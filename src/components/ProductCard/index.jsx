@@ -7,15 +7,19 @@ import "./index.css";
 export default function ProductCard({ product }) {
   const dispatch = useDispatch();
 
-  const addProduct = (productId, quantity, variation, name) => {
-    dispatch(
+  const addProduct = async (productId, quantity, variation, name) => {
+    const result = await dispatch(
       addProductToCart({
         productId,
         quantity,
         variation,
       }),
     );
-    dispatch(showToast(`${name} ajouté au panier`));
+    if (addProductToCart.fulfilled.match(result)) {
+      dispatch(showToast(`${name} ajouté au panier`));
+    } else {
+      dispatch(showToast(result.payload || "Erreur lors de l'ajout au panier"));
+    }
   };
 
   return (
@@ -56,7 +60,7 @@ export default function ProductCard({ product }) {
       {product.is_in_stock ? <p>En stock</p> : <p>Rupture de stock</p>}
       <button
         disabled={!product.is_in_stock}
-        onClick={() => addProduct(product.id, 1, [])}
+        onClick={() => addProduct(product.id, 1, [], product.name)}
       >
         Ajouter au panier
       </button>

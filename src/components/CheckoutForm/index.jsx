@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
+import { useDispatch } from "react-redux";
+import { showToast } from "../../slices/toastSlice";
 
 export default function CheckoutForm() {
   const stripe = useStripe();
   const elements = useElements();
+  const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -101,7 +104,7 @@ export default function CheckoutForm() {
         window.location.href =
           "http://localhost:5173/success/" + (await data.order_id);
       } else {
-        alert("Commande validée avec succès !");
+        dispatch(showToast(`Commande n°${data.order_id} confirmée`));
       }
     } catch (err) {
       setError(err.message);
