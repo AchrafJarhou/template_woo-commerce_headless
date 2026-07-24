@@ -11,6 +11,7 @@ export default function Header() {
   const navigate = useNavigate();
 
   const filters = useSelector((state) => state.filters);
+  const isAuthentificated = !!useSelector((state) => state.user?.token);
 
   const handleSearchChange = (e) => {
     dispatch(setFilters({ search: e.target.value }));
@@ -90,7 +91,15 @@ export default function Header() {
             🔍
           </Link>
 
-          <Link to="/profil" className="header-icon" aria-label="Profil">
+          <Link to="/Profil" className="header-icon"
+          aria-label="Profil"
+          onClick={(e) => {
+          if (!isAuthentificated) {
+          e.preventDefault();
+          navigate("/login");
+                             }
+           }}
+           >
             👤
           </Link>
 
