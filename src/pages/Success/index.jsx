@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { showToast } from "../../slices/toastSlice";
+import { emptyCartThunk } from "../../thunkActionsCreator/cartThunks";
 
 export default function Success() {
   const { orderId } = useParams();
@@ -9,6 +10,7 @@ export default function Success() {
 
   useEffect(() => {
     dispatch(showToast(`Commande n°${orderId} confirmée`));
+    dispatch(emptyCartThunk());
   }, [orderId, dispatch]);
 
   return (

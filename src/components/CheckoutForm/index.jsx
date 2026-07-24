@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { useDispatch } from "react-redux";
 import { showToast } from "../../slices/toastSlice";
+import { emptyCartThunk } from "../../thunkActionsCreator/cartThunks";
 
 export default function CheckoutForm() {
   const stripe = useStripe();
@@ -105,6 +106,7 @@ export default function CheckoutForm() {
           "http://localhost:5173/success/" + (await data.order_id);
       } else {
         dispatch(showToast(`Commande n°${data.order_id} confirmée`));
+        dispatch(emptyCartThunk());
       }
     } catch (err) {
       setError(err.message);
