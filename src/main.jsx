@@ -41,6 +41,7 @@ import Cart from "./pages/Cart";
 import Contact from "./pages/Contact";
 import Checkout from "./pages/Checkout";
 import Blog from "./pages/Blog";
+import Success from "./pages/Success";
 
 const store = configureStore({
   reducer: {
@@ -92,6 +93,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Route path="/product/:id" element={<ProductDetails />} />
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/blog" element={<Blog />} />
+        <Route path="/success/:orderId" element={<Success />} />
       </Routes>
       <Footer />
       <Toast />
