@@ -1,4 +1,5 @@
 import { addProductToCart } from "../../thunkActionsCreator/cartThunks";
+import { showToast } from "../../slices/toastSlice";
 import { useDispatch } from "react-redux";
 import { Link, redirect } from "react-router-dom";
 import "./index.css";
@@ -6,7 +7,7 @@ import "./index.css";
 export default function ProductCard({ product }) {
   const dispatch = useDispatch();
 
-  const addProduct = (productId, quantity, variation) => {
+  const addProduct = (productId, quantity, variation, name) => {
     dispatch(
       addProductToCart({
         productId,
@@ -14,6 +15,7 @@ export default function ProductCard({ product }) {
         variation,
       }),
     );
+    dispatch(showToast(`${name} ajouté au panier`));
   };
 
   return (

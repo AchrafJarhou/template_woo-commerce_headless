@@ -16,6 +16,7 @@ import { filtersSlice } from "./slices/filtersSlice";
 import { userSlice } from "./slices/userSlice";
 import { pagesSlice } from "./slices/pagesSlice";
 import { blogSlice } from "./slices/blogSlice";
+import { toastSlice } from "./slices/toastSlice";
 
 import { initializeCartThunk } from "./thunkActionsCreator/cartThunks";
 import {
@@ -30,6 +31,7 @@ import Login from "./pages/login";
 import Register from "./pages/register";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import Toast from "./components/Toast";
 import Error404 from "./pages/Error404";
 import MentionsLegales from "./pages/MentionsLegales";
 import CGU from "./pages/CGU";
@@ -49,6 +51,7 @@ const store = configureStore({
     filters: filtersSlice.reducer,
     pages: pagesSlice.reducer,
     blog: blogSlice.reducer,
+    toast: toastSlice.reducer,
   },
 });
 
@@ -91,6 +94,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Route path="/blog" element={<Blog />} />
       </Routes>
       <Footer />
+      <Toast />
     </Router>
   </Provider>
   </HelmetProvider>,
