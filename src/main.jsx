@@ -24,6 +24,7 @@ import {
   fetchCurrentCustomerThunk,
   fetchCurrentUserOrdersThunk,
 } from "./thunkActionsCreator/userThunks";
+import { fetchSiteThunk } from "./thunkActionsCreator/siteThunk";
 import { cartIdentityListener } from "./store/cartIdentityListener";
 
 import Store from "./pages/Store";
@@ -41,6 +42,7 @@ import Cart from "./pages/Cart";
 import Contact from "./pages/Contact";
 import Checkout from "./pages/Checkout";
 import Blog from "./pages/Blog";
+import { siteSlice } from "./slices/siteSlice";
 
 const store = configureStore({
   reducer: {
@@ -51,12 +53,14 @@ const store = configureStore({
     filters: filtersSlice.reducer,
     pages: pagesSlice.reducer,
     blog: blogSlice.reducer,
+    site: siteSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().prepend(cartIdentityListener.middleware),
 });
 
 store.dispatch(initializeCartThunk());
+store.dispatch(fetchSiteThunk());
 
 if (store.getState().user.token) {
   store.dispatch(fetchCurrentUserThunk());
