@@ -1,5 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchBlogDataThunk } from "../thunkActionsCreator/blogThunks";
+import {
+  fetchBlogDataThunk,
+  fetchBlogPostBySlugThunk,
+} from "../thunkActionsCreator/blogThunks";
 
 const initialState = {
   posts: [],
@@ -9,6 +12,9 @@ const initialState = {
   error: null,
   page: 1,
   hasMore: true,
+  singlePost: null,
+  loadingSingle: false,
+  errorSingle: null,
 };
 
 export const blogSlice = createSlice({
@@ -42,6 +48,19 @@ export const blogSlice = createSlice({
         state.loading = false;
         state.loadingMore = false;
         state.error = action.payload || action.error?.message;
+      })
+      // --- Nouveau : article unique par slug ---
+      .addCase(fetchBlogPostBySlugThunk.pending, (state) => {
+        state.loadingSingle = true;
+        state.errorSingle = null;
+      })
+      .addCase(fetchBlogPostBySlugThunk.fulfilled, (state, action) => {
+        state.loadingSingle = false;
+        state.singlePost = action.payload;
+      })
+      .addCase(fetchBlogPostBySlugThunk.rejected, (state, action) => {
+        state.loadingSingle = false;
+        state.errorSingle = action.payload || action.error?.message;
       });
   },
 });
