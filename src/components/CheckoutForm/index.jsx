@@ -4,6 +4,11 @@ import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { useDispatch, useSelector } from "react-redux";
 import { showToast } from "../../slices/toastSlice";
 import { emptyCartThunk } from "../../thunkActionsCreator/cartThunks";
+import {
+  fetchCurrentCustomerThunk,
+  fetchCurrentUserOrdersThunk,
+  fetchCurrentUserThunk,
+} from "../../thunkActionsCreator/userThunks";
 
 export default function CheckoutForm() {
   const navigate = useNavigate();
@@ -96,10 +101,12 @@ export default function CheckoutForm() {
         throw new Error(data.message || "Erreur lors de la commande.");
       }
       if (data.payment_result?.redirect_url) {
-        navigate(`/success/${data.order_id}`);
-      } else {
         dispatch(showToast(`Commande n°${data.order_id} confirmée`));
         dispatch(emptyCartThunk());
+        dispatch(fetchCurrentUserThunk());
+        dispatch(fetchCurrentCustomerThunk());
+        dispatch(fetchCurrentUserOrdersThunk());
+        navigate(`/success/${data.order_id}`);
       }
     } catch (err) {
       setError(err.message);

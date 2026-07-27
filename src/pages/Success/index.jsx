@@ -10,7 +10,6 @@ export default function Success() {
 
   useEffect(() => {
     dispatch(showToast(`Commande n°${orderId} confirmée`));
-    dispatch(emptyCartThunk());
   }, [orderId, dispatch]);
 
   return (
