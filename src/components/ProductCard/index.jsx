@@ -1,6 +1,7 @@
 import { addProductToCart } from "../../thunkActionsCreator/cartThunks";
 import { useDispatch } from "react-redux";
 import { Link, redirect } from "react-router-dom";
+import "./index.css";
 
 export default function ProductCard({ product }) {
   const dispatch = useDispatch();
@@ -16,9 +17,9 @@ export default function ProductCard({ product }) {
   };
 
   return (
-    <div>
+    <div className="product-card">
       <Link to={"/product/" + product.slug}>
-        <p>{product.name || "-"}</p>
+        <p dangerouslySetInnerHTML={{ __html: product.name || "-" }} />
         <p>Marque: {product.brands?.[0]?.name}</p>
         <img
           src={
