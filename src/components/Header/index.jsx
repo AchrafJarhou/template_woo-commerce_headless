@@ -2,11 +2,15 @@ import "./index.css";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 import Autocomplete from "../Autocomplete";
+import { logout } from "../../slices/userSlice";
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const token = useSelector((state) => state.user.token);
 
   const handleSearchRedirect = (e) => {
     if (e.key === "Enter") navigate("/catalogue");
@@ -80,6 +84,10 @@ export default function Header() {
           <Link to="/panier" className="header-icon" aria-label="Panier">
             🛒
           </Link>
+
+          {token && (
+            <button onClick={() => dispatch(logout())}>Déconnexion</button>
+          )}
         </div>
       </div>
     </header>
