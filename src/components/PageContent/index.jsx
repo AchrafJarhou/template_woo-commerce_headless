@@ -20,7 +20,7 @@ export default function PageContent({ slug }) {
 
   return (
     <div>
-      <h1>{title}</h1>
+      <h1 dangerouslySetInnerHTML={{ __html: title }} />
       <div dangerouslySetInnerHTML={{ __html: content }} />
     </div>
   );

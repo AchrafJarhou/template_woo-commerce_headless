@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import Seo from "../../components/Seo";
 
 // Importation des actions (thunks)
 import { fetchProductByIdThunk } from "../../thunkActionsCreator/productsThunks";
@@ -53,6 +54,33 @@ export default function ProductDetails() {
 
   return (
     <div className="product-page-wrapper">
+      <Seo
+        title={productToDisplay.name}
+        description={
+          productToDisplay.short_description || productToDisplay.description
+        }
+        image={productToDisplay.images?.[0]?.src}
+        url={window.location.href}
+        jsonLd={{
+          "@context": "https://schema.org/",
+          "@type": "Product",
+          name: productToDisplay.name,
+          description:
+            productToDisplay.short_description || productToDisplay.description,
+          image: productToDisplay.images?.[0]?.src,
+          offers: {
+            "@type": "Offer",
+            priceCurrency: productToDisplay.prices?.currency_code || "EUR",
+            price: productToDisplay.prices?.price
+              ? (parseFloat(productToDisplay.prices.price) / 100).toFixed(2)
+              : undefined,
+            availability:
+              productToDisplay.stock_status === "instock"
+                ? "https://schema.org/InStock"
+                : "https://schema.org/OutOfStock",
+          },
+        }}
+      />
       <button className="back-to-store-btn" onClick={() => navigate(-1)}>
         <i className="fas fa-arrow-left"></i> Retour
       </button>
@@ -72,7 +100,7 @@ export default function ProductDetails() {
         </div>
 
         <div className="main-info-container">
-          <h1 dangerouslySetInnerHTML={{ __html: productToDisplay.name }}></h1>
+          <h1>{productToDisplay.name}</h1>
 
           <p className="product-price">
             {productToDisplay.prices?.price
@@ -85,6 +113,7 @@ export default function ProductDetails() {
             dangerouslySetInnerHTML={{
               __html:
                 productToDisplay.short_description ||
+                productToDisplay.description ||
                 "<p>Aucune introduction disponible.</p>",
             }}
           />
