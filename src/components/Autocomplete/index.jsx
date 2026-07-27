@@ -8,6 +8,7 @@ export default function Autocomplete({ onKeyDown }){
     const dispatch = useDispatch();
     const search = useSelector((state) => state.filters.search);
     const [suggestions, setSuggestions] = useState([]);
+    const [focused, setFocused] = useState(false);
     const timeoutRef = useRef(null);
 
     const fetchSuggestions = async (value) => {
@@ -58,11 +59,13 @@ export default function Autocomplete({ onKeyDown }){
         value={search}
         onChange={handleChange}
         onKeyDown={onKeyDown}
+        onFocus={() => setFocused(true)}
+        onBlur={() => setFocused(false)}
         aria-label="Rechercher"
       />
 
-      {suggestions.length > 0 && (
-        <ul className="autocomplete-suggestions">
+      {focused && suggestions.length > 0 && (
+        <ul className="autocomplete-suggestions" onMouseDown={(e) => e.preventDefault()}>
           {suggestions.map((product) => (
             <li key={product.id}>
               <Link to={`/product/${product.id}`} onClick={handleSelect}>
