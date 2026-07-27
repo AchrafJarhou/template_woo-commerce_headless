@@ -1,19 +1,23 @@
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { deleteCurrentCustomerThunk } from "../../thunkActionsCreator/userThunks";
+import { deleteCurrentUserThunk } from "../../thunkActionsCreator/userThunks";
 
 export default function DeleteAccountButton() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { loading, error } = useSelector((state) => state.user);
+  const [password, setPassword] = useState("");
 
-  const handleDelete = () => {
+  const handleDelete = (e) => {
+    e.preventDefault();
+
     const confirmed = window.confirm(
-      "Êtes-vous sûr de vouloir supprimer définitivement votre compte et l'historique de vos commandes ? Cette action est irréversible.",
+      "Êtes-vous sûr de vouloir supprimer définitivement votre compte ? Cette action est irréversible.",
     );
 
     if (confirmed) {
-      dispatch(deleteCurrentCustomerThunk())
+      dispatch(deleteCurrentUserThunk({ password }))
         .unwrap()
         .then(() => {
           alert("Votre compte a été supprimé avec succès.");
@@ -26,9 +30,16 @@ export default function DeleteAccountButton() {
   };
 
   return (
-    <div className="delete-account-section">
+    <form className="delete-account-section" onSubmit={handleDelete}>
+      <input
+        type="password"
+        placeholder="mot de passe (confirmation)"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        required
+      />
       <button
-        onClick={handleDelete}
+        type="submit"
         disabled={loading}
         style={{ backgroundColor: "red", color: "white" }}
       >
@@ -36,6 +47,6 @@ export default function DeleteAccountButton() {
       </button>
 
       {error && <p style={{ color: "red" }}>{error}</p>}
-    </div>
+    </form>
   );
 }

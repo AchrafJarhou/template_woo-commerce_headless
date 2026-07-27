@@ -7,7 +7,7 @@ import {
   fetchCurrentCustomerThunk,
   fetchCurrentUserOrdersThunk,
   updateCurrentCustomerThunk,
-  deleteCurrentCustomerThunk,
+  deleteCurrentUserThunk,
 } from "../thunkActionsCreator/userThunks";
 
 export const userSlice = createSlice({
@@ -123,11 +123,11 @@ export const userSlice = createSlice({
         state.error = action.payload;
       })
 
-      .addCase(deleteCurrentCustomerThunk.pending, (state) => {
+      .addCase(deleteCurrentUserThunk.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(deleteCurrentCustomerThunk.fulfilled, (state) => {
+      .addCase(deleteCurrentUserThunk.fulfilled, (state) => {
         state.loading = false;
         // Remet tout l'état utilisateur à zéro (déconnexion automatique)
         state.token = null;
@@ -138,7 +138,7 @@ export const userSlice = createSlice({
 
         localStorage.removeItem("wc_user_token");
       })
-      .addCase(deleteCurrentCustomerThunk.rejected, (state, action) => {
+      .addCase(deleteCurrentUserThunk.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

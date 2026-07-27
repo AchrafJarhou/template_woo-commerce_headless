@@ -222,19 +222,21 @@ export const updateCurrentCustomerThunk = createAsyncThunk(
   },
 );
 
-export const deleteCurrentCustomerThunk = createAsyncThunk(
-  "user/deleteCurrentCustomer",
-  async (_, thunkAPI) => {
+export const deleteCurrentUserThunk = createAsyncThunk(
+  "user/deleteCurrentUser",
+  async ({ password }, thunkAPI) => {
     try {
       const token = thunkAPI.getState().user.token;
 
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/wp-json/custom/v1/customer`,
+        `${import.meta.env.VITE_API_URL}/wp-json/custom/v1/user`,
         {
           method: "DELETE",
           headers: {
+            "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
+          body: JSON.stringify({ password }),
         },
       );
 

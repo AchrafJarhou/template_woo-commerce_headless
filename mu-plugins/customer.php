@@ -16,42 +16,11 @@ add_action('rest_api_init', function () {
         },
     ]);
 });
-add_action('rest_api_init', function () {
-    register_rest_route('custom/v1', '/customer', [
-        'methods'             => 'PUT',
-        'callback'            => 'headless_update_current_customer',
-        'permission_callback' => function () {
-            return is_user_logged_in();
-        },
-    ]);
-});
-
-add_action('rest_api_init', function () {
-    register_rest_route('custom/v1', '/customer', [
-        'methods'             => 'DELETE',
-        'callback'            => 'headless_delete_current_customer',
-        'permission_callback' => function () {
-            return is_user_logged_in();
-        },
-    ]);
-});
-
 //route PUT
 add_action('rest_api_init', function () {
     register_rest_route('custom/v1', '/customer', [
         'methods'             => 'PUT',
         'callback'            => 'headless_update_current_customer',
-        'permission_callback' => function () {
-            return is_user_logged_in();
-        },
-    ]);
-});
-
-//route DELETE
-add_action('rest_api_init', function () {
-    register_rest_route('custom/v1', '/customer', [
-        'methods'             => 'DELETE',
-        'callback'            => 'headless_delete_current_customer',
         'permission_callback' => function () {
             return is_user_logged_in();
         },
@@ -144,51 +113,4 @@ function headless_update_current_customer($request)
 
     // On réutilise la fonction GET pour retourner le profil immédiatement mis à jour
     return headless_get_current_customer($request);
-}
-
-/*=======================================
- *  Suppression de compte :
- *  - Exige le mot de passe actuel en confirmation (une requete DELETE seule,
- *    avec juste un token JWT eventuellement vole/traine dans un onglet, ne
- *    doit pas suffire a effacer definitivement un compte).
- *  - Les commandes ne sont PAS supprimees mais anonymisees 
- *  =============================================*/
-
-function headless_delete_current_customer($request)
-{
-    if (!class_exists('WooCommerce')) {
-        return new WP_Error('woocommerce_unavailable', 'WooCommerce est requis pour cette fonctionnalité.', ['status' => 500]);
-    }
-
-    // Requis pour pouvoir utiliser la fonction wp_delete_user() dans l'API REST
-    require_once ABSPATH . 'wp-admin/includes/user.php';
-
-    $user_id = get_current_user_id();
-
-    if (!$user_id) {
-        return new WP_Error('unauthorized', 'Utilisateur non identifié.', ['status' => 401]);
-    }
-
-    // 1. Récupération et suppression définitive de toutes les commandes WooCommerce du client
-    $orders = wc_get_orders([
-        'customer_id' => $user_id,
-        'limit'       => -1, // Récupère TOUTES les commandes
-    ]);
-
-    foreach ($orders as $order) {
-        // true = suppression définitive (contourne la corbeille WooCommerce)
-        $order->delete(true);
-    }
-
-    // 2. Suppression du compte utilisateur WordPress
-    $deleted = wp_delete_user($user_id);
-
-    if (!$deleted) {
-        return new WP_Error('delete_failed', 'Impossible de supprimer le compte utilisateur.', ['status' => 500]);
-    }
-
-    return rest_ensure_response([
-        'success' => true,
-        'message' => 'Le compte utilisateur et toutes ses commandes ont été supprimés définitivement.',
-    ]);
 }
