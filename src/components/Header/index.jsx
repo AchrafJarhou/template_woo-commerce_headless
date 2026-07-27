@@ -1,16 +1,50 @@
 import "./index.css";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { setFilters } from "../../slices/filtersSlice";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+import { fetchSearchSuggestionsThunk } from "../../thunkActionsCreator/productsThunks";
 import Autocomplete from "../Autocomplete";
 import { logout } from "../../slices/userSlice";
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [suggestions, setSuggestions] = useState([]);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const token = useSelector((state) => state.user.token);
+
+  const filters = useSelector((state) => state.filters);
+
+  // Suggestions d'autocomplétion : état local, volontairement séparé de
+  // state.products.list pour ne pas écraser le catalogue ni le slider.
+  useEffect(() => {
+    if (!filters.search) {
+      setSuggestions([]);
+      return;
+    }
+    let active = true;
+    dispatch(
+      fetchSearchSuggestionsThunk({ search: filters.search, per_page: 5 }),
+    )
+      .unwrap()
+      .then((data) => {
+        if (active) setSuggestions(data);
+      })
+      .catch(() => {
+        if (active) setSuggestions([]);
+      });
+    return () => {
+      active = false;
+    };
+  }, [filters.search, dispatch]);
+
+  const handleSearchChange = (e) => {
+    dispatch(setFilters({ search: e.target.value }));
+  };
 
   const handleSearchRedirect = (e) => {
     if (e.key === "Enter") navigate("/catalogue");
