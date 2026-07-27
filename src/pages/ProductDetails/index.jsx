@@ -1,3 +1,4 @@
+import "./index.css";
 import { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -15,11 +16,11 @@ export default function ProductDetails() {
   const [activeImageIndex, setActiveImageIndex] = useState(0);
 
   const { list, singleProduct, loadingSingle, errorSingle } = useSelector(
-    (state) => state.products
+    (state) => state.products,
   );
 
   const productFromList = list?.data?.find(
-    (p) => p.id.toString() === id.toString()
+    (p) => p.id.toString() === id.toString(),
   );
   const productToDisplay = productFromList || singleProduct;
 
@@ -42,7 +43,7 @@ export default function ProductDetails() {
           productId: productToDisplay.id,
           quantity: 1,
           variation: [],
-        })
+        }),
       );
       if (addProductToCart.fulfilled.match(result)) {
         dispatch(showToast(`${productToDisplay.name} ajouté au panier`));
@@ -100,12 +101,10 @@ export default function ProductDetails() {
       />
 
       <div className="top-navigation-bar">
-        <button onClick={() => navigate(-1)}>
-          <i className="fas fa-arrow-left"></i> Retour
-        </button>
+        <button onClick={() => navigate(-1)}>⬅️ Retour</button>
 
         <nav className="breadcrumb-trail">
-          <Link to="/"><i className="fas fa-home"></i>Accueil</Link>
+          <Link to="/">🏠 Accueil</Link>
           <span className="separator">/</span>
           <Link to="/catalogue">catalogue</Link>
           <span className="separator">/</span>
@@ -115,7 +114,6 @@ export default function ProductDetails() {
 
       <div className="product-main-card">
         <div className="product-content-grid">
-          
           <div className="gallery-wrapper">
             {mainImage ? (
               <>
@@ -131,14 +129,19 @@ export default function ProductDetails() {
                         className={`thumbnail-item ${index === activeImageIndex ? "active" : ""}`}
                         onClick={() => setActiveImageIndex(index)}
                       >
-                        <img src={img.src} alt={`${productToDisplay.name} thumbnail ${index + 1}`} />
+                        <img
+                          src={img.src}
+                          alt={`${productToDisplay.name} thumbnail ${index + 1}`}
+                        />
                       </div>
                     ))}
                   </div>
                 )}
               </>
             ) : (
-              <div className="no-image-placeholder">Aucune image disponible</div>
+              <div className="no-image-placeholder">
+                Aucune image disponible
+              </div>
             )}
           </div>
 
@@ -163,13 +166,9 @@ export default function ProductDetails() {
               </h3>
 
               <div className="actions-row">
-                <button onClick={handleAddToCart}>
-                  <i className="fas fa-cart-plus"></i> Ajouter au panier
-                </button>
+                <button onClick={handleAddToCart}>🧺 Ajouter au panier</button>
 
-                <button title="Ajouter aux favoris">
-                  <i className="far fa-heart"></i>
-                </button>
+                <button title="Ajouter aux favoris">❤️</button>
               </div>
             </div>
           </div>
