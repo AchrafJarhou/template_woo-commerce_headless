@@ -1,9 +1,8 @@
-import { useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Seo from "../../components/Seo";
 
-// Importation des actions (thunks)
 import { fetchProductByIdThunk } from "../../thunkActionsCreator/productsThunks";
 import { addProductToCart } from "../../thunkActionsCreator/cartThunks";
 import { showToast } from "../../slices/toastSlice";
@@ -13,12 +12,14 @@ export default function ProductDetails() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
+
   const { list, singleProduct, loadingSingle, errorSingle } = useSelector(
-    (state) => state.products,
+    (state) => state.products
   );
 
   const productFromList = list?.data?.find(
-    (p) => p.id.toString() === id.toString(),
+    (p) => p.id.toString() === id.toString()
   );
   const productToDisplay = productFromList || singleProduct;
 
@@ -28,7 +29,12 @@ export default function ProductDetails() {
     }
   }, [id, dispatch, productFromList, singleProduct]);
 
-  // Fonction pour ajouter ce produit spécifique au panier
+  useEffect(() => {
+    if (productToDisplay) {
+      setActiveImageIndex(0);
+    }
+  }, [productToDisplay?.id]);
+
   const handleAddToCart = async () => {
     if (productToDisplay && productToDisplay.id) {
       const result = await dispatch(
@@ -36,7 +42,7 @@ export default function ProductDetails() {
           productId: productToDisplay.id,
           quantity: 1,
           variation: [],
-        }),
+        })
       );
       if (addProductToCart.fulfilled.match(result)) {
         dispatch(showToast(`${productToDisplay.name} ajouté au panier`));
@@ -60,8 +66,11 @@ export default function ProductDetails() {
     return <div className="not-found-state">Aucun produit trouvé.</div>;
   }
 
+  const productImages = productToDisplay.images || [];
+  const mainImage = productImages[activeImageIndex]?.src || null;
+
   return (
-    <div className="product-page-wrapper">
+    <div className="product-details-page">
       <Seo
         title={productToDisplay.name}
         description={
@@ -89,55 +98,87 @@ export default function ProductDetails() {
           },
         }}
       />
-      <button className="back-to-store-btn" onClick={() => navigate(-1)}>
-        <i className="fas fa-arrow-left"></i> Retour
-      </button>
 
-      <div className="product-top-block">
-        <div className="image-left-side">
-          {productToDisplay.images && productToDisplay.images.length > 0 && (
-            <img
-              src={
-                productToDisplay.images[1]?.src ||
-                productToDisplay.images[0]?.src
-              }
-              alt={productToDisplay.name}
-            />
-          )}
-          <span className="wishlist-heart-decorative">♡</span>
-        </div>
+      <div className="top-navigation-bar">
+        <button onClick={() => navigate(-1)}>
+          <i className="fas fa-arrow-left"></i> Retour
+        </button>
 
-        <div className="main-info-container">
-          <h1>{productToDisplay.name}</h1>
-
-          <p className="product-price">
-            {productToDisplay.prices?.price
-              ? `${(parseFloat(productToDisplay.prices.price) / 100).toFixed(2)} ${productToDisplay.prices.currency_code || "EUR"}`
-              : "Prix non disponible"}
-          </p>
-
-          <div
-            className="short-description-box"
-            dangerouslySetInnerHTML={{
-              __html:
-                productToDisplay.short_description ||
-                productToDisplay.description ||
-                "<p>Aucune introduction disponible.</p>",
-            }}
-          />
-
-          {/* Le bouton d'ajout au panier est maintenant connecté via onClick */}
-          <button className="add-to-cart-btn" onClick={handleAddToCart}>
-            <i className="fas fa-shopping-cart cart-btn-icon"></i>
-            Ajouter au panier
-          </button>
-        </div>
+        <nav className="breadcrumb-trail">
+          <Link to="/"><i className="fas fa-home"></i>Accueil</Link>
+          <span className="separator">/</span>
+          <Link to="/catalogue">catalogue</Link>
+          <span className="separator">/</span>
+          <span className="current-page">{productToDisplay.name}</span>
+        </nav>
       </div>
 
-      <div className="product-bottom-block">
-        <div className="details-content-row">
+      <div className="product-main-card">
+        <div className="product-content-grid">
+          
+          <div className="gallery-wrapper">
+            {mainImage ? (
+              <>
+                <div className="main-image-container">
+                  <img src={mainImage} alt={productToDisplay.name} />
+                </div>
+
+                {productImages.length > 1 && (
+                  <div className="thumbnail-list">
+                    {productImages.map((img, index) => (
+                      <div
+                        key={img.id || index}
+                        className={`thumbnail-item ${index === activeImageIndex ? "active" : ""}`}
+                        onClick={() => setActiveImageIndex(index)}
+                      >
+                        <img src={img.src} alt={`${productToDisplay.name} thumbnail ${index + 1}`} />
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </>
+            ) : (
+              <div className="no-image-placeholder">Aucune image disponible</div>
+            )}
+          </div>
+
+          <div className="info-wrapper">
+            <h1 className="product-title">{productToDisplay.name}</h1>
+
+            <div
+              className="short-description"
+              dangerouslySetInnerHTML={{
+                __html:
+                  productToDisplay.short_description ||
+                  productToDisplay.description ||
+                  "<p>Aucune introduction disponible.</p>",
+              }}
+            />
+
+            <div className="price-action-card">
+              <h3 className="price-text">
+                {productToDisplay.prices?.price
+                  ? `${(parseFloat(productToDisplay.prices.price) / 100).toFixed(2)} ${productToDisplay.prices.currency_code || "EUR"}`
+                  : "Prix non disponible"}
+              </h3>
+
+              <div className="actions-row">
+                <button onClick={handleAddToCart}>
+                  <i className="fas fa-cart-plus"></i> Ajouter au panier
+                </button>
+
+                <button title="Ajouter aux favoris">
+                  <i className="far fa-heart"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="detailed-description-section">
+          <h2>Description détaillée</h2>
           <div
-            className="text-left-side wordpress-content"
+            className="description-content"
             dangerouslySetInnerHTML={{
               __html:
                 productToDisplay.description ||
