@@ -75,7 +75,9 @@ export const fetchCurrentCustomerThunk = createAsyncThunk(
       );
       const data = await response.json();
       if (!response.ok) {
-        throw new Error(data.message || "Impossible de recuperer les infos client.");
+        throw new Error(
+          data.message || "Impossible de recuperer les infos client.",
+        );
       }
       return data;
     } catch (error) {
@@ -97,7 +99,9 @@ export const fetchCurrentUserOrdersThunk = createAsyncThunk(
       );
       const data = await response.json();
       if (!response.ok) {
-        throw new Error(data.message || "Impossible de recuperer les commandes.");
+        throw new Error(
+          data.message || "Impossible de recuperer les commandes.",
+        );
       }
       return data;
     } catch (error) {
@@ -136,6 +140,70 @@ export const registerThunk = createAsyncThunk(
           nicename: data.user_nicename,
         },
       };
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  },
+);
+
+export const updateCurrentCustomerThunk = createAsyncThunk(
+  "user/updateCurrentCustomer",
+  async (customerData, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().user.token;
+
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/wp-json/custom/v1/customer`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(customerData),
+        },
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(
+          data.message ||
+            "Impossible de mettre à jour les informations client.",
+        );
+      }
+
+      // L'API renvoie directement l'objet client complet mis à jour
+      return data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  },
+);
+
+export const deleteCurrentCustomerThunk = createAsyncThunk(
+  "user/deleteCurrentCustomer",
+  async (_, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().user.token;
+
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/wp-json/custom/v1/customer`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Impossible de supprimer le compte.");
+      }
+
+      return data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
     }
