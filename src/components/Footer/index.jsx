@@ -24,11 +24,7 @@ export default function Footer() {
             <li><Link to="/contact">Nous contacter</Link></li>
           </ul>
         </div>
-
-
       </div>
-
-
     </footer>
   );
 }

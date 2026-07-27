@@ -1,4 +1,3 @@
-// Importation de la page des détails du produit dans le fichier principal
 import ProductDetails from "./pages/ProductDetails";
 import "./index.css";
 
