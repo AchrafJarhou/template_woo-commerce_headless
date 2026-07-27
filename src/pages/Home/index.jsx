@@ -8,6 +8,7 @@ export default function Home() {
     <div className="home">
       <PageContent slug="home" />
       <HomeSlider></HomeSlider>
+      <PageContent slug="a-propos" />
       <About></About>
       <DeleteAccountButton></DeleteAccountButton>
     </div>
