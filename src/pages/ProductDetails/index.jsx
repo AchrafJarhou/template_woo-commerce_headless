@@ -35,7 +35,7 @@ export default function ProductDetails() {
     }
   }, [productToDisplay?.id]);
 
-  const handleAddToCart = () => {
+  const handleAddToCart = async () => {
     if (productToDisplay && productToDisplay.id) {
       const result = await dispatch(
         addProductToCart({
