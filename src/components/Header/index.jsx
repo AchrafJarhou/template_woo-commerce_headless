@@ -1,20 +1,12 @@
 import "./index.css";
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { setFilters } from "../../slices/filtersSlice";
 import { useNavigate } from "react-router-dom";
+import Autocomplete from "../Autocomplete";
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  const filters = useSelector((state) => state.filters);
-
-  const handleSearchChange = (e) => {
-    dispatch(setFilters({ search: e.target.value }));
-  };
 
   const handleSearchRedirect = (e) => {
     if (e.key === "Enter") navigate("/catalogue");
@@ -75,16 +67,7 @@ export default function Header() {
 
         <div className="header-actions">
           <label htmlFor="search">Rechercher:</label>
-          <input
-            id="search"
-            type="search"
-            className="header-search"
-            placeholder="Rechercher..."
-            value={filters.search}
-            onChange={handleSearchChange}
-            onKeyDown={handleSearchRedirect}
-            aria-label="Rechercher"
-          />
+          <Autocomplete onKeyDown={handleSearchRedirect} />
 
           <Link to="/catalogue" className="header-icon" aria-label="Recherche">
             🔍
