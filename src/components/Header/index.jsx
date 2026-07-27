@@ -14,6 +14,7 @@ export default function Header() {
   const navigate = useNavigate();
 
   const filters = useSelector((state) => state.filters);
+  const isAuthentificated = !!useSelector((state) => state.user?.token);
 
   // Suggestions d'autocomplétion : état local, volontairement séparé de
   // state.products.list pour ne pas écraser le catalogue ni le slider.
@@ -107,7 +108,8 @@ export default function Header() {
             🔍
           </Link>
 
-          <Link to="/profil" className="header-icon" aria-label="Profil">
+         <Link to={isAuthentificated ? "/profil" : "/login"}  className="header-icon"       aria-label="Profil"
+           >
             👤
           </Link>
 
