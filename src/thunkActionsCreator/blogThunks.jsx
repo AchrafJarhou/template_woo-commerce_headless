@@ -65,3 +65,37 @@ export const fetchBlogDataThunk = createAsyncThunk(
     }
   },
 );
+
+export const fetchBlogPostBySlugThunk = createAsyncThunk(
+  "blog/fetchPostBySlug",
+  async (slug, thunkAPI) => {
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/wp-json/wp/v2/posts?slug=${slug}&_fields=id,date,title,excerpt,content,slug,categories`,
+      );
+
+      if (!response.ok) {
+        throw new Error("Impossible de charger cet article.");
+      }
+
+      const data = await response.json();
+
+      if (!data.length) {
+        throw new Error("Article introuvable.");
+      }
+
+      const post = data[0];
+
+      return {
+        ...post,
+        titleText: stripHtml(post.title?.rendered || ""),
+        excerptText: stripHtml(post.excerpt?.rendered || ""),
+        contentHtml: post.content?.rendered || "",
+      };
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.message || "Une erreur est survenue lors du chargement de l'article.",
+      );
+    }
+  },
+);

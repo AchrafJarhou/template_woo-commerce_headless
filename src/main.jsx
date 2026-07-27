@@ -44,6 +44,7 @@ import Cart from "./pages/Cart";
 import Contact from "./pages/Contact";
 import Checkout from "./pages/Checkout";
 import Blog from "./pages/Blog";
+import BlogPost from "./pages/BlogPost";
 import { siteSlice } from "./slices/siteSlice";
 import Success from "./pages/Success";
 
@@ -102,6 +103,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Route path="/product/:id" element={<ProductDetails />} />
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/blog" element={<Blog />} />
+        <Route path="/blog/:slug" element={<BlogPost />} />
         <Route path="/success/:orderId" element={<Success />} />
       </Routes>
       <Footer />
