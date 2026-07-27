@@ -1,6 +1,9 @@
+// Importation de la page des détails du produit dans le fichier principal
+import ProductDetails from "./pages/ProductDetails";
 import "./index.css";
 
 import ReactDOM from "react-dom/client";
+import {HelmetProvider} from "react-helmet-async";
 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
@@ -12,21 +15,34 @@ import { categoriesSlice } from "./slices/categoriesSlice";
 import { filtersSlice } from "./slices/filtersSlice";
 import { userSlice } from "./slices/userSlice";
 import { pagesSlice } from "./slices/pagesSlice";
+import { blogSlice } from "./slices/blogSlice";
+import { toastSlice } from "./slices/toastSlice";
 
 import { initializeCartThunk } from "./thunkActionsCreator/cartThunks";
-import { fetchCurrentUserThunk } from "./thunkActionsCreator/userThunks";
+import {
+  fetchCurrentUserThunk,
+  fetchCurrentCustomerThunk,
+  fetchCurrentUserOrdersThunk,
+} from "./thunkActionsCreator/userThunks";
+import { cartIdentityListener } from "./store/cartIdentityListener";
 
 import Store from "./pages/Store";
+import Home from "./pages/Home";
 import Login from "./pages/login";
 import Register from "./pages/register";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import Toast from "./components/Toast";
 import Error404 from "./pages/Error404";
 import MentionsLegales from "./pages/MentionsLegales";
 import CGU from "./pages/CGU";
 import CGV from "./pages/CGV";
 import User from "./pages/User";
 import Cart from "./pages/Cart";
+import Contact from "./pages/Contact";
+import Checkout from "./pages/Checkout";
+import Blog from "./pages/Blog";
+import Success from "./pages/Success";
 
 const store = configureStore({
   reducer: {
@@ -36,27 +52,35 @@ const store = configureStore({
     products: productsSlice.reducer,
     filters: filtersSlice.reducer,
     pages: pagesSlice.reducer,
+    blog: blogSlice.reducer,
+    toast: toastSlice.reducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().prepend(cartIdentityListener.middleware),
 });
 
 store.dispatch(initializeCartThunk());
 
 if (store.getState().user.token) {
   store.dispatch(fetchCurrentUserThunk());
+  store.dispatch(fetchCurrentCustomerThunk());
+  store.dispatch(fetchCurrentUserOrdersThunk());
 }
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   // <React.StrictMode>
-  <Provider store={store}>
-    <Router
-      future={{
-        v7_startTransition: true,
-        v7_relativeSplatPath: true,
-      }}
+  <HelmetProvider>
+    <Provider store={store}>
+      <Router
+        future={{
+          v7_startTransition: true,
+          v7_relativeSplatPath: true,
+        }}
       //basename="/ecom"
     >
       <Header />
       <Routes>
+        {<Route path="/" element={<Home />} />}
         {/* <Route path="/" element={<Store />} /> */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
@@ -68,9 +92,16 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Route path="/panier" element={<Cart />} />
         <Route path="/user" element={<User />} />
         <Route path="*" element={<Error404 />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/product/:id" element={<ProductDetails />} />
+        <Route path="/checkout" element={<Checkout />} />
+        <Route path="/blog" element={<Blog />} />
+        <Route path="/success/:orderId" element={<Success />} />
       </Routes>
       <Footer />
+      <Toast />
     </Router>
-  </Provider>,
+  </Provider>
+  </HelmetProvider>,
   /* </React.StrictMode>, */
 );

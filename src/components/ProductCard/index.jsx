@@ -1,23 +1,31 @@
 import { addProductToCart } from "../../thunkActionsCreator/cartThunks";
+import { showToast } from "../../slices/toastSlice";
 import { useDispatch } from "react-redux";
+import { Link, redirect } from "react-router-dom";
+import "./index.css";
 
 export default function ProductCard({ product }) {
   const dispatch = useDispatch();
 
-  const addProduct = (productId, quantity, variation) => {
-    dispatch(
+  const addProduct = async (productId, quantity, variation, name) => {
+    const result = await dispatch(
       addProductToCart({
         productId,
         quantity,
         variation,
       }),
     );
+    if (addProductToCart.fulfilled.match(result)) {
+      dispatch(showToast(`${name} ajouté au panier`));
+    } else {
+      dispatch(showToast(result.payload || "Erreur lors de l'ajout au panier"));
+    }
   };
 
   return (
-    <div>
-      <a href={"/product/" + product.slug}>
-        <p>{product.name || "-"}</p>
+    <div className="product-card">
+      <Link to={"/product/" + product.slug}>
+        <p dangerouslySetInnerHTML={{ __html: product.name || "-" }} />
         <p>Marque: {product.brands?.[0]?.name}</p>
         <img
           src={
@@ -26,7 +34,7 @@ export default function ProductCard({ product }) {
           }
           alt={product.name || "photo produit"}
         />
-      </a>
+      </Link>
       <p>
         Prix: {(product.prices.price / 100).toFixed(2) || "-.--"}
         {" " + product.prices.currency_symbol}
@@ -52,7 +60,7 @@ export default function ProductCard({ product }) {
       {product.is_in_stock ? <p>En stock</p> : <p>Rupture de stock</p>}
       <button
         disabled={!product.is_in_stock}
-        onClick={() => addProduct(product.id, 1, [])}
+        onClick={() => addProduct(product.id, 1, [], product.name)}
       >
         Ajouter au panier
       </button>

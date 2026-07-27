@@ -1,13 +1,16 @@
-import Hero from "../../components/Hero";
-import  Categories from "../../components/Categories";
-import Avantages from "../../components/Avantages";
+import HomeSlider from "../../components/HomeSlider";
+import About from "../../components/About";
+import PageContent from "../../components/PageContent";
+import DeleteAccountButton from "../../components/DeleteAccountButton";
 
 export default function Home() {
-    return(
-        <div className="home">
-            <Hero></Hero>
-            <Categories></Categories>
-            <Avantages></Avantages>
-        </div>
-    )
+  return (
+    <div className="home">
+      <PageContent slug="home" />
+      <HomeSlider></HomeSlider>
+      <PageContent slug="a-propos" />
+      <About></About>
+      <DeleteAccountButton></DeleteAccountButton>
+    </div>
+  );
 }

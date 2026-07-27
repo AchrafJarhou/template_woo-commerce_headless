@@ -1,6 +1,7 @@
 import { useSelector, useDispatch } from "react-redux";
 import { CartProduct } from "../CartProduct";
 import { emptyCartThunk } from "../../thunkActionsCreator/cartThunks";
+import StripeWrapper from "../StripeWrapper";
 
 export default function Cart() {
   const items = useSelector((state) => state.cart.items);
@@ -20,7 +21,7 @@ export default function Cart() {
         ))}
       </ul>
       <button onClick={() => emptyCart()}>Vider Panier</button>
-      <button>Payer</button>
+      <StripeWrapper></StripeWrapper>
     </>
   );
 }

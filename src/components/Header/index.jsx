@@ -1,23 +1,42 @@
 import "./index.css";
-import { Link, redirect } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setFilters } from "../../slices/filtersSlice";
 import { useNavigate } from "react-router-dom";
-import { fetchProductsThunk } from "../../thunkActionsCreator/productsThunks";
+import { fetchSearchSuggestionsThunk } from "../../thunkActionsCreator/productsThunks";
+import Autocomplete from "../Autocomplete";
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [suggestions, setSuggestions] = useState([]);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { list, loading, error } = useSelector((state) => state.products);
-  //const search = useSelector((state) => state.filters.search);
   const filters = useSelector((state) => state.filters);
 
+  // Suggestions d'autocomplétion : état local, volontairement séparé de
+  // state.products.list pour ne pas écraser le catalogue ni le slider.
   useEffect(() => {
-    dispatch(fetchProductsThunk({ ...filters, page: 1, per_page: 20 }));
-  }, [filters, dispatch]);
+    if (!filters.search) {
+      setSuggestions([]);
+      return;
+    }
+    let active = true;
+    dispatch(
+      fetchSearchSuggestionsThunk({ search: filters.search, per_page: 5 }),
+    )
+      .unwrap()
+      .then((data) => {
+        if (active) setSuggestions(data);
+      })
+      .catch(() => {
+        if (active) setSuggestions([]);
+      });
+    return () => {
+      active = false;
+    };
+  }, [filters.search, dispatch]);
 
   const handleSearchChange = (e) => {
     dispatch(setFilters({ search: e.target.value }));
@@ -75,18 +94,14 @@ export default function Header() {
           <Link to="/catalogue" onClick={closeMenu}>
             Catalogue
           </Link>
+          <Link to="/blog" onClick={closeMenu}>
+            Blog
+          </Link>
         </nav>
 
         <div className="header-actions">
-          <input
-            type="search"
-            className="header-search"
-            placeholder="Rechercher..."
-            value={filters.search}
-            onChange={handleSearchChange}
-            onKeyDown={handleSearchRedirect}
-            aria-label="Rechercher"
-          />
+          <label htmlFor="search">Rechercher:</label>
+          <Autocomplete onKeyDown={handleSearchRedirect} />
 
           <Link to="/catalogue" className="header-icon" aria-label="Recherche">
             🔍

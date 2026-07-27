@@ -41,11 +41,12 @@ export const fetchPageThunk = createAsyncThunk(
       }
 
       const item = Array.isArray(data) ? data[0] : data;
-      const page = {
-        title: (item.title?.rendered ?? item.title) || "",
-        content: (item.content?.rendered ?? item.content) || "",
-        slug: item.slug || slug,
-      };
+      // const page = {
+      //   title: (item.title?.rendered ?? item.title) || "",
+      //   content: (item.content?.rendered ?? item.content) || "",
+      //   slug: item.slug || slug,
+      // };
+      const page = item;
       return page;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
@@ -57,6 +58,6 @@ export const fetchPageThunk = createAsyncThunk(
       if (!slug) return true;
       const state = getState();
       if (state.pages?.items?.[slug]) return false;
-    }
-  }
+    },
+  },
 );

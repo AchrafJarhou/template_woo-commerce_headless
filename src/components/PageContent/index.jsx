@@ -12,16 +12,23 @@ export default function PageContent({ slug }) {
     dispatch(fetchPageThunk(slug));
   }, [dispatch, slug]);
 
-  if (error) return <p>{error}</p>;
+  if (!page && error) return <p>{error}</p>;
   if (!page || loading) return <p>Chargement…</p>;
 
   const title = page.title ?? "";
   const content = page.content ?? "";
-
+  console.log(page._links?.["wp:featuredmedia"]?.[0]?.href);
   return (
     <div>
-      <h1>{title}</h1>
-      <div dangerouslySetInnerHTML={{ __html: content }} />
+      {page._links?.["wp:featuredmedia"]?.[0]?.href && (
+        <img
+          // src={`/woo-api/wp-json/wp/v2/media/${page.featured_media}/guid/rendered`}
+          src={`${import.meta.env.VITE_API_URL}/${slug}/images/`}
+          alt={`${import.meta.env.VITE_API_URL}/wp-json/wp/v2/media/${page.featured_media}/alt_text`}
+        />
+      )}
+      <h1 dangerouslySetInnerHTML={{ __html: title.rendered }} />
+      <div dangerouslySetInnerHTML={{ __html: content.rendered }} />
     </div>
   );
 }
