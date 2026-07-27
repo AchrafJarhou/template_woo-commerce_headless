@@ -36,6 +36,28 @@ add_action('rest_api_init', function () {
     ]);
 });
 
+//route PUT
+add_action('rest_api_init', function () {
+    register_rest_route('custom/v1', '/customer', [
+        'methods'             => 'PUT',
+        'callback'            => 'headless_update_current_customer',
+        'permission_callback' => function () {
+            return is_user_logged_in();
+        },
+    ]);
+});
+
+//route DELETE
+add_action('rest_api_init', function () {
+    register_rest_route('custom/v1', '/customer', [
+        'methods'             => 'DELETE',
+        'callback'            => 'headless_delete_current_customer',
+        'permission_callback' => function () {
+            return is_user_logged_in();
+        },
+    ]);
+});
+
 function headless_get_current_customer($request)
 {
     if (!class_exists('WC_Customer')) {
@@ -124,6 +146,13 @@ function headless_update_current_customer($request)
     return headless_get_current_customer($request);
 }
 
+/*=======================================
+ *  Suppression de compte :
+ *  - Exige le mot de passe actuel en confirmation (une requete DELETE seule,
+ *    avec juste un token JWT eventuellement vole/traine dans un onglet, ne
+ *    doit pas suffire a effacer definitivement un compte).
+ *  - Les commandes ne sont PAS supprimees mais anonymisees 
+ *  =============================================*/
 
 function headless_delete_current_customer($request)
 {

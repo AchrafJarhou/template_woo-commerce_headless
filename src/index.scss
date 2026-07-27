@@ -1,13 +1,13 @@
 @font-face {
-  font-family: 'InterCustom';
-  src: url('./assets/fonts/Inter-Regular.ttf') format('truetype');
+  font-family: "InterCustom";
+  src: url("./assets/fonts/Inter-Regular.ttf") format("truetype");
   font-weight: 400;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'PoppinsCustom';
-  src: url('./assets/fonts/Poppins-Bold.ttf') format('truetype');
+  font-family: "PoppinsCustom";
+  src: url("./assets/fonts/Poppins-Bold.ttf") format("truetype");
   font-weight: 700;
   font-style: normal;
 }
@@ -18,8 +18,8 @@
   --danger-color: #dc2626;
   --dark-color: #0f172a;
   --bg-color: #f8fafc;
-  --font-body: 'InterCustom', sans-serif;
-  --font-heading: 'PoppinsCustom', sans-serif;
+  --font-body: "InterCustom", sans-serif;
+  --font-heading: "PoppinsCustom", sans-serif;
 }
 
 * {
@@ -43,7 +43,9 @@ body {
   color: var(--bg-color);
 }
 
-input, textarea, select {
+input,
+textarea,
+select {
   font-family: inherit;
   color: inherit;
 }
@@ -201,7 +203,7 @@ a {
   transition: opacity 0.3s ease;
 
   &:hover {
-    opacity: 0.7; 
+    opacity: 0.7;
   }
 
   @media screen and (aspect-ratio > 1/1) {
