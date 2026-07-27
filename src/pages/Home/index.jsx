@@ -6,9 +6,9 @@ export default function Home() {
   return (
     <div className="home">
       <PageContent slug="home" />
-      <HomeSlider></HomeSlider>
+      <HomeSlider />
       <PageContent slug="a-propos" />
-      <DeleteAccountButton></DeleteAccountButton>
+      <DeleteAccountButton />
     </div>
   );
 }
