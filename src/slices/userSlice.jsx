@@ -3,6 +3,7 @@ import {
   loginThunk,
   registerThunk,
   fetchCurrentUserThunk,
+  updateCurrentUserThunk,
   fetchCurrentCustomerThunk,
   fetchCurrentUserOrdersThunk,
 } from "../thunkActionsCreator/userThunks";
@@ -66,6 +67,18 @@ export const userSlice = createSlice({
         state.profile = action.payload;
       })
       .addCase(fetchCurrentUserThunk.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(updateCurrentUserThunk.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateCurrentUserThunk.fulfilled, (state, action) => {
+        state.loading = false;
+        state.profile = action.payload;
+      })
+      .addCase(updateCurrentUserThunk.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })
