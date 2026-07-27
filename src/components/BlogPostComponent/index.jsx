@@ -9,6 +9,7 @@ export default function BlogPostComponent({slug}) {
   const { singlePost, loadingSingle, errorSingle } = useSelector(
     (state) => state.blog,
   );
+  const baseUrl = window.location.origin;
 
   useEffect(() => {
     dispatch(fetchBlogPostBySlugThunk(slug));
@@ -28,7 +29,7 @@ export default function BlogPostComponent({slug}) {
         title={singlePost.titleText}
         description={singlePost.excerptText}
         image={singlePost.image}
-        url={`https://[url-du-site]/blog/${singlePost.id}`}
+        url={`${baseUrl}/blog/${singlePost.id}`}
         type="article"
       />
 
