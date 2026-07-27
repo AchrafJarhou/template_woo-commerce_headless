@@ -1,8 +1,5 @@
 import { Helmet } from "react-helmet-async";
-
-const SITE_NAME = "[Nom de la boutique]";
-const DEFAULT_TITLE = "[Nom de la boutique]";
-const DEFAULT_DESCRIPTION = "[Description par défaut du site, une phrase].";
+import { useSelector } from "react-redux";
 
 const stripHtml = (value) =>
   String(value || "")
@@ -20,6 +17,12 @@ function Seo({
   noIndex = false,
   lang = "fr",
 }) {
+  /* On charge dynamiquement le titre et description par defaut du site depuis le slice site*/
+  const { name: DEFAULT_TITLE, description: DEFAULT_DESCRIPTION } = useSelector(
+    (state) => state.site,
+  );
+  const SITE_NAME = DEFAULT_TITLE;
+
   const cleanTitle = stripHtml(title);
   const cleanDescription = stripHtml(description);
   const finalTitle = cleanTitle ? `${cleanTitle}` : DEFAULT_TITLE;

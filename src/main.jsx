@@ -7,7 +7,7 @@ import { HelmetProvider } from "react-helmet-async";
 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-import { Provider } from "react-redux";
+import { Provider, useSelector } from "react-redux";
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { cartSlice } from "./slices/cartSlice";
 import { productsSlice } from "./slices/productSlice";
@@ -80,7 +80,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         //basename="/ecom"
       >
         <Header />
-        <Seo title="Woo Commerce" />
+        <Seo />
 
         <Routes>
           {<Route path="/" element={<Home />} />}
