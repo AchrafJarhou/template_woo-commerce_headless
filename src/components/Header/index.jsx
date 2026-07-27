@@ -6,14 +6,17 @@ import { setFilters } from "../../slices/filtersSlice";
 import { useNavigate } from "react-router-dom";
 import { fetchSearchSuggestionsThunk } from "../../thunkActionsCreator/productsThunks";
 import Autocomplete from "../Autocomplete";
+import { logout } from "../../slices/userSlice";
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [suggestions, setSuggestions] = useState([]);
-  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const token = useSelector((state) => state.user.token);
 
   const filters = useSelector((state) => state.filters);
+  const isAuthentificated = !!useSelector((state) => state.user?.token);
 
   // Suggestions d'autocomplétion : état local, volontairement séparé de
   // state.products.list pour ne pas écraser le catalogue ni le slider.
@@ -107,13 +110,18 @@ export default function Header() {
             🔍
           </Link>
 
-          <Link to="/profil" className="header-icon" aria-label="Profil">
+         <Link to={isAuthentificated ? "/profil" : "/login"}  className="header-icon"       aria-label="Profil"
+           >
             👤
           </Link>
 
           <Link to="/panier" className="header-icon" aria-label="Panier">
             🛒
           </Link>
+
+          {token && (
+            <button onClick={() => dispatch(logout())}>Déconnexion</button>
+          )}
         </div>
       </div>
     </header>

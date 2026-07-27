@@ -3,11 +3,11 @@ import ProductDetails from "./pages/ProductDetails";
 import "./index.css";
 
 import ReactDOM from "react-dom/client";
-import {HelmetProvider} from "react-helmet-async";
+import { HelmetProvider } from "react-helmet-async";
 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-import { Provider } from "react-redux";
+import { Provider, useSelector } from "react-redux";
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { cartSlice } from "./slices/cartSlice";
 import { productsSlice } from "./slices/productSlice";
@@ -16,6 +16,7 @@ import { filtersSlice } from "./slices/filtersSlice";
 import { userSlice } from "./slices/userSlice";
 import { pagesSlice } from "./slices/pagesSlice";
 import { blogSlice } from "./slices/blogSlice";
+import Seo from "./components/Seo";
 import { toastSlice } from "./slices/toastSlice";
 
 import { initializeCartThunk } from "./thunkActionsCreator/cartThunks";
@@ -24,6 +25,7 @@ import {
   fetchCurrentCustomerThunk,
   fetchCurrentUserOrdersThunk,
 } from "./thunkActionsCreator/userThunks";
+import { fetchSiteThunk } from "./thunkActionsCreator/siteThunk";
 import { cartIdentityListener } from "./store/cartIdentityListener";
 
 import Store from "./pages/Store";
@@ -43,6 +45,7 @@ import Contact from "./pages/Contact";
 import Checkout from "./pages/Checkout";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
+import { siteSlice } from "./slices/siteSlice";
 import Success from "./pages/Success";
 
 const store = configureStore({
@@ -54,6 +57,7 @@ const store = configureStore({
     filters: filtersSlice.reducer,
     pages: pagesSlice.reducer,
     blog: blogSlice.reducer,
+    site: siteSlice.reducer,
     toast: toastSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
@@ -61,6 +65,7 @@ const store = configureStore({
 });
 
 store.dispatch(initializeCartThunk());
+store.dispatch(fetchSiteThunk());
 
 if (store.getState().user.token) {
   store.dispatch(fetchCurrentUserThunk());
@@ -80,6 +85,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       //basename="/ecom"
     >
       <Header />
+      <Seo />
       <Routes>
         {<Route path="/" element={<Home />} />}
         {/* <Route path="/" element={<Store />} /> */}

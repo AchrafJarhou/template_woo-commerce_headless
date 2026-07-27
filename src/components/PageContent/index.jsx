@@ -17,11 +17,10 @@ export default function PageContent({ slug }) {
 
   const title = page.title ?? "";
   const content = page.content ?? "";
-
   return (
     <div>
-      <h1 dangerouslySetInnerHTML={{ __html: title }} />
-      <div dangerouslySetInnerHTML={{ __html: content }} />
+      <h1 dangerouslySetInnerHTML={{ __html: title.rendered }} />
+      <div dangerouslySetInnerHTML={{ __html: content.rendered }} />
     </div>
   );
 }
