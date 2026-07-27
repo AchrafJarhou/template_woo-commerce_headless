@@ -36,7 +36,7 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Toast from "./components/Toast";
 import Error404 from "./pages/Error404";
-import MentionsLegales from "./pages/MentionsLegales";
+import MentionsLegales from "./pages/LegalMentions";
 import CGU from "./pages/CGU";
 import CGV from "./pages/CGV";
 import User from "./pages/User";
@@ -82,7 +82,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           v7_startTransition: true,
           v7_relativeSplatPath: true,
         }}
-        //basename="/ecom"
+      //basename="/ecom"
       >
         <Header />
         <Seo />

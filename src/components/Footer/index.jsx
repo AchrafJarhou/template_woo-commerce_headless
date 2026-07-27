@@ -9,9 +9,9 @@ export default function Footer() {
       <div className="footer_grid">
         <div className="footer_col">
           <ul className="footer_links">
-            <li><Link to="/catalogue">Acceuil</Link></li>
+            <li><Link to="/">Accueil</Link></li>
             <li><Link to="/catalogue">Catalogue</Link></li>
-            <li><Link to="/cart">Panier</Link></li>
+            <li><Link to="/panier">Panier</Link></li>
             <li><Link to="/login">Se connecter</Link></li>
           </ul>
         </div>
