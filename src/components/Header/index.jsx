@@ -14,9 +14,15 @@ export default function Header() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const token = useSelector((state) => state.user.token);
+  const cartItems = useSelector((state) => state.cart.items);
 
   const filters = useSelector((state) => state.filters);
   const isAuthentificated = !!useSelector((state) => state.user?.token);
+  const cartCount = cartItems.reduce(
+    (total, item) => total + (Number(item.quantity) || 0),
+    0,
+  );
+  const cartBadgeValue = cartCount > 9 ? "9+" : String(cartCount);
 
   // Suggestions d'autocomplétion : état local, volontairement séparé de
   // state.products.list pour ne pas écraser le catalogue ni le slider.
@@ -115,8 +121,13 @@ export default function Header() {
             👤
           </Link>
 
-          <Link to="/panier" className="header-icon" aria-label="Panier">
+          <Link
+            to="/panier"
+            className="header-icon header-cart-link"
+            aria-label={`Panier (${cartBadgeValue})`}
+          >
             🛒
+            {cartCount > 0 && <span className="header-cart-badge">{cartBadgeValue}</span>}
           </Link>
 
           {token && (
