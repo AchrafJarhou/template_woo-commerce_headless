@@ -125,8 +125,6 @@ export default function HomeSlider() {
 
   return (
     <div className="home-slider">
-      <h2>Produits du moment</h2>
-
       <div
         className="home-slider-viewport"
         style={{ width: VIEWPORT_WIDTH }}
