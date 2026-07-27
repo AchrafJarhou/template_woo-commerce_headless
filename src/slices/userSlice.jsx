@@ -5,6 +5,8 @@ import {
   fetchCurrentUserThunk,
   fetchCurrentCustomerThunk,
   fetchCurrentUserOrdersThunk,
+  updateCurrentCustomerThunk,
+  deleteCurrentCustomerThunk,
 } from "../thunkActionsCreator/userThunks";
 
 export const userSlice = createSlice({
@@ -14,7 +16,9 @@ export const userSlice = createSlice({
     customer: null,
     orders: [],
     token:
-      typeof window !== "undefined" ? localStorage.getItem("wc_user_token") : null,
+      typeof window !== "undefined"
+        ? localStorage.getItem("wc_user_token")
+        : null,
     loading: false,
     error: null,
   },
@@ -90,6 +94,38 @@ export const userSlice = createSlice({
         state.orders = action.payload;
       })
       .addCase(fetchCurrentUserOrdersThunk.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(updateCurrentCustomerThunk.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateCurrentCustomerThunk.fulfilled, (state, action) => {
+        state.loading = false;
+        state.customer = action.payload;
+      })
+      .addCase(updateCurrentCustomerThunk.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      .addCase(deleteCurrentCustomerThunk.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(deleteCurrentCustomerThunk.fulfilled, (state) => {
+        state.loading = false;
+        // Remet tout l'état utilisateur à zéro (déconnexion automatique)
+        state.token = null;
+        state.profile = null;
+        state.customer = null;
+        state.orders = [];
+        state.error = null;
+
+        localStorage.removeItem("wc_user_token");
+      })
+      .addCase(deleteCurrentCustomerThunk.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });
