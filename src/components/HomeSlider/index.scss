@@ -38,16 +38,12 @@
 }
 
 .home-slider-buttons {
-  display: none;
+  display: flex;
+  gap: 1rem;
 }
 
 @media (max-width: 1024px) {
   .home-slider-viewport {
     cursor: default;
-  }
-
-  .home-slider-buttons {
-    display: flex;
-    gap: 1rem;
   }
 }
