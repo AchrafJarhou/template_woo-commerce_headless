@@ -3,6 +3,7 @@ import ProductDetails from "./pages/ProductDetails";
 import "./index.css";
 
 import ReactDOM from "react-dom/client";
+import {HelmetProvider} from "react-helmet-async";
 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
@@ -14,6 +15,7 @@ import { categoriesSlice } from "./slices/categoriesSlice";
 import { filtersSlice } from "./slices/filtersSlice";
 import { userSlice } from "./slices/userSlice";
 import { pagesSlice } from "./slices/pagesSlice";
+import { blogSlice } from "./slices/blogSlice";
 
 import { initializeCartThunk } from "./thunkActionsCreator/cartThunks";
 import {
@@ -37,6 +39,7 @@ import User from "./pages/User";
 import Cart from "./pages/Cart";
 import Contact from "./pages/Contact";
 import Checkout from "./pages/Checkout";
+import Blog from "./pages/Blog";
 
 const store = configureStore({
   reducer: {
@@ -46,6 +49,7 @@ const store = configureStore({
     products: productsSlice.reducer,
     filters: filtersSlice.reducer,
     pages: pagesSlice.reducer,
+    blog: blogSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().prepend(cartIdentityListener.middleware),
@@ -61,12 +65,13 @@ if (store.getState().user.token) {
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   // <React.StrictMode>
-  <Provider store={store}>
-    <Router
-      future={{
-        v7_startTransition: true,
-        v7_relativeSplatPath: true,
-      }}
+  <HelmetProvider>
+    <Provider store={store}>
+      <Router
+        future={{
+          v7_startTransition: true,
+          v7_relativeSplatPath: true,
+        }}
       //basename="/ecom"
     >
       <Header />
@@ -86,9 +91,11 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Route path="/contact" element={<Contact />} />
         <Route path="/product/:id" element={<ProductDetails />} />
         <Route path="/checkout" element={<Checkout />} />
+        <Route path="/blog" element={<Blog />} />
       </Routes>
       <Footer />
     </Router>
-  </Provider>,
+  </Provider>
+  </HelmetProvider>,
   /* </React.StrictMode>, */
 );
