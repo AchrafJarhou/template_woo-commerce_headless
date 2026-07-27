@@ -108,13 +108,7 @@ export default function Header() {
             🔍
           </Link>
 
-         <Link to="/Profil" className="header-icon" aria-label="Profil"
-          onClick={(e) => {
-          if (!isAuthentificated) {
-          e.preventDefault();
-          navigate("/login");
-                             }
-           }}
+         <Link to={isAuthentificated ? "/profil" : "/login"}  className="header-icon"       aria-label="Profil"
            >
             👤
           </Link>
