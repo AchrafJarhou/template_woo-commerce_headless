@@ -2,10 +2,12 @@ import { addProductToCart } from "../../thunkActionsCreator/cartThunks";
 import { showToast } from "../../slices/toastSlice";
 import { useDispatch } from "react-redux";
 import { Link, redirect } from "react-router-dom";
+import { useState, useEffect } from "react";
 import "./index.css";
 
 export default function ProductCard({ product }) {
   const dispatch = useDispatch();
+  const [itemVariation, setItemVariation] = useState({});
 
   const addProduct = async (productId, quantity, variation, name) => {
     const result = await dispatch(
@@ -21,6 +23,24 @@ export default function ProductCard({ product }) {
       dispatch(showToast(result.payload || "Erreur lors de l'ajout au panier"));
     }
   };
+
+  function changeVariation(name, value) {
+    setItemVariation((prev) => ({ ...prev, [name]: value }));
+  }
+
+  useEffect(() => {
+    if (!product.attributes) return;
+
+    const defaults = {};
+
+    product.attributes.forEach((attribute) => {
+      if (attribute.terms.length > 0) {
+        defaults[attribute.name] = attribute.terms[0].name;
+      }
+    });
+
+    setItemVariation(defaults);
+  }, [product]);
 
   return (
     <div className="product-card">
@@ -58,9 +78,23 @@ export default function ProductCard({ product }) {
       ) : null}
 
       {product.is_in_stock ? <p>En stock</p> : <p>Rupture de stock</p>}
+      {product.attributes?.map((attribute) => (
+        <>
+          <label htmlFor={attribute.name}>{attribute.name}</label>
+          <select
+            name={attribute.name}
+            onChange={(e) => changeVariation(attribute.name, e.target.value)}
+          >
+            {attribute.terms.map((term) => (
+              <option value={term.name}>{term.name}</option>
+            ))}
+          </select>
+        </>
+      ))}
+
       <button
         disabled={!product.is_in_stock}
-        onClick={() => addProduct(product.id, 1, [], product.name)}
+        onClick={() => addProduct(product.id, 1, itemVariation, product.name)}
       >
         Ajouter au panier
       </button>

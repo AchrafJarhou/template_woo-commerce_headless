@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setFilters } from "../../slices/filtersSlice";
 import { useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+
 import { fetchSearchSuggestionsThunk } from "../../thunkActionsCreator/productsThunks";
 import Autocomplete from "../Autocomplete";
 import { logout } from "../../slices/userSlice";
@@ -14,7 +14,6 @@ export default function Header() {
   const [suggestions, setSuggestions] = useState([]);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const token = useSelector((state) => state.user.token);
 
   const filters = useSelector((state) => state.filters);
