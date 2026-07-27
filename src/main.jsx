@@ -43,10 +43,10 @@ import User from "./pages/User";
 import Cart from "./pages/Cart";
 import Contact from "./pages/Contact";
 import Checkout from "./pages/Checkout";
-import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
 import { siteSlice } from "./slices/siteSlice";
 import Success from "./pages/Success";
+import BlogPage from "./pages/Blog";
 
 const store = configureStore({
   reducer: {
@@ -82,34 +82,34 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           v7_startTransition: true,
           v7_relativeSplatPath: true,
         }}
-      //basename="/ecom"
-    >
-      <Header />
-      <Seo />
-      <Routes>
-        {<Route path="/" element={<Home />} />}
-        {/* <Route path="/" element={<Store />} /> */}
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        {/* <Route path="/" element={<Home />} /> */}
-        <Route path="/catalogue" element={<Store />} />
-        <Route path="/mentions-legales" element={<MentionsLegales />} />
-        <Route path="/cgu" element={<CGU />} />
-        <Route path="/cgv" element={<CGV />} />
-        <Route path="/panier" element={<Cart />} />
-        <Route path="/user" element={<User />} />
-        <Route path="*" element={<Error404 />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/product/:id" element={<ProductDetails />} />
-        <Route path="/checkout" element={<Checkout />} />
-        <Route path="/blog" element={<Blog />} />
-        <Route path="/blog/:slug" element={<BlogPost />} />
-        <Route path="/success/:orderId" element={<Success />} />
-      </Routes>
-      <Footer />
-      <Toast />
-    </Router>
-  </Provider>
+        //basename="/ecom"
+      >
+        <Header />
+        <Seo />
+        <Routes>
+          {<Route path="/" element={<Home />} />}
+          {/* <Route path="/" element={<Store />} /> */}
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          {/* <Route path="/" element={<Home />} /> */}
+          <Route path="/catalogue" element={<Store />} />
+          <Route path="/mentions-legales" element={<MentionsLegales />} />
+          <Route path="/cgu" element={<CGU />} />
+          <Route path="/cgv" element={<CGV />} />
+          <Route path="/panier" element={<Cart />} />
+          <Route path="/user" element={<User />} />
+          <Route path="*" element={<Error404 />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/product/:id" element={<ProductDetails />} />
+          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/blog" element={<BlogPage />} />
+          <Route path="/blog/:slug" element={<BlogPost />} />
+          <Route path="/success/:orderId" element={<Success />} />
+        </Routes>
+        <Footer />
+        <Toast />
+      </Router>
+    </Provider>
   </HelmetProvider>,
   /* </React.StrictMode>, */
 );
