@@ -16,8 +16,8 @@
   --danger-color: #dc2626;
   --dark-color: #0f172a;
   --bg-color: #f8fafc;
-  --font-body: 'InterCustom', sans-serif;
-  --font-heading: 'PoppinsCustom', sans-serif;
+  --font-body: "InterCustom", sans-serif;
+  --font-heading: "PoppinsCustom", sans-serif;
 }
 
 * {
@@ -46,7 +46,9 @@ body {
   color: var(--bg-color);
 }
 
-input, textarea, select {
+input,
+textarea,
+select {
   font-family: inherit;
   color: inherit;
 }

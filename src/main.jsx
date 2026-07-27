@@ -16,6 +16,7 @@ import { filtersSlice } from "./slices/filtersSlice";
 import { userSlice } from "./slices/userSlice";
 import { pagesSlice } from "./slices/pagesSlice";
 import { blogSlice } from "./slices/blogSlice";
+import { toastSlice } from "./slices/toastSlice";
 
 import { initializeCartThunk } from "./thunkActionsCreator/cartThunks";
 import {
@@ -31,6 +32,7 @@ import Login from "./pages/login";
 import Register from "./pages/register";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import Toast from "./components/Toast";
 import Error404 from "./pages/Error404";
 import MentionsLegales from "./pages/MentionsLegales";
 import CGU from "./pages/CGU";
@@ -40,6 +42,7 @@ import Cart from "./pages/Cart";
 import Contact from "./pages/Contact";
 import Checkout from "./pages/Checkout";
 import Blog from "./pages/Blog";
+import Success from "./pages/Success";
 
 const store = configureStore({
   reducer: {
@@ -50,6 +53,7 @@ const store = configureStore({
     filters: filtersSlice.reducer,
     pages: pagesSlice.reducer,
     blog: blogSlice.reducer,
+    toast: toastSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().prepend(cartIdentityListener.middleware),
@@ -92,8 +96,10 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Route path="/product/:id" element={<ProductDetails />} />
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/blog" element={<Blog />} />
+        <Route path="/success/:orderId" element={<Success />} />
       </Routes>
       <Footer />
+      <Toast />
     </Router>
   </Provider>
   </HelmetProvider>,

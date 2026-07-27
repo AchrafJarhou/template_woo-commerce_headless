@@ -5,6 +5,7 @@ import Seo from "../../components/Seo";
 
 import { fetchProductByIdThunk } from "../../thunkActionsCreator/productsThunks";
 import { addProductToCart } from "../../thunkActionsCreator/cartThunks";
+import { showToast } from "../../slices/toastSlice";
 
 export default function ProductDetails() {
   const { id } = useParams();
@@ -36,13 +37,20 @@ export default function ProductDetails() {
 
   const handleAddToCart = () => {
     if (productToDisplay && productToDisplay.id) {
-      dispatch(
+      const result = await dispatch(
         addProductToCart({
           productId: productToDisplay.id,
           quantity: 1,
           variation: [],
         })
       );
+      if (addProductToCart.fulfilled.match(result)) {
+        dispatch(showToast(`${productToDisplay.name} ajouté au panier`));
+      } else {
+        dispatch(
+          showToast(result.payload || "Erreur lors de l'ajout au panier"),
+        );
+      }
     }
   };
 
