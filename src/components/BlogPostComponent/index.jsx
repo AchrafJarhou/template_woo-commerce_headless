@@ -1,10 +1,12 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 import { fetchBlogPostBySlugThunk} from "../../thunkActionsCreator/blogThunks";
 import Seo from "../Seo";
 import "./index.css";
 
-export default function BlogPostComponent({slug}) {
+export default function BlogPostComponent() {
+  const { slug } = useParams();
   const dispatch = useDispatch();
   const { singlePost, loadingSingle, errorSingle } = useSelector(
     (state) => state.blog,
