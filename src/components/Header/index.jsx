@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setFilters } from "../../slices/filtersSlice";
 import { useNavigate } from "react-router-dom";
 import { fetchSearchSuggestionsThunk } from "../../thunkActionsCreator/productsThunks";
+import Autocomplete from "../Autocomplete";
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -22,7 +23,9 @@ export default function Header() {
       return;
     }
     let active = true;
-    dispatch(fetchSearchSuggestionsThunk({ search: filters.search, per_page: 5 }))
+    dispatch(
+      fetchSearchSuggestionsThunk({ search: filters.search, per_page: 5 }),
+    )
       .unwrap()
       .then((data) => {
         if (active) setSuggestions(data);
