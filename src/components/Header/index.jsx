@@ -116,7 +116,7 @@ export default function Header() {
             🔍
           </Link>
 
-         <Link to={isAuthentificated ? "/profil" : "/login"}  className="header-icon"       aria-label="Profil"
+         <Link to={isAuthentificated ? "/profile" : "/login"}  className="header-icon"       aria-label="Profil"
            >
             👤
           </Link>
