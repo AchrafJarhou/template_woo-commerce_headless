@@ -131,40 +131,24 @@ export default function ProductDetails() {
         </nav>
       </div>
 
-          <div
-            className="short-description-box"
-            dangerouslySetInnerHTML={{
-              __html:
-                productToDisplay.description ||
-                productToDisplay.short_description ||
-                "<p>Aucune introduction disponible.</p>",
-            }}
-          />
+      {/*  <div
+        className="short-description-box"
+        dangerouslySetInnerHTML={{
+          __html:
+            productToDisplay.description ||
+            productToDisplay.short_description ||
+            "<p>Aucune introduction disponible.</p>",
+        }}
+      /> */}
 
-          {/* Options variations */}
-          {productToDisplay.attributes?.map((attribute) => (
-            <div key={attribute.name}>
-              <label htmlFor={attribute.name}>{attribute.name}</label>
-              <select
-                name={attribute.name}
-                onChange={(e) =>
-                  changeVariation(attribute.name, e.target.value)
-                }
-              >
-                {attribute.terms.map((term) => (
-                  <option key={term.name} value={term.name}>
-                    {term.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-          ))}
+      {/* Options variations */}
 
-          {/* Le bouton d'ajout au panier est maintenant connecté via onClick */}
-          <button className="add-to-cart-btn" onClick={handleAddToCart}>
-            <i className="fas fa-shopping-cart cart-btn-icon"></i>
-            Ajouter au panier
-          </button>
+      {/* Le bouton d'ajout au panier est maintenant connecté via onClick */}
+      {/* <button className="add-to-cart-btn" onClick={handleAddToCart}>
+        <i className="fas fa-shopping-cart cart-btn-icon"></i>
+        Ajouter au panier
+      </button> */}
+
       <div className="product-main-card">
         <div className="product-content-grid">
           <div className="gallery-wrapper">
@@ -219,6 +203,23 @@ export default function ProductDetails() {
               </h3>
 
               <div className="actions-row">
+                {productToDisplay.attributes?.map((attribute) => (
+                  <div key={attribute.name}>
+                    <label htmlFor={attribute.name}>{attribute.name}</label>
+                    <select
+                      name={attribute.name}
+                      onChange={(e) =>
+                        changeVariation(attribute.name, e.target.value)
+                      }
+                    >
+                      {attribute.terms.map((term) => (
+                        <option key={term.name} value={term.name}>
+                          {term.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                ))}
                 <button onClick={handleAddToCart}>🧺 Ajouter au panier</button>
 
                 <button title="Ajouter aux favoris">❤️</button>
@@ -227,7 +228,7 @@ export default function ProductDetails() {
           </div>
         </div>
 
-      {/* <div className="product-bottom-block">
+        {/* <div className="product-bottom-block">
         <div className="details-content-row">
           <div
             className="description-content"
@@ -239,6 +240,7 @@ export default function ProductDetails() {
           />
         </div>
       </div> */}
+      </div>
     </div>
   );
 }
