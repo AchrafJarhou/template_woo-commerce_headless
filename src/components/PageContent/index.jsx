@@ -17,16 +17,8 @@ export default function PageContent({ slug }) {
 
   const title = page.title ?? "";
   const content = page.content ?? "";
-  console.log(page._links?.["wp:featuredmedia"]?.[0]?.href);
   return (
     <div>
-      {page._links?.["wp:featuredmedia"]?.[0]?.href && (
-        <img
-          // src={`/woo-api/wp-json/wp/v2/media/${page.featured_media}/guid/rendered`}
-          src={`${import.meta.env.VITE_API_URL}/${slug}/images/`}
-          alt={`${import.meta.env.VITE_API_URL}/wp-json/wp/v2/media/${page.featured_media}/alt_text`}
-        />
-      )}
       <h1 dangerouslySetInnerHTML={{ __html: title.rendered }} />
       <div dangerouslySetInnerHTML={{ __html: content.rendered }} />
     </div>

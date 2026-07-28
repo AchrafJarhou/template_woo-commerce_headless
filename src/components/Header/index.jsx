@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setFilters } from "../../slices/filtersSlice";
 import { useNavigate } from "react-router-dom";
-
 import { fetchSearchSuggestionsThunk } from "../../thunkActionsCreator/productsThunks";
 import Autocomplete from "../Autocomplete";
 import { logout } from "../../slices/userSlice";
@@ -12,11 +11,17 @@ import { logout } from "../../slices/userSlice";
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [suggestions, setSuggestions] = useState([]);
-  const dispatch = useDispatch();
   const navigate = useNavigate();
   const token = useSelector((state) => state.user.token);
+  const cartItems = useSelector((state) => state.cart.items);
 
   const filters = useSelector((state) => state.filters);
+  const isAuthentificated = !!useSelector((state) => state.user?.token);
+  const cartCount = cartItems.reduce(
+    (total, item) => total + (Number(item.quantity) || 0),
+    0,
+  );
+  const cartBadgeValue = cartCount > 9 ? "9+" : String(cartCount);
 
   // Suggestions d'autocomplétion : état local, volontairement séparé de
   // state.products.list pour ne pas écraser le catalogue ni le slider.
@@ -110,12 +115,18 @@ export default function Header() {
             🔍
           </Link>
 
-          <Link to="/profil" className="header-icon" aria-label="Profil">
+         <Link to={isAuthentificated ? "/profile" : "/login"}  className="header-icon"       aria-label="Profil"
+           >
             👤
           </Link>
 
-          <Link to="/panier" className="header-icon" aria-label="Panier">
+          <Link
+            to="/panier"
+            className="header-icon header-cart-link"
+            aria-label={`Panier (${cartBadgeValue})`}
+          >
             🛒
+            {cartCount > 0 && <span className="header-cart-badge">{cartBadgeValue}</span>}
           </Link>
 
           {token && (

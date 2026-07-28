@@ -1,0 +1,12 @@
+div {
+  padding: 24px;
+}
+
+.blog-post {
+  max-width: 800px;
+  margin: 0 auto;
+}
+.blog-post-date {
+  color: #666;
+  font-size: 14px;
+}/*# sourceMappingURL=index.css.map */

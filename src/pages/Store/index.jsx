@@ -3,9 +3,9 @@ import Filters from "../../components/Filters";
 
 export default function Store() {
   return (
-    <div>
+    <>
       <Filters />
-      <Feed></Feed>
-    </div>
+      <Feed />
+    </>
   );
 }

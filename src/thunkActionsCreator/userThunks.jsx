@@ -62,6 +62,47 @@ export const fetchCurrentUserThunk = createAsyncThunk(
   },
 );
 
+export const updateCurrentUserThunk = createAsyncThunk(
+  "user/updateCurrentUser",
+  async ({ email, firstName, lastName, password }, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().user.token;
+      const body = {};
+      if (email !== undefined) body.email = email;
+      if (firstName !== undefined) body.first_name = firstName;
+      if (lastName !== undefined) body.last_name = lastName;
+      if (password !== undefined) body.password = password;
+
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/wp-json/wp/v2/users/me`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(body),
+        },
+      );
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || "Impossible de mettre a jour le profil.");
+      }
+      return {
+        id: data.id,
+        username: data.username,
+        email: data.email,
+        firstName: data.first_name,
+        lastName: data.last_name,
+        displayName: data.name,
+        roles: data.roles,
+      };
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  },
+);
+
 export const fetchCurrentCustomerThunk = createAsyncThunk(
   "user/fetchCurrentCustomer",
   async (tokenArg, thunkAPI) => {
@@ -181,19 +222,21 @@ export const updateCurrentCustomerThunk = createAsyncThunk(
   },
 );
 
-export const deleteCurrentCustomerThunk = createAsyncThunk(
-  "user/deleteCurrentCustomer",
-  async (_, thunkAPI) => {
+export const deleteCurrentUserThunk = createAsyncThunk(
+  "user/deleteCurrentUser",
+  async ({ password }, thunkAPI) => {
     try {
       const token = thunkAPI.getState().user.token;
 
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/wp-json/custom/v1/customer`,
+        `${import.meta.env.VITE_API_URL}/wp-json/custom/v1/user`,
         {
           method: "DELETE",
           headers: {
+            "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
+          body: JSON.stringify({ password }),
         },
       );
 

@@ -1,7 +1,11 @@
 // COMPOSANT DE TEST TEMPORAIRE - a supprimer une fois la validation terminee
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { loginThunk, registerThunk } from "../../thunkActionsCreator/userThunks";
+import {
+  loginThunk,
+  registerThunk,
+  updateCurrentUserThunk,
+} from "../../thunkActionsCreator/userThunks";
 import { logout } from "../../slices/userSlice";
 
 export default function UserTest() {
@@ -13,6 +17,11 @@ export default function UserTest() {
   const [regUsername, setRegUsername] = useState("");
   const [regEmail, setRegEmail] = useState("");
   const [regPassword, setRegPassword] = useState("");
+
+  const [newEmail, setNewEmail] = useState("");
+  const [newFirstName, setNewFirstName] = useState("");
+  const [newLastName, setNewLastName] = useState("");
+  const [newPassword, setNewPassword] = useState("");
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -32,6 +41,18 @@ export default function UserTest() {
 
   const handleLogout = () => {
     dispatch(logout());
+  };
+
+  const handleUpdateProfile = (e) => {
+    e.preventDefault();
+    dispatch(
+      updateCurrentUserThunk({
+        email: newEmail || undefined,
+        firstName: newFirstName || undefined,
+        lastName: newLastName || undefined,
+        password: newPassword || undefined,
+      }),
+    );
   };
 
   return (
@@ -83,6 +104,37 @@ export default function UserTest() {
       </form>
 
       <button onClick={handleLogout}>Se deconnecter</button>
+
+      <h3>Modifier le profil</h3>
+      <form onSubmit={handleUpdateProfile}>
+        <input
+          type="email"
+          placeholder="nouvel email"
+          value={newEmail}
+          onChange={(e) => setNewEmail(e.target.value)}
+        />
+        <input
+          type="text"
+          placeholder="prenom"
+          value={newFirstName}
+          onChange={(e) => setNewFirstName(e.target.value)}
+        />
+        <input
+          type="text"
+          placeholder="nom"
+          value={newLastName}
+          onChange={(e) => setNewLastName(e.target.value)}
+        />
+        <input
+          type="password"
+          placeholder="nouveau mot de passe"
+          value={newPassword}
+          onChange={(e) => setNewPassword(e.target.value)}
+        />
+        <button type="submit" disabled={user.loading}>
+          {user.loading ? "Mise a jour..." : "Mettre a jour le profil"}
+        </button>
+      </form>
 
       <h3>State user actuel :</h3>
       <pre>{JSON.stringify(user, null, 2)}</pre>
