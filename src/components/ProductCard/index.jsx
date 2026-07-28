@@ -93,13 +93,15 @@ export default function ProductCard({ product }) {
           </select>
         </div>
       ))}
-
-      <button
-        disabled={!product.is_in_stock}
-        onClick={() => addProduct(product.id, 1, itemVariation, product.name)}
-      >
-        Ajouter au panier
-      </button>
+      {product.is_in_stock ? (
+        <button
+          onClick={() => addProduct(product.id, 1, itemVariation, product.name)}
+        >
+          Ajouter au panier
+        </button>
+      ) : (
+        <button disabled>Rupture de stock</button>
+      )}
     </div>
   );
 }

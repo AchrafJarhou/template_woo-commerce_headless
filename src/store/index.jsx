@@ -1,0 +1,33 @@
+import { configureStore } from "@reduxjs/toolkit";
+
+import { cartSlice } from "../slices/cartSlice";
+import { productsSlice } from "../slices/productSlice";
+import { spotlightSlice } from "../slices/spotlightSlice";
+import { categoriesSlice } from "../slices/categoriesSlice";
+import { filtersSlice } from "../slices/filtersSlice";
+import { userSlice } from "../slices/userSlice";
+import { pagesSlice } from "../slices/pagesSlice";
+import { blogSlice } from "../slices/blogSlice";
+import { siteSlice } from "../slices/siteSlice";
+import { toastSlice } from "../slices/toastSlice";
+
+import { cartIdentityListener } from "./cartIdentityListener";
+
+const store = configureStore({
+  reducer: {
+    user: userSlice.reducer,
+    cart: cartSlice.reducer,
+    categories: categoriesSlice.reducer,
+    products: productsSlice.reducer,
+    spotlight: spotlightSlice.reducer,
+    filters: filtersSlice.reducer,
+    pages: pagesSlice.reducer,
+    blog: blogSlice.reducer,
+    site: siteSlice.reducer,
+    toast: toastSlice.reducer,
+  },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().prepend(cartIdentityListener.middleware),
+});
+
+export default store;

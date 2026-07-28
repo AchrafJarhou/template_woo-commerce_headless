@@ -1,12 +1,10 @@
 .autocomplete {
   position: relative;
 }
-
 .autocomplete-input {
   padding: 0.4rem 0.8rem;
   width: 100%;
 }
-
 .autocomplete-suggestions {
   position: absolute;
   top: 100%;
@@ -22,7 +20,6 @@
   max-height: 320px;
   overflow-y: auto;
 }
-
 .autocomplete-suggestions li a {
   display: flex;
   align-items: center;
@@ -31,14 +28,11 @@
   text-decoration: none;
   color: inherit;
 }
-
 .autocomplete-suggestions li a:hover {
   background: #f5f5f5;
 }
-
 .autocomplete-suggestions li img {
   width: 36px;
   height: 36px;
-  -o-object-fit: cover;
-     object-fit: cover;
-}/*# sourceMappingURL=index.css.map */
+  object-fit: cover;
+}
