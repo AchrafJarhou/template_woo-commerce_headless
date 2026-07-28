@@ -46,6 +46,7 @@ import BlogPost from "./pages/BlogPost";
 import { siteSlice } from "./slices/siteSlice";
 import Success from "./pages/Success";
 import BlogPage from "./pages/Blog";
+import Profile from "./pages/User";
 
 const store = configureStore({
   reducer: {
@@ -81,7 +82,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           v7_startTransition: true,
           v7_relativeSplatPath: true,
         }}
-      //basename="/ecom"
+        //basename="/ecom"
       >
         <Header />
         <Seo />
@@ -104,6 +105,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <Route path="/blog" element={<BlogPage />} />
           <Route path="/blog/:slug" element={<BlogPost />} />
           <Route path="/success/:orderId" element={<Success />} />
+          <Route path="/profile" element={<Profile />} />
         </Routes>
         <Footer />
         <Toast />
