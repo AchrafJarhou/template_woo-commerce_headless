@@ -162,7 +162,10 @@ export default function ProductDetails() {
                   <div className="thumbnail-list">
                     {productImages.map((img, index) => (
                       <div
-                        key={img.id || index}
+                        key={
+                          "pictureDetails" + img.id + index ||
+                          "pictureDetails" + index
+                        }
                         className={`thumbnail-item ${index === activeImageIndex ? "active" : ""}`}
                         onClick={() => setActiveImageIndex(index)}
                       >
