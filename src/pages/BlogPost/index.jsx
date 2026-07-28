@@ -1,9 +1,9 @@
-import BlogPostComponent from "../../components/BlogPost";
+import BlogPost from "../../components/BlogPost";
 
 export default function BlogPost() {
   return (
     <>
-      <BlogPostComponent />
+      <BlogPost />
     </>
   );
 }
