@@ -55,9 +55,7 @@ export default function Login() {
             onChange={handleChange}
           />
         </p>
-        <a href="https://l-araignee.net/wooc/wp-login.php?action=lostpassword">
-          Mot de passe oublié ?
-        </a>
+        <Link to="/reset-password">Mot de passe oublié ?</Link>
         <button type="submit" disabled={loading}>
           {loading ? "Loading..." : "Login"}
         </button>
