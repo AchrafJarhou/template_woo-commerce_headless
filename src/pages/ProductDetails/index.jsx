@@ -223,8 +223,13 @@ export default function ProductDetails() {
                     </select>
                   </div>
                 ))}
-                <button onClick={handleAddToCart}>🧺 Ajouter au panier</button>
-
+                {productToDisplay.is_in_stock ? (
+                  <button onClick={handleAddToCart}>
+                    🧺 Ajouter au panier
+                  </button>
+                ) : (
+                  <button disabled>Rupture de stock</button>
+                )}
                 <button title="Ajouter aux favoris">❤️</button>
               </div>
             </div>
