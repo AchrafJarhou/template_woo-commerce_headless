@@ -14,9 +14,9 @@ export default function Header() {
   // const navigate = useNavigate();
   const token = useSelector((state) => state.user.token);
   const cartItems = useSelector((state) => state.cart.items);
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
-  // const filters = useSelector((state) => state.filters);
+  //const filters = useSelector((state) => state.filters);
   const isAuthentificated = !!useSelector((state) => state.user?.token);
   const cartCount = cartItems.reduce(
     (total, item) => total + (Number(item.quantity) || 0),

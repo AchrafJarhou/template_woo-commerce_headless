@@ -1,12 +1,16 @@
 import { useState, useRef, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setFilters } from "../../slices/filtersSlice";
-import { fetchSearchSuggestionsThunk } from "../../thunkActionsCreator/productsThunks";
+import {
+  fetchProductsThunk,
+  fetchSearchSuggestionsThunk,
+} from "../../thunkActionsCreator/productsThunks";
 import "./index.css";
 
 export default function Autocomplete() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const search = useSelector((state) => state.filters.search);
   // const [suggestions, setSuggestions] = useState([]);
   const [focused, setFocused] = useState(false);
@@ -29,6 +33,9 @@ export default function Autocomplete() {
   //   }
   // };
   const { list, loading, error } = useSelector((state) => state.products);
+  useEffect(() => {
+    dispatch(fetchProductsThunk({ ...filters, page: 1, per_page: 20 }));
+  }, [filters, dispatch]);
 
   // useEffect(() => {
   //   if (!filters.search) {
