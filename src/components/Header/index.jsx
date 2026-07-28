@@ -4,19 +4,19 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setFilters } from "../../slices/filtersSlice";
 import { useNavigate } from "react-router-dom";
-import { fetchSearchSuggestionsThunk } from "../../thunkActionsCreator/productsThunks";
+// import { fetchSearchSuggestionsThunk } from "../../thunkActionsCreator/productsThunks";
 import Autocomplete from "../Autocomplete";
 import { logout } from "../../slices/userSlice";
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [suggestions, setSuggestions] = useState([]);
-  const navigate = useNavigate();
+  // const [suggestions, setSuggestions] = useState([]);
+  // const navigate = useNavigate();
   const token = useSelector((state) => state.user.token);
   const cartItems = useSelector((state) => state.cart.items);
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
-  const filters = useSelector((state) => state.filters);
+  // const filters = useSelector((state) => state.filters);
   const isAuthentificated = !!useSelector((state) => state.user?.token);
   const cartCount = cartItems.reduce(
     (total, item) => total + (Number(item.quantity) || 0),
@@ -26,34 +26,34 @@ export default function Header() {
 
   // Suggestions d'autocomplétion : état local, volontairement séparé de
   // state.products.list pour ne pas écraser le catalogue ni le slider.
-  useEffect(() => {
-    if (!filters.search) {
-      setSuggestions([]);
-      return;
-    }
-    let active = true;
-    dispatch(
-      fetchSearchSuggestionsThunk({ search: filters.search, per_page: 5 }),
-    )
-      .unwrap()
-      .then((data) => {
-        if (active) setSuggestions(data);
-      })
-      .catch(() => {
-        if (active) setSuggestions([]);
-      });
-    return () => {
-      active = false;
-    };
-  }, [filters.search, dispatch]);
+  // useEffect(() => {
+  //   if (!filters.search) {
+  //     setSuggestions([]);
+  //     return;
+  //   }
+  //   let active = true;
+  //   dispatch(
+  //     fetchSearchSuggestionsThunk({ search: filters.search, per_page: 5 }),
+  //   )
+  //     .unwrap()
+  //     .then((data) => {
+  //       if (active) setSuggestions(data);
+  //     })
+  //     .catch(() => {
+  //       if (active) setSuggestions([]);
+  //     });
+  //   return () => {
+  //     active = false;
+  //   };
+  // }, [filters.search, dispatch]);
 
-  const handleSearchChange = (e) => {
-    dispatch(setFilters({ search: e.target.value }));
-  };
+  // const handleSearchChange = (e) => {
+  //   dispatch(setFilters({ search: e.target.value }));
+  // };
 
-  const handleSearchRedirect = (e) => {
-    if (e.key === "Enter") navigate("/catalogue");
-  };
+  // const handleSearchRedirect = (e) => {
+  //   if (e.key === "Enter") navigate("/catalogue");
+  // };
 
   const closeMenu = () => setMenuOpen(false);
 
@@ -110,7 +110,7 @@ export default function Header() {
 
         <div className="header-actions">
           <label htmlFor="search">Rechercher:</label>
-          <Autocomplete onKeyDown={handleSearchRedirect} />
+          <Autocomplete />
 
           <Link to="/catalogue" className="header-icon" aria-label="Recherche">
             🔍
