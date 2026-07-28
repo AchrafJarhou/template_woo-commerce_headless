@@ -1,14 +1,13 @@
-import { updateCurrentCustomerThunk } from "../../../thunkActionsCreator/userThunks";
-import { fetchCurrentCustomerThunk } from "../../../thunkActionsCreator/userThunks";
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 
+import { updateCurrentCustomerThunk } from "../../../thunkActionsCreator/userThunks";
+import { fetchCurrentCustomerThunk } from "../../../thunkActionsCreator/userThunks";
+
 export function BillingUpdate() {
-  const customer = useSelector((state) => state.user.customer);
   const dispatch = useDispatch();
-
+  const customer = useSelector((state) => state.user.customer);
   const [billing, setBilling] = useState(customer?.billing || {});
-
   const handleBillingChange = (key, value) => {
     setBilling((prev) => ({ ...prev, [key]: value }));
   };
@@ -37,8 +36,8 @@ export function BillingUpdate() {
 }
 
 export function ShippingUpdate() {
-  const customer = useSelector((state) => state.user.customer);
   const dispatch = useDispatch();
+  const customer = useSelector((state) => state.user.customer);
   const [shipping, setShipping] = useState(customer?.shipping || {});
   const handleShippingChange = (key, value) => {
     setShipping((prev) => ({ ...prev, [key]: value }));

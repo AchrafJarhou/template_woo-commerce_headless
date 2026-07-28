@@ -1,7 +1,9 @@
 import { UpdateForm } from "../../components/Profile/UpdateUser";
 import DeleteAccountButton from "../../components/DeleteAccountButton";
-import { UserDisplay } from "../../components/Profile/UserDisplay";
-import { CustomerDisplay } from "../../components/Profile/UserDisplay";
+import {
+  UserDisplay,
+  CustomerDisplay,
+} from "../../components/Profile/UserDisplay";
 
 export default function Profile() {
   return (

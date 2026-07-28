@@ -1,15 +1,15 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+
 import {
   fetchCurrentUserThunk,
   fetchCurrentCustomerThunk,
 } from "../../../thunkActionsCreator/userThunks";
-import { BillingUpdate } from "../CustomerUpdate";
-import { ShippingUpdate } from "../CustomerUpdate";
+
+import { BillingUpdate, ShippingUpdate } from "../CustomerUpdate";
 
 export function UserDisplay() {
   const dispatch = useDispatch();
-
   const profile = useSelector((state) => state.user.profile);
   const loading = useSelector((state) => state.user.loading);
   const error = useSelector((state) => state.user.error);
