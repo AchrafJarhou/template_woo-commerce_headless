@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
-import { fetchProductsThunk } from "../../thunkActionsCreator/productsThunks";
+import { fetchSpotlightProductsThunk } from "../../thunkActionsCreator/spotlightThunks";
 import { addProductToCart } from "../../thunkActionsCreator/cartThunks";
 import { showToast } from "../../slices/toastSlice";
 
@@ -15,7 +15,7 @@ const MOBILE_QUERY = "(max-width: 1024px)";
 
 export default function HomeSlider() {
   const dispatch = useDispatch();
-  const { list, loading } = useSelector((state) => state.products);
+  const { list, loading } = useSelector((state) => state.spotlight);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [dragOffset, setDragOffset] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
@@ -30,7 +30,7 @@ export default function HomeSlider() {
 
   useEffect(() => {
     dispatch(
-      fetchProductsThunk({
+      fetchSpotlightProductsThunk({
         orderby: "popularity",
         order: "desc",
         page: 1,
