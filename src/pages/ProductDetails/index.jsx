@@ -12,6 +12,7 @@ export default function ProductDetails() {
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [itemVariation, setItemVariation] = useState({});
 
   const [activeImageIndex, setActiveImageIndex] = useState(0);
 
@@ -28,7 +29,7 @@ export default function ProductDetails() {
     if (id && !productFromList) {
       dispatch(fetchProductByIdThunk(id));
     }
-  }, [id, dispatch, productFromList, singleProduct]);
+  }, []);
 
   useEffect(() => {
     if (productToDisplay) {
@@ -42,7 +43,7 @@ export default function ProductDetails() {
         addProductToCart({
           productId: productToDisplay.id,
           quantity: 1,
-          variation: [],
+          variation: itemVariation,
         }),
       );
       if (addProductToCart.fulfilled.match(result)) {
@@ -54,6 +55,24 @@ export default function ProductDetails() {
       }
     }
   };
+
+  function changeVariation(name, value) {
+    setItemVariation((prev) => ({ ...prev, [name]: value }));
+  }
+
+  useEffect(() => {
+    if (!productToDisplay || !productToDisplay.attributes) return;
+
+    const defaults = {};
+
+    productToDisplay.attributes.forEach((attribute) => {
+      if (attribute.terms.length > 0) {
+        defaults[attribute.name] = attribute.terms[0].name;
+      }
+    });
+
+    setItemVariation(defaults);
+  }, [productToDisplay]);
 
   if (loadingSingle && !productToDisplay) {
     return <div className="loading-state">Chargement en cours...</div>;
@@ -112,6 +131,24 @@ export default function ProductDetails() {
         </nav>
       </div>
 
+      {/*  <div
+        className="short-description-box"
+        dangerouslySetInnerHTML={{
+          __html:
+            productToDisplay.description ||
+            productToDisplay.short_description ||
+            "<p>Aucune introduction disponible.</p>",
+        }}
+      /> */}
+
+      {/* Options variations */}
+
+      {/* Le bouton d'ajout au panier est maintenant connecté via onClick */}
+      {/* <button className="add-to-cart-btn" onClick={handleAddToCart}>
+        <i className="fas fa-shopping-cart cart-btn-icon"></i>
+        Ajouter au panier
+      </button> */}
+
       <div className="product-main-card">
         <div className="product-content-grid">
           <div className="gallery-wrapper">
@@ -166,6 +203,23 @@ export default function ProductDetails() {
               </h3>
 
               <div className="actions-row">
+                {productToDisplay.attributes?.map((attribute) => (
+                  <div key={attribute.name}>
+                    <label htmlFor={attribute.name}>{attribute.name}</label>
+                    <select
+                      name={attribute.name}
+                      onChange={(e) =>
+                        changeVariation(attribute.name, e.target.value)
+                      }
+                    >
+                      {attribute.terms.map((term) => (
+                        <option key={term.name} value={term.name}>
+                          {term.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                ))}
                 <button onClick={handleAddToCart}>🧺 Ajouter au panier</button>
 
                 <button title="Ajouter aux favoris">❤️</button>
@@ -174,8 +228,8 @@ export default function ProductDetails() {
           </div>
         </div>
 
-        <div className="detailed-description-section">
-          <h2>Description détaillée</h2>
+        {/* <div className="product-bottom-block">
+        <div className="details-content-row">
           <div
             className="description-content"
             dangerouslySetInnerHTML={{
@@ -185,6 +239,7 @@ export default function ProductDetails() {
             }}
           />
         </div>
+      </div> */}
       </div>
     </div>
   );

@@ -12,9 +12,9 @@ export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [suggestions, setSuggestions] = useState([]);
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const token = useSelector((state) => state.user.token);
   const cartItems = useSelector((state) => state.cart.items);
+  const dispatch = useDispatch();
 
   const filters = useSelector((state) => state.filters);
   const isAuthentificated = !!useSelector((state) => state.user?.token);
@@ -116,8 +116,11 @@ export default function Header() {
             🔍
           </Link>
 
-         <Link to={isAuthentificated ? "/profile" : "/login"}  className="header-icon"       aria-label="Profil"
-           >
+          <Link
+            to={isAuthentificated ? "/profile" : "/login"}
+            className="header-icon"
+            aria-label="Profil"
+          >
             👤
           </Link>
 
@@ -127,7 +130,9 @@ export default function Header() {
             aria-label={`Panier (${cartBadgeValue})`}
           >
             🛒
-            {cartCount > 0 && <span className="header-cart-badge">{cartBadgeValue}</span>}
+            {cartCount > 0 && (
+              <span className="header-cart-badge">{cartBadgeValue}</span>
+            )}
           </Link>
 
           {token && (

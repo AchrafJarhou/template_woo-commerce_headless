@@ -26,7 +26,19 @@ export function CartProduct({ item }) {
             item.short_description || item.description || "pas de description",
         }}
       ></span>
+      {item.variation &&
+        item.variation.map((variation) => (
+          <p key={variation.attribute}>
+            {variation.attribute} : {variation.value}
+          </p>
+        ))}
       <p>{item.quantity}</p>
+      {item.prices && (
+        <p>
+          {(parseInt(item.prices.price) / 100).toFixed(2) +
+            item.prices.currency_suffix}
+        </p>
+      )}
       <button
         disabled={item.quantity === item.quantity_limits.maximum}
         onClick={() => {
