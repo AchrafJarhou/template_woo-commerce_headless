@@ -17,7 +17,6 @@ import Home from "./pages/Home";
 import Store from "./pages/Store";
 import ProductDetails from "./pages/ProductDetails";
 import Cart from "./pages/Cart";
-import Checkout from "./pages/Checkout";
 import Success from "./pages/Success";
 import Profile from "./pages/User";
 import Login from "./pages/login";
@@ -71,7 +70,6 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <Route path="*" element={<Error404 />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/product/:id" element={<ProductDetails />} />
-          <Route path="/checkout" element={<Checkout />} />
           <Route path="/blog" element={<BlogPage />} />
           <Route path="/blog/:slug" element={<SinglePost />} />
           <Route path="/success/:orderId" element={<Success />} />

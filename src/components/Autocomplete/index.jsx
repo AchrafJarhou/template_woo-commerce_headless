@@ -1,45 +1,79 @@
-import {useState , useRef, useEffect} from "react";
-import {Link} from "react-router-dom";
-import {useDispatch, useSelector} from "react-redux";
-import {setFilters} from "../../slices/filtersSlice";
+import { useState, useRef, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { setFilters } from "../../slices/filtersSlice";
+import {
+  fetchProductsThunk,
+  fetchSearchSuggestionsThunk,
+} from "../../thunkActionsCreator/productsThunks";
 import "./index.css";
 
-export default function Autocomplete({ onKeyDown }){
-    const dispatch = useDispatch();
-    const search = useSelector((state) => state.filters.search);
-    const [suggestions, setSuggestions] = useState([]);
-    const [focused, setFocused] = useState(false);
-    const timeoutRef = useRef(null);
+export default function Autocomplete() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const search = useSelector((state) => state.filters.search);
+  // const [suggestions, setSuggestions] = useState([]);
+  const [focused, setFocused] = useState(false);
+  const timeoutRef = useRef(null);
+  const filters = useSelector((state) => state.filters);
 
-    const fetchSuggestions = async (value) => {
-    try {
-      const url = `${import.meta.env.VITE_API_URL}/wp-json/wc/store/v1/products?search=${encodeURIComponent(value)}&per_page=5`;
-      const response = await fetch(url, {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-      });
-      if (!response.ok) throw new Error(" il est Impossible de récupérer les suggestions.");
-      const data = await response.json();
-      setSuggestions(data);
-    } catch (error) {
-      setSuggestions([]);
-    }
-  };
-
+  // const fetchSuggestions = async (value) => {
+  //   try {
+  //     const url = `${import.meta.env.VITE_API_URL}/wp-json/wc/store/v1/products?search=${encodeURIComponent(value)}&per_page=5`;
+  //     const response = await fetch(url, {
+  //       method: "GET",
+  //       headers: { "Content-Type": "application/json" },
+  //     });
+  //     if (!response.ok)
+  //       throw new Error(" il est Impossible de récupérer les suggestions.");
+  //     const data = await response.json();
+  //     setSuggestions(data);
+  //   } catch (error) {
+  //     setSuggestions([]);
+  //   }
+  // };
+  const { list, loading, error } = useSelector((state) => state.products);
   useEffect(() => {
-    clearTimeout(timeoutRef.current);
+    dispatch(fetchProductsThunk({ ...filters, page: 1, per_page: 20 }));
+  }, [filters, dispatch]);
 
-    if (search.trim().length < 3) {
-      setSuggestions([]);
-      return;
-    }
+  // useEffect(() => {
+  //   if (!filters.search) {
+  //     setSuggestions([]);
+  //     return;
+  //   }
+  //   setSuggestions(list.data);
+  //   let active = true;
+  //   dispatch(
+  //     fetchSearchSuggestionsThunk({ search: filters.search, per_page: 5 }),
+  //   )
+  //     .unwrap()
+  //     .then((data) => {
+  //       if (active) setSuggestions(list.data);
+  //     })
+  //     .catch(() => {
+  //       if (active) setSuggestions([]);
+  //     });
+  //   return () => {
+  //     active = false;
+  //   };
+  // }, [filters.search, dispatch]);
 
-    timeoutRef.current = setTimeout(() => {
-      fetchSuggestions(search);
-    }, 350);
+  // useEffect(() => {
+  //   setSuggestions(list.data);
+  //   clearTimeout(timeoutRef.current);
 
-    return () => clearTimeout(timeoutRef.current);
-  }, [search]);
+  //   if (search.trim().length < 1) {
+  //     setSuggestions([]);
+  //     return;
+  //   }
+
+  //   timeoutRef.current = setTimeout(() => {
+  //     // fetchSuggestions(search);
+  //   }, 350);
+
+  //   return () => clearTimeout(timeoutRef.current);
+  // }, [search]);
 
   const handleChange = (e) => {
     dispatch(setFilters({ search: e.target.value }));
@@ -47,7 +81,14 @@ export default function Autocomplete({ onKeyDown }){
 
   const handleSelect = () => {
     dispatch(setFilters({ search: "" }));
-    setSuggestions([]);
+    //setSuggestions([]);
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      setFocused(false);
+      navigate("/catalogue");
+    }
   };
 
   return (
@@ -58,15 +99,18 @@ export default function Autocomplete({ onKeyDown }){
         placeholder="Rechercher..."
         value={search}
         onChange={handleChange}
-        onKeyDown={onKeyDown}
+        onKeyDown={handleKeyDown}
         onFocus={() => setFocused(true)}
         onBlur={() => setFocused(false)}
         aria-label="Rechercher"
       />
 
-      {focused && suggestions.length > 0 && (
-        <ul className="autocomplete-suggestions" onMouseDown={(e) => e.preventDefault()}>
-          {suggestions.map((product) => (
+      {focused && list.data.length > 0 && (
+        <ul
+          className="autocomplete-suggestions"
+          onMouseDown={(e) => e.preventDefault()}
+        >
+          {list.data.map((product) => (
             <li key={product.id}>
               <Link to={`/product/${product.id}`} onClick={handleSelect}>
                 <img
@@ -84,6 +128,4 @@ export default function Autocomplete({ onKeyDown }){
       )}
     </div>
   );
-
-  
 }
