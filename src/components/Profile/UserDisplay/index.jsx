@@ -4,6 +4,8 @@ import {
   fetchCurrentUserThunk,
   fetchCurrentCustomerThunk,
 } from "../../../thunkActionsCreator/userThunks";
+import { BillingUpdate } from "../CustomerUpdate";
+import { ShippingUpdate } from "../CustomerUpdate";
 
 export function UserDisplay() {
   const dispatch = useDispatch();
@@ -34,10 +36,6 @@ export function CustomerDisplay() {
   const billing = customer?.billing;
   const shipping = customer?.shipping;
   if (!customer) return <p>Chargement...</p>;
-  console.log("Hi Billing !");
-  console.log(billing);
-  console.log("Hi Shipping !");
-  console.log(shipping);
   return (
     <div>
       <h2>Informations de facturation</h2>
@@ -47,6 +45,7 @@ export function CustomerDisplay() {
             {key} : {value}
           </p>
         ))}
+      <BillingUpdate />
       <h2>Informations de livraison</h2>
       {customer &&
         Object.entries(shipping).map(([key, value]) => (
@@ -54,6 +53,7 @@ export function CustomerDisplay() {
             {key} : {value}
           </p>
         ))}
+      <ShippingUpdate />
     </div>
   );
 }

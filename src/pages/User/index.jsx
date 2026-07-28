@@ -8,8 +8,8 @@ export default function Profile() {
     <div>
       <UserDisplay />
       <UpdateForm />
-      <DeleteAccountButton />
       <CustomerDisplay />
+      <DeleteAccountButton />
     </div>
   );
 }
