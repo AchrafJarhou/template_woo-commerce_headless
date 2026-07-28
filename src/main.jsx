@@ -31,6 +31,7 @@ import Store from "./pages/Store";
 import Home from "./pages/Home";
 import Login from "./pages/login";
 import Register from "./pages/register";
+import ResetPassword from "./pages/ResetPassword";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Toast from "./components/Toast";
@@ -90,6 +91,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           {/* <Route path="/" element={<Store />} /> */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
           {/* <Route path="/" element={<Home />} /> */}
           <Route path="/catalogue" element={<Store />} />
           <Route path="/mentions-legales" element={<MentionsLegales />} />
