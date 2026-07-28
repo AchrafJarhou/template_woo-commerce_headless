@@ -1,15 +1,20 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { updateCurrentUserThunk } from "../../../thunkActionsCreator/userThunks";
 
 export function UpdateForm() {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
-
+  const profile = user?.profile;
   const [newEmail, setNewEmail] = useState("");
   const [newFirstName, setNewFirstName] = useState("");
   const [newLastName, setNewLastName] = useState("");
   const [newPassword, setNewPassword] = useState("");
+  useEffect(() => {
+    profile && profile.email ? setNewEmail(profile.email) : null;
+    profile && profile.firstName ? setNewFirstName(profile.firstName) : null;
+    profile && profile.lastName ? setNewLastName(profile.lastName) : null;
+  }, [profile]);
 
   const handleUpdateProfile = (e) => {
     e.preventDefault();

@@ -20,9 +20,8 @@ export function BillingUpdate() {
 
   return (
     <div>
-      <h3>Modifier vos informations de facturation</h3>
       <form onSubmit={handleSubmitBilling}>
-        <h3>Facturation</h3>
+        <h3>Modifier vos informations de facturation</h3>
         {Object.keys(billing).map((key) => (
           <input
             key={key}
@@ -50,9 +49,8 @@ export function ShippingUpdate() {
   };
   return (
     <div>
-      <h3>Modifier vos informations de Livraison</h3>
       <form onSubmit={handleSubmitShipping}>
-        <h3>Livraison</h3>
+        <h3>Modifier vos informations de Livraison</h3>
         {Object.keys(shipping).map((key) => (
           <input
             key={key}
