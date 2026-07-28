@@ -10,6 +10,7 @@ import { Provider, useSelector } from "react-redux";
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { cartSlice } from "./slices/cartSlice";
 import { productsSlice } from "./slices/productSlice";
+import { spotlightSlice } from "./slices/spotlightSlice";
 import { categoriesSlice } from "./slices/categoriesSlice";
 import { filtersSlice } from "./slices/filtersSlice";
 import { userSlice } from "./slices/userSlice";
@@ -53,6 +54,7 @@ const store = configureStore({
     cart: cartSlice.reducer,
     categories: categoriesSlice.reducer,
     products: productsSlice.reducer,
+    spotlight: spotlightSlice.reducer,
     filters: filtersSlice.reducer,
     pages: pagesSlice.reducer,
     blog: blogSlice.reducer,
