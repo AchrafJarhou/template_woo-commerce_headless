@@ -18,8 +18,8 @@ export const filtersSlice = createSlice({
       return { ...state, ...action.payload };
     },
     // Pour tout réinitialiser (pratique si tu as un bouton "Reset")
-    resetFilters: () => initialState,
+    //resetFilters: () => initialState,
   },
 });
 
-export const { setFilters, resetFilters } = filtersSlice.actions;
+export const { setFilters /*, resetFilters*/ } = filtersSlice.actions;
