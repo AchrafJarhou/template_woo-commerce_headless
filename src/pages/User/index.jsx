@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCurrentUserThunk } from "../../thunkActionsCreator/userThunks";
-
+import { UpdateForm } from "../../components/Profile/UpdateUser";
 export default function Profile() {
   const dispatch = useDispatch();
 
@@ -23,6 +23,7 @@ export default function Profile() {
       <p>Email : {profile.email}</p>
       <p>Prénom : {profile.firstName}</p>
       <p>Nom : {profile.lastName}</p>
+      <UpdateForm />
     </div>
   );
 }
