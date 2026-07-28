@@ -1,24 +1,25 @@
-import {useState , useRef, useEffect} from "react";
-import {Link} from "react-router-dom";
-import {useDispatch, useSelector} from "react-redux";
-import {setFilters} from "../../slices/filtersSlice";
+import { useState, useRef, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { setFilters } from "../../slices/filtersSlice";
 import "./index.css";
 
-export default function Autocomplete({ onKeyDown }){
-    const dispatch = useDispatch();
-    const search = useSelector((state) => state.filters.search);
-    const [suggestions, setSuggestions] = useState([]);
-    const [focused, setFocused] = useState(false);
-    const timeoutRef = useRef(null);
+export default function Autocomplete({ onKeyDown }) {
+  const dispatch = useDispatch();
+  const search = useSelector((state) => state.filters.search);
+  const [suggestions, setSuggestions] = useState([]);
+  const [focused, setFocused] = useState(false);
+  const timeoutRef = useRef(null);
 
-    const fetchSuggestions = async (value) => {
+  const fetchSuggestions = async (value) => {
     try {
       const url = `${import.meta.env.VITE_API_URL}/wp-json/wc/store/v1/products?search=${encodeURIComponent(value)}&per_page=5`;
       const response = await fetch(url, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
       });
-      if (!response.ok) throw new Error(" il est Impossible de récupérer les suggestions.");
+      if (!response.ok)
+        throw new Error(" il est Impossible de récupérer les suggestions.");
       const data = await response.json();
       setSuggestions(data);
     } catch (error) {
@@ -29,7 +30,7 @@ export default function Autocomplete({ onKeyDown }){
   useEffect(() => {
     clearTimeout(timeoutRef.current);
 
-    if (search.trim().length < 3) {
+    if (search.trim().length < 1) {
       setSuggestions([]);
       return;
     }
@@ -50,6 +51,13 @@ export default function Autocomplete({ onKeyDown }){
     setSuggestions([]);
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      setFocused(false);
+    }
+    onKeyDown(e);
+  };
+
   return (
     <div className="autocomplete">
       <input
@@ -58,14 +66,17 @@ export default function Autocomplete({ onKeyDown }){
         placeholder="Rechercher..."
         value={search}
         onChange={handleChange}
-        onKeyDown={onKeyDown}
+        onKeyDown={handleKeyDown}
         onFocus={() => setFocused(true)}
         onBlur={() => setFocused(false)}
         aria-label="Rechercher"
       />
 
       {focused && suggestions.length > 0 && (
-        <ul className="autocomplete-suggestions" onMouseDown={(e) => e.preventDefault()}>
+        <ul
+          className="autocomplete-suggestions"
+          onMouseDown={(e) => e.preventDefault()}
+        >
           {suggestions.map((product) => (
             <li key={product.id}>
               <Link to={`/product/${product.id}`} onClick={handleSelect}>
@@ -84,6 +95,4 @@ export default function Autocomplete({ onKeyDown }){
       )}
     </div>
   );
-
-  
 }
