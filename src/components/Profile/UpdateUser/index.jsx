@@ -1,10 +1,6 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  loginThunk,
-  registerThunk,
-  updateCurrentUserThunk,
-} from "../../../thunkActionsCreator/userThunks";
+import { updateCurrentUserThunk } from "../../../thunkActionsCreator/userThunks";
 
 export function UpdateForm() {
   const dispatch = useDispatch();
