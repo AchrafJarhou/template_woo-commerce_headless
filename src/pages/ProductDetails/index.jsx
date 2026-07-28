@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Seo from "../../components/Seo";
@@ -12,6 +12,7 @@ export default function ProductDetails() {
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [itemVariation, setItemVariation] = useState({});
 
   const { list, singleProduct, loadingSingle, errorSingle } = useSelector(
     (state) => state.products,
@@ -26,7 +27,7 @@ export default function ProductDetails() {
     if (id && !productFromList) {
       dispatch(fetchProductByIdThunk(id));
     }
-  }, [id, dispatch, productFromList, singleProduct]);
+  }, []);
 
   // Fonction pour ajouter ce produit spécifique au panier
   const handleAddToCart = async () => {
@@ -35,7 +36,7 @@ export default function ProductDetails() {
         addProductToCart({
           productId: productToDisplay.id,
           quantity: 1,
-          variation: [],
+          variation: itemVariation,
         }),
       );
       if (addProductToCart.fulfilled.match(result)) {
@@ -47,6 +48,24 @@ export default function ProductDetails() {
       }
     }
   };
+
+  function changeVariation(name, value) {
+    setItemVariation((prev) => ({ ...prev, [name]: value }));
+  }
+
+  useEffect(() => {
+    if (!productToDisplay || !productToDisplay.attributes) return;
+
+    const defaults = {};
+
+    productToDisplay.attributes.forEach((attribute) => {
+      if (attribute.terms.length > 0) {
+        defaults[attribute.name] = attribute.terms[0].name;
+      }
+    });
+
+    setItemVariation(defaults);
+  }, [productToDisplay]);
 
   if (loadingSingle && !productToDisplay) {
     return <div className="loading-state">Chargement en cours...</div>;
@@ -120,11 +139,30 @@ export default function ProductDetails() {
             className="short-description-box"
             dangerouslySetInnerHTML={{
               __html:
-                productToDisplay.short_description ||
                 productToDisplay.description ||
+                productToDisplay.short_description ||
                 "<p>Aucune introduction disponible.</p>",
             }}
           />
+
+          {/* Options variations */}
+          {productToDisplay.attributes?.map((attribute) => (
+            <div key={attribute.name}>
+              <label htmlFor={attribute.name}>{attribute.name}</label>
+              <select
+                name={attribute.name}
+                onChange={(e) =>
+                  changeVariation(attribute.name, e.target.value)
+                }
+              >
+                {attribute.terms.map((term) => (
+                  <option key={term.name} value={term.name}>
+                    {term.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          ))}
 
           {/* Le bouton d'ajout au panier est maintenant connecté via onClick */}
           <button className="add-to-cart-btn" onClick={handleAddToCart}>
@@ -134,7 +172,7 @@ export default function ProductDetails() {
         </div>
       </div>
 
-      <div className="product-bottom-block">
+      {/* <div className="product-bottom-block">
         <div className="details-content-row">
           <div
             className="text-left-side wordpress-content"
@@ -145,7 +183,7 @@ export default function ProductDetails() {
             }}
           />
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }

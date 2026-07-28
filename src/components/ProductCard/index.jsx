@@ -79,17 +79,19 @@ export default function ProductCard({ product }) {
 
       {product.is_in_stock ? <p>En stock</p> : <p>Rupture de stock</p>}
       {product.attributes?.map((attribute) => (
-        <>
+        <div key={attribute.name}>
           <label htmlFor={attribute.name}>{attribute.name}</label>
           <select
             name={attribute.name}
             onChange={(e) => changeVariation(attribute.name, e.target.value)}
           >
             {attribute.terms.map((term) => (
-              <option value={term.name}>{term.name}</option>
+              <option key={term.name} value={term.name}>
+                {term.name}
+              </option>
             ))}
           </select>
-        </>
+        </div>
       ))}
 
       <button
