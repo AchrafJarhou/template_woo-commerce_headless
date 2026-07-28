@@ -9,8 +9,6 @@ import "./index.css";
 export function CartProduct({ item }) {
   const dispatch = useDispatch();
 
-  console.log(item);
-
   return (
     <li className="cart-product-list">
       <img
@@ -30,7 +28,7 @@ export function CartProduct({ item }) {
       ></span>
       {item.variation &&
         item.variation.map((variation) => (
-          <p>
+          <p key={variation.attribute}>
             {variation.attribute} : {variation.value}
           </p>
         ))}
