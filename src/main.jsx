@@ -1,4 +1,3 @@
-
 import ReactDOM from "react-dom/client";
 import { HelmetProvider } from "react-helmet-async";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
@@ -24,7 +23,7 @@ import Profile from "./pages/User";
 import Login from "./pages/login";
 import Register from "./pages/register";
 import BlogPage from "./pages/Blog";
-import BlogPost from "./pages/BlogPost";
+import SinglePost from "./pages/SinglePost";
 import Contact from "./pages/Contact";
 import LegalMentions from "./pages/LegalMentions";
 import CGU from "./pages/CGU";
@@ -56,7 +55,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           v7_startTransition: true,
           v7_relativeSplatPath: true,
         }}
-      //basename="/ecom"
+        //basename="/ecom"
       >
         <Header />
         <Seo />
@@ -74,7 +73,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <Route path="/product/:id" element={<ProductDetails />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/blog" element={<BlogPage />} />
-          <Route path="/blog/:slug" element={<BlogPost />} />
+          <Route path="/blog/:slug" element={<SinglePost />} />
           <Route path="/success/:orderId" element={<Success />} />
           <Route path="/profile" element={<Profile />} />
         </Routes>
