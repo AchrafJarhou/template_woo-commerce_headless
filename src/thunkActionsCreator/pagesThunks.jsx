@@ -41,11 +41,6 @@ export const fetchPageThunk = createAsyncThunk(
       }
 
       const item = Array.isArray(data) ? data[0] : data;
-      // const page = {
-      //   title: (item.title?.rendered ?? item.title) || "",
-      //   content: (item.content?.rendered ?? item.content) || "",
-      //   slug: item.slug || slug,
-      // };
       const page = item;
       return page;
     } catch (error) {
