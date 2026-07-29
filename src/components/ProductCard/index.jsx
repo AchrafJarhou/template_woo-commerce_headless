@@ -28,6 +28,16 @@ export default function ProductCard({ product }) {
     setItemVariation((prev) => ({ ...prev, [name]: value }));
   }
 
+  function checkInStock(product) {
+    const variation = product.variations.find((variation) =>
+      variation.attributes.every(
+        (attribute) => itemVariation[attribute.name] === attribute.value,
+      ),
+    );
+
+    return variation ? variation.is_in_stock : true;
+  }
+
   useEffect(() => {
     if (!product.attributes) return;
 
@@ -93,7 +103,7 @@ export default function ProductCard({ product }) {
           </select>
         </div>
       ))}
-      {product.is_in_stock ? (
+      {checkInStock(product) ? (
         <button
           onClick={() => addProduct(product.id, 1, itemVariation, product.name)}
         >

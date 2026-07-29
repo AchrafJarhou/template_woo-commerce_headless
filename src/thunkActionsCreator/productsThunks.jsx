@@ -1,5 +1,36 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
+async function getVariationStock(data) {
+  return Promise.all(
+    data.map(async (product) => {
+      if (product.type !== "variable") {
+        return product;
+      }
+
+      const variations = await Promise.all(
+        product.variations.map(async (variation) => {
+          const response = await fetch(
+            `${import.meta.env.VITE_API_URL}/wp-json/wc/store/v1/products/${variation.id}`,
+          );
+
+          const data = await response.json();
+
+          return {
+            ...variation,
+            is_in_stock: data.is_in_stock,
+            stock_status: data.stock_status,
+          };
+        }),
+      );
+
+      return {
+        ...product,
+        variations,
+      };
+    }),
+  );
+}
+
 export const fetchProductsThunk = createAsyncThunk(
   "products/fetchAll",
   async (params = {}, thunkAPI) => {
@@ -40,7 +71,10 @@ export const fetchProductsThunk = createAsyncThunk(
         throw new Error("Impossible de récupérer les produits.");
       }
       const data = await response.json();
-      return { data, page, perPage };
+
+      const dataWithVariationStock = await getVariationStock(data);
+      return { data: dataWithVariationStock, page, perPage };
+      //return { data, page, perPage };
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
     }
@@ -78,24 +112,26 @@ export const fetchProductByIdThunk = createAsyncThunk(
   async (productId, thunkAPI) => {
     try {
       const url = `${import.meta.env.VITE_API_URL}/wp-json/wc/store/v1/products/${productId}`;
-      
+
       const response = await fetch(url, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
       });
-      
+
       if (!response.ok) {
         // Capture du message d'erreur réel de WooCommerce s'il existe
         const errorData = await response.json().catch(() => ({}));
-        const serverMessage = errorData.message || "Impossible de récupérer le produit.";
+        const serverMessage =
+          errorData.message || "Impossible de récupérer le produit.";
         throw new Error(serverMessage);
       }
-      
+
       const data = await response.json();
-      return data;
-      
+
+      const dataWithVariationStock = await getVariationStock([data]);
+      return dataWithVariationStock[0];
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
     }
-  }
+  },
 );

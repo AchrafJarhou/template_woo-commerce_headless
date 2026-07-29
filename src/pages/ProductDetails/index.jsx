@@ -20,6 +20,16 @@ export default function ProductDetails() {
     (state) => state.products,
   );
 
+  function checkInStock(product) {
+    const variation = product.variations.find((variation) =>
+      variation.attributes.every(
+        (attribute) => itemVariation[attribute.name] === attribute.value,
+      ),
+    );
+
+    return variation ? variation.is_in_stock : true;
+  }
+
   const productFromList = list?.data?.find(
     (p) => p.id.toString() === id.toString(),
   );
@@ -223,7 +233,7 @@ export default function ProductDetails() {
                     </select>
                   </div>
                 ))}
-                {productToDisplay.is_in_stock ? (
+                {checkInStock(productToDisplay) ? (
                   <button onClick={handleAddToCart}>
                     🧺 Ajouter au panier
                   </button>
