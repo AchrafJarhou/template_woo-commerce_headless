@@ -16,8 +16,8 @@
   --danger-color: #dc2626;
   --dark-color: #0f172a;
   --bg-color: #f8fafc;
-  --font-body: 'InterCustom', sans-serif;
-  --font-heading: 'PoppinsCustom', sans-serif;
+  --font-body: "InterCustom", sans-serif;
+  --font-heading: "PoppinsCustom", sans-serif;
 }
 
 * {
@@ -46,32 +46,34 @@ body {
   color: var(--bg-color);
 }
 
-input, textarea, select {
+input,
+textarea,
+select {
   font-family: inherit;
   color: inherit;
 }
 
 h1 {
-  font-size: 8vw;
+  font-size: 6vw;
   font-family: var(--font-heading);
   color: var(--dark-color);
   margin-bottom: 4vw;
 }
 @media screen and (aspect-ratio > 1/1) {
   h1 {
-    font-size: 3vw;
+    font-size: 2vw;
     margin-bottom: 2vw;
   }
 }
 @media screen and (aspect-ratio > 2.6/1) {
   h1 {
-    font-size: 8lvh;
+    font-size: 8vw;
     margin-bottom: 4lvh;
   }
 }
 
 h2 {
-  font-size: 7vw;
+  font-size: 5vw;
   font-family: var(--font-heading);
   color: var(--dark-color);
   margin-bottom: 3.5vw;
@@ -90,7 +92,7 @@ h2 {
 }
 
 h3 {
-  font-size: 6vw;
+  font-size: 5vw;
   font-family: var(--font-heading);
   color: var(--dark-color);
   margin-bottom: 3vw;
@@ -109,7 +111,7 @@ h3 {
 }
 
 h4 {
-  font-size: 5vw;
+  font-size: 3vw;
   font-family: var(--font-heading);
   color: var(--dark-color);
   margin-bottom: 2.5vw;
@@ -128,7 +130,7 @@ h4 {
 }
 
 h5 {
-  font-size: 4.5vw;
+  font-size: 2.5vw;
   font-family: var(--font-heading);
   color: var(--dark-color);
   margin-bottom: 2vw;
@@ -147,7 +149,7 @@ h5 {
 }
 
 h6 {
-  font-size: 4vw;
+  font-size: 1.5vw;
   font-family: var(--font-heading);
   color: var(--dark-color);
   margin-bottom: 1.5vw;
@@ -166,7 +168,7 @@ h6 {
 }
 
 p {
-  font-size: 5vw;
+  font-size: 4.5vw;
   font-family: var(--font-body);
   color: var(--dark-color);
   line-height: 1.5;
@@ -231,7 +233,7 @@ a {
   transition: opacity 0.3s ease;
 }
 a:hover {
-  opacity: 0.7;
+  opacity: 1;
 }
 @media screen and (aspect-ratio > 1/1) {
   a {
@@ -261,16 +263,21 @@ span {
 }
 
 button {
+  display: flex;
   cursor: pointer;
   border: none;
-  background: none;
+  background: var(--primary-color);
+  color: var(--bg-color);
   font-family: var(--font-body);
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all 0.3s ease;
   padding: 3vw 6vw;
+  margin: 1vh;
   font-size: 4.5vw;
+  width: -moz-fit-content;
+  width: fit-content;
   border-radius: 2vw;
 }
 @media screen and (aspect-ratio > 1/1) {
@@ -288,5 +295,5 @@ button {
   }
 }
 button:hover {
-  opacity: 0.8;
+  transform: scale(1.1);
 }/*# sourceMappingURL=index.css.map */

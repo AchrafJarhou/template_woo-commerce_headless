@@ -23,10 +23,10 @@ export const cartSlice = createSlice({
         localStorage.removeItem("wc_cart_nonce");
       }
     },
-    setItems: (state, action) => {
-      state.items = action.payload;
-    },
+    // setItems: (state, action) => {
+    //   state.items = action.payload;
+    // },
   },
 });
 
-export const { setCart, setNonce, setItems } = cartSlice.actions;
+export const { setCart, setNonce /*, setItems*/ } = cartSlice.actions;

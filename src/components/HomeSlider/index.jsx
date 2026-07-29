@@ -3,8 +3,9 @@ import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
-import { fetchProductsThunk } from "../../thunkActionsCreator/productsThunks";
+import { fetchSpotlightProductsThunk } from "../../thunkActionsCreator/spotlightThunks";
 import { addProductToCart } from "../../thunkActionsCreator/cartThunks";
+import { showToast } from "../../slices/toastSlice";
 
 const CARD_WIDTH = 160;
 const GAP = 16;
@@ -14,7 +15,7 @@ const MOBILE_QUERY = "(max-width: 1024px)";
 
 export default function HomeSlider() {
   const dispatch = useDispatch();
-  const { list, loading } = useSelector((state) => state.products);
+  const { list, loading } = useSelector((state) => state.spotlight);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [dragOffset, setDragOffset] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
@@ -29,7 +30,7 @@ export default function HomeSlider() {
 
   useEffect(() => {
     dispatch(
-      fetchProductsThunk({
+      fetchSpotlightProductsThunk({
         orderby: "popularity",
         order: "desc",
         page: 1,
@@ -56,16 +57,20 @@ export default function HomeSlider() {
   }, []);
 
   useEffect(() => {
-
-    // (contenu qui bouge sans action de l'utilisateur) : uniquement les
-    // boutons y font avancer le slider.
-    if (total === 0 || isDragging || isMobile) return;
+    if (total === 0 || isDragging) return;
     const interval = setInterval(goNext, 4000);
     return () => clearInterval(interval);
-  }, [total, isDragging, isMobile]);
+  }, [total, isDragging]);
 
-  const addProduct = (productId) => {
-    dispatch(addProductToCart({ productId, quantity: 1, variation: [] }));
+  const addProduct = async (productId, name) => {
+    const result = await dispatch(
+      addProductToCart({ productId, quantity: 1, variation: [] }),
+    );
+    if (addProductToCart.fulfilled.match(result)) {
+      dispatch(showToast(`${name} ajouté au panier`));
+    } else {
+      dispatch(showToast(result.payload || "Erreur lors de l'ajout au panier"));
+    }
   };
 
   const handlePointerDown = (e) => {
@@ -120,8 +125,6 @@ export default function HomeSlider() {
 
   return (
     <div className="home-slider">
-      <h2>Produits du moment</h2>
-
       <div
         className="home-slider-viewport"
         style={{ width: VIEWPORT_WIDTH }}
@@ -158,7 +161,7 @@ export default function HomeSlider() {
                 <p dangerouslySetInnerHTML={{ __html: product.price_html }}></p>
               </Link>
               {index === slotIndex && (
-                <button onClick={() => addProduct(product.id)}>
+                <button onClick={() => addProduct(product.id, product.name)}>
                   Ajouter au panier
                 </button>
               )}

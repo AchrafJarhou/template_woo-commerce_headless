@@ -16,9 +16,9 @@ export default function Filters() {
     dispatch(fetchCategoriesThunk());
   }, [dispatch]);
 
-  useEffect(() => {
-    dispatch(fetchProductsThunk({ ...filters, page: 1, per_page: 20 }));
-  }, [filters, dispatch]);
+  // useEffect(() => {
+  //   dispatch(fetchProductsThunk({ ...filters, page: 1, per_page: 20 }));
+  // }, [filters, dispatch]);
 
   // const handleSearchChange = (e) => {
   //   dispatch(setFilters({ search: e.target.value }));

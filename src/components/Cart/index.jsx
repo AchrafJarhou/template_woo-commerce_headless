@@ -20,6 +20,12 @@ export default function Cart() {
           <CartProduct key={item.key} item={item} />
         ))}
       </ul>
+      <div>
+        Total:{" "}
+        {totals &&
+          (parseInt(totals.total_price) / 100).toFixed(2) +
+            totals.currency_suffix}
+      </div>
       <button onClick={() => emptyCart()}>Vider Panier</button>
       <StripeWrapper></StripeWrapper>
     </>

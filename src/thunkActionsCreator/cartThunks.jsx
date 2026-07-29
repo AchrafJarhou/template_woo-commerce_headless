@@ -81,6 +81,13 @@ export const addProductToCart = createAsyncThunk(
       const state = thunkAPI.getState();
       const currentNonce = state.cart.nonce;
 
+      const variationData = Object.entries(variation).map(
+        ([attribute, value]) => ({
+          attribute,
+          value,
+        }),
+      );
+
       if (!currentNonce) {
         throw new Error("Jeton de session manquant.");
       }
@@ -90,7 +97,11 @@ export const addProductToCart = createAsyncThunk(
         {
           method: "POST",
           headers: buildCartHeaders(thunkAPI, currentNonce),
-          body: JSON.stringify({ id: productId, quantity, variation }),
+          body: JSON.stringify({
+            id: productId,
+            quantity,
+            variation: variationData,
+          }),
         },
       );
 

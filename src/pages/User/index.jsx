@@ -1,9 +1,17 @@
-import UserTest from "../../components/UserTest";
+import { UpdateForm } from "../../components/Profile/UpdateUser";
+import DeleteAccountButton from "../../components/DeleteAccountButton";
+import {
+  UserDisplay,
+  CustomerDisplay,
+} from "../../components/Profile/UserDisplay";
 
-export default function User() {
+export default function Profile() {
   return (
     <div>
-      <UserTest></UserTest>
+      <UserDisplay />
+      <UpdateForm />
+      <CustomerDisplay />
+      <DeleteAccountButton />
     </div>
   );
 }

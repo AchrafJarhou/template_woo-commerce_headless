@@ -1,24 +1,59 @@
 import "./index.css";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setFilters } from "../../slices/filtersSlice";
 import { useNavigate } from "react-router-dom";
+// import { fetchSearchSuggestionsThunk } from "../../thunkActionsCreator/productsThunks";
+import Autocomplete from "../Autocomplete";
+import { logout } from "../../slices/userSlice";
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
+  // const [suggestions, setSuggestions] = useState([]);
+  // const navigate = useNavigate();
+  const token = useSelector((state) => state.user.token);
+  const cartItems = useSelector((state) => state.cart.items);
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
-  const filters = useSelector((state) => state.filters);
+  //const filters = useSelector((state) => state.filters);
+  const isAuthentificated = !!useSelector((state) => state.user?.token);
+  const cartCount = cartItems.reduce(
+    (total, item) => total + (Number(item.quantity) || 0),
+    0,
+  );
+  const cartBadgeValue = cartCount > 9 ? "9+" : String(cartCount);
 
-  const handleSearchChange = (e) => {
-    dispatch(setFilters({ search: e.target.value }));
-  };
+  // Suggestions d'autocomplétion : état local, volontairement séparé de
+  // state.products.list pour ne pas écraser le catalogue ni le slider.
+  // useEffect(() => {
+  //   if (!filters.search) {
+  //     setSuggestions([]);
+  //     return;
+  //   }
+  //   let active = true;
+  //   dispatch(
+  //     fetchSearchSuggestionsThunk({ search: filters.search, per_page: 5 }),
+  //   )
+  //     .unwrap()
+  //     .then((data) => {
+  //       if (active) setSuggestions(data);
+  //     })
+  //     .catch(() => {
+  //       if (active) setSuggestions([]);
+  //     });
+  //   return () => {
+  //     active = false;
+  //   };
+  // }, [filters.search, dispatch]);
 
-  const handleSearchRedirect = (e) => {
-    if (e.key === "Enter") navigate("/catalogue");
-  };
+  // const handleSearchChange = (e) => {
+  //   dispatch(setFilters({ search: e.target.value }));
+  // };
+
+  // const handleSearchRedirect = (e) => {
+  //   if (e.key === "Enter") navigate("/catalogue");
+  // };
 
   const closeMenu = () => setMenuOpen(false);
 
@@ -75,28 +110,34 @@ export default function Header() {
 
         <div className="header-actions">
           <label htmlFor="search">Rechercher:</label>
-          <input
-            id="search"
-            type="search"
-            className="header-search"
-            placeholder="Rechercher..."
-            value={filters.search}
-            onChange={handleSearchChange}
-            onKeyDown={handleSearchRedirect}
-            aria-label="Rechercher"
-          />
+          <Autocomplete />
 
           <Link to="/catalogue" className="header-icon" aria-label="Recherche">
             🔍
           </Link>
 
-          <Link to="/profil" className="header-icon" aria-label="Profil">
+          <Link
+            to={isAuthentificated ? "/profile" : "/login"}
+            className="header-icon"
+            aria-label="Profil"
+          >
             👤
           </Link>
 
-          <Link to="/panier" className="header-icon" aria-label="Panier">
+          <Link
+            to="/panier"
+            className="header-icon header-cart-link"
+            aria-label={`Panier (${cartBadgeValue})`}
+          >
             🛒
+            {cartCount > 0 && (
+              <span className="header-cart-badge">{cartBadgeValue}</span>
+            )}
           </Link>
+
+          {token && (
+            <button onClick={() => dispatch(logout())}>Déconnexion</button>
+          )}
         </div>
       </div>
     </header>
