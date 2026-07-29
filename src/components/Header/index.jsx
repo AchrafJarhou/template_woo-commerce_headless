@@ -96,10 +96,6 @@ export default function Header() {
           >
             ✕
           </button>
-
-          <Link to="/" onClick={closeMenu}>
-            Accueil
-          </Link>
           <Link to="/catalogue" onClick={closeMenu}>
             Catalogue
           </Link>
