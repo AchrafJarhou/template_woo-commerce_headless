@@ -119,18 +119,6 @@ export default function ProductDetails() {
         }}
       />
 
-      <div className="top-navigation-bar">
-        <button onClick={() => navigate(-1)}>⬅️ Retour</button>
-
-        <nav className="breadcrumb-trail">
-          <Link to="/">🏠 Accueil</Link>
-          <span className="separator">/</span>
-          <Link to="/catalogue">catalogue</Link>
-          <span className="separator">/</span>
-          <span className="current-page">{productToDisplay.name}</span>
-        </nav>
-      </div>
-
       {/*  <div
         className="short-description-box"
         dangerouslySetInnerHTML={{
