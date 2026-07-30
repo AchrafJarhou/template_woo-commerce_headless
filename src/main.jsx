@@ -18,10 +18,6 @@ import Store from "./pages/Store";
 import ProductDetails from "./pages/ProductDetails";
 import Cart from "./pages/Cart";
 import Success from "./pages/Success";
-import Profile from "./pages/User";
-import Login from "./pages/login";
-import Register from "./pages/register";
-import ResetPassword from "./pages/ResetPassword";
 import NewPassword from "./pages/NewPassword";
 import Profile from "./pages/Profile";
 import BlogPage from "./pages/Blog";
@@ -64,9 +60,6 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Seo />
         <Routes>
           {<Route path="/" element={<Home />} />}
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/new-password" element={<NewPassword />} />
           <Route path="/catalogue" element={<Store />} />
           <Route path="/mentions-legales" element={<LegalMentions />} />
