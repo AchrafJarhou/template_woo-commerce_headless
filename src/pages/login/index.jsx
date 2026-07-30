@@ -92,6 +92,10 @@ export default function Login() {
 
         <button className="auth-form__submit" type="submit" disabled={loading}>
           {loading ? "Signing in…" : "Sign in"}
+        </p>
+        <Link to="/reset-password">Mot de passe oublié ?</Link>
+        <button type="submit" disabled={loading}>
+          {loading ? "Loading..." : "Login"}
         </button>
       </form>
 
