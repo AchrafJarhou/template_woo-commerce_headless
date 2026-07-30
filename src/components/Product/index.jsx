@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchProductByIdThunk } from "../../thunkActionsCreator/productsThunks";
 import { addProductToCart } from "../../thunkActionsCreator/cartThunks";
 import { showToast } from "../../slices/toastSlice";
-
+import SimilarProducts from "../SimilarProducts";
 import Seo from "../Seo";
 
 import "./index.css";
@@ -41,83 +41,7 @@ export default function ProductDetails() {
       setActiveImageIndex(0);
     }
   }, [productToDisplay?.id]);
-  useEffect(() => {
-    if (!productToDisplay?.id) return;
 
-    const fetchSimilarProducts = async () => {
-      setLoadingSimilar(true);
-      try {
-        const baseUrl = `${import.meta.env.VITE_API_URL}/wp-json/wc/store/v1/products`;
-        const categoryId = productToDisplay.categories?.[0]?.id;
-        let recommendations = [];
-
-        // --- NIVEAU 1 : Produits de la même catégorie ---
-        if (categoryId) {
-          const response = await fetch(`${baseUrl}?category=${categoryId}`, {
-            method: "GET",
-            headers: { "Content-Type": "application/json" },
-          });
-
-          if (response.ok) {
-            const data = await response.json();
-            recommendations = (Array.isArray(data) ? data : []).filter(
-              (p) => p.id.toString() !== productToDisplay.id.toString(),
-            );
-          }
-        }
-
-        // --- NIVEAU 2 : Complément via le store Redux (si disponible) ---
-        if (recommendations.length < 3 && list?.data?.length > 0) {
-          const reduxExtras = list.data.filter(
-            (p) =>
-              p.id.toString() !== productToDisplay.id.toString() &&
-              !recommendations.some(
-                (rec) => rec.id.toString() === p.id.toString(),
-              ),
-          );
-
-          recommendations = [...recommendations, ...reduxExtras];
-        }
-
-        // --- NIVEAU 3 : Secours API global (Si Redux est vide ou insuffisant) ---
-        if (recommendations.length < 3) {
-          // On demande 10 produits généraux à l'API pour être sûr d'avoir du choix
-          const fallbackResponse = await fetch(`${baseUrl}?per_page=10`, {
-            method: "GET",
-            headers: { "Content-Type": "application/json" },
-          });
-
-          if (fallbackResponse.ok) {
-            const fallbackData = await fallbackResponse.json();
-            const apiExtras = (
-              Array.isArray(fallbackData) ? fallbackData : []
-            ).filter(
-              (p) =>
-                p.id.toString() !== productToDisplay.id.toString() &&
-                !recommendations.some(
-                  (rec) => rec.id.toString() === p.id.toString(),
-                ),
-            );
-
-            recommendations = [...recommendations, ...apiExtras];
-          }
-        }
-
-        // 4. Mélange aléatoirement le tableau avant de prendre les 3 premiers
-        const randomized = recommendations.sort(() => 0.5 - Math.random());
-        setSimilarProducts(randomized.slice(0, 3));
-      } catch (error) {
-        console.error(
-          "Erreur lors de la récupération des recommandations :",
-          error.message,
-        );
-      } finally {
-        setLoadingSimilar(false);
-      }
-    };
-
-    fetchSimilarProducts();
-  }, [productToDisplay?.id, list?.data]);
   const handleAddToCart = async () => {
     if (productToDisplay && productToDisplay.id) {
       const result = await dispatch(
@@ -301,36 +225,11 @@ export default function ProductDetails() {
       </div>
 
       {/* Section des articles similaires */}
-      <section className="similar-products-section">
-        <h2>Produits similaires</h2>
 
-        {loadingSimilar ? (
-          <p className="loading-text">Chargement des recommandations...</p>
-        ) : similarProducts.length > 0 ? (
-          <div className="similar-products-grid">
-            {similarProducts.map((simProduct) => (
-              <Link key={simProduct.id} to={"/product/" + simProduct.slug}>
-                <div className="similar-product-image">
-                  <img
-                    src={simProduct.images?.[0]?.src || "/placeholder.jpg"}
-                    alt={simProduct.name}
-                  />
-                </div>
-                <div className="similar-product-info">
-                  <h4>{simProduct.name}</h4>
-                  <p className="price">
-                    {simProduct.prices?.price
-                      ? `${(parseFloat(simProduct.prices.price) / 100).toFixed(2)} ${simProduct.prices.currency_code || "EUR"}`
-                      : "Prix N/A"}
-                  </p>
-                </div>
-              </Link>
-            ))}
-          </div>
-        ) : (
-          <p className="no-similar-text">Aucun produit similaire trouvé.</p>
-        )}
-      </section>
+      <SimilarProducts
+        currentProduct={productToDisplay}
+        reduxProducts={list?.data}
+      />
     </div>
   );
 }
