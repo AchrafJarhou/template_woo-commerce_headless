@@ -1,5 +1,6 @@
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import DeleteAccountButton from "../../components/DeleteAccountButton";
 import {
@@ -10,6 +11,7 @@ import {
 export default function Profile() {
   const dispatch = useDispatch();
   const isAuthentificated = !!useSelector((state) => state.user?.token);
+  const navigate = useNavigate();
   if (isAuthentificated) {
     return (
       <div>
@@ -19,13 +21,8 @@ export default function Profile() {
       </div>
     );
   } else {
-    return (
-      <div>
-        <p>
-          Aucun profil trouvé, si vous n'êtes pas connecté vous pouvez toujours
-          vous <Link to="/login">connecter/inscrire</Link> ici
-        </p>
-      </div>
-    );
+    useEffect(() => {
+      navigate("/catalogue", { replace: true });
+    });
   }
 }
