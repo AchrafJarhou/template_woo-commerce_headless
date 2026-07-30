@@ -4,15 +4,9 @@ import { useSelector } from "react-redux";
 const Review = ({ productId }) => {
   const userState = useSelector((state) => state.user || {});
 
-  const user = [userState.profile, userState.customer, userState.user].find(
-    Boolean,
-  );
+  const user = userState.profile || userState.customer || null;
   const token = userState.token || localStorage.getItem("wc_user_token");
   const userOrders = useSelector((state) => state.user?.orders ?? []);
-
-  const userId = [user?.id, user?.ID, user?.user_id, user?.data?.ID].find(
-    Boolean,
-  );
 
   // États pour les avis
   const [reviews, setReviews] = useState([]);
@@ -114,20 +108,9 @@ const Review = ({ productId }) => {
           }
         }
 
-        // 2. Vérification de l'ID utilisateur
-        if (!userId) {
-          console.warn(
-            "⚠️ [Review] ID Utilisateur introuvable dans l'objet user :",
-            user,
-          );
-          setHasPurchased(false);
-          setCheckingPurchase(false);
-          return;
-        }
-
-        // 3. Option B : Appel API WooCommerce
+        // 2. Option B : Appel API WooCommerce si aucune commande n’est déjà chargée
         const response = await fetch(
-          `${baseUrl}/wp-json/wc/v3/orders?customer=${userId}&status=completed`,
+          `${baseUrl}/wp-json/wc/v3/orders?customer=${user?.id || user?.ID || user?.user_id || user?.data?.ID || ""}&status=completed`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -170,7 +153,7 @@ const Review = ({ productId }) => {
     };
 
     checkPurchase();
-  }, [userId, productId, userOrders, token, baseUrl]);
+  }, [user, productId, userOrders, token, baseUrl]);
 
   // --- Soumission d'un avis ---
   const handleSubmitReview = async (e) => {
