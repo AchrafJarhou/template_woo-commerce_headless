@@ -31,7 +31,7 @@ export const fetchProductsThunk = createAsyncThunk(
         return acc;
       }, {});
       const queryString = new URLSearchParams(cleanParams).toString();
-      const url = `${import.meta.env.VITE_API_URL}/wp-json/wc/store/v1/products?${queryString}`;
+      const url = `${import.meta.env.VITE_API_URL}/wp-json/custom/v1/products?${queryString}`;
       const response = await fetch(url, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
