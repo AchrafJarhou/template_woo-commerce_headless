@@ -132,7 +132,10 @@ export default function ProductDetails() {
           <span className="separator">/</span>
           <Link to="/catalogue">catalogue</Link>
           <span className="separator">/</span>
-          <span className="current-page">{productToDisplay.name}</span>
+          <span
+            className="current-page"
+            dangerouslySetInnerHTML={{ __html: productToDisplay.name }}
+          />
         </nav>
       </div>
 
@@ -173,7 +176,10 @@ export default function ProductDetails() {
           </div>
 
           <div className="info-wrapper">
-            <h1 className="product-title">{productToDisplay.name}</h1>
+            <h1
+              className="product-title"
+              dangerouslySetInnerHTML={{ __html: productToDisplay.name }}
+            />
 
             <div
               className="short-description"
