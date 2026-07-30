@@ -14,6 +14,7 @@ export default function Header() {
   // const navigate = useNavigate();
   const token = useSelector((state) => state.user.token);
   const cartItems = useSelector((state) => state.cart.items);
+  const logoUrl = useSelector((state) => state.site.logoUrl);
   const dispatch = useDispatch();
 
   //const filters = useSelector((state) => state.filters);
@@ -73,7 +74,7 @@ export default function Header() {
 
           {/* Logo */}
           <Link to="/" className="header-logo" aria-label="Ecommerce">
-            <img src="/logo.webp" alt="Logo" />
+            <img src={logoUrl || "/logo.webp"} alt="Logo" />
           </Link>
         </div>
 
@@ -96,10 +97,6 @@ export default function Header() {
           >
             ✕
           </button>
-
-          <Link to="/" onClick={closeMenu}>
-            Accueil
-          </Link>
           <Link to="/catalogue" onClick={closeMenu}>
             Catalogue
           </Link>
