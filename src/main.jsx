@@ -22,6 +22,7 @@ import Profile from "./pages/User";
 import Login from "./pages/login";
 import Register from "./pages/register";
 import ResetPassword from "./pages/ResetPassword";
+import NewPassword from "./pages/NewPassword";
 import BlogPage from "./pages/Blog";
 import SinglePost from "./pages/SinglePost";
 import Contact from "./pages/Contact";
@@ -64,6 +65,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/new-password" element={<NewPassword />} />
           <Route path="/catalogue" element={<Store />} />
           <Route path="/mentions-legales" element={<LegalMentions />} />
           <Route path="/cgu" element={<CGU />} />
