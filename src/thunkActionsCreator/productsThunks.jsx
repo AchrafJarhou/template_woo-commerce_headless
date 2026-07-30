@@ -77,7 +77,7 @@ export const fetchProductByIdThunk = createAsyncThunk(
   "products/fetchById",
   async (productId, thunkAPI) => {
     try {
-      const url = `${import.meta.env.VITE_API_URL}/wp-json/wc/store/v1/products/${productId}`;
+      const url = `${import.meta.env.VITE_API_URL}/wp-json/custom/v1/products/${productId}`;
       
       const response = await fetch(url, {
         method: "GET",
