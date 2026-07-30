@@ -65,27 +65,11 @@ export default function ProductCard({ product }) {
           alt={product.name || "photo produit"}
         />
       </Link>
-      <p>
-        Prix: {(product.prices.price / 100).toFixed(2) || "-.--"}
-        {" " + product.prices.currency_symbol}
-      </p>
 
-      {/* Prix promotionnel s'il y en a */}
-      {product.prices.regular_price > product.prices.sale_price ? (
-        <p>
-          Reduction de{" "}
-          {Math.round(
-            ((parseInt(product.prices.regular_price) -
-              parseInt(product.prices.sale_price)) /
-              parseInt(product.prices.regular_price)) *
-              100,
-          )}
-          %. Prix initial:{" "}
-          {(product.prices.regular_price / 100).toFixed(2) +
-            " " +
-            product.prices.currency_symbol}
-        </p>
-      ) : null}
+      <span>
+        <p>Prix:</p>
+        <p dangerouslySetInnerHTML={{ __html: product.price_html }}></p>
+      </span>
 
       {product.is_in_stock ? <p>En stock</p> : <p>Rupture de stock</p>}
       {product.attributes?.map((attribute) => (
