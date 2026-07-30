@@ -8,7 +8,6 @@ export default function Home() {
       <PageContent slug="home" />
       <HomeSlider />
       <PageContent slug="a-propos" />
-      <DeleteAccountButton />
     </div>
   );
 }

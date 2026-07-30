@@ -23,6 +23,7 @@ import Login from "./pages/login";
 import Register from "./pages/register";
 import ResetPassword from "./pages/ResetPassword";
 import NewPassword from "./pages/NewPassword";
+import Profile from "./pages/Profile";
 import BlogPage from "./pages/Blog";
 import SinglePost from "./pages/SinglePost";
 import Contact from "./pages/Contact";
@@ -35,6 +36,7 @@ import Seo from "./components/Seo";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Toast from "./components/Toast";
+import AuthModal from "./components/AuthModal";
 
 import "./index.css";
 
@@ -81,6 +83,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         </Routes>
         <Footer />
         <Toast />
+        <AuthModal />
       </Router>
     </Provider>
   </HelmetProvider>,
