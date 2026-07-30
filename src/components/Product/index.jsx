@@ -30,6 +30,16 @@ export default function ProductDetails() {
   );
   const productToDisplay = productFromList || singleProduct;
 
+  function checkInStock(product) {
+    const variation = product.variations.find((variation) =>
+      variation.attributes.every(
+        (attribute) => itemVariation[attribute.name] === attribute.value,
+      ),
+    );
+
+    return variation ? variation.is_in_stock : true;
+  }
+
   useEffect(() => {
     if (id && !productFromList) {
       dispatch(fetchProductByIdThunk(id));
@@ -286,7 +296,7 @@ export default function ProductDetails() {
                     </select>
                   </div>
                 ))}
-                {productToDisplay.is_in_stock ? (
+                {checkInStock(productToDisplay) ? (
                   <button onClick={handleAddToCart}>
                     🧺 Ajouter au panier
                   </button>
