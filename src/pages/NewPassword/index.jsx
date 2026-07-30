@@ -18,11 +18,11 @@ export default function NewPassword() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ key, login, password }),
-      }
+      },
     );
     const data = await response.json();
     setMessage(data.message);
-    if (response.ok) navigate("/login");
+    if (response.ok) navigate("/");
   };
 
   return (
