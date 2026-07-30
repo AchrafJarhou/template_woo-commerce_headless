@@ -7,6 +7,7 @@ import { addProductToCart } from "../../thunkActionsCreator/cartThunks";
 import { showToast } from "../../slices/toastSlice";
 
 import Seo from "../Seo";
+import { decodeHtml } from "../../utils/decodeHtml.js";
 
 import "./index.css";
 
@@ -138,7 +139,9 @@ export default function ProductDetails() {
         }),
       );
       if (addProductToCart.fulfilled.match(result)) {
-        dispatch(showToast(`${productToDisplay.name} ajouté au panier`));
+        dispatch(
+          showToast(`${decodeHtml(productToDisplay.name)} ajouté au panier`),
+        );
       } else {
         dispatch(
           showToast(result.payload || "Erreur lors de l'ajout au panier"),
@@ -183,7 +186,7 @@ export default function ProductDetails() {
   return (
     <div className="product-details-page">
       <Seo
-        title={productToDisplay.name}
+        title={decodeHtml(productToDisplay.name)}
         description={
           productToDisplay.short_description || productToDisplay.description
         }
@@ -192,7 +195,7 @@ export default function ProductDetails() {
         jsonLd={{
           "@context": "https://schema.org/",
           "@type": "Product",
-          name: productToDisplay.name,
+          name: decodeHtml(productToDisplay.name),
           description:
             productToDisplay.short_description || productToDisplay.description,
           image: productToDisplay.images?.[0]?.src,
@@ -218,7 +221,9 @@ export default function ProductDetails() {
           <span className="separator">/</span>
           <Link to="/catalogue">catalogue</Link>
           <span className="separator">/</span>
-          <span className="current-page">{productToDisplay.name}</span>
+          <span className="current-page">
+            {decodeHtml(productToDisplay.name)}
+          </span>
         </nav>
       </div>
 
@@ -228,7 +233,10 @@ export default function ProductDetails() {
             {mainImage ? (
               <>
                 <div className="main-image-container">
-                  <img src={mainImage} alt={productToDisplay.name} />
+                  <img
+                    src={mainImage}
+                    alt={decodeHtml(productToDisplay.name)}
+                  />
                 </div>
 
                 {productImages.length > 1 && (
@@ -244,7 +252,7 @@ export default function ProductDetails() {
                       >
                         <img
                           src={img.src}
-                          alt={`${productToDisplay.name} thumbnail ${index + 1}`}
+                          alt={`${decodeHtml(productToDisplay.name)} thumbnail ${index + 1}`}
                         />
                       </div>
                     ))}
@@ -259,7 +267,9 @@ export default function ProductDetails() {
           </div>
 
           <div className="info-wrapper">
-            <h1 className="product-title">{productToDisplay.name}</h1>
+            <h1 className="product-title">
+              {decodeHtml(productToDisplay.name)}
+            </h1>
 
             <div
               className="short-description"
