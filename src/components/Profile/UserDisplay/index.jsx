@@ -7,6 +7,7 @@ import {
 } from "../../../thunkActionsCreator/userThunks";
 
 import { BillingUpdate, ShippingUpdate } from "../CustomerUpdate";
+import { UpdateForm } from "../UpdateUser";
 
 export function UserDisplay() {
   const dispatch = useDispatch();
@@ -27,6 +28,7 @@ export function UserDisplay() {
       <p>Email : {profile.email}</p>
       <p>Prénom : {profile.firstName}</p>
       <p>Nom : {profile.lastName}</p>
+      <UpdateForm />
     </div>
   );
 }
