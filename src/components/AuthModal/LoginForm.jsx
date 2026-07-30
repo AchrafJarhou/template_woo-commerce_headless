@@ -1,21 +1,19 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
 
 import { loginThunk } from "../../thunkActionsCreator/userThunks";
-import AuthModal from "../../components/AuthModal";
+import { closeAuthModal, switchAuthModalView } from "../../slices/authModalSlice";
 
-export default function Login() {
+export default function LoginForm() {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const { loading, error, token } = useSelector((state) => state.user);
 
   const [form, setForm] = useState({ username: "", password: "" });
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
-    if (token) navigate("/");
-  }, [navigate, token]);
+    if (token) dispatch(closeAuthModal());
+  }, [dispatch, token]);
 
   const validate = () => {
     const newErrors = {};
@@ -44,7 +42,7 @@ export default function Login() {
   };
 
   return (
-    <AuthModal>
+    <>
       <h1>Welcome back</h1>
       <p className="auth-modal__subtitle">Sign in to your account</p>
 
@@ -81,27 +79,36 @@ export default function Login() {
           )}
         </div>
 
-        <a
+        <button
+          type="button"
           className="auth-form__forgot"
-          href="https://l-araignee.net/wooc/wp-login.php?action=lostpassword"
+          onClick={() => dispatch(switchAuthModalView("reset-password"))}
         >
           Forgot password?
-        </a>
+        </button>
 
-        {error && <p className="auth-form__server-error">{error}</p>}
+        {error && (
+          <p
+            className="auth-form__server-error"
+            dangerouslySetInnerHTML={{ __html: error }}
+          />
+        )}
 
         <button className="auth-form__submit" type="submit" disabled={loading}>
           {loading ? "Signing in…" : "Sign in"}
         </button>
-        <Link to="/reset-password">Mot de passe oublié ?</Link>
-        <button type="submit" disabled={loading}>
-          {loading ? "Loading..." : "Login"}
-        </button>
       </form>
 
       <p className="auth-modal__footer">
-        No account? <Link to="/register">Register here</Link>
+        No account?{" "}
+        <button
+          type="button"
+          className="auth-modal__link"
+          onClick={() => dispatch(switchAuthModalView("register"))}
+        >
+          Register here
+        </button>
       </p>
-    </AuthModal>
+    </>
   );
 }

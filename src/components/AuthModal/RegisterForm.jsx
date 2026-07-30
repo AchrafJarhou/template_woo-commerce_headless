@@ -1,13 +1,11 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
 
 import { registerThunk } from "../../thunkActionsCreator/userThunks";
-import AuthModal from "../../components/AuthModal";
+import { closeAuthModal, switchAuthModalView } from "../../slices/authModalSlice";
 
-export default function Register() {
+export default function RegisterForm() {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const { loading, error, token } = useSelector((state) => state.user);
 
   const [form, setForm] = useState({
@@ -19,8 +17,8 @@ export default function Register() {
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
-    if (token) navigate("/");
-  }, [navigate, token]);
+    if (token) dispatch(closeAuthModal());
+  }, [dispatch, token]);
 
   const validate = () => {
     const newErrors = {};
@@ -62,7 +60,7 @@ export default function Register() {
   };
 
   return (
-    <AuthModal>
+    <>
       <h1>Create account</h1>
       <p className="auth-modal__subtitle">Join us today, it's free</p>
 
@@ -131,7 +129,12 @@ export default function Register() {
           )}
         </div>
 
-        {error && <p className="auth-form__server-error">{error}</p>}
+        {error && (
+          <p
+            className="auth-form__server-error"
+            dangerouslySetInnerHTML={{ __html: error }}
+          />
+        )}
 
         <button className="auth-form__submit" type="submit" disabled={loading}>
           {loading ? "Creating account…" : "Create account"}
@@ -139,8 +142,15 @@ export default function Register() {
       </form>
 
       <p className="auth-modal__footer">
-        Already have an account? <Link to="/login">Sign in</Link>
+        Already have an account?{" "}
+        <button
+          type="button"
+          className="auth-modal__link"
+          onClick={() => dispatch(switchAuthModalView("login"))}
+        >
+          Sign in
+        </button>
       </p>
-    </AuthModal>
+    </>
   );
 }
