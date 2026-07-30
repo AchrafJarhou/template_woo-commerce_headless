@@ -23,6 +23,8 @@ add_filter('wp_mail_from_name', function ($original_name) {
     return !empty($wc_name) ? $wc_name : get_bloginfo('name');
 });
 
+
+
 function headless_reset_password($request)
 {
     $email = sanitize_email($request->get_param('email'));
