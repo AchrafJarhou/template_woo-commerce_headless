@@ -6,6 +6,7 @@ import { fetchProductByIdThunk } from "../../thunkActionsCreator/productsThunks"
 import { addProductToCart } from "../../thunkActionsCreator/cartThunks";
 import { showToast } from "../../slices/toastSlice";
 import SimilarProducts from "../SimilarProducts";
+import Review from "../Review";
 import Seo from "../Seo";
 
 import "./index.css";
@@ -236,6 +237,7 @@ export default function ProductDetails() {
         currentProduct={productToDisplay}
         reduxProducts={list?.data}
       />
+      <Review productId={productToDisplay.id} />
     </div>
   );
 }
