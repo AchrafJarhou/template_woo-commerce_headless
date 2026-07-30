@@ -4,10 +4,10 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   fetchCurrentUserThunk,
   fetchCurrentCustomerThunk,
-} from "../../../thunkActionsCreator/userThunks";
+} from "../../thunkActionsCreator/userThunks";
 
 import { BillingUpdate, ShippingUpdate } from "../CustomerUpdate";
-import { UpdateForm } from "../UpdateUser";
+import { UserUpdate } from "../UserUpdate";
 
 export function UserDisplay() {
   const dispatch = useDispatch();
@@ -28,7 +28,7 @@ export function UserDisplay() {
       <p>Email : {profile.email}</p>
       <p>Prénom : {profile.firstName}</p>
       <p>Nom : {profile.lastName}</p>
-      <UpdateForm />
+      <UserUpdate />
     </div>
   );
 }
