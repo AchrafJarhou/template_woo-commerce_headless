@@ -1,8 +1,8 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 
-import { updateCurrentCustomerThunk } from "../../../thunkActionsCreator/userThunks";
-import { fetchCurrentCustomerThunk } from "../../../thunkActionsCreator/userThunks";
+import { updateCurrentCustomerThunk } from "../../thunkActionsCreator/userThunks";
+import { fetchCurrentCustomerThunk } from "../../thunkActionsCreator/userThunks";
 
 export function BillingUpdate() {
   const dispatch = useDispatch();

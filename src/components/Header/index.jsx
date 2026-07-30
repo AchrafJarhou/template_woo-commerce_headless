@@ -1,25 +1,20 @@
 import "./index.css";
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setFilters } from "../../slices/filtersSlice";
 import { useNavigate } from "react-router-dom";
-// import { fetchSearchSuggestionsThunk } from "../../thunkActionsCreator/productsThunks";
 import Autocomplete from "../Autocomplete";
 import { logout } from "../../slices/userSlice";
 import { openAuthModal } from "../../slices/authModalSlice";
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
-  // const [suggestions, setSuggestions] = useState([]);
-  // const navigate = useNavigate();
   const token = useSelector((state) => state.user.token);
   const cartItems = useSelector((state) => state.cart.items);
   const logoUrl = useSelector((state) => state.site.logoUrl);
   const dispatch = useDispatch();
-
-  //const filters = useSelector((state) => state.filters);
-  const isAuthentificated = !!useSelector((state) => state.user?.token);
+  const isAuthentificated = useSelector((state) => state.user?.token);
   const cartCount = cartItems.reduce(
     (total, item) => total + (Number(item.quantity) || 0),
     0,
