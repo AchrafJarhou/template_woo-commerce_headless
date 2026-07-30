@@ -35,6 +35,14 @@
     max-width: 100%;
     pointer-events: none;
   }
+
+  // Le product-card est pensé pour une grille pleine page (width: 23% du
+  // parent, margin en vw) ; dans le slider son parent est un slot de
+  // largeur fixe (CARD_WIDTH), donc on neutralise ces règles ici.
+  .product-card {
+    width: 100%;
+    margin: 0;
+  }
 }
 
 .home-slider-buttons {
