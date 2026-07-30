@@ -7,6 +7,7 @@ import {
   fetchSearchSuggestionsThunk,
 } from "../../thunkActionsCreator/productsThunks";
 import "./index.css";
+import { decodeHtml } from "../../utils/decodeHtml";
 
 export default function Autocomplete() {
   const dispatch = useDispatch();
@@ -118,9 +119,9 @@ export default function Autocomplete() {
                     product.images[0]?.src ||
                     "https://placeholder.pics/svg/300/DEDEDE/555555/Placeholder"
                   }
-                  alt={product.name || "la photo du produit"}
+                  alt={decodeHtml(product.name) || "la photo du produit"}
                 />
-                <span>{product.name}</span>
+                <span>{decodeHtml(product.name)}</span>
               </Link>
             </li>
           ))}

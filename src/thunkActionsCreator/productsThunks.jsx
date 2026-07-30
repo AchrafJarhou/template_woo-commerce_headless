@@ -40,6 +40,7 @@ export const fetchProductsThunk = createAsyncThunk(
         throw new Error("Impossible de récupérer les produits.");
       }
       const data = await response.json();
+
       return { data, page, perPage };
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
@@ -78,24 +79,25 @@ export const fetchProductByIdThunk = createAsyncThunk(
   async (productId, thunkAPI) => {
     try {
       const url = `${import.meta.env.VITE_API_URL}/wp-json/custom/v1/products/${productId}`;
-      
+
       const response = await fetch(url, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
       });
-      
+
       if (!response.ok) {
         // Capture du message d'erreur réel de WooCommerce s'il existe
         const errorData = await response.json().catch(() => ({}));
-        const serverMessage = errorData.message || "Impossible de récupérer le produit.";
+        const serverMessage =
+          errorData.message || "Impossible de récupérer le produit.";
         throw new Error(serverMessage);
       }
-      
+
       const data = await response.json();
+
       return data;
-      
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
     }
-  }
+  },
 );
