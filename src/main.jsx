@@ -18,7 +18,7 @@ import Store from "./pages/Store";
 import ProductDetails from "./pages/ProductDetails";
 import Cart from "./pages/Cart";
 import Success from "./pages/Success";
-import Profile from "./pages/User";
+import Profile from "./pages/Profile";
 import BlogPage from "./pages/Blog";
 import SinglePost from "./pages/SinglePost";
 import Contact from "./pages/Contact";
