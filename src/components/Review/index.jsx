@@ -299,7 +299,7 @@ const Review = ({ productId }) => {
           <div className="review-stars">{renderStars(review.rating)}</div>
           <div className="review-meta">
             <strong>
-              {review.reviewer || review.name || "Anonyme"}
+              {review.reviewer ?? "Anonyme"}
               {" - "}
             </strong>
             <span>
@@ -311,7 +311,7 @@ const Review = ({ productId }) => {
           <div
             className="review-content"
             dangerouslySetInnerHTML={{
-              __html: review.review || review.review_text || "",
+              __html: review.review || "",
             }}
           />
         </article>
