@@ -1,13 +1,11 @@
 import "./index.css";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
 
 import { fetchSpotlightProductsThunk } from "../../thunkActionsCreator/spotlightThunks";
-import { addProductToCart } from "../../thunkActionsCreator/cartThunks";
-import { showToast } from "../../slices/toastSlice";
+import ProductCard from "../ProductCard";
 
-const CARD_WIDTH = 160;
+const CARD_WIDTH = 300;
 const GAP = 16;
 const STEP = CARD_WIDTH + GAP;
 const VIEWPORT_WIDTH = CARD_WIDTH * 3 + GAP * 2;
@@ -61,17 +59,6 @@ export default function HomeSlider() {
     const interval = setInterval(goNext, 4000);
     return () => clearInterval(interval);
   }, [total, isDragging]);
-
-  const addProduct = async (productId, name) => {
-    const result = await dispatch(
-      addProductToCart({ productId, quantity: 1, variation: [] }),
-    );
-    if (addProductToCart.fulfilled.match(result)) {
-      dispatch(showToast(`${name} ajouté au panier`));
-    } else {
-      dispatch(showToast(result.payload || "Erreur lors de l'ajout au panier"));
-    }
-  };
 
   const handlePointerDown = (e) => {
     if (e.pointerType !== "mouse" || isMobile) return;
@@ -151,20 +138,7 @@ export default function HomeSlider() {
               }
               style={{ width: CARD_WIDTH }}
             >
-              <Link to={"/product/" + product.slug}>
-                <img
-                  src={product.images[0]?.src}
-                  alt={product.name}
-                  draggable={false}
-                />
-                <p dangerouslySetInnerHTML={{ __html: product.name }}></p>
-                <p dangerouslySetInnerHTML={{ __html: product.price_html }}></p>
-              </Link>
-              {index === slotIndex && (
-                <button onClick={() => addProduct(product.id, product.name)}>
-                  Ajouter au panier
-                </button>
-              )}
+              <ProductCard product={product} />
             </div>
           ))}
         </div>

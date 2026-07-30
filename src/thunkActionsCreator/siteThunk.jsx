@@ -5,19 +5,18 @@ export const fetchSiteThunk = createAsyncThunk(
   "site/fetchSite",
   async (_, thunkAPI) => {
     try {
-      const token = thunkAPI.getState().user?.token;
+      //const token = thunkAPI.getState().user?.token;
 
       const response = await fetch(`${import.meta.env.VITE_API_URL}/wp-json/`, {
         "Content-Type": "application/json",
-        ...(token && { Authorization: `Bearer ${token}` }),
+        //...(token && { Authorization: `Bearer ${token}` }),
       });
 
       if (!response.ok) {
         throw new Error("Impossible de récupérer les informations du site.");
       }
 
-      const siteData = await response.json();
-
+      let siteData = await response.json();
       let logoUrl = null;
 
       try {
@@ -30,19 +29,20 @@ export const fetchSiteThunk = createAsyncThunk(
             logoUrl = mediaData.source_url ?? null;
           }
         }
-      } catch {
-        
-      }
+      } catch {}
 
-      const formattedData = {
-        name: siteData.name,
-        description: siteData.description,
-        url: siteData.url || siteData.home,
-        logoUrl,
-        faviconUrl: siteData.site_icon_url ?? null,
-      };
+      // const formattedData = {
+      //   name: siteData.name,
+      //   description: siteData.description,
+      //   url: siteData.url || siteData.home,
+      //   logoUrl,
+      //   faviconUrl: siteData.site_icon_url ?? null,
+      // };
 
-      thunkAPI.dispatch(setSite(formattedData));
+      siteData.logoUrl = logoUrl ?? null;
+      siteData.faviconUrl = siteData.site_icon_url ?? null;
+
+      thunkAPI.dispatch(setSite(siteData));
 
       return formattedData;
     } catch (error) {
@@ -50,4 +50,3 @@ export const fetchSiteThunk = createAsyncThunk(
     }
   },
 );
-

@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { updateCurrentUserThunk } from "../../../thunkActionsCreator/userThunks";
+import { updateCurrentUserThunk } from "../../thunkActionsCreator/userThunks";
 
-export function UpdateForm() {
+export function UserUpdate() {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
   const profile = user?.profile;

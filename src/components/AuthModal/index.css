@@ -126,9 +126,22 @@
   text-align: right;
   text-decoration: none;
   margin-top: -0.4rem;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  align-self: flex-end;
 }
 .auth-form__forgot:hover {
   text-decoration: underline;
+}
+
+.auth-modal__link {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
 }
 
 .auth-form__submit {
@@ -172,12 +185,14 @@
   color: #64748b;
 }
 
-.auth-modal__footer a {
+.auth-modal__footer a,
+.auth-modal__footer .auth-modal__link {
   color: var(--primary-color);
   text-decoration: none;
   font-weight: 600;
 }
 
-.auth-modal__footer a:hover {
+.auth-modal__footer a:hover,
+.auth-modal__footer .auth-modal__link:hover {
   text-decoration: underline;
 }

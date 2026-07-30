@@ -51,4 +51,16 @@
 }
 .header-icon {
   text-decoration: none;
+}
+button.header-icon {
+  background: none;
+  color: inherit;
+  padding: 0;
+  margin: 0;
+  font-size: inherit;
+  border-radius: 0;
+  width: auto;
+}
+button.header-icon:hover {
+  transform: none;
 }/*# sourceMappingURL=index.css.map */
