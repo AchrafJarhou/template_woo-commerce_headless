@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 // import { fetchSearchSuggestionsThunk } from "../../thunkActionsCreator/productsThunks";
 import Autocomplete from "../Autocomplete";
 import { logout } from "../../slices/userSlice";
+import { openAuthModal } from "../../slices/authModalSlice";
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -113,13 +114,20 @@ export default function Header() {
             🔍
           </Link>
 
-          <Link
-            to={isAuthentificated ? "/profile" : "/login"}
-            className="header-icon"
-            aria-label="Profil"
-          >
-            👤
-          </Link>
+          {isAuthentificated ? (
+            <Link to="/profile" className="header-icon" aria-label="Profil">
+              👤
+            </Link>
+          ) : (
+            <button
+              type="button"
+              className="header-icon"
+              aria-label="Profil"
+              onClick={() => dispatch(openAuthModal("login"))}
+            >
+              👤
+            </button>
+          )}
 
           <Link
             to="/panier"

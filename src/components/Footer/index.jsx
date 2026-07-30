@@ -1,8 +1,12 @@
 import "./Footer.css";
 
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { openAuthModal } from "../../slices/authModalSlice";
 
 export default function Footer() {
+  const dispatch = useDispatch();
+  const isAuthentificated = !!useSelector((state) => state.user?.token);
 
   return (
     <footer className="footer">
@@ -12,7 +16,17 @@ export default function Footer() {
             <li><Link to="/">Accueil</Link></li>
             <li><Link to="/catalogue">Catalogue</Link></li>
             <li><Link to="/panier">Panier</Link></li>
-            <li><Link to="/login">Se connecter</Link></li>
+            {!isAuthentificated && (
+              <li>
+                <button
+                  type="button"
+                  className="footer_link-button"
+                  onClick={() => dispatch(openAuthModal("login"))}
+                >
+                  Se connecter
+                </button>
+              </li>
+            )}
           </ul>
         </div>
 
