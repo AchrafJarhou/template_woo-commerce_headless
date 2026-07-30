@@ -1,32 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
-async function getVariationStock(product) {
-  if (product.type !== "variable") {
-    return product;
-  }
-
-  const variations = await Promise.all(
-    product.variations.map(async (variation) => {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/wp-json/wc/store/v1/products/${variation.id}`,
-      );
-
-      const variationData = await response.json();
-
-      return {
-        ...variation,
-        is_in_stock: variationData.is_in_stock,
-        stock_status: variationData.stock_status,
-      };
-    }),
-  );
-
-  return {
-    ...product,
-    variations,
-  };
-}
-
 export const fetchProductsThunk = createAsyncThunk(
   "products/fetchAll",
   async (params = {}, thunkAPI) => {
@@ -106,7 +79,7 @@ export const fetchProductByIdThunk = createAsyncThunk(
   async (productId, thunkAPI) => {
     try {
       const url = `${import.meta.env.VITE_API_URL}/wp-json/custom/v1/products/${productId}`;
-      
+
       const response = await fetch(url, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
@@ -122,8 +95,7 @@ export const fetchProductByIdThunk = createAsyncThunk(
 
       const data = await response.json();
 
-      const dataWithVariationStock = await getVariationStock(data);
-      return dataWithVariationStock;
+      return data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
     }
