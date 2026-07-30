@@ -18,9 +18,11 @@ function Seo({
   lang = "fr",
 }) {
   /* On charge dynamiquement le titre et description par defaut du site depuis le slice site*/
-  const { name: DEFAULT_TITLE, description: DEFAULT_DESCRIPTION } = useSelector(
-    (state) => state.site,
-  );
+  const {
+    name: DEFAULT_TITLE,
+    description: DEFAULT_DESCRIPTION,
+    faviconUrl,
+  } = useSelector((state) => state.site);
   const SITE_NAME = DEFAULT_TITLE;
 
   const cleanTitle = stripHtml(title);
@@ -33,6 +35,7 @@ function Seo({
     <Helmet htmlAttributes={{ lang }}>
       <title>{finalTitle}</title>
       <meta name="description" content={finalDescription} />
+      {faviconUrl && <link rel="icon" href={faviconUrl} />}
 
       <meta property="og:title" content={finalTitle} />
       <meta property="og:description" content={finalDescription} />
