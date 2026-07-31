@@ -9,6 +9,7 @@ import AverageRating from "../AverageRating";
 import SimilarProducts from "../SimilarProducts";
 import Review from "../Review";
 import Seo from "../Seo";
+import WishlistButton from "../WishlistButton"; // TEMP: wishlist testing, remove before commit
 import { decodeHtml } from "../../utils/decodeHtml.js";
 
 import "./index.css";
@@ -242,7 +243,8 @@ export default function ProductDetails() {
                 ) : (
                   <button disabled>Rupture de stock</button>
                 )}
-                <button title="Ajouter aux favoris">❤️</button>
+                {/* TEMP: wishlist testing, remove before commit */}
+                <WishlistButton product={productToDisplay} />
               </div>
             </div>
           </div>
