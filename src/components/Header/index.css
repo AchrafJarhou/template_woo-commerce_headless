@@ -1,13 +1,26 @@
+.header {
+  position: relative;
+}
+.header .margin {
+  height: 10lvh;
+}
+.header .content {
+  height: 10lvh;
+  overflow: hidden;
+  position: fixed;
+  z-index: 10;
+  background-color: var(--bg-color);
+  top: 0;
+}
 .header-top {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem 2rem;
+  height: 100%;
 }
 .header-left {
   display: flex;
-  align-items: center;
-  gap: 1rem;
+  height: 100%;
 }
 .header-burger {
   display: none;
@@ -18,11 +31,11 @@
 .header-logo {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
   text-decoration: none;
+  height: 100%;
 }
 .header-logo img {
-  height: 40px;
+  height: 100%;
   width: auto;
 }
 .header-nav {
@@ -45,9 +58,6 @@
   display: flex;
   align-items: center;
   gap: 1rem;
-}
-.header-search {
-  padding: 0.4rem 0.8rem;
 }
 .header-icon {
   text-decoration: none;
