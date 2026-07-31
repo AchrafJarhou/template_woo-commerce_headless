@@ -33,7 +33,7 @@ export default function RegisterForm() {
     if (!form.password) {
       newErrors.password = "Le mot de passe est requis.";
     } else if (form.password.length < 8) {
-      newErrors.password = "Au moins 8 caractères.";
+      newErrors.password = " Il faut au moins 8 caractères.";
     }
     return newErrors;
   };
