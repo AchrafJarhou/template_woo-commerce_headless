@@ -118,13 +118,11 @@ export default function CheckoutForm() {
   const handleChangeAddress = (e) => {
     const { name, value } = e.target;
     setBillingAddress((prev) => ({ ...prev, [name]: value }));
-    console.log(billingAddress.first_name);
   };
 
   const handleChangeShippingAddress = (e) => {
     const { name, value } = e.target;
     setShippingAddress((prev) => ({ ...prev, [name]: value }));
-    console.log(shippingAddress.first_name);
   };
 
   const handleCheckboxChange = (e) => {
