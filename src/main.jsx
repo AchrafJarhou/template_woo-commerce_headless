@@ -54,7 +54,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           v7_startTransition: true,
           v7_relativeSplatPath: true,
         }}
-        //basename="/ecom"
+        // basename="/ecom"
       >
         <Header />
         <Seo />
