@@ -161,6 +161,43 @@ export const deleteProductFromCart = createAsyncThunk(
   },
 );
 
+const couponFetch = (endpoint, code, thunkAPI) =>
+  fetch(
+    `${import.meta.env.VITE_API_URL}/wp-json/wc/store/v1/cart/${endpoint}`,
+    {
+      method: "POST",
+      headers: buildCartHeaders(thunkAPI, thunkAPI.getState().cart.nonce),
+      body: JSON.stringify({ code }),
+    },
+  );
+
+export const applyCouponThunk = createAsyncThunk(
+  "cart/applyCoupon",
+  async ({ code }, thunkAPI) => {
+    const response = await couponFetch("apply-coupon", code, thunkAPI);
+    const data = await response.json();
+    if (!response.ok)
+      return thunkAPI.rejectWithValue(data.message || "Code promo invalide.");
+
+    const nonce = response.headers.get("Nonce");
+    if (nonce) thunkAPI.dispatch(setNonce(nonce));
+    thunkAPI.dispatch(setCart(data));
+    return data;
+  },
+);
+
+export const removeCouponThunk = createAsyncThunk(
+  "cart/removeCoupon",
+  async ({ code }, thunkAPI) => {
+    const response = await couponFetch("remove-coupon", code, thunkAPI);
+    const data = await response.json();
+    const nonce = response.headers.get("Nonce");
+    if (nonce) thunkAPI.dispatch(setNonce(nonce));
+    thunkAPI.dispatch(setCart(data));
+    return data;
+  },
+);
+
 export const substractProductFromCart = createAsyncThunk(
   "cart/substractProduct",
   async ({ itemKey, quantity }, thunkAPI) => {

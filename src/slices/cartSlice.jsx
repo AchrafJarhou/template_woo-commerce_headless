@@ -5,6 +5,7 @@ export const cartSlice = createSlice({
   initialState: {
     items: [],
     totals: null,
+    coupons: [],
     nonce:
       typeof window !== "undefined"
         ? localStorage.getItem("wc_cart_nonce")
@@ -14,6 +15,7 @@ export const cartSlice = createSlice({
     setCart: (state, action) => {
       state.items = action.payload.items;
       state.totals = action.payload.totals;
+      state.coupons = action.payload.coupons || [];
     },
     setNonce: (state, action) => {
       state.nonce = action.payload;
