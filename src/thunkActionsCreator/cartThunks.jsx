@@ -161,6 +161,82 @@ export const deleteProductFromCart = createAsyncThunk(
   },
 );
 
+export const applyCouponThunk = createAsyncThunk(
+  "cart/applyCoupon",
+  async ({ code }, thunkAPI) => {
+    try {
+      const state = thunkAPI.getState();
+      const currentNonce = state.cart.nonce;
+
+      if (!currentNonce) {
+        throw new Error("Jeton de session manquant.");
+      }
+
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/wp-json/wc/store/v1/cart/apply-coupon`,
+        {
+          method: "POST",
+          headers: buildCartHeaders(thunkAPI, currentNonce),
+          body: JSON.stringify({ code }),
+        },
+      );
+
+      const cartData = await response.json();
+
+      if (!response.ok) {
+        throw new Error(cartData.message || "Ce code promo n'est pas valide.");
+      }
+
+      const nextNonce = response.headers.get("Nonce");
+      if (nextNonce && nextNonce !== currentNonce) {
+        thunkAPI.dispatch(setNonce(nextNonce));
+      }
+
+      thunkAPI.dispatch(setCart(cartData));
+      return cartData;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  },
+);
+
+export const removeCouponThunk = createAsyncThunk(
+  "cart/removeCoupon",
+  async ({ code }, thunkAPI) => {
+    try {
+      const state = thunkAPI.getState();
+      const currentNonce = state.cart.nonce;
+
+      if (!currentNonce) {
+        throw new Error("Jeton de session manquant.");
+      }
+
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/wp-json/wc/store/v1/cart/remove-coupon`,
+        {
+          method: "POST",
+          headers: buildCartHeaders(thunkAPI, currentNonce),
+          body: JSON.stringify({ code }),
+        },
+      );
+
+      if (!response.ok)
+        throw new Error("Impossible de retirer ce code promo.");
+
+      const nextNonce = response.headers.get("Nonce");
+      if (nextNonce && nextNonce !== currentNonce) {
+        thunkAPI.dispatch(setNonce(nextNonce));
+      }
+
+      const cartData = await response.json();
+      thunkAPI.dispatch(setCart(cartData));
+      return cartData;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  },
+);
+
 export const substractProductFromCart = createAsyncThunk(
   "cart/substractProduct",
   async ({ itemKey, quantity }, thunkAPI) => {
