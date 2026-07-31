@@ -5,6 +5,7 @@ export default defineConfig(({ mode }) => {
   const prodEnv = loadEnv("production", process.cwd(), "VITE_");
   return {
     plugins: [react()],
+    // base: "/ecom",
     server: {
       proxy: {
         "/woo-api": {
