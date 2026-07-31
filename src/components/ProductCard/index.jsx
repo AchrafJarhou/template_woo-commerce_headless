@@ -3,6 +3,7 @@ import { showToast } from "../../slices/toastSlice";
 import { useDispatch } from "react-redux";
 import { Link, redirect } from "react-router-dom";
 import { useState, useEffect } from "react";
+import WishlistButton from "../WishlistButton"; // TEMP: wishlist testing, remove before commit
 import "./index.css";
 
 export default function ProductCard({ product }) {
@@ -54,6 +55,8 @@ export default function ProductCard({ product }) {
 
   return (
     <div className="product-card">
+      {/* TEmporally Button: wishlist testing */}
+      <WishlistButton product={product} />
       <Link to={"/product/" + product.slug}>
         <p dangerouslySetInnerHTML={{ __html: product.name || "-" }} />
         <p>Marque: {product.brands?.[0]?.name}</p>

@@ -1,0 +1,8 @@
+.wishlist-page {
+  padding: 1rem;
+}
+
+.wishlist-grid {
+  display: flex;
+  flex-wrap: wrap;
+}

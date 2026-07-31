@@ -11,6 +11,7 @@ import { blogSlice } from "../slices/blogSlice";
 import { siteSlice } from "../slices/siteSlice";
 import { toastSlice } from "../slices/toastSlice";
 import { authModalSlice } from "../slices/authModalSlice";
+import { wishlistSlice } from "../slices/wishlistSlice";
 
 import { cartIdentityListener } from "./cartIdentityListener";
 
@@ -27,6 +28,7 @@ const store = configureStore({
     site: siteSlice.reducer,
     toast: toastSlice.reducer,
     authModal: authModalSlice.reducer,
+    wishlist: wishlistSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().prepend(cartIdentityListener.middleware),
