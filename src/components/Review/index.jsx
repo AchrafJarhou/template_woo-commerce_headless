@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import "./index.css";
 
 const Review = ({ productId }) => {
   const userState = useSelector((state) => state.user || {});
@@ -110,7 +111,7 @@ const Review = ({ productId }) => {
 
         // 2. Option B : Appel API WooCommerce si aucune commande n’est déjà chargée
         const response = await fetch(
-          `${baseUrl}/wp-json/wc/v3/orders?customer=${user?.id || user?.ID || user?.user_id || user?.data?.ID || ""}&status=completed`,
+          `${baseUrl}/wp-json/wc/v3/orders?customer=${user?.id}&status=completed`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -207,7 +208,7 @@ const Review = ({ productId }) => {
   };
 
   return (
-    <div className="review-list">
+    <div id="reviews-section" className="review-list">
       <h2>Avis</h2>
 
       {/* --- BLOC NOUVEL AVIS --- */}
@@ -231,19 +232,13 @@ const Review = ({ productId }) => {
                   key={star}
                   onClick={() => setRating(star)}
                   aria-label={`Choisir ${star} étoiles`}
-                  style={{
-                    background: "none",
-                    border: "none",
-                    fontSize: "1.4rem",
-                    cursor: "pointer",
-                    color: star <= rating ? "#ffc107" : "#ccc",
-                  }}
+                  className={`review-star-button ${star <= rating ? "active" : ""}`}
                 >
                   ★
                 </button>
               ))}
               {!rating && (
-                <p style={{ color: "#666", marginTop: "0.5rem" }}>
+                <p className="review-helper-text">
                   Choisissez une note de 1 à 5.
                 </p>
               )}
@@ -252,7 +247,7 @@ const Review = ({ productId }) => {
             <div>
               <textarea
                 rows="3"
-                style={{ width: "100%", padding: "8px" }}
+                className="review-textarea"
                 placeholder="Votre avis sur ce produit..."
                 value={comment}
                 onChange={(e) => setComment(e.target.value)}
