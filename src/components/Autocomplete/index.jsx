@@ -7,73 +7,19 @@ import {
   fetchSearchSuggestionsThunk,
 } from "../../thunkActionsCreator/productsThunks";
 import "./index.css";
+import { decodeHtml } from "../../utils/decodeHtml";
 
 export default function Autocomplete() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const search = useSelector((state) => state.filters.search);
-  // const [suggestions, setSuggestions] = useState([]);
   const [focused, setFocused] = useState(false);
   const timeoutRef = useRef(null);
   const filters = useSelector((state) => state.filters);
-
-  // const fetchSuggestions = async (value) => {
-  //   try {
-  //     const url = `${import.meta.env.VITE_API_URL}/wp-json/wc/store/v1/products?search=${encodeURIComponent(value)}&per_page=5`;
-  //     const response = await fetch(url, {
-  //       method: "GET",
-  //       headers: { "Content-Type": "application/json" },
-  //     });
-  //     if (!response.ok)
-  //       throw new Error(" il est Impossible de récupérer les suggestions.");
-  //     const data = await response.json();
-  //     setSuggestions(data);
-  //   } catch (error) {
-  //     setSuggestions([]);
-  //   }
-  // };
   const { list, loading, error } = useSelector((state) => state.products);
   useEffect(() => {
     dispatch(fetchProductsThunk({ ...filters, page: 1, per_page: 20 }));
   }, [filters, dispatch]);
-
-  // useEffect(() => {
-  //   if (!filters.search) {
-  //     setSuggestions([]);
-  //     return;
-  //   }
-  //   setSuggestions(list.data);
-  //   let active = true;
-  //   dispatch(
-  //     fetchSearchSuggestionsThunk({ search: filters.search, per_page: 5 }),
-  //   )
-  //     .unwrap()
-  //     .then((data) => {
-  //       if (active) setSuggestions(list.data);
-  //     })
-  //     .catch(() => {
-  //       if (active) setSuggestions([]);
-  //     });
-  //   return () => {
-  //     active = false;
-  //   };
-  // }, [filters.search, dispatch]);
-
-  // useEffect(() => {
-  //   setSuggestions(list.data);
-  //   clearTimeout(timeoutRef.current);
-
-  //   if (search.trim().length < 1) {
-  //     setSuggestions([]);
-  //     return;
-  //   }
-
-  //   timeoutRef.current = setTimeout(() => {
-  //     // fetchSuggestions(search);
-  //   }, 350);
-
-  //   return () => clearTimeout(timeoutRef.current);
-  // }, [search]);
 
   const handleChange = (e) => {
     dispatch(setFilters({ search: e.target.value }));
@@ -81,7 +27,6 @@ export default function Autocomplete() {
 
   const handleSelect = () => {
     dispatch(setFilters({ search: "" }));
-    //setSuggestions([]);
   };
 
   const handleKeyDown = (e) => {
@@ -118,9 +63,9 @@ export default function Autocomplete() {
                     product.images[0]?.src ||
                     "https://placeholder.pics/svg/300/DEDEDE/555555/Placeholder"
                   }
-                  alt={product.name || "la photo du produit"}
+                  alt={decodeHtml(product.name) || "la photo du produit"}
                 />
-                <span>{product.name}</span>
+                <span>{decodeHtml(product.name)}</span>
               </Link>
             </li>
           ))}

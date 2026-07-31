@@ -54,7 +54,7 @@ export function CartProduct({ item }) {
             addProductToCart({
               productId: item.id,
               quantity: 1,
-              variation: item.variation,
+              variation: item.variation?.[0] || [],
             }),
           );
         }}

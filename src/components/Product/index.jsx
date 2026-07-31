@@ -5,8 +5,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchProductByIdThunk } from "../../thunkActionsCreator/productsThunks";
 import { addProductToCart } from "../../thunkActionsCreator/cartThunks";
 import { showToast } from "../../slices/toastSlice";
-
+import AverageRating from "../AverageRating";
+import SimilarProducts from "../SimilarProducts";
+import Review from "../Review";
 import Seo from "../Seo";
+import WishlistButton from "../WishlistButton"; // TEMP: wishlist testing, remove before commit
+import { decodeHtml } from "../../utils/decodeHtml.js";
 
 import "./index.css";
 
@@ -30,6 +34,16 @@ export default function ProductDetails() {
   );
   const productToDisplay = productFromList || singleProduct;
 
+  function checkInStock(product) {
+    const variation = product.variations.find((variation) =>
+      variation.attributes.every(
+        (attribute) => itemVariation[attribute.name] === attribute.value,
+      ),
+    );
+
+    return variation ? variation.is_in_stock : true;
+  }
+
   useEffect(() => {
     if (id && !productFromList) {
       dispatch(fetchProductByIdThunk(id));
@@ -41,83 +55,7 @@ export default function ProductDetails() {
       setActiveImageIndex(0);
     }
   }, [productToDisplay?.id]);
-  useEffect(() => {
-    if (!productToDisplay?.id) return;
 
-    const fetchSimilarProducts = async () => {
-      setLoadingSimilar(true);
-      try {
-        const baseUrl = `${import.meta.env.VITE_API_URL}/wp-json/wc/store/v1/products`;
-        const categoryId = productToDisplay.categories?.[0]?.id;
-        let recommendations = [];
-
-        // --- NIVEAU 1 : Produits de la même catégorie ---
-        if (categoryId) {
-          const response = await fetch(`${baseUrl}?category=${categoryId}`, {
-            method: "GET",
-            headers: { "Content-Type": "application/json" },
-          });
-
-          if (response.ok) {
-            const data = await response.json();
-            recommendations = (Array.isArray(data) ? data : []).filter(
-              (p) => p.id.toString() !== productToDisplay.id.toString(),
-            );
-          }
-        }
-
-        // --- NIVEAU 2 : Complément via le store Redux (si disponible) ---
-        if (recommendations.length < 3 && list?.data?.length > 0) {
-          const reduxExtras = list.data.filter(
-            (p) =>
-              p.id.toString() !== productToDisplay.id.toString() &&
-              !recommendations.some(
-                (rec) => rec.id.toString() === p.id.toString(),
-              ),
-          );
-
-          recommendations = [...recommendations, ...reduxExtras];
-        }
-
-        // --- NIVEAU 3 : Secours API global (Si Redux est vide ou insuffisant) ---
-        if (recommendations.length < 3) {
-          // On demande 10 produits généraux à l'API pour être sûr d'avoir du choix
-          const fallbackResponse = await fetch(`${baseUrl}?per_page=10`, {
-            method: "GET",
-            headers: { "Content-Type": "application/json" },
-          });
-
-          if (fallbackResponse.ok) {
-            const fallbackData = await fallbackResponse.json();
-            const apiExtras = (
-              Array.isArray(fallbackData) ? fallbackData : []
-            ).filter(
-              (p) =>
-                p.id.toString() !== productToDisplay.id.toString() &&
-                !recommendations.some(
-                  (rec) => rec.id.toString() === p.id.toString(),
-                ),
-            );
-
-            recommendations = [...recommendations, ...apiExtras];
-          }
-        }
-
-        // 4. Mélange aléatoirement le tableau avant de prendre les 3 premiers
-        const randomized = recommendations.sort(() => 0.5 - Math.random());
-        setSimilarProducts(randomized.slice(0, 3));
-      } catch (error) {
-        console.error(
-          "Erreur lors de la récupération des recommandations :",
-          error.message,
-        );
-      } finally {
-        setLoadingSimilar(false);
-      }
-    };
-
-    fetchSimilarProducts();
-  }, [productToDisplay?.id, list?.data]);
   const handleAddToCart = async () => {
     if (productToDisplay && productToDisplay.id) {
       const result = await dispatch(
@@ -128,7 +66,9 @@ export default function ProductDetails() {
         }),
       );
       if (addProductToCart.fulfilled.match(result)) {
-        dispatch(showToast(`${productToDisplay.name} ajouté au panier`));
+        dispatch(
+          showToast(`${decodeHtml(productToDisplay.name)} ajouté au panier`),
+        );
       } else {
         dispatch(
           showToast(result.payload || "Erreur lors de l'ajout au panier"),
@@ -173,7 +113,7 @@ export default function ProductDetails() {
   return (
     <div className="product-details-page">
       <Seo
-        title={productToDisplay.name}
+        title={decodeHtml(productToDisplay.name)}
         description={
           productToDisplay.short_description || productToDisplay.description
         }
@@ -182,7 +122,7 @@ export default function ProductDetails() {
         jsonLd={{
           "@context": "https://schema.org/",
           "@type": "Product",
-          name: productToDisplay.name,
+          name: decodeHtml(productToDisplay.name),
           description:
             productToDisplay.short_description || productToDisplay.description,
           image: productToDisplay.images?.[0]?.src,
@@ -208,7 +148,9 @@ export default function ProductDetails() {
           <span className="separator">/</span>
           <Link to="/catalogue">catalogue</Link>
           <span className="separator">/</span>
-          <span className="current-page">{productToDisplay.name}</span>
+          <span className="current-page">
+            {decodeHtml(productToDisplay.name)}
+          </span>
         </nav>
       </div>
 
@@ -218,7 +160,10 @@ export default function ProductDetails() {
             {mainImage ? (
               <>
                 <div className="main-image-container">
-                  <img src={mainImage} alt={productToDisplay.name} />
+                  <img
+                    src={mainImage}
+                    alt={decodeHtml(productToDisplay.name)}
+                  />
                 </div>
 
                 {productImages.length > 1 && (
@@ -234,7 +179,7 @@ export default function ProductDetails() {
                       >
                         <img
                           src={img.src}
-                          alt={`${productToDisplay.name} thumbnail ${index + 1}`}
+                          alt={`${decodeHtml(productToDisplay.name)} thumbnail ${index + 1}`}
                         />
                       </div>
                     ))}
@@ -249,8 +194,13 @@ export default function ProductDetails() {
           </div>
 
           <div className="info-wrapper">
-            <h1 className="product-title">{productToDisplay.name}</h1>
-
+            <h1 className="product-title">
+              {decodeHtml(productToDisplay.name)}
+            </h1>
+            <AverageRating
+              avgRating={productToDisplay?.average_rating ?? 0}
+              totalReviews={productToDisplay?.review_count ?? 0}
+            />
             <div
               className="short-description"
               dangerouslySetInnerHTML={{
@@ -286,14 +236,15 @@ export default function ProductDetails() {
                     </select>
                   </div>
                 ))}
-                {productToDisplay.is_in_stock ? (
+                {checkInStock(productToDisplay) ? (
                   <button onClick={handleAddToCart}>
                     🧺 Ajouter au panier
                   </button>
                 ) : (
                   <button disabled>Rupture de stock</button>
                 )}
-                <button title="Ajouter aux favoris">❤️</button>
+                {/* TEMP: wishlist testing, remove before commit */}
+                <WishlistButton product={productToDisplay} />
               </div>
             </div>
           </div>
@@ -301,36 +252,12 @@ export default function ProductDetails() {
       </div>
 
       {/* Section des articles similaires */}
-      <section className="similar-products-section">
-        <h2>Produits similaires</h2>
 
-        {loadingSimilar ? (
-          <p className="loading-text">Chargement des recommandations...</p>
-        ) : similarProducts.length > 0 ? (
-          <div className="similar-products-grid">
-            {similarProducts.map((simProduct) => (
-              <Link key={simProduct.id} to={"/product/" + simProduct.slug}>
-                <div className="similar-product-image">
-                  <img
-                    src={simProduct.images?.[0]?.src || "/placeholder.jpg"}
-                    alt={simProduct.name}
-                  />
-                </div>
-                <div className="similar-product-info">
-                  <h4>{simProduct.name}</h4>
-                  <p className="price">
-                    {simProduct.prices?.price
-                      ? `${(parseFloat(simProduct.prices.price) / 100).toFixed(2)} ${simProduct.prices.currency_code || "EUR"}`
-                      : "Prix N/A"}
-                  </p>
-                </div>
-              </Link>
-            ))}
-          </div>
-        ) : (
-          <p className="no-similar-text">Aucun produit similaire trouvé.</p>
-        )}
-      </section>
+      <SimilarProducts
+        currentProduct={productToDisplay}
+        reduxProducts={list?.data}
+      />
+      <Review productId={productToDisplay.id} />
     </div>
   );
 }

@@ -18,10 +18,9 @@ import Store from "./pages/Store";
 import ProductDetails from "./pages/ProductDetails";
 import Cart from "./pages/Cart";
 import Success from "./pages/Success";
-import Profile from "./pages/User";
-import Login from "./pages/login";
-import Register from "./pages/register";
-import ResetPassword from "./pages/ResetPassword";
+import NewPassword from "./pages/NewPassword";
+import Profile from "./pages/Profile";
+import Wishlist from "./pages/Wishlist"; // TEMP: wishlist testing, remove before commit
 import BlogPage from "./pages/Blog";
 import SinglePost from "./pages/SinglePost";
 import Contact from "./pages/Contact";
@@ -34,6 +33,7 @@ import Seo from "./components/Seo";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Toast from "./components/Toast";
+import AuthModal from "./components/AuthModal";
 
 import "./index.css";
 
@@ -55,15 +55,13 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           v7_startTransition: true,
           v7_relativeSplatPath: true,
         }}
-        //basename="/ecom"
+        // basename="/ecom"
       >
         <Header />
         <Seo />
         <Routes>
           {<Route path="/" element={<Home />} />}
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/new-password" element={<NewPassword />} />
           <Route path="/catalogue" element={<Store />} />
           <Route path="/mentions-legales" element={<LegalMentions />} />
           <Route path="/cgu" element={<CGU />} />
@@ -76,9 +74,12 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <Route path="/blog/:slug" element={<SinglePost />} />
           <Route path="/success/:orderId" element={<Success />} />
           <Route path="/profile" element={<Profile />} />
+          {/* TEMP: wishlist testing, remove before commit */}
+          <Route path="/wishlist" element={<Wishlist />} />
         </Routes>
         <Footer />
         <Toast />
+        <AuthModal />
       </Router>
     </Provider>
   </HelmetProvider>,

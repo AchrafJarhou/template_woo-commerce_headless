@@ -3,6 +3,7 @@ import { showToast } from "../../slices/toastSlice";
 import { useDispatch } from "react-redux";
 import { Link, redirect } from "react-router-dom";
 import { useState, useEffect } from "react";
+import WishlistButton from "../WishlistButton"; // TEMP: wishlist testing, remove before commit
 import "./index.css";
 
 export default function ProductCard({ product }) {
@@ -28,6 +29,16 @@ export default function ProductCard({ product }) {
     setItemVariation((prev) => ({ ...prev, [name]: value }));
   }
 
+  function checkInStock(product) {
+    const variation = product.variations.find((variation) =>
+      variation.attributes.every(
+        (attribute) => itemVariation[attribute.name] === attribute.value,
+      ),
+    );
+
+    return variation ? variation.is_in_stock : true;
+  }
+
   useEffect(() => {
     if (!product.attributes) return;
 
@@ -44,6 +55,8 @@ export default function ProductCard({ product }) {
 
   return (
     <div className="product-card">
+      {/* TEmporally Button: wishlist testing */}
+      <WishlistButton product={product} />
       <Link to={"/product/" + product.slug}>
         <p dangerouslySetInnerHTML={{ __html: product.name || "-" }} />
         <p>Marque: {product.brands?.[0]?.name}</p>
@@ -55,12 +68,12 @@ export default function ProductCard({ product }) {
           alt={product.name || "photo produit"}
         />
       </Link>
-      <p>
+
+      {/* <p>
         Prix: {(product.prices.price / 100).toFixed(2) || "-.--"}
         {" " + product.prices.currency_symbol}
       </p>
 
-      {/* Prix promotionnel s'il y en a */}
       {product.prices.regular_price > product.prices.sale_price ? (
         <p>
           Reduction de{" "}
@@ -75,7 +88,12 @@ export default function ProductCard({ product }) {
             " " +
             product.prices.currency_symbol}
         </p>
-      ) : null}
+      ) : null} */}
+
+      <span>
+        <p>Prix:</p>
+        <p dangerouslySetInnerHTML={{ __html: product.price_html }}></p>
+      </span>
 
       {product.is_in_stock ? <p>En stock</p> : <p>Rupture de stock</p>}
       {product.attributes?.map((attribute) => (
@@ -93,7 +111,7 @@ export default function ProductCard({ product }) {
           </select>
         </div>
       ))}
-      {product.is_in_stock ? (
+      {checkInStock(product) ? (
         <button
           onClick={() => addProduct(product.id, 1, itemVariation, product.name)}
         >

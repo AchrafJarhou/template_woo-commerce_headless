@@ -9,6 +9,7 @@ import {
   fetchCurrentUserOrdersThunk,
   fetchCurrentUserThunk,
 } from "../../thunkActionsCreator/userThunks";
+import CheckoutAuthPromptModal from "../CheckoutAuthPromptModal";
 
 export default function CheckoutForm() {
   const navigate = useNavigate();
@@ -17,6 +18,7 @@ export default function CheckoutForm() {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [showGuestModal, setShowGuestModal] = useState(false);
 
   const user = useSelector((state) => state.user);
   const cart = useSelector((state) => state.cart);
@@ -49,8 +51,7 @@ export default function CheckoutForm() {
     }
   }, [shippingAddress, sameAsBilling]);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const processCheckout = async () => {
     if (!stripe || !elements || loading) return;
     setLoading(true);
     setError(null);
@@ -115,16 +116,28 @@ export default function CheckoutForm() {
     }
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!user?.token) {
+      setShowGuestModal(true);
+      return;
+    }
+    processCheckout();
+  };
+
+  const handleContinueAsGuest = (e) => {
+    setShowGuestModal(false);
+    processCheckout();
+  };
+
   const handleChangeAddress = (e) => {
     const { name, value } = e.target;
     setBillingAddress((prev) => ({ ...prev, [name]: value }));
-    console.log(billingAddress.first_name);
   };
 
   const handleChangeShippingAddress = (e) => {
     const { name, value } = e.target;
     setShippingAddress((prev) => ({ ...prev, [name]: value }));
-    console.log(shippingAddress.first_name);
   };
 
   const handleCheckboxChange = (e) => {
@@ -136,167 +149,176 @@ export default function CheckoutForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h3>Adresse de livraison</h3>
-      <div>
-        <label>
-          Prénom
-          <input
-            name="first_name"
-            value={shippingAddress.first_name}
-            onChange={handleChangeShippingAddress}
-            required
-          />
-        </label>
-
-        <label>
-          Nom
-          <input
-            name="last_name"
-            value={shippingAddress.last_name}
-            onChange={handleChangeShippingAddress}
-            required
-          />
-        </label>
-
-        <label>
-          Adresse
-          <input
-            name="address_1"
-            value={shippingAddress.address_1}
-            onChange={handleChangeShippingAddress}
-            required
-          />
-        </label>
-
-        <label>
-          Ville
-          <input
-            name="city"
-            value={shippingAddress.city}
-            onChange={handleChangeShippingAddress}
-            required
-          />
-        </label>
-
-        <label>
-          Code postal
-          <input
-            name="postcode"
-            value={shippingAddress.postcode}
-            onChange={handleChangeShippingAddress}
-            required
-          />
-        </label>
-
-        <label>
-          Pays
-          <input
-            name="country"
-            value={shippingAddress.country}
-            onChange={handleChangeShippingAddress}
-            required
-          />
-        </label>
-
-        <br />
-        <label>
-          <input
-            type="checkbox"
-            id="sameAsBilling"
-            checked={sameAsBilling}
-            onChange={handleCheckboxChange}
-          />
-          Livrer à la même adresse (facturation identique)
-        </label>
-
-        {!sameAsBilling && (
-          <>
-            <h3>Adresse de facturation</h3>
-            <label>
-              Prénom
-              <input
-                name="first_name"
-                value={billingAddress.first_name}
-                onChange={handleChangeAddress}
-                required
-              />
-            </label>
-
-            <label>
-              Nom
-              <input
-                name="last_name"
-                value={billingAddress.last_name}
-                onChange={handleChangeAddress}
-                required
-              />
-            </label>
-
-            <label>
-              Adresse
-              <input
-                name="address_1"
-                value={billingAddress.address_1}
-                onChange={handleChangeAddress}
-                required
-              />
-            </label>
-
-            <label>
-              Ville
-              <input
-                name="city"
-                value={billingAddress.city}
-                onChange={handleChangeAddress}
-                required
-              />
-            </label>
-
-            <label>
-              Code postal
-              <input
-                name="postcode"
-                value={billingAddress.postcode}
-                onChange={handleChangeAddress}
-                required
-              />
-            </label>
-
-            <label>
-              Pays
-              <input
-                name="country"
-                value={billingAddress.country}
-                onChange={handleChangeAddress}
-                required
-              />
-            </label>
-          </>
-        )}
-
-        <br />
-        <label>
-          Email
-          <input
-            name="email"
-            type="email"
-            value={billingAddress.email}
-            onChange={handleChangeAddress}
-            required
-          />
-        </label>
-
+    <>
+      <form onSubmit={handleSubmit}>
+        <h3>Adresse de livraison</h3>
         <div>
-          <CardElement />
+          <label>
+            Prénom
+            <input
+              name="first_name"
+              value={shippingAddress.first_name}
+              onChange={handleChangeShippingAddress}
+              required
+            />
+          </label>
+
+          <label>
+            Nom
+            <input
+              name="last_name"
+              value={shippingAddress.last_name}
+              onChange={handleChangeShippingAddress}
+              required
+            />
+          </label>
+
+          <label>
+            Adresse
+            <input
+              name="address_1"
+              value={shippingAddress.address_1}
+              onChange={handleChangeShippingAddress}
+              required
+            />
+          </label>
+
+          <label>
+            Ville
+            <input
+              name="city"
+              value={shippingAddress.city}
+              onChange={handleChangeShippingAddress}
+              required
+            />
+          </label>
+
+          <label>
+            Code postal
+            <input
+              name="postcode"
+              value={shippingAddress.postcode}
+              onChange={handleChangeShippingAddress}
+              required
+            />
+          </label>
+
+          <label>
+            Pays
+            <input
+              name="country"
+              value={shippingAddress.country}
+              onChange={handleChangeShippingAddress}
+              required
+            />
+          </label>
+
+          <br />
+          <label>
+            <input
+              type="checkbox"
+              id="sameAsBilling"
+              checked={sameAsBilling}
+              onChange={handleCheckboxChange}
+            />
+            Livrer à la même adresse (facturation identique)
+          </label>
+
+          {!sameAsBilling && (
+            <>
+              <h3>Adresse de facturation</h3>
+              <label>
+                Prénom
+                <input
+                  name="first_name"
+                  value={billingAddress.first_name}
+                  onChange={handleChangeAddress}
+                  required
+                />
+              </label>
+
+              <label>
+                Nom
+                <input
+                  name="last_name"
+                  value={billingAddress.last_name}
+                  onChange={handleChangeAddress}
+                  required
+                />
+              </label>
+
+              <label>
+                Adresse
+                <input
+                  name="address_1"
+                  value={billingAddress.address_1}
+                  onChange={handleChangeAddress}
+                  required
+                />
+              </label>
+
+              <label>
+                Ville
+                <input
+                  name="city"
+                  value={billingAddress.city}
+                  onChange={handleChangeAddress}
+                  required
+                />
+              </label>
+
+              <label>
+                Code postal
+                <input
+                  name="postcode"
+                  value={billingAddress.postcode}
+                  onChange={handleChangeAddress}
+                  required
+                />
+              </label>
+
+              <label>
+                Pays
+                <input
+                  name="country"
+                  value={billingAddress.country}
+                  onChange={handleChangeAddress}
+                  required
+                />
+              </label>
+            </>
+          )}
+
+          <br />
+          <label>
+            Email
+            <input
+              name="email"
+              type="email"
+              value={billingAddress.email}
+              onChange={handleChangeAddress}
+              required
+            />
+          </label>
+
+          <div>
+            <CardElement />
+          </div>
+
+          <button type="submit" disabled={!stripe || loading}>
+            {loading ? "Traitement..." : "Payer maintenant"}
+          </button>
+
+          {error && <p>{error}</p>}
         </div>
+      </form>
 
-        <button type="submit" disabled={!stripe || loading}>
-          {loading ? "Traitement..." : "Payer maintenant"}
-        </button>
-
-        {error && <p>{error}</p>}
-      </div>
-    </form>
+      {showGuestModal && (
+        <CheckoutAuthPromptModal
+          handleContinueAsGuest={handleContinueAsGuest}
+          onClose={() => setShowGuestModal(false)}
+        />
+      )}
+    </>
   );
 }
