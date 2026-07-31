@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { registerThunk } from "../../../thunkActionsCreator/userThunks";
-import { closeAuthModal, switchAuthModalView } from "../../../slices/authModalSlice";
+import { registerThunk } from "../../thunkActionsCreator/userThunks";
+import { closeAuthModal, switchAuthModalView } from "../../slices/authModalSlice";
 
 export default function RegisterForm() {
   const dispatch = useDispatch();
