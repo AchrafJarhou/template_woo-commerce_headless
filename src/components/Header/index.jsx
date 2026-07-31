@@ -12,6 +12,7 @@ export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const token = useSelector((state) => state.user.token);
   const cartItems = useSelector((state) => state.cart.items);
+  const wishlistItems = useSelector((state) => state.wishlist.items); // TEMP: wishlist testing
   const logoUrl = useSelector((state) => state.site.logoUrl);
   const dispatch = useDispatch();
   const isAuthentificated = useSelector((state) => state.user?.token);
@@ -132,6 +133,20 @@ export default function Header() {
             🛒
             {cartCount > 0 && (
               <span className="header-cart-badge">{cartBadgeValue}</span>
+            )}
+          </Link>
+
+          {/* TEMP: wishlist testing, remove before commit */}
+          <Link
+            to="/wishlist"
+            className="header-icon header-wishlist-link"
+            aria-label={`Favoris (${wishlistItems.length})`}
+          >
+            ❤️
+            {wishlistItems.length > 0 && (
+              <span className="header-cart-badge">
+                {wishlistItems.length > 9 ? "9+" : wishlistItems.length}
+              </span>
             )}
           </Link>
 

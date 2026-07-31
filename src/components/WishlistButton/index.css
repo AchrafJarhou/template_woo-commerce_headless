@@ -1,0 +1,24 @@
+.wishlist-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.3rem;
+  line-height: 1;
+  padding: 0.25rem;
+}
+
+.wishlist-button.active {
+  animation: wishlist-pop 0.2s ease-in-out;
+}
+
+@keyframes wishlist-pop {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.3);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
