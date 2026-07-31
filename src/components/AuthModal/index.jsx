@@ -2,13 +2,12 @@ import { useDispatch, useSelector } from "react-redux";
 import "./index.css";
 
 import { closeAuthModal } from "../../slices/authModalSlice";
-import LoginForm from "../LoginForm/LoginForm";
-import RegisterForm from "../RegisterForm/RegisterForm";
+import AuthForm from "../AuthForm/AuthForm";
 import ResetPasswordForm from "../ResetPasswordForm/ResetPasswordForm";
 
 const VIEWS = {
-  login: LoginForm,
-  register: RegisterForm,
+  login: AuthForm,
+  register: AuthForm,
   "reset-password": ResetPasswordForm,
 };
 
@@ -19,7 +18,7 @@ export default function AuthModal() {
   if (!isOpen) return null;
 
   const close = () => dispatch(closeAuthModal());
-  const ActiveForm = VIEWS[view] || LoginForm;
+  const ActiveForm = VIEWS[view] || AuthForm;
 
   return (
     <div className="auth-overlay" onClick={close}>

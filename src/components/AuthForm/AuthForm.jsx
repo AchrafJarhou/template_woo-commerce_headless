@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { registerThunk } from "../../thunkActionsCreator/userThunks";
+import { loginThunk, registerThunk } from "../../thunkActionsCreator/userThunks";
 import { closeAuthModal, switchAuthModalView } from "../../slices/authModalSlice";
 
-export default function RegisterForm() {
+export default function AuthForm() {
   const dispatch = useDispatch();
+  const { view } = useSelector((state) => state.authModal);
   const { loading, error, token } = useSelector((state) => state.user);
+
+  const mode = view === "register" ? "register" : "login";
 
   const [step, setStep] = useState(1);
   const [form, setForm] = useState({
@@ -21,7 +24,24 @@ export default function RegisterForm() {
     if (token) dispatch(closeAuthModal());
   }, [dispatch, token]);
 
-  const validateStep1 = () => {
+  useEffect(() => {
+    setStep(1);
+    setErrors({});
+  }, [mode]);
+
+  const validateLogin = () => {
+    const newErrors = {};
+    if (!form.username.trim())
+      newErrors.username = "Le nom d'utilisateur est requis.";
+    if (!form.email.trim())
+      newErrors.email = "L'adresse e-mail est requise.";
+    if (!form.password) newErrors.password = "Le mot de passe est requis.";
+    else if (form.password.length < 8)
+      newErrors.password = " Il faut au moins 8 caractères.";
+    return newErrors;
+  };
+
+  const validateRegisterStep1 = () => {
     const newErrors = {};
     if (!form.username.trim())
       newErrors.username = "Le nom d'utilisateur est requis.";
@@ -38,7 +58,7 @@ export default function RegisterForm() {
     return newErrors;
   };
 
-  const validateStep2 = () => {
+  const validateRegisterStep2 = () => {
     const newErrors = {};
     if (!form.confirmPassword) {
       newErrors.confirmPassword = "Veuillez confirmer votre mot de passe.";
@@ -62,8 +82,20 @@ export default function RegisterForm() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    if (mode === "login") {
+      const validation = validateLogin();
+      if (Object.keys(validation).length > 0) {
+        setErrors(validation);
+        return;
+      }
+      dispatch(
+        loginThunk({ username: form.username.trim(), password: form.password }),
+      );
+      return;
+    }
+
     if (step === 1) {
-      const validation = validateStep1();
+      const validation = validateRegisterStep1();
       if (Object.keys(validation).length > 0) {
         setErrors(validation);
         return;
@@ -73,7 +105,7 @@ export default function RegisterForm() {
       return;
     }
 
-    const validation = validateStep2();
+    const validation = validateRegisterStep2();
     if (Object.keys(validation).length > 0) {
       setErrors(validation);
       return;
@@ -82,17 +114,31 @@ export default function RegisterForm() {
     dispatch(registerThunk(payload));
   };
 
+  const subtitle =
+    mode === "login"
+      ? ""
+      : step === 1
+        ? "Rejoignez-nous"
+        : "Confirmez votre mot de passe";
+
+  const submitLabel =
+    mode === "login"
+      ? loading
+        ? "Signing in…"
+        : "Se connecter"
+      : step === 1
+        ? "Suivant"
+        : loading
+          ? "Création du compte…"
+          : "Créer le compte";
+
   return (
     <>
-      <h1>Créer un compte</h1>
-      <p className="auth-modal__subtitle">
-        {step === 1
-          ? "Rejoignez-nous"
-          : "Confirmez votre mot de passe"}
-      </p>
+      <h1>{mode === "login" ? "Bonjour" : "Créer un compte"}</h1>
+      {subtitle && <p className="auth-modal__subtitle">{subtitle}</p>}
 
       <form className="auth-form" onSubmit={handleSubmit} noValidate>
-        {step === 1 && (
+        {(mode === "login" || step === 1) && (
           <>
             <div className="auth-form__field">
               <label htmlFor="username">Nom d'utilisateur</label>
@@ -135,7 +181,9 @@ export default function RegisterForm() {
                 value={form.password}
                 onChange={handleChange}
                 className={errors.password ? "input--error" : ""}
-                autoComplete="new-password"
+                autoComplete={
+                  mode === "login" ? "current-password" : "new-password"
+                }
               />
               {errors.password && (
                 <span className="auth-form__error">{errors.password}</span>
@@ -144,7 +192,7 @@ export default function RegisterForm() {
           </>
         )}
 
-        {step === 2 && (
+        {mode === "register" && step === 2 && (
           <div className="auth-form__field">
             <label htmlFor="confirmPassword">Confirmez le mot de passe</label>
             <input
@@ -163,14 +211,17 @@ export default function RegisterForm() {
           </div>
         )}
 
-        {error && (
-          <p
-            className="auth-form__server-error"
-            dangerouslySetInnerHTML={{ __html: error }}
-          />
+        {mode === "login" && (
+          <button
+            type="button"
+            className="auth-form__forgot"
+            onClick={() => dispatch(switchAuthModalView("reset-password"))}
+          >
+            Vous avez oublié votre mot de passe ?
+          </button>
         )}
 
-        {step === 2 && (
+        {mode === "register" && step === 2 && (
           <button
             type="button"
             className="auth-form__forgot"
@@ -180,24 +231,39 @@ export default function RegisterForm() {
           </button>
         )}
 
+        {error && (
+          <p
+            className="auth-form__server-error"
+            dangerouslySetInnerHTML={{ __html: error }}
+          />
+        )}
+
         <button className="auth-form__submit" type="submit" disabled={loading}>
-          {step === 1
-            ? "Suivant"
-            : loading
-              ? "Création du compte…"
-              : "Créer le compte"}
+          {submitLabel}
         </button>
+
+        {mode === "login" && (
+          <button
+            type="button"
+            className="auth-form__submit"
+            onClick={() => dispatch(switchAuthModalView("register"))}
+          >
+            S'inscrire
+          </button>
+        )}
       </form>
 
-      <p className="auth-modal__footer">
-        <button
-          type="button"
-          className="auth-modal__link"
-          onClick={() => dispatch(switchAuthModalView("login"))}
-        >
-          Vous avez déjà un compte ? Se connecter
-        </button>
-      </p>
+      {mode === "register" && (
+        <p className="auth-modal__footer">
+          <button
+            type="button"
+            className="auth-modal__link"
+            onClick={() => dispatch(switchAuthModalView("login"))}
+          >
+            Vous avez déjà un compte ? Se connecter
+          </button>
+        </p>
+      )}
     </>
   );
 }
