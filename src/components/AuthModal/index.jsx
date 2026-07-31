@@ -2,9 +2,9 @@ import { useDispatch, useSelector } from "react-redux";
 import "./index.css";
 
 import { closeAuthModal } from "../../slices/authModalSlice";
-import LoginForm from "./LoginForm";
-import RegisterForm from "./RegisterForm";
-import ResetPasswordForm from "./ResetPasswordForm";
+import LoginForm from "./LoginForm/LoginForm";
+import RegisterForm from "./RegisterForm/RegisterForm";
+import ResetPasswordForm from "./ResetPasswordForm/ResetPasswordForm";
 
 const VIEWS = {
   login: LoginForm,
