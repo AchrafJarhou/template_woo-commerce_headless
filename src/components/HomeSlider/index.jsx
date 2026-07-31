@@ -8,7 +8,8 @@ import ProductCard from "../ProductCard";
 const CARD_WIDTH = 300;
 const GAP = 16;
 const STEP = CARD_WIDTH + GAP;
-const VIEWPORT_WIDTH = CARD_WIDTH * 3 + GAP * 2;
+const VIEWPORT_WIDTH_DESKTOP = CARD_WIDTH * 3 + GAP * 2;
+const VIEWPORT_WIDTH_MOBILE = CARD_WIDTH;
 const MOBILE_QUERY = "(max-width: 1024px)";
 
 export default function HomeSlider() {
@@ -70,7 +71,7 @@ export default function HomeSlider() {
     if (total === 0 || isDragging) return;
     const interval = setInterval(goNext, 4000);
     return () => clearInterval(interval);
-  }, [total, isDragging]);
+  }, [total, isDragging, slotIndex]);
 
   const handlePointerDown = (e) => {
     if (e.pointerType !== "mouse" || isMobile) return;
@@ -140,13 +141,16 @@ export default function HomeSlider() {
   // reste continu, y compris quand on boucle du dernier produit au premier.
   const extended = [...products, ...products, ...products];
 
-  const baseOffset = VIEWPORT_WIDTH / 2 - CARD_WIDTH / 2 - slotIndex * STEP;
+  const viewportWidth = isMobile
+    ? VIEWPORT_WIDTH_MOBILE
+    : VIEWPORT_WIDTH_DESKTOP;
+  const baseOffset = viewportWidth / 2 - CARD_WIDTH / 2 - slotIndex * STEP;
 
   return (
     <div className="home-slider">
       <div
         className="home-slider-viewport"
-        style={{ width: VIEWPORT_WIDTH }}
+        style={{ width: viewportWidth }}
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={endDrag}
