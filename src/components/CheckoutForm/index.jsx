@@ -51,80 +51,6 @@ export default function CheckoutForm() {
     }
   }, [shippingAddress, sameAsBilling]);
 
-  /*   const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    console.log("SUBMIT");
-
-    if (!user?.token || !continueAsGuest) {
-      setShowGuestModal(true);
-      return;
-    }
-
-    if (!stripe || !elements || loading) return;
-    setLoading(true);
-    setError(null);
-
-    const cardElement = elements.getElement(CardElement);
-    const { paymentMethod, error: stripeError } =
-      await stripe.createPaymentMethod({
-        type: "card",
-        card: cardElement,
-        billing_details: {
-          name: `${billingAddress?.first_name} ${billingAddress?.last_name}`,
-          email: billingAddress?.email,
-        },
-      });
-
-    if (stripeError) {
-      setError(stripeError.message);
-      setLoading(false);
-      return;
-    }
-
-    try {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/wp-json/wc/store/v1/checkout`,
-        {
-          method: "POST",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-            Nonce: cart?.nonce || "",
-            ...(user?.token && { Authorization: `Bearer ${user.token}` }),
-          },
-          body: JSON.stringify({
-            payment_method: "stripe",
-            payment_data: [
-              { key: "stripe_source", value: paymentMethod.id },
-              { key: "wc-stripe-payment-method", value: paymentMethod.id },
-              { key: "payment_method", value: paymentMethod.id },
-            ],
-            billing_address: billingAddress,
-            shipping_address: shippingAddress,
-          }),
-        },
-      );
-
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.message || "Erreur lors de la commande.");
-      }
-      if (data.payment_result?.redirect_url) {
-        dispatch(showToast(`Commande n°${data.order_id} confirmée`));
-        dispatch(emptyCartThunk());
-        dispatch(fetchCurrentUserThunk());
-        dispatch(fetchCurrentCustomerThunk());
-        dispatch(fetchCurrentUserOrdersThunk());
-        navigate(`/success/${data.order_id}`);
-      }
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  }; */
-
   const processCheckout = async () => {
     if (!stripe || !elements || loading) return;
     setLoading(true);
@@ -192,14 +118,10 @@ export default function CheckoutForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    // Si l'utilisateur n'est pas connecté, on affiche la modale d'avertissement
     if (!user?.token) {
       setShowGuestModal(true);
       return;
     }
-
-    // Sinon on procède directement au paiement
     processCheckout();
   };
 
