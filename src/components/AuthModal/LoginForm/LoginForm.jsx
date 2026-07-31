@@ -1,19 +1,14 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { registerThunk } from "../../thunkActionsCreator/userThunks";
-import { closeAuthModal, switchAuthModalView } from "../../slices/authModalSlice";
+import { loginThunk } from "../../../thunkActionsCreator/userThunks";
+import { closeAuthModal, switchAuthModalView } from "../../../slices/authModalSlice";
 
-export default function RegisterForm() {
+export default function LoginForm() {
   const dispatch = useDispatch();
   const { loading, error, token } = useSelector((state) => state.user);
 
-  const [form, setForm] = useState({
-    username: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-  });
+  const [form, setForm] = useState({ username: "", email: "", password: "" });
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
@@ -22,23 +17,13 @@ export default function RegisterForm() {
 
   const validate = () => {
     const newErrors = {};
-    if (!form.username.trim())
-      newErrors.username = "Le nom d'utilisateur est requis.";
-    if (!form.email.trim()) {
-      newErrors.email = "L'adresse e-mail est requise.";
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
-      newErrors.email = "Entrez une adresse e-mail valide.";
+    if (!form.username.trim() && !form.email.trim()) {
+      newErrors.username = "Renseignez un nom d'utilisateur ou un e-mail.";
+      newErrors.email = "Renseignez un nom d'utilisateur ou un e-mail.";
     }
-    if (!form.password) {
-      newErrors.password = "Le mot de passe est requis.";
-    } else if (form.password.length < 6) {
-      newErrors.password = "Au moins 6 caractères.";
-    }
-    if (!form.confirmPassword) {
-      newErrors.confirmPassword = "Veuillez confirmer votre mot de passe.";
-    } else if (form.confirmPassword !== form.password) {
-      newErrors.confirmPassword = "Les mots de passe ne correspondent pas.";
-    }
+    if (!form.password) newErrors.password = "Le mot de passe est requis.";
+    else if (form.password.length < 8)
+      newErrors.password = " Il faut au moins 8 caractères.";
     return newErrors;
   };
 
@@ -55,18 +40,18 @@ export default function RegisterForm() {
       setErrors(validation);
       return;
     }
-    const { confirmPassword, ...payload } = form;
-    dispatch(registerThunk(payload));
+    const identifier = form.username.trim() || form.email.trim();
+    dispatch(loginThunk({ username: identifier, password: form.password }));
   };
 
   return (
     <>
-      <h1>Create account</h1>
-      <p className="auth-modal__subtitle">Join us today, it's free</p>
+      <h1>Bonjour</h1>
+      <p className="auth-modal__subtitle">Identifiez-vous</p>
 
       <form className="auth-form" onSubmit={handleSubmit} noValidate>
         <div className="auth-form__field">
-          <label htmlFor="username">Username</label>
+          <label htmlFor="username">Nom d'utilisateur</label>
           <input
             id="username"
             name="username"
@@ -82,7 +67,7 @@ export default function RegisterForm() {
         </div>
 
         <div className="auth-form__field">
-          <label htmlFor="email">Email</label>
+          <label htmlFor="email">E-mail</label>
           <input
             id="email"
             name="email"
@@ -97,8 +82,12 @@ export default function RegisterForm() {
           )}
         </div>
 
+        <p className="auth-modal__subtitle">
+          Un seul des deux suffit pour vous connecter.
+        </p>
+
         <div className="auth-form__field">
-          <label htmlFor="password">Password</label>
+          <label htmlFor="password">Mot de passe </label>
           <input
             id="password"
             name="password"
@@ -106,27 +95,28 @@ export default function RegisterForm() {
             value={form.password}
             onChange={handleChange}
             className={errors.password ? "input--error" : ""}
-            autoComplete="new-password"
+            autoComplete="current-password"
           />
           {errors.password && (
             <span className="auth-form__error">{errors.password}</span>
           )}
         </div>
 
-        <div className="auth-form__field">
-          <label htmlFor="confirmPassword">Confirm password</label>
-          <input
-            id="confirmPassword"
-            name="confirmPassword"
-            type="password"
-            value={form.confirmPassword}
-            onChange={handleChange}
-            className={errors.confirmPassword ? "input--error" : ""}
-            autoComplete="new-password"
-          />
-          {errors.confirmPassword && (
-            <span className="auth-form__error">{errors.confirmPassword}</span>
-          )}
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <button
+            type="button"
+            className="auth-form__forgot"
+            onClick={() => dispatch(switchAuthModalView("register"))}
+          >
+            Vous n'avez pas de compte ?
+          </button>
+          <button
+            type="button"
+            className="auth-form__forgot"
+            onClick={() => dispatch(switchAuthModalView("reset-password"))}
+          >
+            Vous avez oublié votre mot de passe ?
+          </button>
         </div>
 
         {error && (
@@ -137,20 +127,9 @@ export default function RegisterForm() {
         )}
 
         <button className="auth-form__submit" type="submit" disabled={loading}>
-          {loading ? "Creating account…" : "Create account"}
+          {loading ? "Signing in…" : "Se connecter"}
         </button>
       </form>
-
-      <p className="auth-modal__footer">
-        Already have an account?{" "}
-        <button
-          type="button"
-          className="auth-modal__link"
-          onClick={() => dispatch(switchAuthModalView("login"))}
-        >
-          Sign in
-        </button>
-      </p>
     </>
   );
 }

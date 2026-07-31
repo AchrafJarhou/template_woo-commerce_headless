@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { showToast } from "../../slices/toastSlice";
 import OrderDetails from "../../components/OrderDetails";
 
-
 export default function Success() {
   const { orderId } = useParams();
   const dispatch = useDispatch();
@@ -22,8 +21,7 @@ export default function Success() {
     <div className="success-page">
       <h1>Commande confirmée</h1>
       <p className="thank-you">Merci pour votre commande.</p>
-
-      <OrderDetails order={order} />
+      {order ? <OrderDetails order={order} /> : <p>regardes tes mails</p>}
     </div>
   );
 }

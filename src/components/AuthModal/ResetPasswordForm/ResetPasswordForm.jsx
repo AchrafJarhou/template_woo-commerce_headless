@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 
-import { switchAuthModalView } from "../../slices/authModalSlice";
+import { switchAuthModalView } from "../../../slices/authModalSlice";
 
 export default function ResetPasswordForm() {
   const dispatch = useDispatch();

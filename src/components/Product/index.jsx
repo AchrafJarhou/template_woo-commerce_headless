@@ -5,7 +5,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchProductByIdThunk } from "../../thunkActionsCreator/productsThunks";
 import { addProductToCart } from "../../thunkActionsCreator/cartThunks";
 import { showToast } from "../../slices/toastSlice";
+import AverageRating from "../AverageRating";
 import SimilarProducts from "../SimilarProducts";
+import Review from "../Review";
 import Seo from "../Seo";
 import { decodeHtml } from "../../utils/decodeHtml.js";
 
@@ -194,7 +196,10 @@ export default function ProductDetails() {
             <h1 className="product-title">
               {decodeHtml(productToDisplay.name)}
             </h1>
-
+            <AverageRating
+              avgRating={productToDisplay?.average_rating ?? 0}
+              totalReviews={productToDisplay?.review_count ?? 0}
+            />
             <div
               className="short-description"
               dangerouslySetInnerHTML={{
@@ -250,6 +255,7 @@ export default function ProductDetails() {
         currentProduct={productToDisplay}
         reduxProducts={list?.data}
       />
+      <Review productId={productToDisplay.id} />
     </div>
   );
 }
