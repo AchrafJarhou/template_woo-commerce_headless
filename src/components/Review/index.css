@@ -1,0 +1,26 @@
+.review-list {
+  margin-top: 2rem;
+}
+
+.review-star-button {
+  background: none;
+  border: none;
+  font-size: 1.4rem;
+  cursor: pointer;
+  color: #ccc;
+}
+
+.review-star-button.active {
+  color: #ffc107;
+}
+
+.review-helper-text {
+  color: #666;
+  margin-top: 0.5rem;
+}
+
+.review-textarea {
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
+}
