@@ -161,79 +161,40 @@ export const deleteProductFromCart = createAsyncThunk(
   },
 );
 
+const couponFetch = (endpoint, code, thunkAPI) =>
+  fetch(
+    `${import.meta.env.VITE_API_URL}/wp-json/wc/store/v1/cart/${endpoint}`,
+    {
+      method: "POST",
+      headers: buildCartHeaders(thunkAPI, thunkAPI.getState().cart.nonce),
+      body: JSON.stringify({ code }),
+    },
+  );
+
 export const applyCouponThunk = createAsyncThunk(
   "cart/applyCoupon",
   async ({ code }, thunkAPI) => {
-    try {
-      const state = thunkAPI.getState();
-      const currentNonce = state.cart.nonce;
+    const response = await couponFetch("apply-coupon", code, thunkAPI);
+    const data = await response.json();
+    if (!response.ok)
+      return thunkAPI.rejectWithValue(data.message || "Code promo invalide.");
 
-      if (!currentNonce) {
-        throw new Error("Jeton de session manquant.");
-      }
-
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/wp-json/wc/store/v1/cart/apply-coupon`,
-        {
-          method: "POST",
-          headers: buildCartHeaders(thunkAPI, currentNonce),
-          body: JSON.stringify({ code }),
-        },
-      );
-
-      const cartData = await response.json();
-
-      if (!response.ok) {
-        throw new Error(cartData.message || "Ce code promo n'est pas valide.");
-      }
-
-      const nextNonce = response.headers.get("Nonce");
-      if (nextNonce && nextNonce !== currentNonce) {
-        thunkAPI.dispatch(setNonce(nextNonce));
-      }
-
-      thunkAPI.dispatch(setCart(cartData));
-      return cartData;
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error.message);
-    }
+    const nonce = response.headers.get("Nonce");
+    if (nonce) thunkAPI.dispatch(setNonce(nonce));
+    thunkAPI.dispatch(setCart(data));
+    return data;
   },
 );
 
 export const removeCouponThunk = createAsyncThunk(
   "cart/removeCoupon",
   async ({ code }, thunkAPI) => {
-    try {
-      const state = thunkAPI.getState();
-      const currentNonce = state.cart.nonce;
-
-      if (!currentNonce) {
-        throw new Error("Jeton de session manquant.");
-      }
-
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/wp-json/wc/store/v1/cart/remove-coupon`,
-        {
-          method: "POST",
-          headers: buildCartHeaders(thunkAPI, currentNonce),
-          body: JSON.stringify({ code }),
-        },
-      );
-
-      if (!response.ok)
-        throw new Error("Impossible de retirer ce code promo.");
-
-      const nextNonce = response.headers.get("Nonce");
-      if (nextNonce && nextNonce !== currentNonce) {
-        thunkAPI.dispatch(setNonce(nextNonce));
-      }
-
-      const cartData = await response.json();
-      thunkAPI.dispatch(setCart(cartData));
-      return cartData;
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error.message);
-    }
+    const response = await couponFetch("remove-coupon", code, thunkAPI);
+    const data = await response.json();
+    const nonce = response.headers.get("Nonce");
+    if (nonce) thunkAPI.dispatch(setNonce(nonce));
+    thunkAPI.dispatch(setCart(data));
+    return data;
   },
 );
 
