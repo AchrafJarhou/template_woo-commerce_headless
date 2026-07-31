@@ -20,12 +20,14 @@ export default function HomeSlider() {
   const [isDragging, setIsDragging] = useState(false);
   const [transitionDuration, setTransitionDuration] = useState(0.4);
   const [instant, setInstant] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
   const [isMobile, setIsMobile] = useState(
     () => window.matchMedia(MOBILE_QUERY).matches,
   );
   const dragStartX = useRef(0);
   const lastMove = useRef({ x: 0, t: 0 });
   const velocity = useRef(0);
+  const isAnimatingRef = useRef(false);
 
   useEffect(() => {
     dispatch(
@@ -41,10 +43,6 @@ export default function HomeSlider() {
   const products = list?.data || [];
   const total = products.length;
 
-  // On démarre sur la copie du milieu (voir `extended` plus bas) pour avoir
-  // de la marge des deux côtés dès le premier rendu. Recentrage instantané :
-  // slotIndex 0 et slotIndex total affichent le même produit, donc ce
-  // cadrage initial ne doit jamais s'animer.
   useEffect(() => {
     if (total > 0) {
       setInstant(true);
@@ -53,6 +51,9 @@ export default function HomeSlider() {
   }, [total]);
 
   const moveBy = (steps, duration = 0.4) => {
+    if (isAnimatingRef.current) return;
+    isAnimatingRef.current = true;
+    setIsAnimating(true);
     setInstant(false);
     setSlotIndex((i) => i + steps);
     setTransitionDuration(duration);
@@ -67,14 +68,17 @@ export default function HomeSlider() {
     return () => mql.removeEventListener("change", update);
   }, []);
 
-  useEffect(() => {
-    if (total === 0 || isDragging) return;
-    const interval = setInterval(goNext, 4000);
-    return () => clearInterval(interval);
-  }, [total, isDragging, slotIndex]);
+  // Auto-play désactivé temporairement.
+  // useEffect(() => {
+  //   if (total === 0 || isDragging) return;
+  //   const interval = setInterval(goNext, 4000);
+  //   return () => clearInterval(interval);
+  // }, [total, isDragging, slotIndex]);
 
   const handlePointerDown = (e) => {
     if (e.pointerType !== "mouse" || isMobile) return;
+    isAnimatingRef.current = false;
+    setIsAnimating(false);
     setIsDragging(true);
     dragStartX.current = e.clientX;
     lastMove.current = { x: e.clientX, t: performance.now() };
@@ -92,12 +96,8 @@ export default function HomeSlider() {
     setDragOffset(e.clientX - dragStartX.current);
   };
 
-  const endDrag = () => {
+  const handleDragEnd = () => {
     if (!isDragging) return;
-    // On projette la position sur la vitesse relevée juste avant le
-    // relâchement : un flick rapide continue sur son élan (plus de
-    // produits, animation plus longue) même si la distance glissée est
-    // courte ; un glissement lent s'arrête net au produit le plus proche.
     const MOMENTUM_MS = 200;
     const projectedOffset = dragOffset + velocity.current * MOMENTUM_MS;
     const steps = Math.round(-projectedOffset / STEP);
@@ -112,17 +112,10 @@ export default function HomeSlider() {
     setIsDragging(false);
   };
 
-  // Une fois la transition terminée, si on a dérivé hors de la copie du
-  // milieu, on se replace silencieusement (sans transition) sur la copie
-  // équivalente : comme les trois copies sont identiques, ce recentrage ne
-  // se voit jamais à l'écran, et ça permet au wrap dernier -> premier (ou
-  // inversement) de glisser exactement comme n'importe quel autre pas.
   const handleTransitionEnd = (e) => {
-    // Les cartes produit ont elles aussi une transition (opacity/scale sur
-    // l'état actif) : leur `transitionend` remonte jusqu'ici. On ignore
-    // tout ce qui ne vient pas directement de la piste, sinon le
-    // recentrage se déclenche plusieurs fois pour un seul mouvement.
     if (e.target !== e.currentTarget) return;
+    isAnimatingRef.current = false;
+    setIsAnimating(false);
     if (slotIndex >= 2 * total) {
       setInstant(true);
       setSlotIndex((i) => i - total);
@@ -135,10 +128,6 @@ export default function HomeSlider() {
   if (loading) return <p>Chargement...</p>;
   if (total === 0) return null;
 
-  // La piste contient trois copies de la liste : la copie du milieu
-  // (indices [total, 2*total[) est celle affichée au repos, les deux
-  // autres servent de tampon pour que le glissement d'un produit à l'autre
-  // reste continu, y compris quand on boucle du dernier produit au premier.
   const extended = [...products, ...products, ...products];
 
   const viewportWidth = isMobile
@@ -153,8 +142,8 @@ export default function HomeSlider() {
         style={{ width: viewportWidth }}
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
-        onPointerUp={endDrag}
-        onPointerLeave={endDrag}
+        onPointerUp={handleDragEnd}
+        onPointerLeave={handleDragEnd}
       >
         <div
           className="home-slider-track"
@@ -171,10 +160,6 @@ export default function HomeSlider() {
             <div
               key={`slot-${index}`}
               className={
-                // On marque active toutes les copies du produit courant (pas
-                // seulement le slot physique visible) : comme ça, aucune
-                // carte n'a de transition opacity/scale à rattraper au
-                // moment du recentrage invisible, ce qui évite le sursaut.
                 "home-slider-product" +
                 (index % total === slotIndex % total ? " active" : "")
               }
@@ -187,8 +172,12 @@ export default function HomeSlider() {
       </div>
 
       <div className="home-slider-buttons">
-        <button onClick={goPrev}>{"<"}</button>
-        <button onClick={goNext}>{">"}</button>
+        <button onClick={goPrev} disabled={isAnimating}>
+          {"<"}
+        </button>
+        <button onClick={goNext} disabled={isAnimating}>
+          {">"}
+        </button>
       </div>
     </div>
   );
