@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { fetchSpotlightProductsThunk } from "../../thunkActionsCreator/spotlightThunks";
 import ProductCard from "../ProductCard";
+import Loader from "../Loader";
 
 const CARD_WIDTH = 300;
 const GAP = 16;
@@ -125,7 +126,7 @@ export default function HomeSlider() {
     }
   };
 
-  if (loading) return <p>Chargement...</p>;
+  if (loading) return <Loader size="lg"/>;
   if (total === 0) return null;
 
   const extended = [...products, ...products, ...products];

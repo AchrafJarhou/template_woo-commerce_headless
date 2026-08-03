@@ -13,6 +13,7 @@ import WishlistButton from "../WishlistButton"; // TEMP: wishlist testing, remov
 import { decodeHtml } from "../../utils/decodeHtml.js";
 
 import "./index.css";
+import Loader from "../Loader/index.jsx";
 
 export default function ProductDetails() {
   const { id } = useParams();
@@ -96,7 +97,7 @@ export default function ProductDetails() {
   }, [productToDisplay]);
 
   if (loadingSingle && !productToDisplay) {
-    return <div className="loading-state">Chargement en cours...</div>;
+    return <Loader size="lg" />;
   }
 
   if (errorSingle && !productToDisplay) {

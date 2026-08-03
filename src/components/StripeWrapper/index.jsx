@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import CheckoutForm from "../CheckoutForm";
+import Loader from "../Loader";
 
 export default function StripeWrapper({ shippingAddress }) {
   const [stripePromise, setStripePromise] = useState(null);
@@ -32,7 +33,7 @@ export default function StripeWrapper({ shippingAddress }) {
   }, []);
 
   if (loading) {
-    return <p>Chargement du module de paiement...</p>;
+    return <Loader size="lg" />;
   }
 
   if (error || !stripePromise) {

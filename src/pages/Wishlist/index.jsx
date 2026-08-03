@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchWishlistThunk } from "../../thunkActionsCreator/wishlistThunks";
 import ProductCard from "../../components/ProductCard";
 import "./index.css";
+import Loader from "../../components/Loader";
 
 export default function Wishlist() {
   const dispatch = useDispatch();
@@ -22,7 +23,7 @@ export default function Wishlist() {
   return (
     <div className="wishlist-page">
       <h1>Mes favoris</h1>
-      {loading && <p>Chargement...</p>}
+      {loading && <Loader size="lg" />}
       {!loading && items.length === 0 && <p>Aucun favori pour le moment.</p>}
       <div className="wishlist-grid">
         {items.map((product) => (

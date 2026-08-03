@@ -88,7 +88,7 @@ export default function SimilarProducts({
       <h2>Produits similaires</h2>
 
       {loadingSimilar ? (
-        <p className="loading-text">Chargement des recommandations...</p>
+        <Loader size="lg" />
       ) : similarProducts.length > 0 ? (
         <div className="similar-products-grid">
           {similarProducts.map((simProduct) => (
