@@ -1,21 +1,144 @@
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import SucessMessage from "../SucessMessage";
 
-export default function OrderDetails({ order }) {
-  if (!order) {
-    return <p>Aucune commande trouvée.</p>;
-  }
+const ordersCache = {};
 
-  const isPaid = ["processing", "completed"].includes(order.status);
-  const orderRef = order.number ?? order.id;
+export default function OrderDetails({ order = null, orderId = null }) {
+  const token = useSelector((state) => state.user.token);
+
+  const [detail, setDetail] = useState(
+    orderId ? ordersCache[orderId] : null
+  );
+
+  const [loading, setLoading] = useState(
+    Boolean(!order && orderId && !ordersCache[orderId])
+  );
+
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (order || !orderId || ordersCache[orderId]) return;
+
+    let cancelled = false;
+
+    // Fetch order details from the API
+    async function fetchOrder() {
+      try {
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}/wp-json/wc/store/v1/order/${orderId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok)
+          throw new Error(
+            data.message || "Impossible de récupérer la commande."
+          );
+
+        ordersCache[orderId] = data;
+
+        if (cancelled) return;
+
+        setDetail(data);
+      } catch (err) {
+        if (!cancelled) setError(err.message);
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    }
+
+    fetchOrder();
+
+    return () => (cancelled = true);
+  }, [order, orderId, token]);
+
+  const current = detail || order;
+
+  if (loading) return <p>Chargement...</p>;
+  if (error) return <p>{error}</p>;
+  if (!current) return null;
+
+  const isPaid = ["processing", "completed"].includes(current.status);
+  const label = current.number ?? current.id;
+  const statusText = isPaid
+    ? `Paiement confirmé pour la commande n°${label}`
+    : `Paiement en attente de confirmation pour la commande n°${label}`;
 
   return (
-    <div>
+    <div className="order-details">
       <p className={isPaid ? "payment-ok" : "payment-pending"}>
-        {isPaid
-          ? `Paiement confirmé pour la commande n°${orderRef}`
-          : `Paiement en attente de confirmation pour la commande n°${orderRef}`}
+        {statusText}
       </p>
-      <SucessMessage order={order} />
+
+      {!orderId && <SucessMessage order={current} />}
+
+      {detail && (
+        <>
+          <h3>Produits</h3>
+
+          <div className="order-items">
+            {detail.items?.map((item) => (
+              <div key={item.id} className="order-item">
+                {item.images?.[0] && (
+                  <img
+                    src={item.images[0].thumbnail}
+                    alt={item.images[0].alt || item.name}
+                    width={70}
+                  />
+                )}
+
+                <div>
+                  <strong>{item.name}</strong>
+
+                  <p>Quantité : {item.quantity}</p>
+
+                  <p>
+                    {(Number(item.totals.line_total) / 100).toFixed(2)} €
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {detail.shipping_address && (
+            <>
+              <h3>Adresse de livraison</h3>
+
+              <p>
+                {detail.shipping_address.first_name}{" "}
+                {detail.shipping_address.last_name}
+              </p>
+
+              <p>{detail.shipping_address.address_1}</p>
+
+              {detail.shipping_address.address_2 && (
+                <p>{detail.shipping_address.address_2}</p>
+              )}
+
+              <p>
+                {detail.shipping_address.postcode}{" "}
+                {detail.shipping_address.city}
+              </p>
+
+              <p>
+                {detail.shipping_address.state}{" "}
+                {detail.shipping_address.country}
+              </p>
+
+              <p>
+                Livraison :{" "}
+                {(Number(detail.totals.total_shipping) / 100).toFixed(2)} €
+              </p>
+            </>
+          )}
+        </>
+      )}
     </div>
   );
 }
