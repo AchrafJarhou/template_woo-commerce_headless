@@ -11,6 +11,7 @@ import {
 
 export default function AuthForm() {
   const dispatch = useDispatch();
+  const { loading, error, token } = useSelector((state) => state.user);
   const [mode, setMode] = useState("login");
   const [errors, setErrors] = useState({});
   const [form, setForm] = useState({
@@ -19,6 +20,10 @@ export default function AuthForm() {
     password: "",
     confirmPassword: "",
   });
+
+  useEffect(() => {
+    if (token) dispatch(closeAuthModal());
+  }, [dispatch, token]);
 
   const validateLogin = (e) => {
     setErrors({});
@@ -84,7 +89,6 @@ export default function AuthForm() {
           email: form.email.trim(),
           password: form.password,
         }),
-        dispatch(closeAuthModal()),
       );
     }
     return;
@@ -190,6 +194,12 @@ export default function AuthForm() {
           S'inscrire
         </button>{" "}
       </div>
+      {error && (
+        <p
+          className="auth-form__server-error"
+          dangerouslySetInnerHTML={{ __html: error }}
+        />
+      )}
     </form>
   );
 }
