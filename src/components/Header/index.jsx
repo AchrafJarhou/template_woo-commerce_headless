@@ -27,25 +27,16 @@ export default function Header() {
     <header className="header">
       <div className="margin"></div>
       <div className="content">
-        <div className="header-top">
-          <div className="header-left">
-            <button
-              className="header-burger"
-              onClick={() => setMenuOpen(!menuOpen)}
-              aria-label="Menu"
-              aria-expanded={menuOpen}
-            >
-              ☰
-            </button>
-            <Link to="/" className="header-logo" aria-label="Ecommerce">
-              <img src={logoUrl || "/logo.webp"} alt="Logo" />
-            </Link>
-          </div>
-          <div
+        <Link to="/" className="header-logo" aria-label="Ecommerce">
+          <img src={logoUrl || "./logo.webp"} alt="Logo" />
+        </Link>
+
+        {/* <div
             className={`header-overlay ${menuOpen ? "open" : ""}`}
             onClick={closeMenu}
             aria-hidden="true"
-          />
+          /> */}
+        <div className="menu">
           <nav
             className={`header-nav ${menuOpen ? "open" : ""}`}
             aria-hidden={!menuOpen}
@@ -56,6 +47,14 @@ export default function Header() {
               aria-label="Fermer le menu"
             >
               ✕
+            </button>
+            <button
+              className="header-burger"
+              onClick={() => setMenuOpen(!menuOpen)}
+              aria-label="Menu"
+              aria-expanded={menuOpen}
+            >
+              ☰
             </button>
             <Link to="/catalogue" onClick={closeMenu}>
               Catalogue

@@ -68,7 +68,8 @@ export default function AuthForm() {
   };
 
   const handleSubmit = (e) => {
-    e.target.className === "login" ? setMode("login") : setMode("register");
+    e.target.className === "login" && setMode("login");
+    e.target.className === "signin" && setMode("register");
     const validation = validateLogin();
     if (Object.keys(validation).length > 0) {
       setErrors(validation);
@@ -112,6 +113,12 @@ export default function AuthForm() {
           autoComplete="username"
           placeholder={errors.username}
           title={errors.username}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              handleSubmit(e);
+            }
+          }}
         />
       </div>
       {mode === "register" && (
@@ -127,6 +134,12 @@ export default function AuthForm() {
             autoComplete="email"
             placeholder={errors.email}
             title={errors.email}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                handleSubmit(e);
+              }
+            }}
           />
         </div>
       )}
@@ -142,6 +155,12 @@ export default function AuthForm() {
           autoComplete={mode === "login" ? "current-password" : "new-password"}
           placeholder={errors.password}
           title={errors.password}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              handleSubmit(e);
+            }
+          }}
         />
       </div>
       {mode === "register" && (
@@ -158,6 +177,12 @@ export default function AuthForm() {
             autoFocus
             placeholder={errors.confirmPassword}
             title={errors.confirmPassword}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                handleSubmit(e);
+              }
+            }}
           />
         </div>
       )}
