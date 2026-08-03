@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import DeleteAccountButton from "../../components/DeleteAccountButton";
 import { UserDisplay, CustomerDisplay } from "../../components/UserDisplay";
-import { OrderAll } from "../../components/OrderDetails";
+import { OrderAll } from "../../components/OrderAll";
 import { useEffect } from "react";
 
 export default function Profile() {

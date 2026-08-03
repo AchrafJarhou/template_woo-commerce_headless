@@ -4,7 +4,7 @@ import {
   UserDisplay,
   CustomerDisplay,
 } from "../../components/Profile/UserDisplay";
-import { OrderAll } from "../../components/OrderDetails";
+import { OrderAll } from "../../components/OrderAll";
 
 export default function Profile() {
   return (
