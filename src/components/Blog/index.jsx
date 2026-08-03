@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchBlogDataThunk } from "../../thunkActionsCreator/blogThunks";
 import Seo from "../../components/Seo";
 import { Link } from "react-router-dom";
+import Loader from "../Loader";
 
 function formatDate(value) {
   if (!value) return "";
@@ -50,7 +51,7 @@ export default function Blog() {
   }, [activeCategory, posts]);
 
   if (loading) {
-    return <div style={{ padding: 24 }}>Chargement des articles...</div>;
+    return <Loader size="lg" />;
   }
 
   if (error) {
@@ -130,7 +131,7 @@ export default function Blog() {
       )}
 
       {loadingMore && (
-        <p style={{ marginTop: 20 }}>Chargement de plus d’articles...</p>
+        <Loader size="lg" />
       )}
       {!hasMore && !loading && (
         <p style={{ marginTop: 20 }}>Tous les articles ont été chargés.</p>

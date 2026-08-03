@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import Loader from "../Loader"
 
 import {
   fetchCurrentUserThunk,
@@ -18,7 +19,7 @@ export function UserDisplay() {
   useEffect(() => {
     dispatch(fetchCurrentUserThunk());
   }, [dispatch]);
-  if (loading) return <p>Chargement...</p>;
+  if (loading) return <Loader size="lg" />;
   if (error) return <p>{error}</p>;
   if (!profile) return <p>Aucun profil.</p>;
 
@@ -37,7 +38,7 @@ export function CustomerDisplay() {
   const customer = useSelector((state) => state.user.customer);
   const billing = customer?.billing;
   const shipping = customer?.shipping;
-  if (!customer) return <p>Chargement...</p>;
+  if (!customer) return <Loader size="lg"/>;
   return (
     <div>
       <h2>Informations de facturation</h2>

@@ -268,7 +268,7 @@ const Review = ({ productId }) => {
       </div>
 
       {/* --- LISTE DES AVIS --- */}
-      {loading && <p>Chargement des avis...</p>}
+      {loading && <Loader size="lg" />}
       {error && <p className="review-error">Erreur : {error}</p>}
       {!loading && !error && reviews.length === 0 && <p>Aucun avis trouvé.</p>}
 

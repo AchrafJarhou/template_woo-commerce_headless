@@ -3,6 +3,7 @@ import "./index.css";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
+import Loader from "../../components/Loader"
 import { fetchProductsThunk } from "../../thunkActionsCreator/productsThunks";
 import { fetchCategoriesThunk } from "../../thunkActionsCreator/categoriesThunks";
 import ProductCard from "../ProductCard";
@@ -65,7 +66,7 @@ export default function Feed() {
           <span ref={loadMoreRef}></span>
         </div>
       )}
-      {loading && <p>Chargement...</p>}
+      {loading && <Loader size="lg"/>}
     </div>
   );
 }

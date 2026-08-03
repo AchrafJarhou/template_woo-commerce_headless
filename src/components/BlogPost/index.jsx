@@ -18,7 +18,7 @@ export default function BlogPostComponent() {
   }, [slug, dispatch]);
 
   if (loadingSingle) {
-    return <div >Chargement de l'article...</div>;
+    return <Loader size="md" />
   }
 
   if (errorSingle || !singlePost) {
