@@ -15,5 +15,9 @@ export default function Toast() {
 
   if (!message) return null;
 
-  return <div className="toast">{message}</div>;
+  return (
+    <div className="toast">
+      {<div dangerouslySetInnerHTML={{ __html: message }} />}
+    </div>
+  );
 }

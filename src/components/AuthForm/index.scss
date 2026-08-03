@@ -1,0 +1,39 @@
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  .auth-form__field {
+    display: flex;
+    flex-direction: column;
+  }
+  .auth-form__field input {
+    padding: 0.65rem 0.85rem;
+    border: 1.5px solid var(--dark-color);
+    border-radius: 8px;
+    transition:
+      border-color 0.15s,
+      box-shadow 0.15s;
+    outline: none;
+  }
+  .auth-form__field input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+  }
+
+  .auth-form__field input.input--error {
+    border-color: var(--danger-color);
+  }
+
+  .auth-form__field input.input--error:focus {
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.12);
+  }
+  .auth-form__error {
+    color: var(--danger-color);
+  }
+  .auth-form__buttons {
+    display: flex;
+    justify-content: space-between;
+  }
+  button {
+    margin-top: 0.5lvh;
+  }
+}

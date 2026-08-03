@@ -1,9 +1,12 @@
+import "./index.css";
+
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   closeAuthModal,
   switchAuthModalView,
 } from "../../slices/authModalSlice";
+import { showToast } from "../../slices/toastSlice";
 import {
   loginThunk,
   registerThunk,
@@ -25,54 +28,48 @@ export default function AuthForm() {
     if (token) dispatch(closeAuthModal());
   }, [dispatch, token]);
 
-  const validateLogin = (e) => {
+  useEffect(() => {
+    dispatch(showToast(error));
+  }, [error]);
+
+  const validateLogin = (e, updatedForm) => {
     setErrors({});
     const newErrors = {};
-    if (!form.username.trim()) {
-      if (e.target.className === "signin") {
-        newErrors.username = "Le nom d'utilisateur est requis.";
-      } else if (e.target.className === "login" && !form.email.trim()) {
-        newErrors.username = "Le nom d'utilisateur est requis.";
-      }
+    !updatedForm && (updatedForm = form);
+    if (!updatedForm.username.trim()) {
+      newErrors.username = "Le nom d'utilisateur est requis.";
     }
-    if (e.target.className === "signin") {
-      if (!form.email.trim()) {
+    if (!updatedForm.password)
+      newErrors.password = "Le mot de passe est requis.";
+    else if (updatedForm.password.length < 8)
+      newErrors.password = " Il faut au moins 8 caractères.";
+    if (mode === "register") {
+      if (!updatedForm.email.trim()) {
         newErrors.email = "L'adresse e-mail est requise.";
-      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
+      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(updatedForm.email)) {
         newErrors.email = "Entrez une adresse e-mail valide.";
       }
+      if (!updatedForm.confirmPassword) {
+        newErrors.confirmPassword = "Veuillez confirmer votre mot de passe.";
+      } else if (updatedForm.confirmPassword !== updatedForm.password) {
+        newErrors.confirmPassword = "Les mots de passe ne correspondent pas.";
+      }
     }
-    if (
-      form.email.trim() &&
-      e.target.className === "login" &&
-      !form.username.trim() &&
-      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)
-    ) {
-      newErrors.email = "Entrez une adresse e-mail valide.";
-    }
-    if (!form.password) newErrors.password = "Le mot de passe est requis.";
-    else if (form.password.length < 8)
-      newErrors.password = " Il faut au moins 8 caractères.";
-    if (!form.confirmPassword && e.target.className === "signin") {
-      newErrors.confirmPassword = "Veuillez confirmer votre mot de passe.";
-    } else if (
-      form.confirmPassword !== form.password &&
-      e.target.className === "signin"
-    ) {
-      newErrors.confirmPassword = "Les mots de passe ne correspondent pas.";
-    }
+    setErrors(newErrors);
     return newErrors;
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
+    const updatedForm = { ...form, [name]: value };
+    setForm(updatedForm);
     if (errors[name]) setErrors((prev) => ({ ...prev, [name]: "" }));
+    validateLogin(e, updatedForm);
   };
 
   const handleSubmit = (e) => {
     e.target.className === "login" ? setMode("login") : setMode("register");
-    const validation = validateLogin(e);
+    const validation = validateLogin();
     if (Object.keys(validation).length > 0) {
       setErrors(validation);
       return;
@@ -113,10 +110,9 @@ export default function AuthForm() {
           onChange={handleChange}
           className={errors.username ? "input--error" : ""}
           autoComplete="username"
+          placeholder={errors.username}
+          title={errors.username}
         />
-        {errors.username && (
-          <span className="auth-form__error">{errors.username}</span>
-        )}
       </div>
       {mode === "register" && (
         <div className="auth-form__field">
@@ -129,13 +125,11 @@ export default function AuthForm() {
             onChange={handleChange}
             className={errors.email ? "input--error" : ""}
             autoComplete="email"
+            placeholder={errors.email}
+            title={errors.email}
           />
-          {errors.email && (
-            <span className="auth-form__error">{errors.email}</span>
-          )}
         </div>
       )}
-
       <div className="auth-form__field">
         <label htmlFor="password">Mot de passe</label>
         <input
@@ -146,12 +140,10 @@ export default function AuthForm() {
           onChange={handleChange}
           className={errors.password ? "input--error" : ""}
           autoComplete={mode === "login" ? "current-password" : "new-password"}
+          placeholder={errors.password}
+          title={errors.password}
         />
-        {errors.password && (
-          <span className="auth-form__error">{errors.password}</span>
-        )}
       </div>
-
       {mode === "register" && (
         <div className="auth-form__field">
           <label htmlFor="confirmPassword">Confirmez le mot de passe</label>
@@ -164,21 +156,19 @@ export default function AuthForm() {
             className={errors.confirmPassword ? "input--error" : ""}
             autoComplete="new-password"
             autoFocus
+            placeholder={errors.confirmPassword}
+            title={errors.confirmPassword}
           />
-          {errors.confirmPassword && (
-            <span className="auth-form__error">{errors.confirmPassword}</span>
-          )}
         </div>
       )}
-
       <button
         type="button"
         className="auth-form__forgot"
         onClick={() => dispatch(switchAuthModalView("reset-password"))}
       >
-        Vous avez oublié votre mot de passe ?
+        Mot de passe oublié ?
       </button>
-      <div>
+      <div className="auth-form__buttons">
         <button
           className="login"
           type="button"
@@ -194,12 +184,6 @@ export default function AuthForm() {
           S'inscrire
         </button>{" "}
       </div>
-      {error && (
-        <p
-          className="auth-form__server-error"
-          dangerouslySetInnerHTML={{ __html: error }}
-        />
-      )}
     </form>
   );
 }

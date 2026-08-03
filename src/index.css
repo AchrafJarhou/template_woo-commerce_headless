@@ -274,7 +274,6 @@ button {
   justify-content: center;
   transition: all 0.3s ease;
   padding: 3vw 6vw;
-  margin: 1vh;
   font-size: 4.5vw;
   width: -moz-fit-content;
   width: fit-content;
@@ -296,4 +295,24 @@ button {
 }
 button:hover {
   transform: scale(1.1);
+}
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+label {
+  font-size: 4.5vw;
+  font-family: var(--font-body);
+  color: var(--dark-color);
+}
+@media screen and (aspect-ratio > 1/1) {
+  label {
+    font-size: 1.5vw;
+  }
+}
+@media screen and (aspect-ratio > 2.6/1) {
+  label {
+    font-size: 3.5lvh;
+  }
 }/*# sourceMappingURL=index.css.map */
