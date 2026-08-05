@@ -1,0 +1,8 @@
+@import "../../styles/variables.scss";
+
+.home {
+  min-height: 100vh;
+  background: $primary-blue;
+  font-family: $font-family;
+  color: $text-primary;
+}
