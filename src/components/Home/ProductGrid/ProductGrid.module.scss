@@ -1,0 +1,45 @@
+@import "../../../styles/variables.scss";
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: $spacing-2xl $spacing-md;
+  align-items: end;
+
+  @media (max-width: $breakpoint-tablet) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media (max-width: $breakpoint-mobile) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 34px $spacing-sm;
+  }
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  cursor: pointer;
+  transition: transform $transition-fast;
+
+  &:hover {
+    transform: translateY(-4px);
+  }
+}
+
+.image {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: contain;
+  margin-bottom: $spacing-md;
+}
+
+.title {
+  font-size: $font-size-base;
+  font-weight: $font-weight-normal;
+  letter-spacing: $letter-spacing-sm;
+  text-transform: uppercase;
+  color: $text-primary;
+}
