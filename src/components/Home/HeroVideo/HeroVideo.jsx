@@ -22,7 +22,7 @@ export default function HeroVideo() {
         playsinline
         loop
         muted
-        src="https://videos.pexels.com/video-files/3573367/3573367-uhd_2560_1440_24fps.mp4"
+        src="https://videos.pexels.com/video-files/3191823/3191823-sd_640_360_24fps.mp4"
       />
       <h1 className={styles.title}>RAVI</h1>
     </div>

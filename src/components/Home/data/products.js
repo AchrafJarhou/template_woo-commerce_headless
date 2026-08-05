@@ -33,7 +33,7 @@ export const PRODUCTS = [
     id: 6,
     title: "YS-02",
     category: "femmes",
-    image: "https://images.unsplash.com/photo-1578925078519-cf21a4eae3f8?w=300&h=300&fit=crop",
+    image: "https://picsum.photos/300/300?random=6",
   },
   {
     id: 7,
