@@ -317,10 +317,12 @@ label {
   }
 }/*# sourceMappingURL=index.css.map */
 /* ===== HOME PAGE STYLES ===== */
-body.home-page > footer {
+/* Masquer le Header global WordPress */
+body.home-page .header {
   display: none !important;
 }
 
-body.home-page footer {
+/* Masquer le Footer global WordPress (enfant direct du body) */
+body.home-page > footer {
   display: none !important;
 }
