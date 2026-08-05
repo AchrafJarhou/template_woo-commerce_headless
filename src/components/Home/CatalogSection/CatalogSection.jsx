@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Header from "../../../layouts/MainLayout/components/Header/Header";
 import FilterBar from "../FilterBar/FilterBar";
 import ProductGrid from "../ProductGrid/ProductGrid";
 import Footer from "../Footer/Footer";
@@ -9,6 +10,7 @@ export default function CatalogSection({ products }) {
 
   return (
     <div className={styles.catalog}>
+      <Header />
       <main className={styles.main}>
         <FilterBar onFilterChange={setFilter} />
         <ProductGrid products={products} filter={filter} />

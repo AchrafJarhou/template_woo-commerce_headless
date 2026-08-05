@@ -1,12 +1,9 @@
 @import "../../../../styles/variables.scss";
 
 .header {
-  position: fixed;
+  position: sticky;
   top: 0;
-  left: 0;
-  right: 0;
-  background: rgba(103, 132, 200, 0.9);
-  backdrop-filter: blur(8px);
+  background: $primary-blue;
   padding: $spacing-sm $spacing-md;
   display: flex;
   justify-content: space-between;
