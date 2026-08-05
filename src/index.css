@@ -316,3 +316,11 @@ label {
     font-size: 3.5lvh;
   }
 }/*# sourceMappingURL=index.css.map */
+/* ===== HOME PAGE STYLES ===== */
+body.home-page .header {
+  display: none;
+}
+
+body.home-page > footer {
+  display: none;
+}

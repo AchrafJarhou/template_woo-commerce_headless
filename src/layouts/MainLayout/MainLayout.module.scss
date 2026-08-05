@@ -1,0 +1,10 @@
+@import "../../styles/variables.scss";
+
+.layout {
+  display: contents;
+
+  /* Masquer le Header global du projet */
+  :global(.header:not([class*="MainLayout"]) ~ *) {
+    display: none;
+  }
+}
