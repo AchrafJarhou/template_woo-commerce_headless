@@ -1,0 +1,48 @@
+@import "../../../styles/variables.scss";
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: $spacing-3xl;
+}
+
+.searchIcon {
+  width: 28px;
+  cursor: pointer;
+  margin-bottom: $spacing-md;
+  color: $text-primary;
+  transition: opacity $transition-fast;
+
+  &:hover {
+    opacity: 0.7;
+  }
+}
+
+.filters {
+  display: flex;
+  gap: $spacing-lg;
+  font-size: $font-size-sm;
+  letter-spacing: $letter-spacing-md;
+  text-transform: uppercase;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.filterLink {
+  color: $text-secondary;
+  text-decoration: none;
+  transition: color $transition-fast;
+  font-weight: $font-weight-normal;
+  cursor: pointer;
+
+  &:hover {
+    color: $text-primary;
+  }
+
+  &.active {
+    color: $text-primary;
+    font-weight: $font-weight-bold;
+  }
+}
