@@ -2,7 +2,7 @@ import styles from "./Footer.module.scss";
 
 export default function Footer() {
   return (
-    <footer className={styles.footer}>
+    <footer className={`${styles.footer} catalog-footer`}>
       <nav className={styles.links}>
         <a href="#mentions">Mentions Légales</a>
         <a href="#confidentialite">Politique de Confidentialité</a>
