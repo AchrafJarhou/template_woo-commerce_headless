@@ -1,0 +1,36 @@
+@import "../../../styles/variables.scss";
+
+.hero {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: $z-hero;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: $dark-bg;
+  overflow: hidden;
+  transition: opacity $transition-fast;
+}
+
+.video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.8;
+  z-index: 0;
+}
+
+.title {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  color: $white;
+  letter-spacing: $letter-spacing-xl;
+  z-index: 2;
+  margin: 0;
+}
