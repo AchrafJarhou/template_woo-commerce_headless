@@ -16,13 +16,14 @@ export default function HeroVideo() {
 
   return (
     <div className={styles.hero} style={{ opacity }}>
-      <video
+      {/* Embed YouTube vidéo libre de droit */}
+      <iframe
         className={styles.video}
-        autoPlay
-        playsinline
-        loop
-        muted
-        src="https://videos.pexels.com/video-files/3191823/3191823-sd_640_360_24fps.mp4"
+        src="https://www.youtube.com/embed/aqz-KE-bpKQ?autoplay=1&mute=1&loop=1&playlist=aqz-KE-bpKQ&controls=0&modestbranding=1"
+        title="Hero Fashion Video"
+        frameBorder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowFullScreen
       />
       <h1 className={styles.title}>RAVI</h1>
     </div>
