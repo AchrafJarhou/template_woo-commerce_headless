@@ -11,10 +11,10 @@
 }
 
 .main {
-  padding: $spacing-xl 40px 100px;
+  padding: calc($spacing-xl + 60px) 40px 100px;
   flex: 1;
 
   @media (max-width: $breakpoint-mobile) {
-    padding: $spacing-md $spacing-sm 60px;
+    padding: calc($spacing-md + 60px) $spacing-sm 60px;
   }
 }
