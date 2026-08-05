@@ -3,7 +3,6 @@ import styles from "./Header.module.scss";
 
 export default function Header() {
   const cartItems = useSelector((state) => state.cart.items);
-  const logoUrl = useSelector((state) => state.site.logoUrl);
 
   const cartCount = cartItems.reduce(
     (total, item) => total + (Number(item.quantity) || 0),
@@ -20,14 +19,8 @@ export default function Header() {
         </svg>
       </div>
 
-      {/* Logo */}
-      <div className={styles.logo}>
-        {logoUrl ? (
-          <img src={logoUrl} alt="Logo" className={styles.logoImg} />
-        ) : (
-          "RAVI"
-        )}
-      </div>
+      {/* Logo RAVI */}
+      <div className={styles.logo}>RAVI</div>
 
       <div className={styles.headerRight}>
         {/* Icône Utilisateur */}

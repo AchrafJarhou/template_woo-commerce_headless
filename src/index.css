@@ -318,9 +318,13 @@ label {
 }/*# sourceMappingURL=index.css.map */
 /* ===== HOME PAGE STYLES ===== */
 body.home-page .header {
-  display: none;
+  display: none !important;
 }
 
 body.home-page > footer {
-  display: none;
+  display: none !important;
+}
+
+body.home-page footer {
+  display: none !important;
 }
