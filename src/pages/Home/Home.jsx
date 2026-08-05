@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import HeroVideo from "../../components/Home/HeroVideo/HeroVideo";
-import MainLayout from "../../layouts/MainLayout/MainLayout";
 import CatalogSection from "../../components/Home/CatalogSection/CatalogSection";
 import { PRODUCTS } from "../../components/Home/data/products";
 import styles from "./Home.module.scss";
@@ -15,9 +14,7 @@ export default function Home() {
   return (
     <div className={styles.home}>
       <HeroVideo />
-      <MainLayout hideFooter={true}>
-        <CatalogSection products={PRODUCTS} />
-      </MainLayout>
+      <CatalogSection products={PRODUCTS} />
     </div>
   );
 }

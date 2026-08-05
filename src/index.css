@@ -324,16 +324,3 @@ body.home-page > footer {
 body.home-page footer {
   display: none !important;
 }
-
-/* Masquer le Header au départ sur la page Home */
-body.home-page header {
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s ease;
-}
-
-/* Afficher le Header quand la classe catalog-visible est présente */
-body.home-page.catalog-visible header {
-  opacity: 1;
-  pointer-events: auto;
-}
