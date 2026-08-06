@@ -62,3 +62,77 @@
   font-weight: $font-weight-bold;
   color: $text-primary;
 }
+
+.menuButton {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    opacity: 0.7;
+  }
+}
+
+.navFullscreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: $primary-blue;
+  z-index: $z-modal;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: $spacing-lg;
+}
+
+.closeButton {
+  position: absolute;
+  top: $spacing-md;
+  left: $spacing-md;
+  background: none;
+  border: none;
+  font-size: 2rem;
+  cursor: pointer;
+  color: $text-primary;
+  transition: opacity $transition-fast;
+
+  &:hover {
+    opacity: 0.7;
+  }
+}
+
+.navContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $spacing-lg;
+}
+
+.navLink {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+  letter-spacing: $letter-spacing-lg;
+  color: $text-primary;
+  text-decoration: none;
+  transition: opacity $transition-fast;
+
+  &:hover {
+    opacity: 0.7;
+  }
+}
+
+.navLanguage {
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+  font-size: $font-size-md;
+  letter-spacing: $letter-spacing-lg;
+  color: $text-primary;
+}
