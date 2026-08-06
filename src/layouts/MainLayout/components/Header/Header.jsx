@@ -1,7 +1,11 @@
+import { useState } from "react";
 import { useSelector } from "react-redux";
 import styles from "./Header.module.scss";
+import menuBurgerIcon from "../../../../assets/icons/menu-burger.png";
+import cartIcon from "../../../../assets/icons/logo-panier.png";
 
 export default function Header() {
+  const [menuOpen, setMenuOpen] = useState(false);
   const cartItems = useSelector((state) => state.cart.items);
 
   const cartCount = cartItems.reduce(
@@ -11,31 +15,59 @@ export default function Header() {
   const cartBadgeValue = cartCount > 9 ? "9+" : String(cartCount);
 
   return (
-    <header className={styles.header}>
-      <div className={styles.headerLeft}>
-        {/* Menu Burger */}
-        <svg className={styles.icon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M3 12h18M3 6h18M3 18h18" />
-        </svg>
-      </div>
-
-      {/* Logo RAVI */}
-      <div className={styles.logo}>RAVI</div>
-
-      <div className={styles.headerRight}>
-        {/* Icône Utilisateur */}
-        <svg className={styles.icon} viewBox="0 0 24 24" fill="currentColor">
-          <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
-        </svg>
-
-        {/* Icône Panier avec compteur */}
-        <div className={styles.cartWrapper}>
-          {cartCount > 0 && <span className={styles.cartCount}>{cartBadgeValue}</span>}
-          <svg className={styles.icon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4zM3 6h18M16 10a4 4 0 0 1-8 0" />
-          </svg>
+    <>
+      <header className={styles.header}>
+        <div className={styles.headerLeft}>
+          {/* Menu Burger */}
+          <button
+            className={styles.menuButton}
+            onClick={() => setMenuOpen(true)}
+            aria-label="Ouvrir le menu"
+          >
+            <img src={menuBurgerIcon} alt="Menu" className={styles.icon} />
+          </button>
         </div>
-      </div>
-    </header>
+
+        {/* Logo RAVI */}
+        <div className={styles.logo}>RAVI</div>
+
+        <div className={styles.headerRight}>
+          {/* Icône Utilisateur */}
+          <svg className={styles.icon} viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+          </svg>
+
+          {/* Icône Panier avec compteur */}
+          <div className={styles.cartWrapper}>
+            {cartCount > 0 && <span className={styles.cartCount}>{cartBadgeValue}</span>}
+            <img src={cartIcon} alt="Panier" className={styles.icon} />
+          </div>
+        </div>
+      </header>
+
+      {/* Navigation fullscreen */}
+      {menuOpen && (
+        <nav className={styles.navFullscreen}>
+          <button
+            className={styles.closeButton}
+            onClick={() => setMenuOpen(false)}
+            aria-label="Fermer le menu"
+          >
+            ✕
+          </button>
+          <div className={styles.navContent}>
+            <a href="/" className={styles.navLink}>ACCUEIL</a>
+            <a href="/faq" className={styles.navLink}>FAQ</a>
+            <a href="/about" className={styles.navLink}>À PROPOS</a>
+            <a href="/contact" className={styles.navLink}>CONTACT</a>
+            <div className={styles.navLanguage}>
+              <a href="#" className={styles.navLink}>FR</a>
+              <span> / </span>
+              <a href="#" className={styles.navLink}>EN</a>
+            </div>
+          </div>
+        </nav>
+      )}
+    </>
   );
 }

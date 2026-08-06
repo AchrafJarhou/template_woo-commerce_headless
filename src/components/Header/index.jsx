@@ -7,6 +7,9 @@ import { useNavigate } from "react-router-dom";
 import Autocomplete from "../Autocomplete";
 import { logout } from "../../slices/userSlice";
 import { openAuthModal } from "../../slices/authModalSlice";
+import menuBurgerIcon from "../../assets/icons/menu-burger.png";
+import searchBarIcon from "../../assets/icons/search-bar.png";
+import cartIcon from "../../assets/icons/logo-panier.png";
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -54,7 +57,7 @@ export default function Header() {
               aria-label="Menu"
               aria-expanded={menuOpen}
             >
-              ☰
+              <img src={menuBurgerIcon} alt="Menu" />
             </button>
             <Link to="/catalogue" onClick={closeMenu}>
               Catalogue
@@ -70,7 +73,7 @@ export default function Header() {
               className="header-icon"
               aria-label="Recherche"
             >
-              🔍
+              <img src={searchBarIcon} alt="Recherche" />
             </Link>
 
             {isAuthentificated ? (
@@ -93,7 +96,7 @@ export default function Header() {
               className="header-icon header-cart-link"
               aria-label={`Panier (${cartBadgeValue})`}
             >
-              🛒
+              <img src={cartIcon} alt="Panier" />
               {cartCount > 0 && (
                 <span className="header-cart-badge">{cartBadgeValue}</span>
               )}

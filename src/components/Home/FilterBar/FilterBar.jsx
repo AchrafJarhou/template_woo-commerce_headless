@@ -1,8 +1,11 @@
 import { useState } from "react";
 import styles from "./FilterBar.module.scss";
+import searchBarIcon from "../../../assets/icons/search-bar.png";
 
 export default function FilterBar({ onFilterChange }) {
   const [activeFilter, setActiveFilter] = useState("tous");
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const filters = [
     { id: "tous", label: "TOUT" },
@@ -15,13 +18,38 @@ export default function FilterBar({ onFilterChange }) {
     onFilterChange(filterId);
   };
 
+  const toggleSearch = () => {
+    setSearchOpen(!searchOpen);
+    if (searchOpen) {
+      setSearchQuery("");
+    }
+  };
+
   return (
     <div className={styles.container}>
       {/* Icône Loupe */}
-      <svg className={styles.searchIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-        <circle cx="11" cy="11" r="8" />
-        <line x1="21" y1="21" x2="16.65" y2="16.65" />
-      </svg>
+      <button
+        className={styles.searchButton}
+        onClick={toggleSearch}
+        aria-label="Recherche"
+      >
+        <img src={searchBarIcon} alt="Recherche" className={styles.searchIcon} />
+      </button>
+
+      {/* Input de recherche */}
+      {searchOpen && (
+        <div className={styles.searchInputWrapper}>
+          <img src={searchBarIcon} alt="" className={styles.inputIcon} />
+          <input
+            type="text"
+            className={styles.searchInput}
+            placeholder="Rechercher un article..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            autoFocus
+          />
+        </div>
+      )}
 
       {/* Filtres */}
       <nav className={styles.filters}>
