@@ -1,5 +1,7 @@
 import { useSelector } from "react-redux";
 import styles from "./Header.module.scss";
+import menuBurgerIcon from "../../../../assets/icons/menu-burger.png";
+import cartIcon from "../../../../assets/icons/logo-panier.png";
 
 export default function Header() {
   const cartItems = useSelector((state) => state.cart.items);
@@ -14,9 +16,7 @@ export default function Header() {
     <header className={styles.header}>
       <div className={styles.headerLeft}>
         {/* Menu Burger */}
-        <svg className={styles.icon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M3 12h18M3 6h18M3 18h18" />
-        </svg>
+        <img src={menuBurgerIcon} alt="Menu" className={styles.icon} />
       </div>
 
       {/* Logo RAVI */}
@@ -31,9 +31,7 @@ export default function Header() {
         {/* Icône Panier avec compteur */}
         <div className={styles.cartWrapper}>
           {cartCount > 0 && <span className={styles.cartCount}>{cartBadgeValue}</span>}
-          <svg className={styles.icon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4zM3 6h18M16 10a4 4 0 0 1-8 0" />
-          </svg>
+          <img src={cartIcon} alt="Panier" className={styles.icon} />
         </div>
       </div>
     </header>
