@@ -1,5 +1,6 @@
 import { useState } from "react";
 import styles from "./FilterBar.module.scss";
+import searchBarIcon from "../../../assets/icons/search-bar.png";
 
 export default function FilterBar({ onFilterChange }) {
   const [activeFilter, setActiveFilter] = useState("tous");
@@ -18,10 +19,7 @@ export default function FilterBar({ onFilterChange }) {
   return (
     <div className={styles.container}>
       {/* Icône Loupe */}
-      <svg className={styles.searchIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-        <circle cx="11" cy="11" r="8" />
-        <line x1="21" y1="21" x2="16.65" y2="16.65" />
-      </svg>
+      <img src={searchBarIcon} alt="Recherche" className={styles.searchIcon} />
 
       {/* Filtres */}
       <nav className={styles.filters}>
