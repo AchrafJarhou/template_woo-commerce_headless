@@ -39,6 +39,7 @@ export default function FilterBar({ onFilterChange }) {
       {/* Input de recherche */}
       {searchOpen && (
         <div className={styles.searchInputWrapper}>
+          <img src={searchBarIcon} alt="" className={styles.inputIcon} />
           <input
             type="text"
             className={styles.searchInput}

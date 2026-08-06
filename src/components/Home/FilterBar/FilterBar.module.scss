@@ -32,21 +32,32 @@
   width: 100%;
   max-width: 500px;
   margin-bottom: $spacing-md;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.inputIcon {
+  position: absolute;
+  left: $spacing-md;
+  width: 16px;
+  height: 16px;
+  pointer-events: none;
 }
 
 .searchInput {
   width: 100%;
-  padding: $spacing-sm $spacing-md;
+  padding: $spacing-sm $spacing-md $spacing-sm 40px;
   border: 2px solid $primary-blue;
   border-radius: 25px;
   font-size: $font-size-base;
   font-family: $font-family;
   color: $text-primary;
-  background: $white;
+  background: $primary-blue;
   transition: all $transition-fast;
 
   &::placeholder {
-    color: $text-secondary;
+    color: rgba(0, 0, 0, 0.5);
   }
 
   &:focus {
