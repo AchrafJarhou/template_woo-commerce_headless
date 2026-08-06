@@ -4,6 +4,8 @@ import searchBarIcon from "../../../assets/icons/search-bar.png";
 
 export default function FilterBar({ onFilterChange }) {
   const [activeFilter, setActiveFilter] = useState("tous");
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const filters = [
     { id: "tous", label: "TOUT" },
@@ -16,10 +18,37 @@ export default function FilterBar({ onFilterChange }) {
     onFilterChange(filterId);
   };
 
+  const toggleSearch = () => {
+    setSearchOpen(!searchOpen);
+    if (searchOpen) {
+      setSearchQuery("");
+    }
+  };
+
   return (
     <div className={styles.container}>
       {/* Icône Loupe */}
-      <img src={searchBarIcon} alt="Recherche" className={styles.searchIcon} />
+      <button
+        className={styles.searchButton}
+        onClick={toggleSearch}
+        aria-label="Recherche"
+      >
+        <img src={searchBarIcon} alt="Recherche" className={styles.searchIcon} />
+      </button>
+
+      {/* Input de recherche */}
+      {searchOpen && (
+        <div className={styles.searchInputWrapper}>
+          <input
+            type="text"
+            className={styles.searchInput}
+            placeholder="Rechercher un article..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            autoFocus
+          />
+        </div>
+      )}
 
       {/* Filtres */}
       <nav className={styles.filters}>
