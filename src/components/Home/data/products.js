@@ -21,7 +21,7 @@ export const PRODUCTS = [
     id: 4,
     title: "TS-07",
     category: "femmes",
-    image: "https://picsum.photos/300/300?random=4",
+    image: "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=300&h=300&fit=crop",
   },
   {
     id: 5,
@@ -33,7 +33,7 @@ export const PRODUCTS = [
     id: 6,
     title: "YS-02",
     category: "femmes",
-    image: "https://picsum.photos/300/300?random=6",
+    image: "https://images.unsplash.com/photo-1591195853828-11db59a44f6b?w=300&h=300&fit=crop",
   },
   {
     id: 7,
@@ -51,13 +51,13 @@ export const PRODUCTS = [
     id: 9,
     title: "TS-09",
     category: "hommes",
-    image: "https://picsum.photos/300/300?random=9",
+    image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=300&h=300&fit=crop",
   },
   {
     id: 10,
     title: "LS-07",
     category: "femmes",
-    image: "https://picsum.photos/300/300?random=10",
+    image: "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=300&h=300&fit=crop",
   },
   {
     id: 11,

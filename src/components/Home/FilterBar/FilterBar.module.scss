@@ -40,8 +40,8 @@
 .inputIcon {
   position: absolute;
   left: $spacing-md;
-  width: 16px;
-  height: 16px;
+  width: 20px;
+  height: 20px;
   pointer-events: none;
 }
 
@@ -83,6 +83,7 @@
   transition: color $transition-fast;
   font-weight: $font-weight-normal;
   cursor: pointer;
+  font-size: 13px;
 
   &:hover {
     color: $text-primary;
