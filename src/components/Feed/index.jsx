@@ -3,7 +3,7 @@ import "./index.css";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import Loader from "../../components/Loader"
+import Loader from "../../components/Loader";
 import { fetchProductsThunk } from "../../thunkActionsCreator/productsThunks";
 import { fetchCategoriesThunk } from "../../thunkActionsCreator/categoriesThunks";
 import ProductCard from "../ProductCard";
@@ -55,6 +55,8 @@ export default function Feed() {
     }
   };
 
+  console.log("PRODUCST: ", items);
+
   return (
     <div className="feed-container">
       <span ref={feedContainerRef}></span>
@@ -66,7 +68,7 @@ export default function Feed() {
           <span ref={loadMoreRef}></span>
         </div>
       )}
-      {loading && <Loader size="lg"/>}
+      {loading && <Loader size="lg" />}
     </div>
   );
 }
