@@ -32,24 +32,36 @@ export function CartProduct({ item }) {
           </p>
         )}
 
-        <div className="cart-product__quantity">
-          <span className="cart-product__quantity-label">Qté</span>
+        <div className="cart-product__actions">
+          <div className="cart-product__quantity">
+            <span className="cart-product__quantity-label">Qté</span>
+            <button
+              type="button"
+              className="cart-product__step"
+              disabled={atMinimum}
+              aria-label={`Retirer un ${item.name}`}
+            >
+              −
+            </button>
+            <span className="cart-product__quantity-value">
+              {item.quantity}
+            </span>
+            <button
+              type="button"
+              className="cart-product__step"
+              disabled={atMaximum}
+              aria-label={`Ajouter un ${item.name}`}
+            >
+              +
+            </button>
+          </div>
+
           <button
             type="button"
-            className="cart-product__step"
-            disabled={atMinimum}
-            aria-label={`Retirer un ${item.name}`}
+            className="cart-product__remove"
+            aria-label={`Supprimer ${item.name} du panier`}
           >
-            −
-          </button>
-          <span className="cart-product__quantity-value">{item.quantity}</span>
-          <button
-            type="button"
-            className="cart-product__step"
-            disabled={atMaximum}
-            aria-label={`Ajouter un ${item.name}`}
-          >
-            +
+            Supprimer
           </button>
         </div>
       </div>
