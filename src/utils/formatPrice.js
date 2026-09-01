@@ -4,6 +4,6 @@ export function formatPrice(amount, currency) {
 
   return new Intl.NumberFormat("fr-FR", {
     style: "currency",
-    currency: code,
+    currency: currency?.currency_code || "EUR",
   }).format(value);
 }
