@@ -32,6 +32,7 @@ export const MOCK_CART_ITEMS = [
       line_total: "108000",
       currency_minor_unit: 2,
       currency_suffix: " €",
+      currency_code: "EUR"
     },
   },
   {
@@ -67,6 +68,7 @@ export const MOCK_CART_ITEMS = [
       line_total: "26000",
       currency_minor_unit: 2,
       currency_suffix: " €",
+      currency_code: "EUR"
     },
   },
 ];
