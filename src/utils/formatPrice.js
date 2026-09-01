@@ -3,7 +3,7 @@ export function formatPrice(amount, currency) {
   const code = currency?.currency_code ?? "EUR";
   const value = Number(amount) / 10 ** minorUnit;
 
-  return new Init.NumberFormat("fr-FR", {
+  return new Intl.NumberFormat("fr-FR", {
     style: "currency",
     currency: code,
   }).format(value);
