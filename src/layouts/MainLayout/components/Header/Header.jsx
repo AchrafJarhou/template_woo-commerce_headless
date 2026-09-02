@@ -40,7 +40,7 @@ export default function Header() {
           {/* Icône Panier avec compteur */}
           <div className={styles.cartWrapper}>
             {cartCount > 0 && <span className={styles.cartCount}>{cartBadgeValue}</span>}
-            <img src={cartIcon} alt="Panier" className={styles.icon} />
+            <img src={cartIcon} alt="Panier" className={styles.cartIcon} />
           </div>
         </div>
       </header>

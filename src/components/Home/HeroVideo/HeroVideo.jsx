@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import styles from "./HeroVideo.module.scss";
+import raviVideo from "../../../assets/videos/ravi.mp4";
 
 export default function HeroVideo() {
   const [opacity, setOpacity] = useState(1);
@@ -22,7 +23,7 @@ export default function HeroVideo() {
         playsinline
         loop
         muted
-        src="https://www.w3schools.com/html/mov_bbb.mp4"
+        src={raviVideo}
       />
       <h1 className={styles.title}>RAVI</h1>
     </div>
