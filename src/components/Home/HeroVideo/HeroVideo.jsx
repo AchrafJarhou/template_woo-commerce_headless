@@ -22,7 +22,7 @@ export default function HeroVideo() {
         playsinline
         loop
         muted
-        src="https://www.w3schools.com/html/mov_bbb.mp4"
+        src="../../../assets/video/street.mp4"
       />
       <h1 className={styles.title}>RAVI</h1>
     </div>
