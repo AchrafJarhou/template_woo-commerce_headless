@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import styles from "./Header.module.scss";
@@ -29,7 +30,9 @@ export default function Header() {
         </div>
 
         {/* Logo RAVI */}
-        <div className={styles.logo}>RAVI</div>
+        <Link to="/">
+          <div className={styles.logo}>RAVI</div>
+        </Link>
 
         <div className={styles.headerRight}>
           {/* Icône Utilisateur */}
@@ -38,10 +41,14 @@ export default function Header() {
           </svg>
 
           {/* Icône Panier avec compteur */}
-          <div className={styles.cartWrapper}>
-            {cartCount > 0 && <span className={styles.cartCount}>{cartBadgeValue}</span>}
-            <img src={cartIcon} alt="Panier" className={styles.icon} />
-          </div>
+          <Link to="/panier">
+            <div className={styles.cartWrapper}>
+              {cartCount > 0 && (
+                <span className={styles.cartCount}>{cartBadgeValue}</span>
+              )}
+              <img src={cartIcon} alt="Panier" className={styles.icon} />
+            </div>
+          </Link>
         </div>
       </header>
 
@@ -56,14 +63,26 @@ export default function Header() {
             ✕
           </button>
           <div className={styles.navContent}>
-            <a href="/" className={styles.navLink}>ACCUEIL</a>
-            <a href="/faq" className={styles.navLink}>FAQ</a>
-            <a href="/about" className={styles.navLink}>À PROPOS</a>
-            <a href="/contact" className={styles.navLink}>CONTACT</a>
+            <Link to="/" className={styles.navLink}>
+              ACCUEIL
+            </Link>
+            <Link to="/faq" className={styles.navLink}>
+              FAQ
+            </Link>
+            <Link to="/about" className={styles.navLink}>
+              À PROPOS
+            </Link>
+            <Link to="/contact" className={styles.navLink}>
+              CONTACT
+            </Link>
             <div className={styles.navLanguage}>
-              <a href="#" className={styles.navLink}>FR</a>
+              <Link to="#" className={styles.navLink}>
+                FR
+              </Link>
               <span> / </span>
-              <a href="#" className={styles.navLink}>EN</a>
+              <Link to="#" className={styles.navLink}>
+                EN
+              </Link>
             </div>
           </div>
         </nav>
