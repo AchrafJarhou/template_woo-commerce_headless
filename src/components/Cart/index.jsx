@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { CartProduct } from "../CartProduct";
 import { formatPrice } from "../../utils/formatPrice";
 import { MOCK_CART_ITEMS, MOCK_CART_TOTALS } from "./mockCart";
+import './index.scss';
 
 export default function Cart() {
   const items = MOCK_CART_ITEMS;
