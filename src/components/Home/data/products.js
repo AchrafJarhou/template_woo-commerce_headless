@@ -1,74 +1,307 @@
 export const PRODUCTS = [
   {
     id: 1,
-    title: "SL-03",
+    name: "SL-03",
+    slug: "SL-03",
     category: "hommes",
-    image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=300&h=300&fit=crop",
+    images: [
+      {
+        src: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=300&h=300&fit=crop",
+      },
+    ],
+    prices: {
+      price: "100",
+      regular_price: "100",
+      sale_price: null,
+      price_range: null,
+      currency_code: "EUR",
+    },
+    description:
+      "Botte montante en cuir de veau, zip central. Semelle épaisse, tige à mi-mollet. Doublure cuir.",
+    attributes: [
+      {
+        name: "matière",
+        options: ["coton"],
+      },
+    ],
   },
+
   {
     id: 2,
-    title: "SG-03",
+    name: "SG-03",
+    slug: "SG-03",
     category: "femmes",
-    image: "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=300&h=300&fit=crop",
+    images: [
+      {
+        src: "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=300&h=300&fit=crop",
+      },
+    ],
+    prices: {
+      price: "100",
+      regular_price: "100",
+      sale_price: null,
+      price_range: null,
+      currency_code: "EUR",
+    },
+    description:
+      "Botte montante en cuir de veau, zip central. Semelle épaisse, tige à mi-mollet. Doublure cuir.",
+    attributes: [
+      {
+        name: "matière",
+        options: ["coton"],
+      },
+    ],
   },
+
   {
     id: 3,
-    title: "SL-01",
+    name: "SL-01",
+    slug: "SL-01",
     category: "hommes",
-    image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=300&h=300&fit=crop",
+    images: [
+      {
+        src: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=300&h=300&fit=crop",
+      },
+    ],
+    prices: {
+      price: "100",
+      regular_price: "100",
+      sale_price: null,
+      price_range: null,
+      currency_code: "EUR",
+    },
+    description:
+      "Botte montante en cuir de veau, zip central. Semelle épaisse, tige à mi-mollet. Doublure cuir.",
+    attributes: [
+      {
+        name: "matière",
+        options: ["coton"],
+      },
+    ],
   },
+
   {
     id: 4,
-    title: "TS-07",
+    name: "TS-07",
+    slug: "TS-07",
     category: "femmes",
-    image: "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=300&h=300&fit=crop",
+    images: [{ src: "https://picsum.photos/300/300?random=4" }],
+    prices: {
+      price: "100",
+      regular_price: "100",
+      sale_price: null,
+      price_range: null,
+      currency_code: "EUR",
+    },
+    description:
+      "Botte montante en cuir de veau, zip central. Semelle épaisse, tige à mi-mollet. Doublure cuir.",
+    attributes: [
+      {
+        name: "matière",
+        options: ["coton"],
+      },
+    ],
   },
+
   {
     id: 5,
-    title: "LS-03",
+    name: "LS-03",
+    slug: "LS-03",
     category: "hommes",
-    image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=300&h=300&fit=crop",
+    images: [
+      {
+        src: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=300&h=300&fit=crop",
+      },
+    ],
+    prices: {
+      price: "100",
+      regular_price: "100",
+      sale_price: null,
+      price_range: null,
+      currency_code: "EUR",
+    },
+    description:
+      "Botte montante en cuir de veau, zip central. Semelle épaisse, tige à mi-mollet. Doublure cuir.",
+    attributes: [
+      {
+        name: "matière",
+        options: ["coton"],
+      },
+    ],
   },
+
   {
     id: 6,
-    title: "YS-02",
+    name: "YS-02",
+    slug: "YS-02",
     category: "femmes",
-    image: "https://images.unsplash.com/photo-1591195853828-11db59a44f6b?w=300&h=300&fit=crop",
+    images: [{ src: "https://picsum.photos/300/300?random=6" }],
+    prices: {
+      price: "100",
+      regular_price: "100",
+      sale_price: null,
+      price_range: null,
+      currency_code: "EUR",
+    },
+    description:
+      "Botte montante en cuir de veau, zip central. Semelle épaisse, tige à mi-mollet. Doublure cuir.",
+    attributes: [
+      {
+        name: "matière",
+        options: ["coton"],
+      },
+    ],
   },
   {
     id: 7,
-    title: "SL-05",
+    name: "SL-05",
+    slug: "SL-05",
     category: "hommes",
-    image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=300&h=300&fit=crop",
+    images: [
+      {
+        src: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=300&h=300&fit=crop",
+      },
+    ],
+    prices: {
+      price: "100",
+      regular_price: "100",
+      sale_price: null,
+      price_range: null,
+      currency_code: "EUR",
+    },
+    description:
+      "Botte montante en cuir de veau, zip central. Semelle épaisse, tige à mi-mollet. Doublure cuir.",
+    attributes: [
+      {
+        name: "matière",
+        options: ["coton"],
+      },
+    ],
   },
+
   {
     id: 8,
-    title: "SG-05",
+    name: "SG-05",
+    slug: "SG-05",
     category: "femmes",
-    image: "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=300&h=300&fit=crop",
+    images: [
+      {
+        src: "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=300&h=300&fit=crop",
+      },
+    ],
+    prices: {
+      price: "100",
+      regular_price: "100",
+      sale_price: null,
+      price_range: null,
+      currency_code: "EUR",
+    },
+    description:
+      "Botte montante en cuir de veau, zip central. Semelle épaisse, tige à mi-mollet. Doublure cuir.",
+    attributes: [
+      {
+        name: "matière",
+        options: ["coton"],
+      },
+    ],
   },
+
   {
     id: 9,
-    title: "TS-09",
+    name: "TS-09",
+    slug: "TS-09",
     category: "hommes",
-    image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=300&h=300&fit=crop",
+    images: [{ src: "https://picsum.photos/300/300?random=9" }],
+    prices: {
+      price: "100",
+      regular_price: "100",
+      sale_price: null,
+      price_range: null,
+      currency_code: "EUR",
+    },
+    description:
+      "Botte montante en cuir de veau, zip central. Semelle épaisse, tige à mi-mollet. Doublure cuir.",
+    attributes: [
+      {
+        name: "matière",
+        options: ["coton"],
+      },
+    ],
   },
+
   {
     id: 10,
-    title: "LS-07",
+    name: "LS-07",
+    slug: "LS-07",
     category: "femmes",
-    image: "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=300&h=300&fit=crop",
+    images: [{ src: "https://picsum.photos/300/300?random=10" }],
+    prices: {
+      price: "100",
+      regular_price: "100",
+      sale_price: null,
+      price_range: null,
+      currency_code: "EUR",
+    },
+    description:
+      "Botte montante en cuir de veau, zip central. Semelle épaisse, tige à mi-mollet. Doublure cuir.",
+    attributes: [
+      {
+        name: "matière",
+        options: ["coton"],
+      },
+    ],
   },
+
   {
     id: 11,
-    title: "SL-07",
+    name: "SL-07",
+    slug: "SL-07",
     category: "hommes",
-    image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=300&h=300&fit=crop",
+    images: [
+      {
+        src: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=300&h=300&fit=crop",
+      },
+    ],
+    prices: {
+      price: "100",
+      regular_price: "100",
+      sale_price: null,
+      price_range: null,
+      currency_code: "EUR",
+    },
+    description:
+      "Botte montante en cuir de veau, zip central. Semelle épaisse, tige à mi-mollet. Doublure cuir.",
+    attributes: [
+      {
+        name: "matière",
+        options: ["coton"],
+      },
+    ],
   },
   {
     id: 12,
-    title: "AC-01",
+    name: "AC-01",
+    slug: "AC-01",
     category: "femmes",
-    image: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=300&h=300&fit=crop",
+    images: [
+      {
+        src: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=300&h=300&fit=crop",
+      },
+    ],
+    prices: {
+      price: "100",
+      regular_price: "100",
+      sale_price: null,
+      price_range: null,
+      currency_code: "EUR",
+    },
+    description:
+      "Botte montante en cuir de veau, zip central. Semelle épaisse, tige à mi-mollet. Doublure cuir.",
+    attributes: [
+      {
+        name: "matière",
+        options: ["coton"],
+      },
+    ],
   },
 ];
