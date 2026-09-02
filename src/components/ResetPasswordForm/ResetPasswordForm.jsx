@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-
 import { switchAuthModalView } from "../../slices/authModalSlice";
+import "./ResetPasswordForm.css";
 
 export default function ResetPasswordForm() {
   const dispatch = useDispatch();
@@ -24,14 +24,16 @@ export default function ResetPasswordForm() {
 
   return (
     <>
-      <h1>Mot de passe oublié</h1>
-      <p className="auth-modal__subtitle">
-        Recevez un lien pour réinitialiser votre mot de passe
-      </p>
+      <div className="drawer-header">
+        <h2 className="drawer-title">Mot de passe oublié</h2>
+        <p className="drawer-subtitle">
+          Recevez un lien pour réinitialiser votre mot de passe
+        </p>
+      </div>
 
-      <form className="auth-form" onSubmit={handleSubmit} noValidate>
-        <div className="auth-form__field">
-          <label htmlFor="reset-email">Votre email</label>
+      <form className="drawer-form" onSubmit={handleSubmit} noValidate>
+        <div className="input-group">
+          <label htmlFor="reset-email">Email</label>
           <input
             id="reset-email"
             type="email"
@@ -42,22 +44,22 @@ export default function ResetPasswordForm() {
           />
         </div>
 
-        {message && <p className="auth-form__server-error">{message}</p>}
+        {message && <p className="drawer-message">{message}</p>}
 
-        <button className="auth-form__submit" type="submit">
+        <button className="submit-btn" type="submit">
           Envoyer le lien
         </button>
       </form>
 
-      <p className="auth-modal__footer">
+      <div className="drawer-footer">
         <button
           type="button"
-          className="auth-modal__link"
+          className="toggle-btn"
           onClick={() => dispatch(switchAuthModalView("login"))}
         >
-          Retour à la connexion
+          ← Retour à la connexion
         </button>
-      </p>
+      </div>
     </>
   );
 }
