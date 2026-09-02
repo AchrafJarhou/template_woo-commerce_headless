@@ -140,7 +140,7 @@ export default function AuthDrawer() {
             </div>
 
             <form className="drawer-form" onSubmit={handleSubmit}>
-              <div className="input-group">
+              {/* <div className="input-group">
                 <label htmlFor="username">Nom d'utilisateur</label>
                 <input
                   id="username"
@@ -152,9 +152,9 @@ export default function AuthDrawer() {
                   placeholder={errors.username || "Votre identifiant"}
                   autoComplete="username"
                 />
-              </div>
+              </div> */}
 
-              {mode === "register" && (
+              {/* {mode === "register" && (
                 <div className="input-group">
                   <label htmlFor="email">Email</label>
                   <input
@@ -168,7 +168,21 @@ export default function AuthDrawer() {
                     autoComplete="email"
                   />
                 </div>
-              )}
+              )} */}
+
+              <div className="input-group">
+                <label htmlFor="email">Email</label>
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  value={form.email}
+                  onChange={handleChange}
+                  className={errors.email ? "input-error" : ""}
+                  placeholder={errors.email || "votre@email.com"}
+                  autoComplete="email"
+                />
+              </div>
 
               <div className="input-group">
                 <label htmlFor="password">Mot de passe</label>
