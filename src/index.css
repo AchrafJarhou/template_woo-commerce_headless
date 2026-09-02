@@ -321,9 +321,3 @@ label {
 body.home-page .header {
   display: none !important;
 }
-
-/* ===== MASQUER FOOTER WORDPRESS GLOBALEMENT ===== */
-/* Masquer tous les footers sauf celui du catalogue */
-footer:not(.catalog-footer) {
-  display: none !important;
-}
