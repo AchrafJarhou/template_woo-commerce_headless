@@ -1,0 +1,90 @@
+export const MOCK_CART_ITEMS = [
+  {
+    key: "a1b2c3d4e5f60718293a4b5c",
+    id: 103,
+    name: "SL-03",
+    permalink: "https://boutique.test/product/sl-03/",
+    quantity: 2,
+    quantity_limits: { minimum: 1, maximum: 9, multiple_of: 1 },
+    images: [
+      {
+        id: 501,
+        src: "https://placeholder.pics/svg/300/DEDEDE/555555/SL-03",
+        thumbnail: "https://placeholder.pics/svg/150/DEDEDE/555555/SL-03",
+        alt: "Botte SL-03",
+      },
+    ],
+    variation: [{ attribute: "Taille", value: "42" }],
+    prices: {
+      price: "54000",
+      regular_price: "54000",
+      sale_price: "54000",
+      currency_code: "EUR",
+      currency_symbol: "€",
+      currency_minor_unit: 2,
+      currency_decimal_separator: ",",
+      currency_thousand_separator: " ",
+      currency_prefix: "",
+      currency_suffix: " €",
+    },
+    totals: {
+      line_subtotal: "108000",
+      line_total: "108000",
+      currency_minor_unit: 2,
+      currency_suffix: " €",
+      currency_code: "EUR"
+    },
+  },
+  {
+    key: "f6e5d4c3b2a10987654321fe",
+    id: 101,
+    name: "SL-01",
+    permalink: "https://boutique.test/product/sl-01/",
+    quantity: 1,
+    quantity_limits: { minimum: 1, maximum: 4, multiple_of: 1 },
+    images: [
+      {
+        id: 502,
+        src: "https://placeholder.pics/svg/300/DEDEDE/555555/SL-01",
+        thumbnail: "https://placeholder.pics/svg/150/DEDEDE/555555/SL-01",
+        alt: "Chaussure SL-01",
+      },
+    ],
+    variation: [],
+    prices: {
+      price: "26000",
+      regular_price: "26000",
+      sale_price: "26000",
+      currency_code: "EUR",
+      currency_symbol: "€",
+      currency_minor_unit: 2,
+      currency_decimal_separator: ",",
+      currency_thousand_separator: " ",
+      currency_prefix: "",
+      currency_suffix: " €",
+    },
+    totals: {
+      line_subtotal: "26000",
+      line_total: "26000",
+      currency_minor_unit: 2,
+      currency_suffix: " €",
+      currency_code: "EUR"
+    },
+  },
+];
+
+export const MOCK_CART_TOTALS = {
+  total_items: "134000",
+  total_items_tax: "0",
+  total_discount: "0",
+  total_shipping: "0",
+  total_tax: "0",
+  total_price: "134000",
+  currency_code: "EUR",
+  currency_symbol: "€",
+  currency_minor_unit: 2,
+  currency_decimal_separator: ",",
+  currency_thousand_separator: " ",
+  currency_prefix: "",
+  currency_suffix: " €",
+};
