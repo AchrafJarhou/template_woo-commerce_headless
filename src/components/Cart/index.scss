@@ -144,6 +144,6 @@
 
   .cart__aside {
     position: sticky;
-    top: clamp(20px, 3vw, 40px);
+    top: clamp(76px, calc(56px + 3vw), 96px);
   }
 }
