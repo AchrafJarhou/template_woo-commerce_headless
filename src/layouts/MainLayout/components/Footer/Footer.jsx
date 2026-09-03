@@ -1,13 +1,14 @@
+import { Link } from "react-router-dom";
 import styles from "./Footer.module.scss";
 
 export default function Footer() {
   return (
     <footer className={`${styles.footer} catalog-footer`}>
       <nav className={styles.links}>
-        <a href="#mentions">Mentions Légales</a>
-        <a href="#confidentialite">Politique de Confidentialité</a>
-        <a href="#cookies">Politique des Cookies</a>
-        <a href="#cgv">CGV</a>
+        <Link to="/mentions-legales">Mentions Légales</Link>
+        <Link to="/confidentialite">Politique de Confidentialité</Link>
+        <Link to="/cookies">Politique des Cookies</Link>
+        <Link to="/cgv">CGV</Link>
       </nav>
       <p className={styles.copyright}>© 2026 RAVI. TOUS DROITS RÉSERVÉS.</p>
     </footer>
