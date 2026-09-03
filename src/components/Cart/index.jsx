@@ -25,9 +25,9 @@ export default function Cart() {
 
   return (
     <section className="cart">
+      <h1 className="cart__title">Votre panier</h1>
+      
       <div className="cart__main">
-        <h1 className="cart__title">Votre panier</h1>
-
         <ul className="cart__list">
           {items.map((item) => (
             <CartProduct key={item.key} item={item} />
@@ -38,10 +38,6 @@ export default function Cart() {
           Sous-total ({countLabel}) :{" "}
           <strong>{formatPrice(totals.total_items, totals)}</strong>
         </p>
-
-        <Link to="/catalogue" className="cart__continue">
-          Continuer mon shopping
-        </Link>
       </div>
 
       <aside className="cart__aside">
@@ -69,6 +65,10 @@ export default function Cart() {
 
         <Link to="/commande" className="cart__checkout">
           Passer la commande
+        </Link>
+
+        <Link to="/catalogue" className="cart__continue">
+          Continuer mon shopping
         </Link>
       </aside>
     </section>
