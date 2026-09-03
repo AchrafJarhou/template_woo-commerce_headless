@@ -23,8 +23,36 @@ add_action('rest_api_init', function () {
     ]);
 });
 
+function headless_enrich_product_images($product_data)
+{
+    $images = [];
+
+    // Récupérer la description
+    $description = is_object($product_data) ? ($product_data->description ?? '') : ($product_data['description'] ?? '');
+
+    if ($description) {
+        // Extraire les URLs des images <img> dans la description
+        preg_match_all('/<img[^>]+src=["\']([^"\']+)["\']/', $description, $matches);
+        if (!empty($matches[1])) {
+            foreach ($matches[1] as $src) {
+                $images[] = ['src' => $src];
+            }
+        }
+    }
+
+    if (is_object($product_data)) {
+        $product_data->images = $images;
+    } else {
+        $product_data['images'] = $images;
+    }
+
+    return $product_data;
+}
+
 function headless_enrich_variation_stock($product_data)
 {
+    $product_data = headless_enrich_product_images($product_data);
+
     // Selon le contexte, le Store API renvoie les entrees de "variations" en
     // stdClass ou en tableau associatif : on gere les deux formes.
     $variations = is_object($product_data) ? ($product_data->variations ?? null) : ($product_data['variations'] ?? null);
