@@ -14,8 +14,8 @@ add_filter('allowed_http_origins', function ($origins) {
     $origins[] = 'http://localhost:5173';
     $origins[] = 'http://127.0.0.1:5173';
 
-    // Sur le réseau local (IP locale)
-    // Remplace 192.168.1.* par ton réseau
+    // Sur le réseau local
+    $origins[] = 'http://10.60.4.51:5173';
     $origins[] = 'http://192.168.1.*';
     $origins[] = 'http://192.168.*';
 

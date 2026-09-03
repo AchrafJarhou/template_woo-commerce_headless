@@ -1,0 +1,97 @@
+.page-content {
+  max-width: 900px;
+  margin: 60px auto;
+  padding: 0 20px;
+  line-height: 1.8;
+  color: #333;
+}
+
+.page-content h1 {
+  font-size: 32px;
+  font-weight: 800;
+  margin-bottom: 40px;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  color: #182240;
+}
+
+.page-content h2 {
+  font-size: 24px;
+  font-weight: 700;
+  margin: 40px 0 20px;
+  color: #182240;
+  border-bottom: 2px solid #6784c8;
+  padding-bottom: 10px;
+}
+
+.page-content h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 30px 0 15px;
+  color: #4a5f9f;
+}
+
+.page-content p {
+  margin-bottom: 15px;
+  font-size: 15px;
+  text-align: justify;
+}
+
+.page-content strong {
+  color: #182240;
+  font-weight: 600;
+}
+
+.page-content ul,
+.page-content ol {
+  margin: 20px 0 20px 30px;
+  font-size: 15px;
+}
+
+.page-content li {
+  margin-bottom: 10px;
+}
+
+.page-content a {
+  color: #6784c8;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.page-content a:hover {
+  color: #4a5f9f;
+  text-decoration: underline;
+}
+
+.page-content blockquote {
+  border-left: 4px solid #6784c8;
+  padding-left: 20px;
+  margin: 20px 0;
+  font-style: italic;
+  color: #666;
+}
+
+@media (max-width: 768px) {
+  .page-content {
+    margin: 40px auto;
+    padding: 0 15px;
+  }
+
+  .page-content h1 {
+    font-size: 24px;
+    margin-bottom: 30px;
+  }
+
+  .page-content h2 {
+    font-size: 20px;
+    margin: 30px 0 15px;
+  }
+
+  .page-content h3 {
+    font-size: 16px;
+  }
+
+  .page-content p {
+    font-size: 14px;
+  }
+}

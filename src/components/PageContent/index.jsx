@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchPageThunk } from "../../thunkActionsCreator/pagesThunks";
 import Loader from "../Loader";
+import "./PageContent.css";
 
 export default function PageContent({ slug }) {
   const page = useSelector((state) => state.pages.items[slug]);
@@ -19,7 +20,7 @@ export default function PageContent({ slug }) {
   const title = page.title ?? "";
   const content = page.content ?? "";
   return (
-    <div>
+    <div className="page-content">
       <h1 dangerouslySetInnerHTML={{ __html: title.rendered }} />
       <div dangerouslySetInnerHTML={{ __html: content.rendered }} />
     </div>
