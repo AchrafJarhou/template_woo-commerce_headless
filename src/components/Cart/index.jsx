@@ -67,7 +67,7 @@ export default function Cart() {
           Passer la commande
         </Link>
 
-        <Link to="/catalogue" className="cart__continue">
+        <Link to="/" className="cart__continue">
           Continuer mon shopping
         </Link>
       </aside>
