@@ -65,7 +65,10 @@ export default function ProductModal({ product, onClose }) {
               : "Prix sur demande"}
           </div>
 
-          <p className="modal-description">{product.description}</p>
+          <div
+            className="modal-description"
+            dangerouslySetInnerHTML={{ __html: product.description }}
+          />
 
           <div className="modal-attributes">
             {product.attributes?.map((attr) => (
