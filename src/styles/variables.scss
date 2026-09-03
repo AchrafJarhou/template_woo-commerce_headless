@@ -1,0 +1,51 @@
+// =========================================
+// VARIABLES GLOBALES - SCSS
+// =========================================
+
+// COULEURS
+$primary-blue: rgb(103, 132, 200);
+$dark-bg: rgb(17, 17, 17);
+$text-primary: #000;
+$text-secondary: rgba(0, 0, 0, 0.4);
+$text-tertiary: rgba(0, 0, 0, 0.6);
+$white: #fff;
+
+// TYPOGRAPHIE
+$font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+$font-size-xs: 10px;
+$font-size-sm: 13px;
+$font-size-base: 14px;
+$font-size-md: 16px;
+$font-size-lg: 22px;
+$font-size-xl: 10vw;
+
+$font-weight-normal: 500;
+$font-weight-bold: 700;
+
+$letter-spacing-sm: 1px;
+$letter-spacing-md: 1.5px;
+$letter-spacing-lg: 4px;
+$letter-spacing-xl: 5px;
+
+// ESPACEMENTS
+$spacing-xs: 6px;
+$spacing-sm: 14px;
+$spacing-md: 20px;
+$spacing-lg: 26px;
+$spacing-xl: 40px;
+$spacing-2xl: 50px;
+$spacing-3xl: 60px;
+
+// Z-INDEX
+$z-hero: 1;
+$z-catalog: 10;
+$z-header: 100;
+$z-modal: 1000;
+
+// RESPONSIVE BREAKPOINTS
+$breakpoint-tablet: 1024px;
+$breakpoint-mobile: 640px;
+
+// TRANSITIONS
+$transition-fast: 0.3s;
+$transition-normal: 0.5s;

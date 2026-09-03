@@ -1,3 +1,5 @@
+@import "../../../styles/variables.scss";
+
 @font-face {
   font-family: "InterCustom";
   src: url("./assets/fonts/Inter-Regular.ttf") format("truetype");
@@ -15,7 +17,7 @@
   --success-color: #16a34a;
   --danger-color: #dc2626;
   --dark-color: #0f172a;
-  --bg-color: #f8fafc;
+  --bg-color: rgb(103, 132, 200);
   --font-body: "InterCustom", sans-serif;
   --font-heading: "PoppinsCustom", sans-serif;
 }
@@ -32,6 +34,17 @@ body {
   color: var(--dark-color);
   font-family: var(--font-body);
 }
+
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+}
+
+.main-layout__content {
+  flex: 1;
+}
+
 ::selection {
   background-color: var(--primary-color);
   color: var(--bg-color);

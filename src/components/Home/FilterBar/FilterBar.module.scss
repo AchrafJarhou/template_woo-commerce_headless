@@ -1,0 +1,96 @@
+@import "../../../styles/variables.scss";
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: $spacing-3xl;
+}
+
+.searchButton {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: $spacing-md;
+
+  &:hover {
+    opacity: 0.7;
+  }
+}
+
+.searchIcon {
+  width: 28px;
+  color: $text-primary;
+  transition: opacity $transition-fast;
+}
+
+.searchInputWrapper {
+  width: 100%;
+  max-width: 500px;
+  margin-bottom: $spacing-md;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.inputIcon {
+  position: absolute;
+  left: $spacing-md;
+  width: 18px;
+  height: 16px;
+  pointer-events: none;
+}
+
+.searchInput {
+  width: 100%;
+  padding: $spacing-sm $spacing-md $spacing-sm 40px;
+  border: 2px solid $primary-blue;
+  border-radius: 25px;
+  font-size: $font-size-base;
+  font-family: $font-family;
+  color: $text-primary;
+  background: $primary-blue;
+  transition: all $transition-fast;
+
+  &::placeholder {
+    color: rgba(0, 0, 0, 0.5);
+  }
+
+  &:focus {
+    outline: none;
+    border-color: $text-primary;
+  }
+}
+
+.filters {
+  display: flex;
+  gap: $spacing-lg;
+  font-size: $font-size-sm;
+  letter-spacing: $letter-spacing-md;
+  text-transform: uppercase;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.filterLink {
+  color: $text-secondary;
+  text-decoration: none;
+  transition: color $transition-fast;
+  font-weight: $font-weight-normal;
+  cursor: pointer;
+  font-size: 13px;
+
+  &:hover {
+    color: $text-primary;
+  }
+
+  &.active {
+    color: $text-primary;
+    font-weight: $font-weight-bold;
+  }
+}

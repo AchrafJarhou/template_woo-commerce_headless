@@ -1,0 +1,21 @@
+@import "../../../styles/variables.scss";
+
+.catalog {
+  position: relative;
+  z-index: $z-catalog;
+  margin-top: 100vh;
+  background: $primary-blue;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.main {
+  padding: $spacing-xl 40px 100px;
+  flex: 1;
+
+  @media (max-width: $breakpoint-mobile) {
+    padding: $spacing-md $spacing-sm 60px;
+  }
+}

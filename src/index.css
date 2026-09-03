@@ -293,9 +293,9 @@ button {
     border-radius: 1lvh;
   }
 }
-button:hover {
+/* button:hover {
   transform: scale(1.1);
-}
+} */
 button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
@@ -315,4 +315,9 @@ label {
   label {
     font-size: 3.5lvh;
   }
-}/*# sourceMappingURL=index.css.map */
+} /*# sourceMappingURL=index.css.map */
+/* ===== HOME PAGE STYLES ===== */
+/* Masquer le Header global WordPress */
+body.home-page .header {
+  display: none !important;
+}

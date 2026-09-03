@@ -1,0 +1,218 @@
+/* Animations d'apparition */
+@keyframes ravi-backdrop {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes ravi-modal {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* L'arrière-plan flouté */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  background: rgba(24, 34, 64, 0.72);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 28px;
+  animation: ravi-backdrop 0.25s ease both;
+}
+
+/* La boite principale */
+.modal-content {
+  position: relative;
+  width: 100%;
+  max-width: 960px;
+  max-height: 85vh;
+  /* overflow: hidden empêche la scrollbar globale. 
+     Seule la zone texte scrollera si nécessaire */
+  overflow: hidden;
+  background: #6784c8;
+  border: 1px solid #000;
+  display: flex;
+  flex-wrap: wrap;
+  animation: ravi-modal 0.32s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Bouton Fermer (Rond parfait) */
+.close-btn {
+  position: absolute;
+  right: 14px;
+  top: 14px;
+  z-index: 5;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 1px solid #000;
+  color: #000;
+  background: transparent;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box; /* Force le maintien du rond */
+  flex-shrink: 0;
+  transition:
+    background 0.2s,
+    color 0.2s;
+}
+
+.close-btn:hover {
+  background: #000;
+  color: #fff;
+}
+
+/* Section Image */
+.modal-img-container {
+  flex: 1 1 340px;
+  min-width: 300px;
+  aspect-ratio: 3/4;
+  padding: 28px;
+  background: #7691d1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+/* Section Texte */
+.modal-txt-container {
+  flex: 1 1 300px;
+  min-width: 280px;
+  padding: 56px 44px 44px;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  min-height: 0;
+}
+
+.modal-category {
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  opacity: 0.6;
+  margin-bottom: 14px;
+}
+
+.modal-title {
+  margin: 0;
+  font-size: 30px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  line-height: 1.05;
+}
+
+.modal-price {
+  font-size: 20px;
+  letter-spacing: 1px;
+  margin: 16px 0 26px;
+}
+
+.modal-description {
+  margin: 0 0 30px;
+  font-size: 14px;
+  line-height: 1.8;
+  max-width: 42ch;
+}
+
+/* Attributs (Matière, Origine) */
+.modal-attributes {
+  display: flex;
+  gap: 26px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  border-top: 1px solid rgba(0, 0, 0, 0.3);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+  padding: 16px 0;
+  margin-bottom: 30px;
+}
+
+.modal-attribute-item {
+  font-size: 12px;
+}
+
+.modal-attribute-item strong {
+  display: block;
+  opacity: 0.55;
+  font-weight: 400;
+  margin-bottom: 4px;
+}
+
+/* Bouton Ajout Panier */
+.add-btn {
+  border-radius: 0;
+  position: sticky;
+  bottom: 0;
+  background: #000;
+  color: #fff;
+  border: none;
+  padding: 19px 0;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  width: 100%;
+  flex-shrink: 0;
+  z-index: 10;
+}
+
+.add-btn:hover {
+  opacity: 0.82;
+}
+
+/* Media Queries pour mobile */
+@media (max-width: 760px) {
+  .modal-backdrop {
+    padding: 10px;
+  }
+  .modal-content {
+    overflow-y: auto;
+  }
+  .modal-img-container {
+    flex: 1 1 100%;
+    height: auto;
+    min-height: auto;
+    aspect-ratio: 4 / 3;
+    padding: 50px 20px 20px 20px;
+  }
+  .modal-txt-container {
+    flex: 1 1 100%;
+    padding: 30px 20px 24px;
+    overflow-y: auto;
+    min-height: 0;
+  }
+
+  .modal-attributes {
+    margin-bottom: 20px;
+  }
+
+  .add-btn {
+    margin-top: 0;
+  }
+}

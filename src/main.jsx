@@ -29,13 +29,16 @@ import CGU from "./pages/CGU";
 import CGV from "./pages/CGV";
 import Error404 from "./pages/Error404";
 
+import MainLayout from "./layouts/MainLayout/MainLayout";
 import Seo from "./components/Seo";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Toast from "./components/Toast";
-import AuthModal from "./components/AuthModal";
+import ScrollToTop from "./components/ScrollToTop";
+// import AuthModal from "./components/AuthModal";
 
 import "./index.css";
+import AuthDrawer from "./components/AuthDrawer";
 
 store.dispatch(initializeCartThunk());
 store.dispatch(fetchSiteThunk());
@@ -46,8 +49,47 @@ if (store.getState().user.token) {
   store.dispatch(fetchCurrentUserOrdersThunk());
 }
 
+// ReactDOM.createRoot(document.getElementById("root")).render(
+//   // <React.StrictMode>
+//   <HelmetProvider>
+//     <Provider store={store}>
+//       <Router
+//         future={{
+//           v7_startTransition: true,
+//           v7_relativeSplatPath: true,
+//         }}
+//         // basename="/ecom"
+//       >
+//         <Header />
+//         <Seo />
+//         <Routes>
+//           {<Route path="/" element={<Home />} />}
+//           <Route path="/new-password" element={<NewPassword />} />
+//           <Route path="/catalogue" element={<Store />} />
+//           <Route path="/mentions-legales" element={<LegalMentions />} />
+//           <Route path="/cgu" element={<CGU />} />
+//           <Route path="/cgv" element={<CGV />} />
+//           <Route path="/panier" element={<Cart />} />
+//           <Route path="*" element={<Error404 />} />
+//           <Route path="/contact" element={<Contact />} />
+//           <Route path="/product/:id" element={<ProductDetails />} />
+//           <Route path="/blog" element={<BlogPage />} />
+//           <Route path="/blog/:slug" element={<SinglePost />} />
+//           <Route path="/success/:orderId" element={<Success />} />
+//           <Route path="/profile" element={<Profile />} />
+//           {/* TEMP: wishlist testing, remove before commit */}
+//           <Route path="/wishlist" element={<Wishlist />} />
+//         </Routes>
+//         <Footer />
+//         <Toast />
+//         <AuthModal />
+//       </Router>
+//     </Provider>
+//   </HelmetProvider>,
+//   /* </React.StrictMode>, */
+// );
+
 ReactDOM.createRoot(document.getElementById("root")).render(
-  // <React.StrictMode>
   <HelmetProvider>
     <Provider store={store}>
       <Router
@@ -55,33 +97,33 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           v7_startTransition: true,
           v7_relativeSplatPath: true,
         }}
-        // basename="/ecom"
       >
-        <Header />
+        <ScrollToTop />
         <Seo />
         <Routes>
-          {<Route path="/" element={<Home />} />}
-          <Route path="/new-password" element={<NewPassword />} />
-          <Route path="/catalogue" element={<Store />} />
-          <Route path="/mentions-legales" element={<LegalMentions />} />
-          <Route path="/cgu" element={<CGU />} />
-          <Route path="/cgv" element={<CGV />} />
-          <Route path="/panier" element={<Cart />} />
-          <Route path="*" element={<Error404 />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/product/:id" element={<ProductDetails />} />
-          <Route path="/blog" element={<BlogPage />} />
-          <Route path="/blog/:slug" element={<SinglePost />} />
-          <Route path="/success/:orderId" element={<Success />} />
-          <Route path="/profile" element={<Profile />} />
-          {/* TEMP: wishlist testing, remove before commit */}
-          <Route path="/wishlist" element={<Wishlist />} />
+          <Route path="/" element={<Home />} />
+
+          <Route element={<MainLayout />}>
+            <Route path="/catalogue" element={<Store />} />
+            <Route path="/product/:id" element={<ProductDetails />} />
+            <Route path="/panier" element={<Cart />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/wishlist" element={<Wishlist />} />
+            <Route path="/blog" element={<BlogPage />} />
+            <Route path="/blog/:slug" element={<SinglePost />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/success/:orderId" element={<Success />} />
+            <Route path="/new-password" element={<NewPassword />} />
+            <Route path="/mentions-legales" element={<LegalMentions />} />
+            <Route path="/cgu" element={<CGU />} />
+            <Route path="/cgv" element={<CGV />} />
+            <Route path="*" element={<Error404 />} />
+          </Route>
         </Routes>
-        <Footer />
         <Toast />
-        <AuthModal />
+        {/* <AuthModal /> */}
+        <AuthDrawer />
       </Router>
     </Provider>
   </HelmetProvider>,
-  /* </React.StrictMode>, */
 );

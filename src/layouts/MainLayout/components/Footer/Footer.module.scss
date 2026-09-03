@@ -1,0 +1,55 @@
+@use "../../../../styles/variables" as *;
+
+.footer {
+  background-color: $primary-blue;
+  padding: $spacing-lg $spacing-md;
+  text-align: center;
+}
+
+.footer {
+  padding: $spacing-xl $spacing-md;
+  text-align: center;
+  font-size: $font-size-xs;
+  text-transform: uppercase;
+  letter-spacing: $letter-spacing-sm;
+  margin-top: auto;
+  background: $primary-blue;
+}
+
+.links {
+  display: flex;
+  justify-content: center;
+  gap: $spacing-lg;
+  margin-bottom: $spacing-sm;
+  list-style: none;
+  margin: 0 0 $spacing-sm 0;
+  padding: 0;
+
+  a {
+    color: $text-primary;
+    text-decoration: none;
+    transition: opacity $transition-fast;
+    font-size: 12px;
+
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+}
+
+.copyright {
+  margin: 0;
+  color: $text-primary;
+  font-size: 12px;
+}
+
+@media (max-width: $breakpoint-mobile) {
+  .footer {
+    padding: $spacing-md $spacing-sm;
+  }
+
+  .links {
+    flex-direction: column;
+    gap: $spacing-sm;
+  }
+}
