@@ -1,0 +1,18 @@
+/* Ensure full viewport height and flexbox layout */
+html, body, #root {
+  height: 100%;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+}
+
+.main-layout__content {
+  flex: 1 0 auto;
+  min-height: calc(100vh - 200px);
+}
+
+footer {
+  flex-shrink: 0;
+}
