@@ -3,6 +3,7 @@ import Header from "../../../layouts/MainLayout/components/Header/Header";
 import FilterBar from "../FilterBar/FilterBar";
 import ProductGrid from "../ProductGrid/ProductGrid";
 import styles from "./CatalogSection.module.scss";
+import Footer from "../../../layouts/MainLayout/components/Footer/Footer.jsx";
 import ProductModal from "../../ProductModal";
 
 export default function CatalogSection({ products }) {
@@ -28,6 +29,7 @@ export default function CatalogSection({ products }) {
           onClose={() => setSelectedProduct(null)}
         />
       )}
+    <Footer />
 
     </div>
   );
