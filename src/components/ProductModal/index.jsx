@@ -74,7 +74,7 @@ export default function ProductModal({ product, onClose }) {
 
           <div
             className="modal-description"
-            dangerouslySetInnerHTML={{ __html: product.description }}
+            dangerouslySetInnerHTML={{ __html: product.short_description }}
           />
 
           <div className="modal-attributes">
