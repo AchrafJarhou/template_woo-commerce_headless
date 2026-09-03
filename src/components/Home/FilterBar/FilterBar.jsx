@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
+import { useSelector } from "react-redux";
 import styles from "./FilterBar.module.scss";
 import searchBarIcon from "../../../assets/icons/search-bar.png";
 
@@ -7,11 +8,22 @@ export default function FilterBar({ onFilterChange }) {
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
-  const filters = [
-    { id: "tous", label: "TOUT" },
-    { id: "hommes", label: "HOMMES" },
-    { id: "femmes", label: "FEMMES" },
-  ];
+  const products = useSelector((state) => state.products.list.data);
+
+  const filters = useMemo(() => {
+    const categories = new Set();
+    products?.forEach((product) => {
+      product.categories?.forEach((cat) => {
+        categories.add(JSON.stringify({ id: cat.slug, label: cat.name }));
+      });
+    });
+
+    const uniqueFilters = Array.from(categories).map((cat) => JSON.parse(cat));
+    return [
+      { id: "tous", label: "TOUT" },
+      ...uniqueFilters.sort((a, b) => a.label.localeCompare(b.label)),
+    ];
+  }, [products]);
 
   const handleFilterClick = (filterId) => {
     setActiveFilter(filterId);

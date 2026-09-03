@@ -28,9 +28,9 @@ export default function ProductGrid({ products, filter, onProductClick }) {
   const filteredProducts =
     filter === "tous"
       ? products
-      : products.filter((p) => p.category === filter);
-
-  console.log("PRODUCTS ACHRAF :", filteredProducts);
+      : products.filter((p) =>
+          p.categories?.some((cat) => cat.slug === filter)
+        );
 
   return (
     <div className={styles.grid}>
