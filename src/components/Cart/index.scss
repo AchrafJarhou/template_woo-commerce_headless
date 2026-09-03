@@ -37,9 +37,10 @@
 }
 
 .cart__continue {
-  display: inline-block;
-  margin-top: clamp(20px, 2.5vw, 32px);
+  display: block;
+  margin-top: clamp(14px, 1.5vw, 20px);
   font-size: clamp(13px, 1.2vw, 16px);
+  text-align: center;
   color: var(--primary-color);
   text-decoration: underline;
   text-underline-offset: 4px;
@@ -53,6 +54,10 @@
     outline-offset: 3px;
   }
 }
+
+  .cart__main {
+    grid-column: 1;
+  }
 
 .cart__aside {
   align-self: start;
@@ -139,11 +144,19 @@
 @media screen and (aspect-ratio > 1/1) {
   .cart {
     grid-template-columns: minmax(0, 1fr) clamp(280px, 26vw, 380px);
+    column-gap: clamp(40px, 5vw, 88px);
     align-items: start;
   }
 
+.cart__title {
+  margin-top: clamp(16px, 3vw, 48px);
+  margin-bottom: 0;
+  font-size: clamp(26px, 3vw, 40px);
+}
+
   .cart__aside {
+    grid-column: 2;
     position: sticky;
-    top: clamp(20px, 3vw, 40px);
+    top: clamp(76px, calc(56px + 3vw), 96px);
   }
 }

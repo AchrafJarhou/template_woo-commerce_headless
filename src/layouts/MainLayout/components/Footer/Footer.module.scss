@@ -1,4 +1,10 @@
-@import "../../../styles/variables.scss";
+@use "../../../../styles/variables" as *;
+
+.footer {
+  background-color: $primary-blue;
+  padding: $spacing-lg $spacing-md;
+  text-align: center;
+}
 
 .footer {
   padding: $spacing-xl $spacing-md;
