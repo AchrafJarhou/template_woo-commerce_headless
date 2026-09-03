@@ -1,19 +1,32 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import styles from "./Header.module.scss";
 import menuBurgerIcon from "../../../../assets/icons/menu-burger.png";
 import cartIcon from "../../../../assets/icons/logo-panier.png";
+import { openAuthModal } from "../../../../slices/authModalSlice";
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.cart.items);
+  const { token } = useSelector((state) => state.user);
 
   const cartCount = cartItems.reduce(
     (total, item) => total + (Number(item.quantity) || 0),
     0,
   );
   const cartBadgeValue = cartCount > 9 ? "9+" : String(cartCount);
+
+  // Fonction de routage intelligent
+  const handleUserClick = () => {
+    if (token) {
+      navigate("/profile"); // Redirige vers le profil si connecté
+    } else {
+      dispatch(openAuthModal("login")); // Ouvre le tiroir si déconnecté
+    }
+  };
 
   return (
     <>
@@ -36,9 +49,19 @@ export default function Header() {
 
         <div className={styles.headerRight}>
           {/* Icône Utilisateur */}
-          <svg className={styles.icon} viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
-          </svg>
+          <button
+            className={styles.userIconButton}
+            onClick={handleUserClick}
+            aria-label="Profil ou Connexion"
+          >
+            <svg
+              className={styles.icon}
+              viewBox="0 0 24 24"
+              fill="currentColor"
+            >
+              <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+            </svg>
+          </button>
 
           {/* Icône Panier avec compteur */}
           <Link to="/panier">

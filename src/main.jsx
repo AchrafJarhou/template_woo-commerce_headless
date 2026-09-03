@@ -34,9 +34,10 @@ import Seo from "./components/Seo";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Toast from "./components/Toast";
-import AuthModal from "./components/AuthModal";
+// import AuthModal from "./components/AuthModal";
 
 import "./index.css";
+import AuthDrawer from "./components/AuthDrawer";
 
 store.dispatch(initializeCartThunk());
 store.dispatch(fetchSiteThunk());
@@ -118,7 +119,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           </Route>
         </Routes>
         <Toast />
-        <AuthModal />
+        {/* <AuthModal /> */}
+        <AuthDrawer />
       </Router>
     </Provider>
   </HelmetProvider>,

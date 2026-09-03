@@ -1,5 +1,13 @@
 @import "../../../styles/variables.scss";
 
+// Cet élément RESTE dans le flux normal : il repousse le contenu suivant
+// et ne peint RIEN par-dessus le bleu du body pendant qu'on scrolle dedans.
+.heroSpacer {
+  position: relative;
+  height: 30vh; // doit être >= à la distance de fondu (800px dans votre JS)
+  background: transparent; // important : ne pas remettre de fond ici
+}
+
 .hero {
   position: fixed;
   top: 0;
@@ -12,7 +20,7 @@
   align-items: center;
   background: $dark-bg;
   overflow: hidden;
-  transition: opacity $transition-fast;
+  will-change: opacity;
 }
 
 .video {
@@ -22,7 +30,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 0.8;
+  will-change: opacity;
   z-index: 0;
 }
 
