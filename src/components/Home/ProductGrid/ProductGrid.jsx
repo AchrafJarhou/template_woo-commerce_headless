@@ -28,9 +28,14 @@ export default function ProductGrid({ products, filter, onProductClick }) {
   const filteredProducts =
     filter === "tous"
       ? products
-      : products.filter((p) => p.category === filter);
+      : products.filter((p) =>
+          p.categories?.some((cat) => cat.slug === filter)
+        );
 
   console.log("PRODUCTS ACHRAF :", filteredProducts);
+  if (filteredProducts && filteredProducts.length > 0) {
+    console.log("FIRST PRODUCT:", filteredProducts[0]);
+  }
 
   return (
     <div className={styles.grid}>
