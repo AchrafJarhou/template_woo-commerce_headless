@@ -59,11 +59,13 @@
     grid-column: 1;
   }
 
-  .cart__aside {
-    grid-column: 2;
-    position: sticky;
-    top: clamp(76px, calc(56px + 3vw), 96px);
-  }
+.cart__aside {
+  align-self: start;
+  padding: clamp(18px, 2vw, 28px);
+  border: var(--hairline);
+  border-radius: var(--panel-radius);
+  background-color: var(--bg-color);
+}
 
 .cart__summary {
   display: grid;
@@ -153,6 +155,7 @@
 }
 
   .cart__aside {
+    grid-column: 2;
     position: sticky;
     top: clamp(76px, calc(56px + 3vw), 96px);
   }
