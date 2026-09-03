@@ -32,11 +32,6 @@ export default function ProductGrid({ products, filter, onProductClick }) {
           p.categories?.some((cat) => cat.slug === filter)
         );
 
-  console.log("PRODUCTS ACHRAF :", filteredProducts);
-  if (filteredProducts && filteredProducts.length > 0) {
-    console.log("FIRST PRODUCT:", filteredProducts[0]);
-  }
-
   return (
     <div className={styles.grid}>
       {filteredProducts.map((product) => (
