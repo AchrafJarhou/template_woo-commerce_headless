@@ -8,6 +8,15 @@ export default function ProductModal({ product, onClose }) {
   const dispatch = useDispatch();
   const [itemVariation, setItemVariation] = useState({});
 
+  const formatPrice = (priceInCents, currencyCode) => {
+    if (!priceInCents) return "Prix sur demande";
+    const priceInUnits = parseFloat(priceInCents) / 100;
+    return new Intl.NumberFormat("fr-FR", {
+      style: "currency",
+      currency: currencyCode || "EUR",
+    }).format(priceInUnits);
+  };
+
   useEffect(() => {
     if (!product || !product.attributes) return;
     const defaults = {};
@@ -60,9 +69,7 @@ export default function ProductModal({ product, onClose }) {
           <h2 className="modal-title">{product.name}</h2>
 
           <div className="modal-price">
-            {product.prices?.price
-              ? `${product.prices.price} ${product.prices.currency_code}`
-              : "Prix sur demande"}
+            {formatPrice(product.prices?.price, product.prices?.currency_code)}
           </div>
 
           <div
