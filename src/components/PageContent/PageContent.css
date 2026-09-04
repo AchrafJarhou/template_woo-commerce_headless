@@ -1,9 +1,11 @@
 .page-content {
   max-width: 900px;
   margin: 60px auto;
-  padding: 0 20px;
+  padding: 40px 20px;
   line-height: 1.8;
-  color: #333;
+  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
 }
 
 .page-content h1 {
@@ -12,15 +14,16 @@
   margin-bottom: 40px;
   text-transform: uppercase;
   letter-spacing: -0.01em;
-  color: #182240;
+  color: #ffffff;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.15);
 }
 
 .page-content h2 {
   font-size: 24px;
   font-weight: 700;
   margin: 40px 0 20px;
-  color: #182240;
-  border-bottom: 2px solid #6784c8;
+  color: #ffffff;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.3);
   padding-bottom: 10px;
 }
 
@@ -28,17 +31,18 @@
   font-size: 18px;
   font-weight: 600;
   margin: 30px 0 15px;
-  color: #4a5f9f;
+  color: #f0f0f0;
 }
 
 .page-content p {
   margin-bottom: 15px;
   font-size: 15px;
-  text-align: justify;
+  text-align: left;
+  color: #ffffff;
 }
 
 .page-content strong {
-  color: #182240;
+  color: #ffffff;
   font-weight: 600;
 }
 
@@ -46,35 +50,101 @@
 .page-content ol {
   margin: 20px 0 20px 30px;
   font-size: 15px;
+  color: #ffffff;
 }
 
 .page-content li {
   margin-bottom: 10px;
+  color: #ffffff;
 }
 
 .page-content a {
-  color: #6784c8;
-  text-decoration: none;
-  transition: color 0.2s;
+  color: #e8f0ff;
+  text-decoration: underline;
+  transition: all 0.2s;
+  font-weight: 500;
 }
 
 .page-content a:hover {
-  color: #4a5f9f;
+  color: #ffffff;
   text-decoration: underline;
 }
 
 .page-content blockquote {
-  border-left: 4px solid #6784c8;
+  border-left: 4px solid rgba(255, 255, 255, 0.5);
   padding-left: 20px;
   margin: 20px 0;
   font-style: italic;
-  color: #666;
+  color: #e8f0ff;
+  background-color: rgba(255, 255, 255, 0.05);
+  padding: 15px 20px;
+  border-radius: 4px;
+}
+
+.page-content details {
+  margin-bottom: 20px;
+  background-color: rgba(255, 255, 255, 0.05);
+  padding: 15px;
+  border-radius: 8px;
+  border-left: 4px solid rgba(255, 255, 255, 0.3);
+}
+
+.page-content details summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: #ffffff;
+  user-select: none;
+  transition: color 0.2s;
+}
+
+.page-content details summary:hover {
+  color: #f0f0f0;
+}
+
+.page-content details[open] summary {
+  margin-bottom: 10px;
+}
+
+.page-content details p {
+  margin-bottom: 0;
+  font-size: 14px;
+}
+
+.page-content button.button {
+  background-color: #ffffff;
+  color: #2563eb;
+  padding: 12px 30px;
+  font-size: 15px;
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s;
+  margin-top: 20px;
+}
+
+.page-content button.button:hover {
+  background-color: #f0f0f0;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.page-content ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.page-content ul li:before {
+  content: "✓ ";
+  margin-right: 10px;
+  color: #ffffff;
+  font-weight: bold;
 }
 
 @media (max-width: 768px) {
   .page-content {
     margin: 40px auto;
-    padding: 0 15px;
+    padding: 30px 15px;
   }
 
   .page-content h1 {

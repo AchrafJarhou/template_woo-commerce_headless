@@ -27,6 +27,8 @@ import Contact from "./pages/Contact";
 import LegalMentions from "./pages/LegalMentions";
 import CGU from "./pages/CGU";
 import CGV from "./pages/CGV";
+import FAQ from "./pages/FAQ";
+import About from "./pages/About";
 import Error404 from "./pages/Error404";
 
 import MainLayout from "./layouts/MainLayout/MainLayout";
@@ -117,6 +119,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(
             <Route path="/mentions-legales" element={<LegalMentions />} />
             <Route path="/cgu" element={<CGU />} />
             <Route path="/cgv" element={<CGV />} />
+            <Route path="/faq" element={<FAQ />} />
+            <Route path="/a-propos" element={<About />} />
             <Route path="*" element={<Error404 />} />
           </Route>
         </Routes>

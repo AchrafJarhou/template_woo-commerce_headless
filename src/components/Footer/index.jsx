@@ -32,6 +32,8 @@ export default function Footer() {
 
         <div className="footer_col">
           <ul className="footer_links">
+            <li><Link to="/faq">FAQ</Link></li>
+            <li><Link to="/a-propos">À Propos</Link></li>
             <li><Link to="/cgu">Conditions générales d'utilisation</Link></li>
             <li><Link to="/cgv">Conditions générales de vente</Link></li>
             <li><Link to="/mentions-legales">Mentions légales</Link></li>
