@@ -38,9 +38,7 @@
   position: relative;
   width: 100%;
   max-width: 960px;
-  max-height: 85vh;
-  /* overflow: hidden empêche la scrollbar globale. 
-     Seule la zone texte scrollera si nécessaire */
+  max-height: 95vh;
   overflow: hidden;
   background: #6784c8;
   border: 1px solid #000;
