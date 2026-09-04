@@ -57,7 +57,7 @@ export default function ProductCard({ product }) {
     <div className="product-card">
       {/* TEmporally Button: wishlist testing */}
       <WishlistButton product={product} />
-      <Link to={"/product/" + product.slug}>
+      <Link to={"/product/" + product.id}>
         <p dangerouslySetInnerHTML={{ __html: product.name || "-" }} />
         <p>Marque: {product.brands?.[0]?.name}</p>
         <img
