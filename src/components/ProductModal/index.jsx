@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
+import DOMPurify from "dompurify";
 import { addProductToCart } from "../../thunkActionsCreator/cartThunks";
 import { showToast } from "../../slices/toastSlice";
 import "./index.css";
@@ -74,7 +75,7 @@ export default function ProductModal({ product, onClose }) {
 
           <div
             className="modal-description"
-            dangerouslySetInnerHTML={{ __html: product.short_description }}
+            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(product.short_description) }}
           />
 
           <div className="modal-attributes">
