@@ -65,6 +65,12 @@ export default function Header() {
             <Link to="/blog" onClick={closeMenu}>
               Blog
             </Link>
+            <Link to="/faq" onClick={closeMenu}>
+              FAQ
+            </Link>
+            <Link to="/a-propos" onClick={closeMenu}>
+              À Propos
+            </Link>
           </nav>
           <div className="header-actions">
             <Autocomplete />

@@ -86,16 +86,16 @@ export default function Header() {
             ✕
           </button>
           <div className={styles.navContent}>
-            <Link to="/" className={styles.navLink}>
+            <Link to="/" className={styles.navLink} onClick={() => setMenuOpen(false)}>
               ACCUEIL
             </Link>
-            <Link to="/faq" className={styles.navLink}>
+            <Link to="/faq" className={styles.navLink} onClick={() => setMenuOpen(false)}>
               FAQ
             </Link>
-            <Link to="/about" className={styles.navLink}>
+            <Link to="/a-propos" className={styles.navLink} onClick={() => setMenuOpen(false)}>
               À PROPOS
             </Link>
-            <Link to="/contact" className={styles.navLink}>
+            <Link to="/contact" className={styles.navLink} onClick={() => setMenuOpen(false)}>
               CONTACT
             </Link>
             <div className={styles.navLanguage}>
