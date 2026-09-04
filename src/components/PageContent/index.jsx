@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import DOMPurify from "dompurify";
 import { fetchPageThunk } from "../../thunkActionsCreator/pagesThunks";
 import Loader from "../Loader";
 import "./PageContent.css";
@@ -19,10 +20,11 @@ export default function PageContent({ slug }) {
 
   const title = page.title ?? "";
   const content = page.content ?? "";
+
   return (
     <div className="page-content">
-      <h1 dangerouslySetInnerHTML={{ __html: title.rendered }} />
-      <div dangerouslySetInnerHTML={{ __html: content.rendered }} />
+      <h1 dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(title.rendered) }} />
+      <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(content.rendered) }} />
     </div>
   );
 }

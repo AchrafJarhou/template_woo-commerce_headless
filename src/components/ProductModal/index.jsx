@@ -22,14 +22,25 @@ export default function ProductModal({ product, onClose }) {
     if (!product || !product.attributes) return;
     const defaults = {};
     product.attributes.forEach((attribute) => {
-      if (attribute.options && attribute.options.length > 0) {
-        defaults[attribute.name] = attribute.options[0];
+      const options = attribute.options || (attribute.terms?.map(t => t.name) || []);
+      if (options.length > 0) {
+        defaults[attribute.name] = options[0];
       }
     });
     setItemVariation(defaults);
   }, [product]);
 
   const handleAddToCart = async () => {
+    // Valider que toutes les tailles/attributs sont sélectionnés
+    if (product.attributes?.length > 0) {
+      for (const attr of product.attributes) {
+        if (!itemVariation[attr.name]) {
+          dispatch(showToast(`Veuillez sélectionner une ${attr.name.toLowerCase()}`));
+          return;
+        }
+      }
+    }
+
     const result = await dispatch(
       addProductToCart({
         productId: product.id,
@@ -78,14 +89,38 @@ export default function ProductModal({ product, onClose }) {
             dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(product.short_description) }}
           />
 
-          <div className="modal-attributes">
-            {product.attributes?.map((attr) => (
-              <span key={attr.name} className="modal-attribute-item">
-                <strong>{attr.name}</strong>
-                {itemVariation[attr.name] || attr.options[0]}
-              </span>
-            ))}
-          </div>
+          {product.attributes && product.attributes.length > 0 && (
+            <div className="modal-attributes">
+              {product.attributes.map((attr) => {
+                const options = attr.options || (attr.terms?.map(t => t.name) || []);
+                return (
+                  <div key={attr.name} className="modal-attribute-group">
+                    <label htmlFor={attr.name} className="modal-attribute-label">
+                      {attr.name}
+                    </label>
+                    <select
+                      id={attr.name}
+                      value={itemVariation[attr.name] || ""}
+                      onChange={(e) =>
+                        setItemVariation((prev) => ({
+                          ...prev,
+                          [attr.name]: e.target.value,
+                        }))
+                      }
+                      className="modal-attribute-select"
+                    >
+                      <option value="">-- Choisir --</option>
+                      {options?.map((option) => (
+                        <option key={option} value={option}>
+                          {option}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                );
+              })}
+            </div>
+          )}
 
           <button className="add-btn" onClick={handleAddToCart}>
             Ajouter au panier
