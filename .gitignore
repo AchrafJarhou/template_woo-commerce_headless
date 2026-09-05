@@ -1,6 +1,7 @@
 node_modules
 package-lock.json
 dist
+wp-content/
 
 # Environment variables (never commit these!)
 .env.development
