@@ -56,6 +56,7 @@
 .page-content li {
   margin-bottom: 10px;
   color: #ffffff;
+  list-style: none;
 }
 
 .page-content a {
@@ -138,7 +139,7 @@
   content: "✓ ";
   margin-right: 10px;
   color: #ffffff;
-  font-weight: bold;
+  font-weight: bold; 
 }
 
 @media (max-width: 768px) {
