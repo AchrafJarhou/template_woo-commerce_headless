@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   siteSettings: null,
+  isLoadingSiteSettings: true,
 };
 
 export const siteSlice = createSlice({
@@ -20,6 +21,7 @@ export const siteSlice = createSlice({
         siteLogo: action.payload.site_logo_custom || null,
         heroTitle: action.payload.hero_title || null,
       };
+      state.isLoadingSiteSettings = false;
     },
   },
 });

@@ -33,10 +33,10 @@ import Error404 from "./pages/Error404";
 
 import MainLayout from "./layouts/MainLayout/MainLayout";
 import Seo from "./components/Seo";
-import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Toast from "./components/Toast";
 import ScrollToTop from "./components/ScrollToTop";
+import AppLoader from "./components/AppLoader/AppLoader";
 // import AuthModal from "./components/AuthModal";
 
 import "./index.css";
@@ -102,6 +102,7 @@ function mountApp() {
   ReactDOM.createRoot(document.getElementById("root")).render(
     <HelmetProvider>
       <Provider store={store}>
+        <AppLoader />
         <Router
           future={{
             v7_startTransition: true,
