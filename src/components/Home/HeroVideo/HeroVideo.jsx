@@ -1,14 +1,16 @@
 import { useEffect, useRef } from "react";
+import { useSelector } from "react-redux";
 import styles from "./HeroVideo.module.scss";
 import raviVideo from "../../../assets/videos/ravi.mp4";
 
-// La vidéo reste pleinement visible jusqu'à ce scroll (en % de la hauteur d'écran)
-const FADE_START_RATIO = 0.1; // ex: 40% d'un écran de scroll avant que ça commence
-// Puis elle s'estompe totalement sur cette distance additionnelle (en % d'écran)
-const FADE_DURATION_RATIO = 3; // ex: 160% d'un écran pour le fondu complet
+const FADE_START_RATIO = 0.1;
+const FADE_DURATION_RATIO = 3;
 
 export default function HeroVideo() {
   const heroRef = useRef(null);
+  const siteSettings = useSelector((state) => state.site.siteSettings);
+  const heroVideo = siteSettings?.heroVideo || raviVideo;
+  const heroTitle = siteSettings?.heroTitle || "RAVI";
 
   useEffect(() => {
     const handleScroll = () => {
@@ -18,12 +20,10 @@ export default function HeroVideo() {
       const fadeStart = vh * FADE_START_RATIO;
       const fadeDistance = vh * FADE_DURATION_RATIO;
 
-      // Progression de 0 (encore net) à 1 (totalement fondu)
       const rawProgress = (window.scrollY - fadeStart) / fadeDistance;
       const progress = Math.min(1, Math.max(0, rawProgress));
 
-      // Easing : la vidéo reste plus longtemps nette, puis accélère vers le bleu
-      const eased = progress * progress; // courbe quadratique, ajustable
+      const eased = progress * progress;
       const newOpacity = 1 - eased;
 
       heroRef.current.style.opacity = newOpacity;
@@ -45,9 +45,9 @@ export default function HeroVideo() {
           playsInline
           loop
           muted
-          src={raviVideo}
+          src={heroVideo}
         />
-        <h1 className={styles.title}>RAVI</h1>
+        <h1 className={styles.title}>{heroTitle}</h1>
       </div>
     </div>
   );

@@ -16,8 +16,12 @@ export default function Header() {
   const token = useSelector((state) => state.user.token);
   const cartItems = useSelector((state) => state.cart.items);
   const wishlistItems = useSelector((state) => state.wishlist.items);
-  const logoUrl = useSelector((state) => state.site.logoUrl);
+  const siteSettings = useSelector((state) => state.site.siteSettings);
+  const siteLogo = siteSettings?.siteLogo;
   const dispatch = useDispatch();
+
+  console.log("🎨 Header - siteSettings:", siteSettings);
+  console.log("🎨 Header - siteLogo:", siteLogo);
   const isAuthentificated = useSelector((state) => state.user?.token);
   const cartCount = cartItems.reduce(
     (total, item) => total + (Number(item.quantity) || 0),
@@ -31,7 +35,11 @@ export default function Header() {
       <div className="margin"></div>
       <div className="content">
         <Link to="/" className="header-logo" aria-label="Ecommerce">
-          <img src={logoUrl || "./logo.webp"} alt="Logo" />
+          {siteLogo ? (
+            <img src={siteLogo} alt="Logo" />
+          ) : (
+            <span className="logo-text">RAVI</span>
+          )}
         </Link>
 
         {/* <div
