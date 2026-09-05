@@ -12,6 +12,8 @@ export default function Header() {
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.cart.items);
   const { token } = useSelector((state) => state.user);
+  const siteSettings = useSelector((state) => state.site.siteSettings);
+  const siteLogo = siteSettings?.siteLogo;
 
   const cartCount = cartItems.reduce(
     (total, item) => total + (Number(item.quantity) || 0),
@@ -44,7 +46,11 @@ export default function Header() {
 
         {/* Logo RAVI */}
         <Link to="/">
-          <div className={styles.logo}>RAVI</div>
+          {siteLogo ? (
+            <img src={siteLogo} alt="Logo" className={styles.logoImg} />
+          ) : (
+            <div className={styles.logo}>RAVI</div>
+          )}
         </Link>
 
         <div className={styles.headerRight}>

@@ -11,7 +11,7 @@ import {
   fetchCurrentCustomerThunk,
   fetchCurrentUserOrdersThunk,
 } from "./thunkActionsCreator/userThunks";
-import { fetchSiteThunk } from "./thunkActionsCreator/siteThunk";
+import { fetchSiteThunk, fetchSiteSettingsThunk } from "./thunkActionsCreator/siteThunk";
 
 import Home from "./pages/Home";
 import Store from "./pages/Store";
@@ -42,14 +42,22 @@ import ScrollToTop from "./components/ScrollToTop";
 import "./index.css";
 import AuthDrawer from "./components/AuthDrawer";
 
-store.dispatch(initializeCartThunk());
-store.dispatch(fetchSiteThunk());
+async function initializeApp() {
+  store.dispatch(initializeCartThunk());
+  store.dispatch(fetchSiteThunk());
 
-if (store.getState().user.token) {
-  store.dispatch(fetchCurrentUserThunk());
-  store.dispatch(fetchCurrentCustomerThunk());
-  store.dispatch(fetchCurrentUserOrdersThunk());
+  await store.dispatch(fetchSiteSettingsThunk());
+
+  if (store.getState().user.token) {
+    store.dispatch(fetchCurrentUserThunk());
+    store.dispatch(fetchCurrentCustomerThunk());
+    store.dispatch(fetchCurrentUserOrdersThunk());
+  }
+
+  mountApp();
 }
+
+function mountApp() {
 
 // ReactDOM.createRoot(document.getElementById("root")).render(
 //   // <React.StrictMode>
@@ -91,43 +99,46 @@ if (store.getState().user.token) {
 //   /* </React.StrictMode>, */
 // );
 
-ReactDOM.createRoot(document.getElementById("root")).render(
-  <HelmetProvider>
-    <Provider store={store}>
-      <Router
-        future={{
-          v7_startTransition: true,
-          v7_relativeSplatPath: true,
-        }}
-      >
-        <ScrollToTop />
-        <Seo />
-        <Routes>
-          <Route path="/" element={<Home />} />
+  ReactDOM.createRoot(document.getElementById("root")).render(
+    <HelmetProvider>
+      <Provider store={store}>
+        <Router
+          future={{
+            v7_startTransition: true,
+            v7_relativeSplatPath: true,
+          }}
+        >
+          <ScrollToTop />
+          <Seo />
+          <Routes>
+            <Route path="/" element={<Home />} />
 
-          <Route element={<MainLayout />}>
-            <Route path="/catalogue" element={<Store />} />
-            <Route path="/product/:id" element={<ProductDetails />} />
-            <Route path="/panier" element={<Cart />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/wishlist" element={<Wishlist />} />
-            <Route path="/blog" element={<BlogPage />} />
-            <Route path="/blog/:slug" element={<SinglePost />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/success/:orderId" element={<Success />} />
-            <Route path="/new-password" element={<NewPassword />} />
-            <Route path="/mentions-legales" element={<LegalMentions />} />
-            <Route path="/cgu" element={<CGU />} />
-            <Route path="/cgv" element={<CGV />} />
-            <Route path="/faq" element={<FAQ />} />
-            <Route path="/a-propos" element={<About />} />
-            <Route path="*" element={<Error404 />} />
-          </Route>
-        </Routes>
-        <Toast />
-        {/* <AuthModal /> */}
-        <AuthDrawer />
-      </Router>
-    </Provider>
-  </HelmetProvider>,
-);
+            <Route element={<MainLayout />}>
+              <Route path="/catalogue" element={<Store />} />
+              <Route path="/product/:id" element={<ProductDetails />} />
+              <Route path="/panier" element={<Cart />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/wishlist" element={<Wishlist />} />
+              <Route path="/blog" element={<BlogPage />} />
+              <Route path="/blog/:slug" element={<SinglePost />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/success/:orderId" element={<Success />} />
+              <Route path="/new-password" element={<NewPassword />} />
+              <Route path="/mentions-legales" element={<LegalMentions />} />
+              <Route path="/cgu" element={<CGU />} />
+              <Route path="/cgv" element={<CGV />} />
+              <Route path="/faq" element={<FAQ />} />
+              <Route path="/a-propos" element={<About />} />
+              <Route path="*" element={<Error404 />} />
+            </Route>
+          </Routes>
+          <Toast />
+          {/* <AuthModal /> */}
+          <AuthDrawer />
+        </Router>
+      </Provider>
+    </HelmetProvider>,
+  );
+}
+
+initializeApp();
