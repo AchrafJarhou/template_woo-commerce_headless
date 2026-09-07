@@ -1,9 +1,11 @@
 import { useState, useMemo } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import styles from "./FilterBar.module.scss";
 import searchBarIcon from "../../../assets/icons/search-bar.png";
+import { setFilters } from "../../../slices/filtersSlice";
 
-export default function FilterBar({ onFilterChange }) {
+export default function FilterBar({ onFilterChange, hasProducts }) {
+  const dispatch = useDispatch();
   const [activeFilter, setActiveFilter] = useState("tous");
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -28,12 +30,24 @@ export default function FilterBar({ onFilterChange }) {
   const handleFilterClick = (filterId) => {
     setActiveFilter(filterId);
     onFilterChange(filterId);
+
+    if (filterId === "tous" && !hasProducts) {
+      setSearchQuery("");
+      dispatch(setFilters({ search: "" }));
+    }
+  };
+
+  const handleSearchChange = (e) => {
+    const value = e.target.value;
+    setSearchQuery(value);
+    dispatch(setFilters({ search: value }));
   };
 
   const toggleSearch = () => {
     setSearchOpen(!searchOpen);
     if (searchOpen) {
       setSearchQuery("");
+      dispatch(setFilters({ search: "" }));
     }
   };
 
@@ -57,7 +71,7 @@ export default function FilterBar({ onFilterChange }) {
             className={styles.searchInput}
             placeholder="Rechercher un article..."
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={handleSearchChange}
             autoFocus
           />
         </div>

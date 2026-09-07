@@ -8,6 +8,7 @@ import styles from "./Home.module.scss";
 export default function Home() {
   const dispatch = useDispatch();
   const products = useSelector((state) => state.products.list.data);
+  const filters = useSelector((state) => state.filters);
 
   useEffect(() => {
     document.body.classList.add("home-page");
@@ -15,8 +16,8 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    dispatch(fetchProductsThunk({ page: 1, per_page: 20 }));
-  }, [dispatch]);
+    dispatch(fetchProductsThunk({ ...filters, page: 1, per_page: 20 }));
+  }, [filters, dispatch]);
 
   return (
     <div className={styles.home}>
