@@ -43,3 +43,18 @@
   text-transform: uppercase;
   color: $text-primary;
 }
+
+.noProducts {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  text-align: center;
+  color: $text-secondary;
+  font-size: $font-size-lg;
+
+  p {
+    margin: 0;
+    font-weight: $font-weight-normal;
+  }
+}
