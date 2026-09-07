@@ -1,0 +1,410 @@
+.payment {
+  --gutter: clamp(16px, 3vw, 48px);
+  --hairline: 1px solid rgb(15 23 42 / 0.12);
+  --muted: rgb(15 23 42 / 0.6);
+  --panel-radius: 12px;
+
+  max-width: 1400px;
+  margin-inline: auto;
+  padding: var(--gutter);
+}
+
+.payment__title {
+  margin-bottom: clamp(20px, 2vw, 32px);
+  font-size: clamp(28px, 2.5vw, 42px);
+  font-family: var(--font-heading);
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.payment__container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(20px, 2.5vw, 32px);
+}
+
+.payment__left,
+.payment__right {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(16px, 2vw, 24px);
+}
+
+.payment__card {
+  padding: clamp(18px, 2.5vw, 28px);
+  border: var(--hairline);
+  border-radius: var(--panel-radius);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.4) 100%);
+  backdrop-filter: blur(4px);
+  transition: all 0.3s ease;
+
+  &:hover {
+    border-color: rgb(15 23 42 / 0.2);
+    box-shadow: 0 4px 12px rgb(37 99 235 / 0.08);
+  }
+}
+
+.payment__section-title {
+  margin-bottom: clamp(12px, 1.5vw, 18px);
+  font-size: clamp(16px, 1.8vw, 22px);
+  font-family: var(--font-heading);
+  color: var(--dark-color);
+  font-weight: 600;
+}
+
+// ===== ADRESSE =====
+.payment__address-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.payment__address-display {
+  padding: clamp(12px, 1.5vw, 16px);
+  background: rgba(255, 255, 255, 0.7);
+  border: var(--hairline);
+  border-radius: 8px;
+}
+
+.payment__address-line {
+  margin: 0;
+  font-size: clamp(13px, 1vw, 15px);
+  color: var(--dark-color);
+  line-height: 1.6;
+
+  &:not(:last-child) {
+    margin-bottom: 3px;
+  }
+
+  strong {
+    font-weight: 600;
+    display: block;
+  }
+}
+
+.payment__address-company {
+  display: block;
+  font-size: clamp(12px, 0.95vw, 14px);
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+.payment__address-contact {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: clamp(12px, 0.95vw, 14px);
+  color: var(--muted);
+  margin-top: 6px;
+  padding-top: 6px;
+  border-top: var(--hairline);
+}
+
+// ===== FORMULAIRE DE PAIEMENT =====
+.payment__form-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.payment__form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.payment__form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.payment__form-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: clamp(12px, 1.5vw, 16px);
+}
+
+.payment__label {
+  font-size: 11px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  font-family: var(--font-heading);
+  font-weight: 600;
+}
+
+.payment__input {
+  padding: clamp(9px, 1vw, 12px) clamp(12px, 1.2vw, 14px);
+  border: var(--hairline);
+  border-radius: 8px;
+  font-family: var(--font-body);
+  font-size: clamp(13px, 1vw, 15px);
+  color: var(--dark-color);
+  background: rgba(255, 255, 255, 0.8);
+  transition: all 0.2s ease;
+
+  &:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    background: rgba(255, 255, 255, 1);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  }
+
+  &::placeholder {
+    color: var(--muted);
+  }
+}
+
+.payment__form-hint {
+  margin: 0;
+  font-size: 10px;
+  color: var(--muted);
+  font-style: italic;
+}
+
+.payment__security-info {
+  padding: clamp(10px, 1.2vw, 12px);
+  background: rgba(22, 163, 74, 0.08);
+  border: 1px solid rgba(22, 163, 74, 0.3);
+  border-radius: 6px;
+  font-size: clamp(12px, 0.95vw, 14px);
+  color: var(--dark-color);
+
+  p {
+    margin: 0;
+  }
+}
+
+// ===== RÉSUMÉ DE COMMANDE =====
+.payment__summary {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.payment__summary-title {
+  margin: 0;
+  font-size: clamp(16px, 1.8vw, 22px);
+  font-family: var(--font-heading);
+  color: var(--dark-color);
+  font-weight: 600;
+}
+
+.payment__items {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 300px;
+  overflow-y: auto;
+  padding-right: 8px;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: rgba(15 23 42 / 0.05);
+    border-radius: 3px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(15 23 42 / 0.2);
+    border-radius: 3px;
+
+    &:hover {
+      background: rgba(15 23 42 / 0.3);
+    }
+  }
+}
+
+.payment__item {
+  display: grid;
+  grid-template-columns: 60px 1fr auto;
+  gap: 12px;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.6);
+  border: var(--hairline);
+  border-radius: 8px;
+  align-items: center;
+}
+
+.payment__item-image {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: var(--hairline);
+}
+
+.payment__item-details {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.payment__item-name {
+  margin: 0;
+  font-size: clamp(12px, 1vw, 14px);
+  font-weight: 600;
+  color: var(--dark-color);
+}
+
+.payment__item-qty {
+  margin: 0;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.payment__item-price {
+  margin: 0;
+  font-size: clamp(12px, 1vw, 14px);
+  color: var(--dark-color);
+  font-weight: 500;
+}
+
+.payment__item-total {
+  margin: 0;
+  font-size: clamp(13px, 1.1vw, 15px);
+  font-family: var(--font-heading);
+  color: var(--dark-color);
+  font-weight: 600;
+  text-align: right;
+}
+
+.payment__totals {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.6);
+  border: var(--hairline);
+  border-radius: 8px;
+  border-top: 2px solid var(--hairline);
+}
+
+.payment__total-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: clamp(12px, 1vw, 14px);
+  color: var(--dark-color);
+
+  &--final {
+    padding-top: 8px;
+    border-top: var(--hairline);
+    font-size: clamp(14px, 1.2vw, 18px);
+    font-family: var(--font-heading);
+    font-weight: 600;
+  }
+}
+
+// ===== BOUTONS =====
+.payment__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(9px, 1.1vw, 13px) clamp(14px, 1.5vw, 20px);
+  border: none;
+  border-radius: 8px;
+  font-family: var(--font-heading);
+  font-size: clamp(11px, 0.9vw, 13px);
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+
+  &--primary {
+    background-color: var(--primary-color);
+    color: white;
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.2);
+
+    &:hover:not(:disabled) {
+      background-color: #1d4ed8;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+      transform: translateY(-1px);
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+
+  &--secondary {
+    background-color: transparent;
+    color: var(--primary-color);
+    border: 1.5px solid var(--primary-color);
+
+    &:hover {
+      background-color: var(--primary-color);
+      color: white;
+      transform: translateY(-1px);
+    }
+  }
+
+  &--full {
+    width: 100%;
+  }
+}
+
+// ===== RESPONSIVE =====
+@media screen and (aspect-ratio > 1/1) {
+  .payment {
+    padding: clamp(24px, 2.5vw, 40px);
+  }
+
+  .payment__container {
+    grid-template-columns: 1fr 1.2fr;
+    gap: clamp(24px, 3vw, 40px);
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .payment__container {
+    grid-template-columns: 1fr;
+  }
+
+  .payment__form-row {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .payment {
+    padding: clamp(12px, 2vw, 20px);
+  }
+
+  .payment__card {
+    padding: clamp(14px, 2vw, 18px);
+  }
+
+  .payment__button {
+    width: 100%;
+  }
+
+  .payment__item {
+    grid-template-columns: 50px 1fr;
+
+    .payment__item-image {
+      grid-column: 1;
+      grid-row: 1 / 3;
+      width: 50px;
+      height: 50px;
+    }
+
+    .payment__item-details {
+      grid-column: 2;
+    }
+
+    .payment__item-total {
+      grid-column: 1 / 3;
+      text-align: left;
+      border-top: var(--hairline);
+      padding-top: 8px;
+      margin-top: 8px;
+    }
+  }
+}
