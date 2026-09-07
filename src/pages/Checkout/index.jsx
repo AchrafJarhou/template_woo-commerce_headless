@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./Checkout.css";
+import "./Checkout.scss";
 import CheckoutForm from "../../components/CheckoutForm";
 import OrderSummaryK from "../../components/OrderSummaryK";
 import {

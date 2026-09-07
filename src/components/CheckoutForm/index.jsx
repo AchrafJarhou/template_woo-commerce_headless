@@ -325,16 +325,31 @@
 
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import ShippingAddress from "./ShippingAddress";
+import BillingAddress from "./BillingAddress";
+import ShippingOptions from "./ShippingOptions";
 
 export default function CheckoutForm({ shippingMethod, setShippingMethod }) {
   const [paymentType, setPaymentType] = useState("card");
   const [sameAsBilling, setSameAsBilling] = useState(true);
+
+  // États locaux pour gérer les champs des sous-composants
+  const [shippingAddress, setShippingAddress] = useState({});
+  const [billingAddress, setBillingAddress] = useState({});
 
   const shippingOptions = [
     { id: "mondial_relay", name: "Mondial Relay (Point Relais)", price: 4.5 },
     { id: "colissimo", name: "Colissimo (Standard)", price: 7.9 },
     { id: "express", name: "Chronopost (Express 24h)", price: 12.9 },
   ];
+
+  const handleShippingChange = (e) => {
+    setShippingAddress({ ...shippingAddress, [e.target.name]: e.target.value });
+  };
+
+  const handleBillingChange = (e) => {
+    setBillingAddress({ ...billingAddress, [e.target.name]: e.target.value });
+  };
 
   return (
     <div className="checkout-left">
@@ -369,53 +384,10 @@ export default function CheckoutForm({ shippingMethod, setShippingMethod }) {
       <div className="divider">OU CONTINUER CI-DESSOUS</div>
 
       <form id="checkout-payment-form">
-        <h3>Adresse de livraison</h3>
-        <div className="form-group">
-          <div className="form-row">
-            <div className="input-field">
-              <label>Prénom</label>
-              <input type="text" name="shipping_first_name" required />
-            </div>
-            <div className="input-field">
-              <label>Nom</label>
-              <input type="text" name="shipping_last_name" required />
-            </div>
-          </div>
-          <div className="input-field">
-            <label>Adresse</label>
-            <input
-              type="text"
-              name="shipping_address_1"
-              placeholder="Commencez à saisir votre adresse..."
-              required
-            />
-          </div>
-          <div className="form-row">
-            <div className="input-field">
-              <label>Ville</label>
-              <input type="text" name="shipping_city" required />
-            </div>
-            <div className="input-field">
-              <label>Pays</label>
-              <input
-                type="text"
-                name="shipping_country"
-                defaultValue="France"
-                required
-              />
-            </div>
-          </div>
-          <div className="form-row">
-            <div className="input-field">
-              <label>Code Postal</label>
-              <input type="text" name="shipping_postcode" required />
-            </div>
-            <div className="input-field">
-              <label>Téléphone</label>
-              <input type="tel" name="shipping_phone" />
-            </div>
-          </div>
-        </div>
+        <ShippingAddress
+          address={shippingAddress}
+          onChange={handleShippingChange}
+        />
 
         <div className="form-group" style={{ marginBottom: "30px" }}>
           <label className="checkbox-group" style={{ cursor: "pointer" }}>
@@ -429,75 +401,17 @@ export default function CheckoutForm({ shippingMethod, setShippingMethod }) {
         </div>
 
         {!sameAsBilling && (
-          <>
-            <h3>Adresse de facturation</h3>
-            <div className="form-group">
-              <div className="form-row">
-                <div className="input-field">
-                  <label>Prénom</label>
-                  <input type="text" name="billing_first_name" required />
-                </div>
-                <div className="input-field">
-                  <label>Nom</label>
-                  <input type="text" name="billing_last_name" required />
-                </div>
-              </div>
-              <div className="input-field">
-                <label>Adresse</label>
-                <input
-                  type="text"
-                  name="billing_address_1"
-                  placeholder="Commencez à saisir votre adresse..."
-                  required
-                />
-              </div>
-              <div className="form-row">
-                <div className="input-field">
-                  <label>Ville</label>
-                  <input type="text" name="billing_city" required />
-                </div>
-                <div className="input-field">
-                  <label>Pays</label>
-                  <input
-                    type="text"
-                    name="billing_country"
-                    defaultValue="France"
-                    required
-                  />
-                </div>
-              </div>
-              <div className="form-row">
-                <div className="input-field">
-                  <label>Code Postal</label>
-                  <input type="text" name="billing_postcode" required />
-                </div>
-                <div className="input-field">
-                  <label>Téléphone</label>
-                  <input type="tel" name="billing_phone" />
-                </div>
-              </div>
-            </div>
-          </>
+          <BillingAddress
+            address={billingAddress}
+            onChange={handleBillingChange}
+          />
         )}
 
-        <h3>Mode de livraison</h3>
-        <div className="form-group shipping-methods">
-          {shippingOptions.map((option) => (
-            <label key={option.id} className="shipping-option">
-              <div>
-                <input
-                  type="radio"
-                  name="shipping"
-                  value={option.id}
-                  checked={shippingMethod?.id === option.id}
-                  onChange={() => setShippingMethod(option)}
-                />
-                {option.name}
-              </div>
-              <span>{option.price.toFixed(2).replace(".", ",")} €</span>
-            </label>
-          ))}
-        </div>
+        <ShippingOptions
+          options={shippingOptions}
+          selectedMethod={shippingMethod}
+          onSelect={setShippingMethod}
+        />
 
         <h3>Détails du paiement</h3>
         <div className="form-group">
