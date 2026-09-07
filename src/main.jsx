@@ -11,7 +11,10 @@ import {
   fetchCurrentCustomerThunk,
   fetchCurrentUserOrdersThunk,
 } from "./thunkActionsCreator/userThunks";
-import { fetchSiteThunk, fetchSiteSettingsThunk } from "./thunkActionsCreator/siteThunk";
+import {
+  fetchSiteThunk,
+  fetchSiteSettingsThunk,
+} from "./thunkActionsCreator/siteThunk";
 
 import Home from "./pages/Home";
 import Store from "./pages/Store";
@@ -41,63 +44,63 @@ import AppLoader from "./components/AppLoader/AppLoader";
 
 import "./index.css";
 import AuthDrawer from "./components/AuthDrawer";
+import Checkout from "./pages/Checkout";
 
 async function initializeApp() {
-  store.dispatch(initializeCartThunk());
-  store.dispatch(fetchSiteThunk());
+  // store.dispatch(initializeCartThunk());
+  // store.dispatch(fetchSiteThunk());
 
-  await store.dispatch(fetchSiteSettingsThunk());
+  // await store.dispatch(fetchSiteSettingsThunk());
 
-  if (store.getState().user.token) {
-    store.dispatch(fetchCurrentUserThunk());
-    store.dispatch(fetchCurrentCustomerThunk());
-    store.dispatch(fetchCurrentUserOrdersThunk());
-  }
+  // if (store.getState().user.token) {
+  //   store.dispatch(fetchCurrentUserThunk());
+  //   store.dispatch(fetchCurrentCustomerThunk());
+  //   store.dispatch(fetchCurrentUserOrdersThunk());
+  // }
 
   mountApp();
 }
 
 function mountApp() {
-
-// ReactDOM.createRoot(document.getElementById("root")).render(
-//   // <React.StrictMode>
-//   <HelmetProvider>
-//     <Provider store={store}>
-//       <Router
-//         future={{
-//           v7_startTransition: true,
-//           v7_relativeSplatPath: true,
-//         }}
-//         // basename="/ecom"
-//       >
-//         <Header />
-//         <Seo />
-//         <Routes>
-//           {<Route path="/" element={<Home />} />}
-//           <Route path="/new-password" element={<NewPassword />} />
-//           <Route path="/catalogue" element={<Store />} />
-//           <Route path="/mentions-legales" element={<LegalMentions />} />
-//           <Route path="/cgu" element={<CGU />} />
-//           <Route path="/cgv" element={<CGV />} />
-//           <Route path="/panier" element={<Cart />} />
-//           <Route path="*" element={<Error404 />} />
-//           <Route path="/contact" element={<Contact />} />
-//           <Route path="/product/:id" element={<ProductDetails />} />
-//           <Route path="/blog" element={<BlogPage />} />
-//           <Route path="/blog/:slug" element={<SinglePost />} />
-//           <Route path="/success/:orderId" element={<Success />} />
-//           <Route path="/profile" element={<Profile />} />
-//           {/* TEMP: wishlist testing, remove before commit */}
-//           <Route path="/wishlist" element={<Wishlist />} />
-//         </Routes>
-//         <Footer />
-//         <Toast />
-//         <AuthModal />
-//       </Router>
-//     </Provider>
-//   </HelmetProvider>,
-//   /* </React.StrictMode>, */
-// );
+  // ReactDOM.createRoot(document.getElementById("root")).render(
+  //   // <React.StrictMode>
+  //   <HelmetProvider>
+  //     <Provider store={store}>
+  //       <Router
+  //         future={{
+  //           v7_startTransition: true,
+  //           v7_relativeSplatPath: true,
+  //         }}
+  //         // basename="/ecom"
+  //       >
+  //         <Header />
+  //         <Seo />
+  //         <Routes>
+  //           {<Route path="/" element={<Home />} />}
+  //           <Route path="/new-password" element={<NewPassword />} />
+  //           <Route path="/catalogue" element={<Store />} />
+  //           <Route path="/mentions-legales" element={<LegalMentions />} />
+  //           <Route path="/cgu" element={<CGU />} />
+  //           <Route path="/cgv" element={<CGV />} />
+  //           <Route path="/panier" element={<Cart />} />
+  //           <Route path="*" element={<Error404 />} />
+  //           <Route path="/contact" element={<Contact />} />
+  //           <Route path="/product/:id" element={<ProductDetails />} />
+  //           <Route path="/blog" element={<BlogPage />} />
+  //           <Route path="/blog/:slug" element={<SinglePost />} />
+  //           <Route path="/success/:orderId" element={<Success />} />
+  //           <Route path="/profile" element={<Profile />} />
+  //           {/* TEMP: wishlist testing, remove before commit */}
+  //           <Route path="/wishlist" element={<Wishlist />} />
+  //         </Routes>
+  //         <Footer />
+  //         <Toast />
+  //         <AuthModal />
+  //       </Router>
+  //     </Provider>
+  //   </HelmetProvider>,
+  //   /* </React.StrictMode>, */
+  // );
 
   ReactDOM.createRoot(document.getElementById("root")).render(
     <HelmetProvider>
@@ -131,6 +134,7 @@ function mountApp() {
               <Route path="/faq" element={<FAQ />} />
               <Route path="/a-propos" element={<About />} />
               <Route path="*" element={<Error404 />} />
+              <Route path="/checkout" element={<Checkout />} />
             </Route>
           </Routes>
           <Toast />
