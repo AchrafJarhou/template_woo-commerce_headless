@@ -82,6 +82,9 @@ export default function CheckoutForm() {
           headers: {
             "Content-Type": "application/json",
             Nonce: cart?.nonce || "",
+            // Sans ce jeton, la commande porterait sur une autre session que
+            // celle où le client a rempli son panier.
+            ...(cart?.cartToken && { "Cart-Token": cart.cartToken }),
             ...(user?.token && { Authorization: `Bearer ${user.token}` }),
           },
           body: JSON.stringify({
