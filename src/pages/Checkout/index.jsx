@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./Checkout.css";
 import CheckoutForm from "../../components/CheckoutForm";
-import OrderSummary from "../../components/OrderSummary";
+import OrderSummaryK from "../../components/OrderSummaryK";
 import {
   MOCK_CART_ITEMS,
   MOCK_CART_TOTALS,
@@ -20,7 +20,7 @@ export default function Checkout() {
         shippingMethod={shippingMethod}
         setShippingMethod={setShippingMethod}
       />
-      <OrderSummary
+      <OrderSummaryK
         items={items}
         totals={totals}
         shippingCost={shippingMethod ? shippingMethod.price : 0}

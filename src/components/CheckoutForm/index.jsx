@@ -328,6 +328,7 @@ import { Link } from "react-router-dom";
 
 export default function CheckoutForm({ shippingMethod, setShippingMethod }) {
   const [paymentType, setPaymentType] = useState("card");
+  const [sameAsBilling, setSameAsBilling] = useState(true);
 
   const shippingOptions = [
     { id: "mondial_relay", name: "Mondial Relay (Point Relais)", price: 4.5 },
@@ -373,18 +374,18 @@ export default function CheckoutForm({ shippingMethod, setShippingMethod }) {
           <div className="form-row">
             <div className="input-field">
               <label>Prénom</label>
-              <input type="text" name="first_name" required />
+              <input type="text" name="shipping_first_name" required />
             </div>
             <div className="input-field">
               <label>Nom</label>
-              <input type="text" name="last_name" required />
+              <input type="text" name="shipping_last_name" required />
             </div>
           </div>
           <div className="input-field">
             <label>Adresse</label>
             <input
               type="text"
-              name="address_1"
+              name="shipping_address_1"
               placeholder="Commencez à saisir votre adresse..."
               required
             />
@@ -392,13 +393,13 @@ export default function CheckoutForm({ shippingMethod, setShippingMethod }) {
           <div className="form-row">
             <div className="input-field">
               <label>Ville</label>
-              <input type="text" name="city" required />
+              <input type="text" name="shipping_city" required />
             </div>
             <div className="input-field">
               <label>Pays</label>
               <input
                 type="text"
-                name="country"
+                name="shipping_country"
                 defaultValue="France"
                 required
               />
@@ -407,14 +408,77 @@ export default function CheckoutForm({ shippingMethod, setShippingMethod }) {
           <div className="form-row">
             <div className="input-field">
               <label>Code Postal</label>
-              <input type="text" name="postcode" required />
+              <input type="text" name="shipping_postcode" required />
             </div>
             <div className="input-field">
               <label>Téléphone</label>
-              <input type="tel" name="phone" />
+              <input type="tel" name="shipping_phone" />
             </div>
           </div>
         </div>
+
+        <div className="form-group" style={{ marginBottom: "30px" }}>
+          <label className="checkbox-group" style={{ cursor: "pointer" }}>
+            <input
+              type="checkbox"
+              checked={sameAsBilling}
+              onChange={(e) => setSameAsBilling(e.target.checked)}
+            />
+            Adresse de facturation identique à l'adresse de livraison
+          </label>
+        </div>
+
+        {!sameAsBilling && (
+          <>
+            <h3>Adresse de facturation</h3>
+            <div className="form-group">
+              <div className="form-row">
+                <div className="input-field">
+                  <label>Prénom</label>
+                  <input type="text" name="billing_first_name" required />
+                </div>
+                <div className="input-field">
+                  <label>Nom</label>
+                  <input type="text" name="billing_last_name" required />
+                </div>
+              </div>
+              <div className="input-field">
+                <label>Adresse</label>
+                <input
+                  type="text"
+                  name="billing_address_1"
+                  placeholder="Commencez à saisir votre adresse..."
+                  required
+                />
+              </div>
+              <div className="form-row">
+                <div className="input-field">
+                  <label>Ville</label>
+                  <input type="text" name="billing_city" required />
+                </div>
+                <div className="input-field">
+                  <label>Pays</label>
+                  <input
+                    type="text"
+                    name="billing_country"
+                    defaultValue="France"
+                    required
+                  />
+                </div>
+              </div>
+              <div className="form-row">
+                <div className="input-field">
+                  <label>Code Postal</label>
+                  <input type="text" name="billing_postcode" required />
+                </div>
+                <div className="input-field">
+                  <label>Téléphone</label>
+                  <input type="tel" name="billing_phone" />
+                </div>
+              </div>
+            </div>
+          </>
+        )}
 
         <h3>Mode de livraison</h3>
         <div className="form-group shipping-methods">
@@ -455,7 +519,6 @@ export default function CheckoutForm({ shippingMethod, setShippingMethod }) {
             />
           </label>
 
-          {/* C'est ici que tu injecteras <CardElement /> de Stripe plus tard */}
           {paymentType === "card" && (
             <div className="stripe-elements-box">
               <p style={{ fontSize: "12px", opacity: 0.5 }}>
