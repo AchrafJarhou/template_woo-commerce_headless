@@ -1,26 +1,19 @@
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-
-import DeleteAccountButton from "../../components/DeleteAccountButton";
-import { UserDisplay, CustomerDisplay } from "../../components/UserDisplay";
-import { OrderAll } from "../../components/OrderAll";
-import { useEffect } from "react";
+import { UserInfo } from './components/UserInfo';
+import { AddressSection } from './components/AddressSection';
+import { OrdersList } from './components/OrdersList';
+import { DangerZone } from './components/DangerZone';
+import { mockUser, mockBilling, mockShipping, mockOrders } from './mockData';
+import './index.scss';
 
 export default function Profile() {
-  const isAuthentificated = useSelector((state) => state.user?.token);
-  useEffect(() => {
-    !isAuthentificated && navigate("/catalogue", { replace: true });
-  }, [isAuthentificated]);
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  if (isAuthentificated) {
-    return (
-      <div>
-        <UserDisplay />
-        <CustomerDisplay />
-        <OrderAll />
-        <DeleteAccountButton />
-      </div>
-    );
-  }
+  return (
+    <div className="profile">
+      <h1 className="profile__title">Mon Profil</h1>
+      <UserInfo user={mockUser} />
+      <AddressSection title="Adresse de Facturation" address={mockBilling} />
+      <AddressSection title="Adresse de Livraison" address={mockShipping} />
+      <OrdersList orders={mockOrders} />
+      <DangerZone />
+    </div>
+  );
 }

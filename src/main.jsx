@@ -20,6 +20,7 @@ import Cart from "./pages/Cart";
 import Success from "./pages/Success";
 import NewPassword from "./pages/NewPassword";
 import Profile from "./pages/Profile";
+import Payment from "./pages/Payment";
 import Wishlist from "./pages/Wishlist"; // TEMP: wishlist testing, remove before commit
 import BlogPage from "./pages/Blog";
 import SinglePost from "./pages/SinglePost";
@@ -120,6 +121,7 @@ function mountApp() {
               <Route path="/catalogue" element={<Store />} />
               <Route path="/product/:id" element={<ProductDetails />} />
               <Route path="/panier" element={<Cart />} />
+              <Route path="/commande" element={<Payment />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/wishlist" element={<Wishlist />} />
               <Route path="/blog" element={<BlogPage />} />
