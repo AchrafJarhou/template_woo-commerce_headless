@@ -20,10 +20,23 @@
   max-width: 30lvh;
   display: flex;
   align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  padding: 0 2lvh;
 }
 .header .content .header-logo img {
   max-height: 100%;
   max-width: 100%;
+  object-fit: contain;
+}
+.header .content .header-logo .logo-text {
+  font-size: clamp(1.5rem, 6lvh, 3rem);
+  font-weight: 700;
+  color: var(--dark-color);
+  font-family: var(--font-heading);
+  white-space: nowrap;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
 }
 .header .content .menu {
   height: 100%;

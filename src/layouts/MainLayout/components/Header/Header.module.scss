@@ -35,6 +35,9 @@
 .logoImg {
   max-height: 40px;
   width: auto;
+  max-width: 120px;
+  object-fit: contain;
+  display: block;
 }
 
 .icon {
