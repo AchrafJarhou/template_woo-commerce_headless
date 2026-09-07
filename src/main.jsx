@@ -28,6 +28,7 @@ import LegalMentions from "./pages/LegalMentions";
 import CGU from "./pages/CGU";
 import CGV from "./pages/CGV";
 import FAQ from "./pages/FAQ";
+import PolitiqueCookies from "./pages/PolitiqueCookies";
 import Confidentialite from "./pages/Confidentialite";
 import About from "./pages/About";
 import Error404 from "./pages/Error404";
@@ -130,6 +131,7 @@ function mountApp() {
               <Route path="/cgu" element={<CGU />} />
               <Route path="/cgv" element={<CGV />} />
               <Route path="/faq" element={<FAQ />} />
+              <Route path="/cookies" element={<PolitiqueCookies />} />
               <Route path="/confidentialite" element={<Confidentialite />} />
               <Route path="/a-propos" element={<About />} />
               <Route path="*" element={<Error404 />} />
