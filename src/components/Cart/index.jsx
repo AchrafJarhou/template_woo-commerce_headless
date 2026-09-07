@@ -1,12 +1,24 @@
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { CartProduct } from "../CartProduct";
 import { formatPrice } from "../../utils/formatPrice";
-import { MOCK_CART_ITEMS, MOCK_CART_TOTALS } from "./mockCart";
+import Loader from "../Loader";
 import './index.scss';
 
 export default function Cart() {
-  const items = MOCK_CART_ITEMS;
-  const totals = MOCK_CART_TOTALS;
+  const items = useSelector((state) => state.cart.items);
+  const totals = useSelector((state) => state.cart.totals);
+
+  // Tant que le premier chargement n'a pas répondu, un panier vide et un
+  // panier inconnu sont indiscernables : afficher « vide » serait un mensonge.
+  if (!totals) {
+    return (
+      <section className="cart cart--empty">
+        <h1 className="cart__title">Votre panier</h1>
+        <Loader size="lg" />
+      </section>
+    );
+  }
 
   const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
   const countLabel = `${itemCount} article${itemCount > 1 ? "s" : ""}`;
@@ -26,7 +38,7 @@ export default function Cart() {
   return (
     <section className="cart">
       <h1 className="cart__title">Votre panier</h1>
-      
+
       <div className="cart__main">
         <ul className="cart__list">
           {items.map((item) => (
