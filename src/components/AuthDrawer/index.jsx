@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import DOMPurify from "dompurify";
 import {
   closeAuthModal,
@@ -15,6 +16,7 @@ import "./index.css";
 
 export default function AuthDrawer() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { isOpen, view } = useSelector((state) => state.authModal);
   const { loading, error, token } = useSelector((state) => state.user);
 
@@ -31,8 +33,11 @@ export default function AuthDrawer() {
   });
 
   useEffect(() => {
-    if (token) dispatch(closeAuthModal());
-  }, [dispatch, token]);
+    if (token) {
+      dispatch(closeAuthModal());
+      navigate("/profile");
+    }
+  }, [dispatch, token, navigate]);
 
   useEffect(() => {
     if (error) {
