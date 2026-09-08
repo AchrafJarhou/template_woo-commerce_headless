@@ -8,6 +8,7 @@ import "./index.css";
 export default function ProductModal({ product, onClose }) {
   const dispatch = useDispatch();
   const [itemVariation, setItemVariation] = useState({});
+  const [descriptionNeedsScroll, setDescriptionNeedsScroll] = useState(false);
 
   const formatPrice = (priceInCents, currencyCode) => {
     if (!priceInCents) return "Prix sur demande";
@@ -28,6 +29,15 @@ export default function ProductModal({ product, onClose }) {
       }
     });
     setItemVariation(defaults);
+  }, [product]);
+
+  useEffect(() => {
+    if (product?.short_description) {
+      const tempDiv = document.createElement("div");
+      tempDiv.innerHTML = DOMPurify.sanitize(product.short_description);
+      const textContent = tempDiv.textContent || "";
+      setDescriptionNeedsScroll(textContent.length > 150);
+    }
   }, [product]);
 
   const handleAddToCart = async () => {
@@ -85,7 +95,7 @@ export default function ProductModal({ product, onClose }) {
           </div>
 
           <div
-            className="modal-description"
+            className={`modal-description ${descriptionNeedsScroll ? "modal-description--scrollable" : ""}`}
             dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(product.short_description) }}
           />
 
