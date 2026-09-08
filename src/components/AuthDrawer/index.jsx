@@ -36,6 +36,15 @@ export default function AuthDrawer() {
   useEffect(() => {
     if (token && !hasRedirected && isOpen === false) {
       dispatch(closeAuthModal());
+      setForm({
+        username: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+        firstName: "",
+        lastName: "",
+      });
+      setErrors({});
       navigate("/profile");
       setHasRedirected(true);
     }
