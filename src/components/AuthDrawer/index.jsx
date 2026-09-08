@@ -176,6 +176,9 @@ export default function AuthDrawer() {
                     placeholder={errors.username || "Votre identifiant"}
                     autoComplete="username"
                   />
+                  <p className="help-text">
+                    💡 Utilisez le prénom que vous avez indiqué lors de votre inscription
+                  </p>
                 </div>
               )}
 
