@@ -26,6 +26,8 @@ export default function AuthForm() {
     lastName: "",
   });
 
+  const isLogin = mode === "login";
+
   useEffect(() => {
     if (token) dispatch(closeAuthModal());
   }, [dispatch, token]);
@@ -91,7 +93,6 @@ export default function AuthForm() {
     if (mode === "register") {
       dispatch(
         registerThunk({
-          username: form.username.trim(),
           email: form.email.trim(),
           password: form.password,
           firstName: form.firstName.trim(),
@@ -111,26 +112,28 @@ export default function AuthForm() {
             ? "Créer un compte"
             : "Confirmez votre mot de passe"}
       </h2>
-      <div className="auth-form__field">
-        <label htmlFor="username">Nom d'utilisateur</label>
-        <input
-          id="username"
-          name="username"
-          type="text"
-          value={form.username}
-          onChange={handleChange}
-          className={errors.username ? "input--error" : ""}
-          autoComplete="username"
-          placeholder={errors.username}
-          title={errors.username}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              e.preventDefault();
-              handleSubmit(e);
-            }
-          }}
-        />
-      </div>
+      {isLogin && (
+        <div className="auth-form__field">
+          <label htmlFor="username">Nom d'utilisateur</label>
+          <input
+            id="username"
+            name="username"
+            type="text"
+            value={form.username}
+            onChange={handleChange}
+            className={errors.username ? "input--error" : ""}
+            autoComplete="username"
+            placeholder={errors.username}
+            title={errors.username}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                handleSubmit(e);
+              }
+            }}
+          />
+        </div>
+      )}
       {mode === "register" && (
         <div className="auth-form__field">
           <label htmlFor="email">E-mail</label>
