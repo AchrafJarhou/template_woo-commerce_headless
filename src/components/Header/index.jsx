@@ -13,6 +13,7 @@ import cartIcon from "../../assets/icons/logo-panier.png";
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
   const token = useSelector((state) => state.user.token);
   const cartItems = useSelector((state) => state.cart.items);
   const wishlistItems = useSelector((state) => state.wishlist.items);
@@ -91,9 +92,37 @@ export default function Header() {
             </Link>
 
             {isAuthentificated ? (
-              <Link to="/profile" className="header-icon" aria-label="Profil">
-                👤
-              </Link>
+              <div className="header-user-menu">
+                <button
+                  type="button"
+                  className="header-icon"
+                  aria-label="Menu utilisateur"
+                  onClick={() => setUserMenuOpen(!userMenuOpen)}
+                >
+                  👤
+                </button>
+                {userMenuOpen && (
+                  <div className="user-dropdown">
+                    <Link
+                      to="/profile"
+                      className="dropdown-item"
+                      onClick={() => setUserMenuOpen(false)}
+                    >
+                      Mon profil
+                    </Link>
+                    <button
+                      type="button"
+                      className="dropdown-item logout-btn"
+                      onClick={() => {
+                        dispatch(logout());
+                        setUserMenuOpen(false);
+                      }}
+                    >
+                      Déconnexion
+                    </button>
+                  </div>
+                )}
+              </div>
             ) : (
               <button
                 type="button"
@@ -128,9 +157,6 @@ export default function Header() {
               )}
             </Link>
 
-            {token && (
-              <button onClick={() => dispatch(logout())}>Déconnexion</button>
-            )}
           </div>
         </div>
       </div>
