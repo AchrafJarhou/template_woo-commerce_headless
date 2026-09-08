@@ -49,9 +49,13 @@ export default function AuthDrawer() {
   const validateLogin = (e, updatedForm = form) => {
     setErrors({});
     const newErrors = {};
-    if (!updatedForm.username.trim()) {
-      newErrors.username = "Le nom d'utilisateur est requis.";
+
+    if (mode === "login") {
+      if (!updatedForm.username.trim()) {
+        newErrors.username = "Le nom d'utilisateur est requis.";
+      }
     }
+
     if (!updatedForm.password) {
       newErrors.password = "Le mot de passe est requis.";
     } else if (updatedForm.password.length < 8) {
