@@ -102,6 +102,7 @@ export default function Header() {
                   onClick={() => {
                     dispatch(logout());
                     setUserMenuOpen(false);
+                    navigate("/");
                   }}
                 >
                   Déconnexion
