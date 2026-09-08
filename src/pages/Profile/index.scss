@@ -1,4 +1,3 @@
-/* === PROFILE.SCSS === */
 .profile-container {
   background-color: #6784c8;
   color: #000;
@@ -9,17 +8,19 @@
   margin: 0 auto;
 }
 
-/* --- NAVIGATION (Mobile First) --- */
+/* --- NAVIGATION --- */
 .profile-nav {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
   position: relative;
 }
 
 .profile-nav button {
   background: transparent;
   border: none;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  // border-bottom: 1px solid rgba(0, 0, 0, 0.2);
   padding: 20px 0;
   text-align: left;
   font-size: 16px;
@@ -35,12 +36,11 @@
   font-weight: bold;
 }
 
-/* L'indicateur animé est caché sur mobile */
 .nav-indicator {
   display: none;
 }
 
-/* --- CONTENU --- */
+/* --- CONTENU & GRILLES --- */
 .profile-content-wrapper {
   margin-top: 20px;
 }
@@ -48,24 +48,53 @@
 .back-btn {
   background: transparent;
   border: none;
-  font-size: 14px;
+  font-size: 0.9rem;
   text-transform: uppercase;
   cursor: pointer;
+  color: #000;
   margin-bottom: 30px;
   display: inline-flex;
   align-items: center;
   gap: 10px;
+  padding: 0;
 }
 
 .section-title {
   font-size: 20px;
   text-transform: uppercase;
-  margin-bottom: 20px;
-  font-weight: normal;
+  margin-bottom: 30px;
+  font-weight: bold;
+}
+
+/* Correction des textes collés */
+.data-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.data-item {
+  display: flex;
+  flex-direction: column; /* Force le retour à la ligne */
+  gap: 5px;
+  border-bottom: rgb(62, 62, 62) 1px solid;
+}
+
+.data-label {
+  font-size: 1rem;
+  text-transform: uppercase;
+  opacity: 0.6;
+  margin-bottom: 0.2rem;
+}
+
+.data-value {
+  font-size: 1rem;
+  padding-bottom: 0.5rem;
 }
 
 /* --- BOUTONS --- */
-.btn-black {
+.action-btn {
   background-color: #000;
   color: #fff;
   border: 1px solid #000;
@@ -76,31 +105,63 @@
   letter-spacing: 2px;
   cursor: pointer;
   transition: opacity 0.3s;
+  display: block;
+  width: fit-content;
+  margin: 10px auto 60px auto;
 }
 
-.btn-black:hover {
+.action-btn:hover {
   opacity: 0.8;
 }
 
-/* --- HISTORIQUE DES COMMANDES (Style Uniqlo) --- */
+.action-btn.outline {
+  background-color: transparent;
+  color: #000;
+}
+
+.action-btn.outline:hover {
+  background-color: #000;
+  color: #fff;
+}
+
+/* --- COMMANDES --- */
 .order-history-header {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  gap: 10px;
   border-bottom: 1px solid #000;
   padding-bottom: 15px;
-  margin-bottom: 20px;
-  font-size: 14px;
+  margin-bottom: 30px;
+  margin-top: 30px;
+}
+
+.order-data {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  justify-content: space-between;
+}
+
+.order-header-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1rem;
   font-weight: bold;
   text-transform: uppercase;
 }
 
+.order-date {
+  font-size: 1rem;
+  font-weight: normal;
+  opacity: 0.8;
+}
+
 .order-product-row {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 20px;
   margin-bottom: 40px;
-  border-bottom: 1px dashed rgba(0, 0, 0, 0.2);
-  padding-bottom: 30px;
 }
 
 .order-product-image img {
@@ -108,33 +169,26 @@
   max-width: 150px;
   aspect-ratio: 1;
   object-fit: contain;
-  mix-blend-mode: multiply; /* Effet transparent Yeezy */
+  mix-blend-mode: multiply;
 }
 
 .order-product-details {
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
 }
 
 .order-product-details h3 {
-  font-size: 16px;
+  font-size: 1rem;
   text-transform: uppercase;
   margin-bottom: 10px;
 }
 
 .order-product-details p {
-  font-size: 13px;
+  font-size: 0.9rem;
   margin: 5px 0;
   opacity: 0.9;
-}
-
-.btn-review {
-  align-self: flex-start;
-  margin-top: 20px;
-  border-radius: 30px; /* Forme pilule comme sur la capture */
-  padding: 12px 25px;
 }
 
 /* === DESKTOP OVERRIDES === */
@@ -143,13 +197,11 @@
     padding: 60px 20px;
   }
 
-  /* Navigation Centrée avec Animation */
   .profile-nav {
     flex-direction: row;
     justify-content: center;
     gap: 40px;
     margin-bottom: 60px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.2); /* Ligne de base grise */
   }
 
   .profile-nav button {
@@ -161,11 +213,11 @@
   .profile-nav button.logout-btn {
     margin-top: 0;
   }
+
   .back-btn {
     display: none;
   }
 
-  /* La ligne noire animée */
   .nav-indicator {
     display: block;
     position: absolute;
@@ -177,11 +229,22 @@
       width 0.4s cubic-bezier(0.25, 1, 0.5, 1);
   }
 
-  /* Commandes Desktop */
+  .data-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .order-history-header {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
   .order-product-row {
     flex-direction: row;
   }
-  .btn-review {
-    align-self: flex-end;
+
+  .action-btn {
+    display: inline-block;
+    margin-top: 10px;
   }
 }

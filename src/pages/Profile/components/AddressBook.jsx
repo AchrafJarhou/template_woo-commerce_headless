@@ -32,10 +32,10 @@ export default function AddressBook() {
       </div>
       <button className="action-btn">Modifier l'adresse</button>
 
-      <h2 className="section-title" style={{ marginTop: "40px" }}>
+      <h2 className="section-title" style={{ marginTop: "60px" }}>
         Adresse de Facturation
       </h2>
-      <p style={{ fontSize: "14px", marginBottom: "20px" }}>
+      <p style={{ fontSize: "14px", marginBottom: "20px", opacity: 0.8 }}>
         Identique à l'adresse de livraison.
       </p>
       <button className="action-btn outline">
