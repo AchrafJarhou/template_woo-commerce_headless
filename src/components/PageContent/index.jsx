@@ -29,7 +29,7 @@ export default function PageContent({ slug }) {
   const contentLanguage = isFallback ? DEFAULT_LANGUAGE : undefined;
 
   return (
-    <div className="page-content">
+    <article className="page-content">
       {isFallback && (
         <p className="page-content__translation-notice">
           {t("page.translationPending")}
@@ -48,6 +48,6 @@ export default function PageContent({ slug }) {
           __html: DOMPurify.sanitize(page.content?.rendered ?? ""),
         }}
       />
-    </div>
+    </article>
   );
 }
