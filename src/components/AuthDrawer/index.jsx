@@ -158,9 +158,7 @@ export default function AuthDrawer() {
             </div>
 
             {errors.general && (
-              <div className="error-message">
-                {errors.general}
-              </div>
+              <div className="error-message" dangerouslySetInnerHTML={{ __html: errors.general }} />
             )}
 
             <form className="drawer-form" onSubmit={handleSubmit}>
