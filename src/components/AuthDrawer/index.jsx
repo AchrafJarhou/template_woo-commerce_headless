@@ -25,6 +25,8 @@ export default function AuthDrawer() {
     email: "",
     password: "",
     confirmPassword: "",
+    firstName: "",
+    lastName: "",
   });
 
   useEffect(() => {
@@ -62,6 +64,12 @@ export default function AuthDrawer() {
       } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(updatedForm.email)) {
         newErrors.email = "Entrez une adresse e-mail valide.";
       }
+      if (!updatedForm.firstName.trim()) {
+        newErrors.firstName = "Le prénom est requis.";
+      }
+      if (!updatedForm.lastName.trim()) {
+        newErrors.lastName = "Le nom est requis.";
+      }
       if (!updatedForm.confirmPassword) {
         newErrors.confirmPassword = "Veuillez confirmer votre mot de passe.";
       } else if (updatedForm.confirmPassword !== updatedForm.password) {
@@ -95,9 +103,10 @@ export default function AuthDrawer() {
     } else {
       dispatch(
         registerThunk({
-          username: form.username.trim(),
           email: form.email.trim(),
           password: form.password,
+          firstName: form.firstName.trim(),
+          lastName: form.lastName.trim(),
         }),
       );
     }
@@ -183,6 +192,38 @@ export default function AuthDrawer() {
                   autoComplete="email"
                 />
               </div>
+
+              {mode === "register" && (
+                <div className="input-group">
+                  <label htmlFor="firstName">Prénom</label>
+                  <input
+                    id="firstName"
+                    name="firstName"
+                    type="text"
+                    value={form.firstName}
+                    onChange={handleChange}
+                    className={errors.firstName ? "input-error" : ""}
+                    placeholder={errors.firstName || "Votre prénom"}
+                    autoComplete="given-name"
+                  />
+                </div>
+              )}
+
+              {mode === "register" && (
+                <div className="input-group">
+                  <label htmlFor="lastName">Nom</label>
+                  <input
+                    id="lastName"
+                    name="lastName"
+                    type="text"
+                    value={form.lastName}
+                    onChange={handleChange}
+                    className={errors.lastName ? "input-error" : ""}
+                    placeholder={errors.lastName || "Votre nom"}
+                    autoComplete="family-name"
+                  />
+                </div>
+              )}
 
               <div className="input-group">
                 <label htmlFor="password">Mot de passe</label>
