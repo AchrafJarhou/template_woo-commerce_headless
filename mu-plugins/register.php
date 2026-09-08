@@ -33,12 +33,13 @@ function headless_register_user($request)
         return new WP_Error('too_many_requests', 'Trion depuis cette adresse. Reessayez plus tard.', ['status' => 429]);
     }
 
-    $username = sanitize_user($request->get_param('username'));
-    $email    = sanitize_email($request->get_param('email'));
-    $password = (string) $request->get_param('password');
+    $email     = sanitize_email($request->get_param('email'));
+    $password  = (string) $request->get_param('password');
+    $firstName = sanitize_text_field($request->get_param('firstName'));
+    $lastName  = sanitize_text_field($request->get_param('lastName'));
 
-    if (empty($username) || empty($email) || empty($password)) {
-        return new WP_Error('missing_fields', 'Identifiant, email et mot de passe sont requis.', ['status' => 400]);
+    if (empty($email) || empty($password) || empty($firstName) || empty($lastName)) {
+        return new WP_Error('missing_fields', 'Email, mot de passe, prénom et nom sont requis.', ['status' => 400]);
     }
     if (!is_email($email)) {
         return new WP_Error('invalid_email', 'Adresse email invalide.', ['status' => 400]);
@@ -46,14 +47,26 @@ function headless_register_user($request)
     if (strlen($password) < 8) {
         return new WP_Error('weak_password', 'Le mot de passe doit contenir au moins 8 caracteres.', ['status' => 400]);
     }
-    if (username_exists($username) || email_exists($email)) {
-        return new WP_Error('registration_unavailable', 'Impossible de creer ce compte avec ces informations.', ['status' => 409]);
+    if (email_exists($email)) {
+        return new WP_Error('email_exists', 'Un compte existe deja avec cet email.', ['status' => 409]);
+    }
+
+    $base_username = sanitize_user(strtolower(explode('@', $email)[0]));
+    $username      = $base_username;
+    $counter       = 1;
+
+    while (username_exists($username)) {
+        $username = $base_username . $counter;
+        $counter++;
     }
 
     $user_id = wp_create_user($username, $password, $email);
     if (is_wp_error($user_id)) {
         return new WP_Error('registration_failed', $user_id->get_error_message(), ['status' => 500]);
     }
+
+    update_user_meta($user_id, 'first_name', $firstName);
+    update_user_meta($user_id, 'last_name', $lastName);
 
     $token_request = new WP_REST_Request('POST', '/jwt-auth/v1/token');
     $token_request->set_param('username', $username);
