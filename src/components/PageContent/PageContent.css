@@ -1,21 +1,33 @@
+/* Palette des pages éditoriales. Ces sept pages (mentions légales, CGV, CGU,
+   cookies, confidentialité, FAQ, à propos, contact) partagent ce fichier :
+   changer l'encre ici les change toutes. Pour un noir pur, remplacer la valeur
+   de --page-ink par #000. */
 .page-content {
+  --page-ink: var(--dark-color);
+  /* Opacité mesurée, pas choisie à l'œil : en dessous de 0.86 le rapport de
+     contraste sur ce fond passe sous le seuil AA de 4.5:1. */
+  --page-ink-soft: rgba(15, 23, 42, 0.9);
+  --page-rule: rgba(15, 23, 42, 0.22);
+  --page-link: #0a1f4d;
+  --page-surface: rgba(255, 255, 255, 0.08);
+
   max-width: 900px;
   margin: 60px auto;
   padding: 40px 20px;
   line-height: 1.8;
-  color: #ffffff;
-  background-color: rgba(255, 255, 255, 0.08);
+  color: var(--page-ink);
+  background-color: var(--page-surface);
   border-radius: 12px;
 }
 
 .page-content__translation-notice {
   margin: 0 0 30px;
   padding: 12px 16px;
-  border-left: 4px solid rgba(255, 255, 255, 0.5);
+  border-left: 4px solid var(--page-rule);
   border-radius: 4px;
-  background-color: rgba(255, 255, 255, 0.08);
+  background-color: var(--page-surface);
   font-size: 14px;
-  color: #ffffff;
+  color: var(--page-ink);
 }
 
 .page-content h1 {
@@ -24,16 +36,17 @@
   margin-bottom: 40px;
   text-transform: uppercase;
   letter-spacing: -0.01em;
-  color: #ffffff;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.15);
+  color: var(--page-ink);
+  /* L'ombre portée sombre servait à détacher un titre blanc du fond. Sous une
+     encre foncée elle ne fait qu'empâter le tracé. */
 }
 
 .page-content h2 {
   font-size: 24px;
   font-weight: 700;
   margin: 40px 0 20px;
-  color: #ffffff;
-  border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+  color: var(--page-ink);
+  border-bottom: 2px solid var(--page-rule);
   padding-bottom: 10px;
 }
 
@@ -41,18 +54,18 @@
   font-size: 18px;
   font-weight: 600;
   margin: 30px 0 15px;
-  color: #f0f0f0;
+  color: var(--page-ink-soft);
 }
 
 .page-content p {
   margin-bottom: 15px;
   font-size: 15px;
   text-align: left;
-  color: #ffffff;
+  color: var(--page-ink);
 }
 
 .page-content strong {
-  color: #ffffff;
+  color: var(--page-ink);
   font-weight: 600;
 }
 
@@ -60,33 +73,33 @@
 .page-content ol {
   margin: 20px 0 20px 30px;
   font-size: 15px;
-  color: #ffffff;
+  color: var(--page-ink);
 }
 
 .page-content li {
   margin-bottom: 10px;
-  color: #ffffff;
+  color: var(--page-ink);
   list-style: none;
 }
 
 .page-content a {
-  color: #e8f0ff;
+  color: var(--page-link);
   text-decoration: underline;
   transition: all 0.2s;
   font-weight: 500;
 }
 
 .page-content a:hover {
-  color: #ffffff;
+  color: var(--page-ink);
   text-decoration: underline;
 }
 
 .page-content blockquote {
-  border-left: 4px solid rgba(255, 255, 255, 0.5);
+  border-left: 4px solid var(--page-rule);
   padding-left: 20px;
   margin: 20px 0;
   font-style: italic;
-  color: #e8f0ff;
+  color: var(--page-ink-soft);
   background-color: rgba(255, 255, 255, 0.05);
   padding: 15px 20px;
   border-radius: 4px;
@@ -97,19 +110,19 @@
   background-color: rgba(255, 255, 255, 0.05);
   padding: 15px;
   border-radius: 8px;
-  border-left: 4px solid rgba(255, 255, 255, 0.3);
+  border-left: 4px solid var(--page-rule);
 }
 
 .page-content details summary {
   cursor: pointer;
   font-weight: 600;
-  color: #ffffff;
+  color: var(--page-ink);
   user-select: none;
   transition: color 0.2s;
 }
 
 .page-content details summary:hover {
-  color: #f0f0f0;
+  color: var(--page-ink-soft);
 }
 
 .page-content details[open] summary {
@@ -148,8 +161,8 @@
 .page-content ul li:before {
   content: "✓ ";
   margin-right: 10px;
-  color: #ffffff;
-  font-weight: bold; 
+  color: var(--page-ink);
+  font-weight: bold;
 }
 
 @media (max-width: 768px) {
