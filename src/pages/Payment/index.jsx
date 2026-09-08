@@ -1,8 +1,13 @@
-import { OrderSummary } from './components/OrderSummary';
-import { AddressForm } from './components/AddressForm';
-import { PaymentForm } from './components/PaymentForm';
-import { mockCartItems, mockCartTotals, mockShippingAddress, mockBillingAddress } from './mockData';
-import './index.scss';
+import { OrderSummary } from "./components/OrderSummaryA";
+import { AddressForm } from "./components/AddressForm";
+import { PaymentForm } from "./components/PaymentForm";
+import {
+  mockCartItems,
+  mockCartTotals,
+  mockShippingAddress,
+  mockBillingAddress,
+} from "./mockData";
+import "./index.scss";
 
 export default function Payment() {
   return (
@@ -13,11 +18,19 @@ export default function Payment() {
         {/* Section Gauche: Informations */}
         <div className="payment__left">
           <section className="payment__card">
-            <AddressForm title="Adresse de Livraison" address={mockShippingAddress} type="shipping" />
+            <AddressForm
+              title="Adresse de Livraison"
+              address={mockShippingAddress}
+              type="shipping"
+            />
           </section>
 
           <section className="payment__card">
-            <AddressForm title="Adresse de Facturation" address={mockBillingAddress} type="billing" />
+            <AddressForm
+              title="Adresse de Facturation"
+              address={mockBillingAddress}
+              type="billing"
+            />
           </section>
         </div>
 
