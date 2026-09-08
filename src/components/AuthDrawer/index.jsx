@@ -165,7 +165,7 @@ export default function AuthDrawer() {
             <form className="drawer-form" onSubmit={handleSubmit}>
               {mode === "login" && (
                 <div className="input-group">
-                  <label htmlFor="username">Nom d'utilisateur</label>
+                  <label htmlFor="username">Login</label>
                   <input
                     id="username"
                     name="username"
@@ -177,7 +177,7 @@ export default function AuthDrawer() {
                     autoComplete="username"
                   />
                   <p className="help-text">
-                    💡 Utilisez le prénom que vous avez indiqué lors de votre inscription
+                    Utilisez votre prénom ou votre adresse e-mail
                   </p>
                 </div>
               )}
