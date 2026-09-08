@@ -34,7 +34,7 @@ export default function AuthDrawer() {
   });
 
   useEffect(() => {
-    if (token && !hasRedirected && isOpen === false) {
+    if (token && !hasRedirected) {
       dispatch(closeAuthModal());
       setForm({
         username: "",
@@ -47,6 +47,12 @@ export default function AuthDrawer() {
       setErrors({});
       navigate("/profile");
       setHasRedirected(true);
+    }
+  }, [token, dispatch, navigate]);
+
+  useEffect(() => {
+    if (!token) {
+      setHasRedirected(false);
     }
   }, [token]);
 
@@ -213,9 +219,10 @@ export default function AuthDrawer() {
                     value={form.username}
                     onChange={handleChange}
                     className={errors.username ? "input-error" : ""}
-                    placeholder={errors.username || "Votre identifiant"}
+                    placeholder="Votre identifiant"
                     autoComplete="username"
                   />
+                  {errors.username && <p className="error-text">{errors.username}</p>}
                   <p className="help-text">
                     Utilisez votre prénom ou votre adresse e-mail
                   </p>
@@ -232,9 +239,10 @@ export default function AuthDrawer() {
                     value={form.email}
                     onChange={handleChange}
                     className={errors.email ? "input-error" : ""}
-                    placeholder={errors.email || "votre@email.com"}
+                    placeholder="votre@email.com"
                     autoComplete="email"
                   />
+                  {errors.email && <p className="error-text">{errors.email}</p>}
                 </div>
               )}
 
@@ -248,9 +256,10 @@ export default function AuthDrawer() {
                     value={form.firstName}
                     onChange={handleChange}
                     className={errors.firstName ? "input-error" : ""}
-                    placeholder={errors.firstName || "Votre prénom"}
+                    placeholder="Votre prénom"
                     autoComplete="given-name"
                   />
+                  {errors.firstName && <p className="error-text">{errors.firstName}</p>}
                 </div>
               )}
 
@@ -264,9 +273,10 @@ export default function AuthDrawer() {
                     value={form.lastName}
                     onChange={handleChange}
                     className={errors.lastName ? "input-error" : ""}
-                    placeholder={errors.lastName || "Votre nom"}
+                    placeholder="Votre nom"
                     autoComplete="family-name"
                   />
+                  {errors.lastName && <p className="error-text">{errors.lastName}</p>}
                 </div>
               )}
 
@@ -280,7 +290,7 @@ export default function AuthDrawer() {
                     value={form.password}
                     onChange={handleChange}
                     className={errors.password ? "input-error" : ""}
-                    placeholder={errors.password || "••••••••"}
+                    placeholder="••••••••"
                     autoComplete={
                       mode === "login" ? "current-password" : "new-password"
                     }
@@ -294,6 +304,7 @@ export default function AuthDrawer() {
                     {renderEyeIcon()}
                   </button>
                 </div>
+                {errors.password && <p className="error-text">{errors.password}</p>}
                 {mode === "register" && (
                   <div className="password-strength">
                     <div className="strength-bar">
@@ -322,7 +333,7 @@ export default function AuthDrawer() {
                       value={form.confirmPassword}
                       onChange={handleChange}
                       className={errors.confirmPassword ? "input-error" : ""}
-                      placeholder={errors.confirmPassword || "••••••••"}
+                      placeholder="••••••••"
                       autoComplete="new-password"
                     />
                     <button
@@ -334,6 +345,7 @@ export default function AuthDrawer() {
                       {renderEyeIcon()}
                     </button>
                   </div>
+                  {errors.confirmPassword && <p className="error-text">{errors.confirmPassword}</p>}
                 </div>
               )}
 
