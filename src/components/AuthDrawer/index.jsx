@@ -57,6 +57,13 @@ export default function AuthDrawer() {
   }, [token]);
 
   useEffect(() => {
+    if (isOpen && view !== "reset-password") {
+      setMode(view === "login" ? "login" : "register");
+      setErrors({});
+    }
+  }, [isOpen, view]);
+
+  useEffect(() => {
     if (error) {
       dispatch(showToast(error));
       const parsedErrors = parseBackendError(error);
