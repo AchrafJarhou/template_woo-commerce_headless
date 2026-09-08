@@ -135,18 +135,12 @@
   letter-spacing: $letter-spacing-lg;
   color: $text-primary;
   text-decoration: none;
+  // La casse est une décision de présentation : les traductions restent
+  // écrites normalement pour que chaque langue applique ses propres règles.
+  text-transform: uppercase;
   transition: opacity $transition-fast;
 
   &:hover {
     opacity: 0.7;
   }
-}
-
-.navLanguage {
-  display: flex;
-  align-items: center;
-  gap: $spacing-xs;
-  font-size: $font-size-md;
-  letter-spacing: $letter-spacing-lg;
-  color: $text-primary;
 }

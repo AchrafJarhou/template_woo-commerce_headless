@@ -1,15 +1,18 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 import styles from "./Header.module.scss";
 import menuBurgerIcon from "../../../../assets/icons/menu-burger.png";
 import cartIcon from "../../../../assets/icons/logo-panier.png";
 import { openAuthModal } from "../../../../slices/authModalSlice";
+import LanguageSwitcher from "../../../../components/LanguageSwitcher";
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { t } = useTranslation();
   const cartItems = useSelector((state) => state.cart.items);
   const { token } = useSelector((state) => state.user);
   const siteSettings = useSelector((state) => state.site.siteSettings);
@@ -30,6 +33,8 @@ export default function Header() {
     }
   };
 
+  const closeMenu = () => setMenuOpen(false);
+
   return (
     <>
       <header className={styles.header}>
@@ -38,16 +43,18 @@ export default function Header() {
           <button
             className={styles.menuButton}
             onClick={() => setMenuOpen(true)}
-            aria-label="Ouvrir le menu"
+            aria-label={t("header.openMenu")}
           >
-            <img src={menuBurgerIcon} alt="Menu" className={styles.icon} />
+            <img src={menuBurgerIcon} alt="" className={styles.icon} />
           </button>
+
+          <LanguageSwitcher />
         </div>
 
         {/* Logo RAVI */}
         <Link to="/">
           {siteLogo ? (
-            <img src={siteLogo} alt="Logo" className={styles.logoImg} />
+            <img src={siteLogo} alt={t("header.logoAlt")} className={styles.logoImg} />
           ) : (
             <div className={styles.logo}>RAVI</div>
           )}
@@ -58,7 +65,7 @@ export default function Header() {
           <button
             className={styles.userIconButton}
             onClick={handleUserClick}
-            aria-label="Profil ou Connexion"
+            aria-label={t("header.account")}
           >
             <svg
               className={styles.icon}
@@ -70,12 +77,12 @@ export default function Header() {
           </button>
 
           {/* Icône Panier avec compteur */}
-          <Link to="/panier">
+          <Link to="/panier" aria-label={t("header.cart")}>
             <div className={styles.cartWrapper}>
               {cartCount > 0 && (
                 <span className={styles.cartCount}>{cartBadgeValue}</span>
               )}
-              <img src={cartIcon} alt="Panier" className={styles.icon} />
+              <img src={cartIcon} alt="" className={styles.icon} />
             </div>
           </Link>
         </div>
@@ -86,33 +93,24 @@ export default function Header() {
         <nav className={styles.navFullscreen}>
           <button
             className={styles.closeButton}
-            onClick={() => setMenuOpen(false)}
-            aria-label="Fermer le menu"
+            onClick={closeMenu}
+            aria-label={t("header.closeMenu")}
           >
             ✕
           </button>
           <div className={styles.navContent}>
-            <Link to="/" className={styles.navLink} onClick={() => setMenuOpen(false)}>
-              ACCUEIL
+            <Link to="/" className={styles.navLink} onClick={closeMenu}>
+              {t("header.nav.home")}
             </Link>
-            <Link to="/faq" className={styles.navLink} onClick={() => setMenuOpen(false)}>
-              FAQ
+            <Link to="/faq" className={styles.navLink} onClick={closeMenu}>
+              {t("header.nav.faq")}
             </Link>
-            <Link to="/a-propos" className={styles.navLink} onClick={() => setMenuOpen(false)}>
-              À PROPOS
+            <Link to="/a-propos" className={styles.navLink} onClick={closeMenu}>
+              {t("header.nav.about")}
             </Link>
-            <Link to="/contact" className={styles.navLink} onClick={() => setMenuOpen(false)}>
-              CONTACT
+            <Link to="/contact" className={styles.navLink} onClick={closeMenu}>
+              {t("header.nav.contact")}
             </Link>
-            <div className={styles.navLanguage}>
-              <Link to="#" className={styles.navLink}>
-                FR
-              </Link>
-              <span> / </span>
-              <Link to="#" className={styles.navLink}>
-                EN
-              </Link>
-            </div>
           </div>
         </nav>
       )}

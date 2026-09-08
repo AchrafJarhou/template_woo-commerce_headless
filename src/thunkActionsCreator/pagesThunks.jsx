@@ -1,58 +1,48 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
+const fetchPageBySlug = async (slug) => {
+  const response = await fetch(
+    `${import.meta.env.VITE_API_URL}/wp-json/wp/v2/pages?slug=${encodeURIComponent(slug)}`,
+    {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error("Impossible de récupérer la page.");
+  }
+
+  const data = await response.json();
+  return Array.isArray(data) ? (data[0] ?? null) : (data ?? null);
+};
+
 export const fetchPageThunk = createAsyncThunk(
   "pages/fetchBySlug",
-  async (params = {}, thunkAPI) => {
+  async ({ slug, fallbackSlug }, thunkAPI) => {
     try {
-      const slug = typeof params === "string" ? params : params && params.slug;
-      if (!slug) {
-        return thunkAPI.rejectWithValue(
-          "Le slug de la page est requis pour récupérer la page.",
-        );
+      const page = await fetchPageBySlug(slug);
+      if (page) {
+        return { key: slug, page, isFallback: false };
       }
 
-      const rawParams = typeof params === "string" ? {} : { ...params };
-      delete rawParams.slug;
-      const cleanParams = Object.entries(rawParams).reduce(
-        (acc, [key, value]) => {
-          if (value !== undefined && value !== null && value !== "") {
-            acc[key] = String(value);
-          }
-          return acc;
-        },
-        {},
-      );
-
-      const queryString = new URLSearchParams(cleanParams).toString();
-      const url = `${import.meta.env.VITE_API_URL}/wp-json/wp/v2/pages?slug=${encodeURIComponent(
-        slug,
-      )}${queryString ? `&${queryString}` : ""}`;
-
-      const response = await fetch(url, {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-      });
-      if (!response.ok) {
-        return thunkAPI.rejectWithValue("Impossible de récupérer la page.");
-      }
-      const data = await response.json();
-      if (!data || (Array.isArray(data) && data.length === 0)) {
-        return thunkAPI.rejectWithValue("Page non trouvée");
+      // La traduction n'existe pas encore dans WordPress : mieux vaut servir
+      // la version d'origine qu'une page d'erreur, a fortiori sur un texte légal.
+      if (fallbackSlug && fallbackSlug !== slug) {
+        const originalPage = await fetchPageBySlug(fallbackSlug);
+        if (originalPage) {
+          return { key: slug, page: originalPage, isFallback: true };
+        }
       }
 
-      const item = Array.isArray(data) ? data[0] : data;
-      const page = item;
-      return page;
+      return thunkAPI.rejectWithValue("Page non trouvée");
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
     }
   },
   {
-    condition: (params, { getState }) => {
-      const slug = typeof params === "string" ? params : params?.slug;
-      if (!slug) return true;
-      const state = getState();
-      if (state.pages?.items?.[slug]) return false;
-    },
+    // Le cache est indexé par slug demandé : chaque langue a donc sa propre
+    // entrée, et changer de langue déclenche bien une nouvelle requête.
+    condition: ({ slug }, { getState }) => !getState().pages?.items?.[slug],
   },
 );
