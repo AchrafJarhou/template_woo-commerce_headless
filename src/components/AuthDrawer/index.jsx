@@ -23,6 +23,7 @@ export default function AuthDrawer() {
   const [mode, setMode] = useState("login");
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState({});
+  const [hasRedirected, setHasRedirected] = useState(false);
   const [form, setForm] = useState({
     username: "",
     email: "",
@@ -33,11 +34,12 @@ export default function AuthDrawer() {
   });
 
   useEffect(() => {
-    if (token) {
+    if (token && !hasRedirected && isOpen === false) {
       dispatch(closeAuthModal());
       navigate("/profile");
+      setHasRedirected(true);
     }
-  }, [dispatch, token, navigate]);
+  }, [token]);
 
   useEffect(() => {
     if (error) {
