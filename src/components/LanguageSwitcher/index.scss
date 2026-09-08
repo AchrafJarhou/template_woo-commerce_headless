@@ -1,0 +1,41 @@
+@import "../../styles/variables.scss";
+
+.language-switcher {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.language-switcher__option {
+  padding: 4px $spacing-xs;
+  border: none;
+  border-radius: 4px;
+  background: none;
+  color: $text-primary;
+  font-family: inherit;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-normal;
+  letter-spacing: $letter-spacing-sm;
+  cursor: pointer;
+  opacity: 0.55;
+  transition: opacity $transition-fast;
+
+  &:hover {
+    opacity: 1;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $text-primary;
+    outline-offset: 2px;
+  }
+
+  // La langue active n'est pas signalée que par la couleur : le poids du
+  // trait et le soulignement restent perceptibles sans distinction fine.
+  &[aria-pressed="true"] {
+    opacity: 1;
+    font-weight: $font-weight-bold;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    cursor: default;
+  }
+}

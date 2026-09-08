@@ -1,0 +1,21 @@
+{
+  "header": {
+    "openMenu": "Ouvrir le menu",
+    "closeMenu": "Fermer le menu",
+    "account": "Profil ou connexion",
+    "cart": "Panier",
+    "logoAlt": "Logo",
+    "nav": {
+      "home": "Accueil",
+      "faq": "FAQ",
+      "about": "À propos",
+      "contact": "Contact"
+    }
+  },
+  "language": {
+    "label": "Choix de la langue"
+  },
+  "page": {
+    "translationPending": "Cette page n'est pas encore disponible en français. La version d'origine est affichée ci-dessous."
+  }
+}

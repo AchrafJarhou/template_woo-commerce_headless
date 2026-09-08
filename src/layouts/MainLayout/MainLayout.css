@@ -1,9 +1,13 @@
 /* Ensure full viewport height and flexbox layout */
-html, body, #root {
+html, body {
   height: 100%;
 }
 
+/* min-height et non height : un #root figé à la hauteur de l'écran limiterait
+   le bloc conteneur du header, qui cesserait alors d'être collé après un
+   écran de défilement. Avec min-height, le conteneur grandit avec la page. */
 #root {
+  min-height: 100%;
   display: flex;
   flex-direction: column;
 }
