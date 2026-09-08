@@ -22,6 +22,8 @@ export default function AuthForm() {
     email: "",
     password: "",
     confirmPassword: "",
+    firstName: "",
+    lastName: "",
   });
 
   useEffect(() => {
@@ -48,6 +50,12 @@ export default function AuthForm() {
         newErrors.email = "L'adresse e-mail est requise.";
       } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(updatedForm.email)) {
         newErrors.email = "Entrez une adresse e-mail valide.";
+      }
+      if (!updatedForm.firstName.trim()) {
+        newErrors.firstName = "Le prénom est requis.";
+      }
+      if (!updatedForm.lastName.trim()) {
+        newErrors.lastName = "Le nom est requis.";
       }
       if (!updatedForm.confirmPassword) {
         newErrors.confirmPassword = "Veuillez confirmer votre mot de passe.";
@@ -86,6 +94,8 @@ export default function AuthForm() {
           username: form.username.trim(),
           email: form.email.trim(),
           password: form.password,
+          firstName: form.firstName.trim(),
+          lastName: form.lastName.trim(),
         }),
       );
     }
@@ -134,6 +144,50 @@ export default function AuthForm() {
             autoComplete="email"
             placeholder={errors.email}
             title={errors.email}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                handleSubmit(e);
+              }
+            }}
+          />
+        </div>
+      )}
+      {mode === "register" && (
+        <div className="auth-form__field">
+          <label htmlFor="firstName">Prénom</label>
+          <input
+            id="firstName"
+            name="firstName"
+            type="text"
+            value={form.firstName}
+            onChange={handleChange}
+            className={errors.firstName ? "input--error" : ""}
+            autoComplete="given-name"
+            placeholder={errors.firstName}
+            title={errors.firstName}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                handleSubmit(e);
+              }
+            }}
+          />
+        </div>
+      )}
+      {mode === "register" && (
+        <div className="auth-form__field">
+          <label htmlFor="lastName">Nom</label>
+          <input
+            id="lastName"
+            name="lastName"
+            type="text"
+            value={form.lastName}
+            onChange={handleChange}
+            className={errors.lastName ? "input--error" : ""}
+            autoComplete="family-name"
+            placeholder={errors.lastName}
+            title={errors.lastName}
             onKeyDown={(e) => {
               if (e.key === "Enter") {
                 e.preventDefault();
