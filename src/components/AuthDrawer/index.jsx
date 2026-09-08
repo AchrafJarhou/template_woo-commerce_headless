@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import DOMPurify from "dompurify";
 import {
   closeAuthModal,
   switchAuthModalView,
@@ -25,6 +26,8 @@ export default function AuthDrawer() {
     email: "",
     password: "",
     confirmPassword: "",
+    firstName: "",
+    lastName: "",
   });
 
   useEffect(() => {
@@ -32,8 +35,13 @@ export default function AuthDrawer() {
   }, [dispatch, token]);
 
   useEffect(() => {
-    if (error) dispatch(showToast(error));
-  }, [error, dispatch]);
+    if (error) {
+      dispatch(showToast(error));
+      if (mode === "login") {
+        setErrors({ general: error });
+      }
+    }
+  }, [error, dispatch, mode]);
 
   if (!isOpen) return null;
 
@@ -47,9 +55,13 @@ export default function AuthDrawer() {
   const validateLogin = (e, updatedForm = form) => {
     setErrors({});
     const newErrors = {};
-    if (!updatedForm.username.trim()) {
-      newErrors.username = "Le nom d'utilisateur est requis.";
+
+    if (mode === "login") {
+      if (!updatedForm.username.trim()) {
+        newErrors.username = "Le nom d'utilisateur est requis.";
+      }
     }
+
     if (!updatedForm.password) {
       newErrors.password = "Le mot de passe est requis.";
     } else if (updatedForm.password.length < 8) {
@@ -61,6 +73,12 @@ export default function AuthDrawer() {
         newErrors.email = "L'adresse e-mail est requise.";
       } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(updatedForm.email)) {
         newErrors.email = "Entrez une adresse e-mail valide.";
+      }
+      if (!updatedForm.firstName.trim()) {
+        newErrors.firstName = "Le prénom est requis.";
+      }
+      if (!updatedForm.lastName.trim()) {
+        newErrors.lastName = "Le nom est requis.";
       }
       if (!updatedForm.confirmPassword) {
         newErrors.confirmPassword = "Veuillez confirmer votre mot de passe.";
@@ -95,9 +113,10 @@ export default function AuthDrawer() {
     } else {
       dispatch(
         registerThunk({
-          username: form.username.trim(),
           email: form.email.trim(),
           password: form.password,
+          firstName: form.firstName.trim(),
+          lastName: form.lastName.trim(),
         }),
       );
     }
@@ -139,22 +158,28 @@ export default function AuthDrawer() {
               </h2>
             </div>
 
-            <form className="drawer-form" onSubmit={handleSubmit}>
-              {/* <div className="input-group">
-                <label htmlFor="username">Nom d'utilisateur</label>
-                <input
-                  id="username"
-                  name="username"
-                  type="text"
-                  value={form.username}
-                  onChange={handleChange}
-                  className={errors.username ? "input-error" : ""}
-                  placeholder={errors.username || "Votre identifiant"}
-                  autoComplete="username"
-                />
-              </div> */}
+            {errors.general && (
+              <div className="error-message" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(errors.general) }} />
+            )}
 
-              {/* {mode === "register" && (
+            <form className="drawer-form" onSubmit={handleSubmit}>
+              {mode === "login" && (
+                <div className="input-group">
+                  <label htmlFor="username">Nom d'utilisateur</label>
+                  <input
+                    id="username"
+                    name="username"
+                    type="text"
+                    value={form.username}
+                    onChange={handleChange}
+                    className={errors.username ? "input-error" : ""}
+                    placeholder={errors.username || "Votre identifiant"}
+                    autoComplete="username"
+                  />
+                </div>
+              )}
+
+              {mode === "register" && (
                 <div className="input-group">
                   <label htmlFor="email">Email</label>
                   <input
@@ -168,21 +193,39 @@ export default function AuthDrawer() {
                     autoComplete="email"
                   />
                 </div>
-              )} */}
+              )}
 
-              <div className="input-group">
-                <label htmlFor="email">Email</label>
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  value={form.email}
-                  onChange={handleChange}
-                  className={errors.email ? "input-error" : ""}
-                  placeholder={errors.email || "votre@email.com"}
-                  autoComplete="email"
-                />
-              </div>
+              {mode === "register" && (
+                <div className="input-group">
+                  <label htmlFor="firstName">Prénom</label>
+                  <input
+                    id="firstName"
+                    name="firstName"
+                    type="text"
+                    value={form.firstName}
+                    onChange={handleChange}
+                    className={errors.firstName ? "input-error" : ""}
+                    placeholder={errors.firstName || "Votre prénom"}
+                    autoComplete="given-name"
+                  />
+                </div>
+              )}
+
+              {mode === "register" && (
+                <div className="input-group">
+                  <label htmlFor="lastName">Nom</label>
+                  <input
+                    id="lastName"
+                    name="lastName"
+                    type="text"
+                    value={form.lastName}
+                    onChange={handleChange}
+                    className={errors.lastName ? "input-error" : ""}
+                    placeholder={errors.lastName || "Votre nom"}
+                    autoComplete="family-name"
+                  />
+                </div>
+              )}
 
               <div className="input-group">
                 <label htmlFor="password">Mot de passe</label>

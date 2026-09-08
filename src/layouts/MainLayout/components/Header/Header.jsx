@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import styles from "./Header.module.scss";
@@ -10,6 +10,8 @@ import LanguageSwitcher from "../../../../components/LanguageSwitcher";
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const userMenuRef = useRef(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { t } = useTranslation();
@@ -24,12 +26,27 @@ export default function Header() {
   );
   const cartBadgeValue = cartCount > 9 ? "9+" : String(cartCount);
 
-  // Fonction de routage intelligent
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (userMenuRef.current && !userMenuRef.current.contains(event.target)) {
+        setUserMenuOpen(false);
+      }
+    };
+
+    if (userMenuOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [userMenuOpen]);
+
   const handleUserClick = () => {
     if (token) {
-      navigate("/profile"); // Redirige vers le profil si connecté
+      setUserMenuOpen(!userMenuOpen);
     } else {
-      dispatch(openAuthModal("login")); // Ouvre le tiroir si déconnecté
+      dispatch(openAuthModal("login"));
     }
   };
 
@@ -62,19 +79,43 @@ export default function Header() {
 
         <div className={styles.headerRight}>
           {/* Icône Utilisateur */}
-          <button
-            className={styles.userIconButton}
-            onClick={handleUserClick}
-            aria-label={t("header.account")}
-          >
-            <svg
-              className={styles.icon}
-              viewBox="0 0 24 24"
-              fill="currentColor"
+          <div className={styles.userMenuContainer} ref={userMenuRef}>
+            <button
+              className={styles.userIconButton}
+              onClick={handleUserClick}
+              aria-label="Profil ou Connexion"
             >
-              <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
-            </svg>
-          </button>
+              <svg
+                className={styles.icon}
+                viewBox="0 0 24 24"
+                fill="currentColor"
+              >
+                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+              </svg>
+            </button>
+            {token && userMenuOpen && (
+              <div className={styles.userDropdown}>
+                <Link
+                  to="/profile"
+                  className={styles.dropdownItem}
+                  onClick={() => setUserMenuOpen(false)}
+                >
+                  Mon profil
+                </Link>
+                <button
+                  type="button"
+                  className={`${styles.dropdownItem} ${styles.logoutBtn}`}
+                  onClick={() => {
+                    dispatch(logout());
+                    setUserMenuOpen(false);
+                    navigate("/");
+                  }}
+                >
+                  Déconnexion
+                </button>
+              </div>
+            )}
+          </div>
 
           {/* Icône Panier avec compteur */}
           <Link to="/panier" aria-label={t("header.cart")}>

@@ -52,11 +52,62 @@
   }
 }
 
+.userMenuContainer {
+  position: relative;
+}
+
 .userIconButton {
   background: none;
   border: none;
   cursor: pointer;
   padding: 0;
+}
+
+.userDropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: $primary-blue;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  min-width: 150px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  margin-top: 0.5rem;
+}
+
+.dropdownItem {
+  display: block;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  text-align: left;
+  text-decoration: none;
+  color: $text-primary;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: background-color $transition-fast;
+  font-size: $font-size-md;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+
+  &:first-child {
+    border-radius: 8px 8px 0 0;
+  }
+
+  &:last-child {
+    border-radius: 0 0 8px 8px;
+  }
+}
+
+.logoutBtn {
+  color: #ff6b6b;
+
+  &:hover {
+    background-color: rgba(255, 107, 107, 0.15);
+  }
 }
 
 .cartIcon {

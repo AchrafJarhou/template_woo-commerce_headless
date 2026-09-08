@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { CartProduct } from "../CartProduct";
 import { formatPrice } from "../../utils/formatPrice";
 import Loader from "../Loader";
-import './index.scss';
+import "./index.scss";
 
 export default function Cart() {
   const items = useSelector((state) => state.cart.items);
@@ -75,7 +75,7 @@ export default function Cart() {
           </div>
         </dl>
 
-        <Link to="/commande" className="cart__checkout">
+        <Link to="/checkout" className="cart__checkout">
           Passer la commande
         </Link>
 
