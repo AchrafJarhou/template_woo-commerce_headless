@@ -1,0 +1,21 @@
+{
+  "header": {
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "account": "Account or sign in",
+    "cart": "Cart",
+    "logoAlt": "Logo",
+    "nav": {
+      "home": "Home",
+      "faq": "FAQ",
+      "about": "About",
+      "contact": "Contact"
+    }
+  },
+  "language": {
+    "label": "Language"
+  },
+  "page": {
+    "translationPending": "This page is not available in English yet. The French version below is the legally binding one."
+  }
+}
