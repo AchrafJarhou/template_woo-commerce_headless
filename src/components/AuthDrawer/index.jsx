@@ -23,7 +23,7 @@ export default function AuthDrawer() {
   const [mode, setMode] = useState("login");
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState({});
-  const [hasRedirected, setHasRedirected] = useState(false);
+  const [justAuthenticated, setJustAuthenticated] = useState(false);
   const [form, setForm] = useState({
     username: "",
     email: "",
@@ -34,7 +34,7 @@ export default function AuthDrawer() {
   });
 
   useEffect(() => {
-    if (token && !hasRedirected) {
+    if (token && justAuthenticated && isOpen) {
       dispatch(closeAuthModal());
       setForm({
         username: "",
@@ -46,15 +46,9 @@ export default function AuthDrawer() {
       });
       setErrors({});
       navigate("/profile");
-      setHasRedirected(true);
+      setJustAuthenticated(false);
     }
-  }, [token, dispatch, navigate]);
-
-  useEffect(() => {
-    if (!token) {
-      setHasRedirected(false);
-    }
-  }, [token]);
+  }, [token, justAuthenticated, isOpen, dispatch, navigate]);
 
   useEffect(() => {
     if (isOpen && view !== "reset-password") {
@@ -68,6 +62,7 @@ export default function AuthDrawer() {
       dispatch(showToast(error));
       const parsedErrors = parseBackendError(error);
       setErrors(parsedErrors);
+      setJustAuthenticated(false);
     }
   }, [error, dispatch]);
 
@@ -159,6 +154,7 @@ export default function AuthDrawer() {
       return;
     }
 
+    setJustAuthenticated(true);
     if (mode === "login") {
       dispatch(
         loginThunk({ username: form.username.trim(), password: form.password }),
