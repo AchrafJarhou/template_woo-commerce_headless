@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./Checkout.scss";
 import CheckoutForm from "../../components/CheckoutForm";
-import OrderSummaryK from "../../components/OrderSummaryK";
+import OrderSummaryK from "../../components/OrderSummary";
 import {
   MOCK_CART_ITEMS,
   MOCK_CART_TOTALS,
