@@ -2,8 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   siteSettings: null,
-  // isLoadingSiteSettings: true, A remmettre
-  isLoadingSiteSettings: false,
+  isLoadingSiteSettings: true,
 };
 
 export const siteSlice = createSlice({

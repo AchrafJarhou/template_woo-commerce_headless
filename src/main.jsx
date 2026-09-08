@@ -47,16 +47,16 @@ import AuthDrawer from "./components/AuthDrawer";
 import Checkout from "./pages/Checkout";
 
 async function initializeApp() {
-  // store.dispatch(initializeCartThunk());
-  // store.dispatch(fetchSiteThunk());
+  store.dispatch(initializeCartThunk());
+  store.dispatch(fetchSiteThunk());
 
-  // await store.dispatch(fetchSiteSettingsThunk());
+  await store.dispatch(fetchSiteSettingsThunk());
 
-  // if (store.getState().user.token) {
-  //   store.dispatch(fetchCurrentUserThunk());
-  //   store.dispatch(fetchCurrentCustomerThunk());
-  //   store.dispatch(fetchCurrentUserOrdersThunk());
-  // }
+  if (store.getState().user.token) {
+    store.dispatch(fetchCurrentUserThunk());
+    store.dispatch(fetchCurrentCustomerThunk());
+    store.dispatch(fetchCurrentUserOrdersThunk());
+  }
 
   mountApp();
 }
