@@ -6,6 +6,8 @@ import styles from "./Header.module.scss";
 import menuBurgerIcon from "../../../../assets/icons/menu-burger.png";
 import cartIcon from "../../../../assets/icons/logo-panier.png";
 import { openAuthModal } from "../../../../slices/authModalSlice";
+import { logout } from "../../../../slices/userSlice";
+import { showToast } from "../../../../slices/toastSlice";
 import LanguageSwitcher from "../../../../components/LanguageSwitcher";
 
 export default function Header() {
@@ -107,6 +109,8 @@ export default function Header() {
                   className={`${styles.dropdownItem} ${styles.logoutBtn}`}
                   onClick={() => {
                     dispatch(logout());
+                    dispatch(showToast("Vous avez été déconnecté"));
+                    dispatch(openAuthModal("login"));
                     setUserMenuOpen(false);
                     navigate("/");
                   }}

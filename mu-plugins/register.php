@@ -19,7 +19,7 @@ function headless_register_rate_limit_check()
 
     $attempts = (int) get_transient($key);
 
-    if ($attempts >= 5) {
+    if ($attempts >= 20) {
         return false;
     }
 
@@ -30,7 +30,7 @@ function headless_register_rate_limit_check()
 function headless_register_user($request)
 {
     if (!headless_register_rate_limit_check()) {
-        return new WP_Error('too_many_requests', 'Trion depuis cette adresse. Reessayez plus tard.', ['status' => 429]);
+        return new WP_Error('too_many_requests', 'Trop de tentatives. Reessayez dans une heure.', ['status' => 429]);
     }
 
     $email     = sanitize_email($request->get_param('email'));
