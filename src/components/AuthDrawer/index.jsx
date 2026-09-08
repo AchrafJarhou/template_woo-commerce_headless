@@ -53,11 +53,10 @@ export default function AuthDrawer() {
   useEffect(() => {
     if (error) {
       dispatch(showToast(error));
-      if (mode === "login") {
-        setErrors({ general: error });
-      }
+      const parsedErrors = parseBackendError(error);
+      setErrors(parsedErrors);
     }
-  }, [error, dispatch, mode]);
+  }, [error, dispatch]);
 
   if (!isOpen) return null;
 
@@ -66,6 +65,31 @@ export default function AuthDrawer() {
   const toggleMode = () => {
     setMode(mode === "login" ? "register" : "login");
     setErrors({});
+  };
+
+  const parseBackendError = (errorMsg) => {
+    const fieldErrors = {};
+    const errorLower = errorMsg.toLowerCase();
+
+    if (errorLower.includes("email")) {
+      fieldErrors.email = errorMsg;
+    }
+    if (errorLower.includes("mot de passe") || errorLower.includes("password")) {
+      fieldErrors.password = errorMsg;
+    }
+    if (errorLower.includes("prenom") || errorLower.includes("prénom")) {
+      fieldErrors.firstName = errorMsg;
+    }
+    if (errorLower.includes("nom")) {
+      fieldErrors.lastName = errorMsg;
+    }
+    if (errorLower.includes("identifiant") || errorLower.includes("username")) {
+      fieldErrors.username = errorMsg;
+    }
+
+    return Object.keys(fieldErrors).length > 0
+      ? fieldErrors
+      : { general: errorMsg };
   };
 
   const validateLogin = (e, updatedForm = form) => {
