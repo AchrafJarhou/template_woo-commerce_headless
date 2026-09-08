@@ -229,7 +229,7 @@ export default function AuthDrawer() {
                     placeholder="Votre identifiant"
                     autoComplete="username"
                   />
-                  {errors.username && <p className="error-text">{errors.username}</p>}
+                  {errors.username && <p className="error-text" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(errors.username) }} />}
                   <p className="help-text">
                     Utilisez votre prénom ou votre adresse e-mail
                   </p>
@@ -249,7 +249,7 @@ export default function AuthDrawer() {
                     placeholder="votre@email.com"
                     autoComplete="email"
                   />
-                  {errors.email && <p className="error-text">{errors.email}</p>}
+                  {errors.email && <p className="error-text" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(errors.email) }} />}
                 </div>
               )}
 
@@ -266,7 +266,7 @@ export default function AuthDrawer() {
                     placeholder="Votre prénom"
                     autoComplete="given-name"
                   />
-                  {errors.firstName && <p className="error-text">{errors.firstName}</p>}
+                  {errors.firstName && <p className="error-text" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(errors.firstName) }} />}
                 </div>
               )}
 
@@ -283,7 +283,7 @@ export default function AuthDrawer() {
                     placeholder="Votre nom"
                     autoComplete="family-name"
                   />
-                  {errors.lastName && <p className="error-text">{errors.lastName}</p>}
+                  {errors.lastName && <p className="error-text" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(errors.lastName) }} />}
                 </div>
               )}
 
@@ -311,7 +311,7 @@ export default function AuthDrawer() {
                     {renderEyeIcon()}
                   </button>
                 </div>
-                {errors.password && <p className="error-text">{errors.password}</p>}
+                {errors.password && <p className="error-text" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(errors.password) }} />}
                 {mode === "register" && (
                   <div className="password-strength">
                     <div className="strength-bar">
@@ -352,7 +352,7 @@ export default function AuthDrawer() {
                       {renderEyeIcon()}
                     </button>
                   </div>
-                  {errors.confirmPassword && <p className="error-text">{errors.confirmPassword}</p>}
+                  {errors.confirmPassword && <p className="error-text" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(errors.confirmPassword) }} />}
                 </div>
               )}
 
