@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import DOMPurify from "dompurify";
 import {
   closeAuthModal,
   switchAuthModalView,
@@ -158,7 +159,7 @@ export default function AuthDrawer() {
             </div>
 
             {errors.general && (
-              <div className="error-message" dangerouslySetInnerHTML={{ __html: errors.general }} />
+              <div className="error-message" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(errors.general) }} />
             )}
 
             <form className="drawer-form" onSubmit={handleSubmit}>
