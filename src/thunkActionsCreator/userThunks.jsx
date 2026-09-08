@@ -153,7 +153,7 @@ export const fetchCurrentUserOrdersThunk = createAsyncThunk(
 
 export const registerThunk = createAsyncThunk(
   "user/register",
-  async ({ username, email, password }, thunkAPI) => {
+  async ({ email, password, firstName, lastName }, thunkAPI) => {
     try {
       // Endpoint custom a exposer cote WordPress (mu-plugin), au meme titre
       // que le CORS : WordPress ne permet pas la creation de compte anonyme
@@ -164,7 +164,7 @@ export const registerThunk = createAsyncThunk(
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ username, email, password }),
+          body: JSON.stringify({ email, password, firstName, lastName }),
         },
       );
       const data = await response.json();
@@ -179,6 +179,8 @@ export const registerThunk = createAsyncThunk(
           email: data.user_email,
           displayName: data.user_display_name,
           nicename: data.user_nicename,
+          firstName: data.first_name,
+          lastName: data.last_name,
         },
       };
     } catch (error) {
