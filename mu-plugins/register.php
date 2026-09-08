@@ -51,7 +51,7 @@ function headless_register_user($request)
         return new WP_Error('email_exists', 'Un compte existe deja avec cet email.', ['status' => 409]);
     }
 
-    $base_username = sanitize_user(strtolower(explode('@', $email)[0]));
+    $base_username = sanitize_user(strtolower($firstName));
     $username      = $base_username;
     $counter       = 1;
 
