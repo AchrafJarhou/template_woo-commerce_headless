@@ -251,6 +251,19 @@ export default function AuthDrawer() {
                     {renderEyeIcon()}
                   </button>
                 </div>
+                {mode === "register" && (
+                  <div className="password-strength">
+                    <div className="strength-bar">
+                      <div
+                        className={`strength-fill ${form.password.length >= 8 ? "valid" : ""}`}
+                        style={{ width: `${Math.min((form.password.length / 8) * 100, 100)}%` }}
+                      />
+                    </div>
+                    <span className={`strength-text ${form.password.length >= 8 ? "valid" : ""}`}>
+                      {form.password.length}/8 caractères
+                    </span>
+                  </div>
+                )}
               </div>
 
               {mode === "register" && (
