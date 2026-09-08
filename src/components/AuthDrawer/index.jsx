@@ -34,8 +34,13 @@ export default function AuthDrawer() {
   }, [dispatch, token]);
 
   useEffect(() => {
-    if (error) dispatch(showToast(error));
-  }, [error, dispatch]);
+    if (error) {
+      dispatch(showToast(error));
+      if (mode === "login") {
+        setErrors({ general: error });
+      }
+    }
+  }, [error, dispatch, mode]);
 
   if (!isOpen) return null;
 
@@ -151,6 +156,12 @@ export default function AuthDrawer() {
                 {mode === "login" ? "Connexion" : "Créer un compte"}
               </h2>
             </div>
+
+            {errors.general && (
+              <div className="error-message">
+                {errors.general}
+              </div>
+            )}
 
             <form className="drawer-form" onSubmit={handleSubmit}>
               {mode === "login" && (
