@@ -23,6 +23,7 @@ import Cart from "./pages/Cart";
 import Success from "./pages/Success";
 import NewPassword from "./pages/NewPassword";
 import Profile from "./pages/Profile";
+import Payment from "./pages/Payment";
 import Wishlist from "./pages/Wishlist"; // TEMP: wishlist testing, remove before commit
 import BlogPage from "./pages/Blog";
 import SinglePost from "./pages/SinglePost";
@@ -31,6 +32,8 @@ import LegalMentions from "./pages/LegalMentions";
 import CGU from "./pages/CGU";
 import CGV from "./pages/CGV";
 import FAQ from "./pages/FAQ";
+import PolitiqueCookies from "./pages/PolitiqueCookies";
+import Confidentialite from "./pages/Confidentialite";
 import About from "./pages/About";
 import Error404 from "./pages/Error404";
 
@@ -121,6 +124,7 @@ function mountApp() {
               <Route path="/catalogue" element={<Store />} />
               <Route path="/product/:id" element={<ProductDetails />} />
               <Route path="/panier" element={<Cart />} />
+              <Route path="/commande" element={<Payment />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/wishlist" element={<Wishlist />} />
               <Route path="/blog" element={<BlogPage />} />
@@ -132,6 +136,8 @@ function mountApp() {
               <Route path="/cgu" element={<CGU />} />
               <Route path="/cgv" element={<CGV />} />
               <Route path="/faq" element={<FAQ />} />
+              <Route path="/cookies" element={<PolitiqueCookies />} />
+              <Route path="/confidentialite" element={<Confidentialite />} />
               <Route path="/a-propos" element={<About />} />
               <Route path="*" element={<Error404 />} />
               <Route path="/checkout" element={<Checkout />} />

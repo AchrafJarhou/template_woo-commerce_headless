@@ -16,13 +16,9 @@ export default function Filters() {
     dispatch(fetchCategoriesThunk());
   }, [dispatch]);
 
-  // useEffect(() => {
-  //   dispatch(fetchProductsThunk({ ...filters, page: 1, per_page: 20 }));
-  // }, [filters, dispatch]);
-
-  // const handleSearchChange = (e) => {
-  //   dispatch(setFilters({ search: e.target.value }));
-  // };
+  useEffect(() => {
+    dispatch(fetchProductsThunk({ ...filters, page: 1, per_page: 20 }));
+  }, [filters, dispatch]);
 
   const handleCategoryChange = (e) => {
     dispatch(setFilters({ category: e.target.value, search: "" }));
@@ -40,12 +36,12 @@ export default function Filters() {
 
   return (
     <>
-      {/* <input
+      <input
         type="text"
         value={filters.search}
-        onChange={handleSearchChange}
-        placeholder="Rechercher..."
-      /> */}
+        onChange={(e) => dispatch(setFilters({ search: e.target.value }))}
+        placeholder="Rechercher un produit..."
+      />
       <select value={filters.category} onChange={handleCategoryChange}>
         <option value="">Toutes les catégories</option>
         {categories.map((cat) => (

@@ -33,26 +33,34 @@ export default function ProductGrid({ products, filter, onProductClick }) {
         );
 
   return (
-    <div className={styles.grid}>
-      {filteredProducts.map((product) => (
-        // <Link key={product.id} to={"/product/" + product.slug}>
-        <div
-          key={product.id}
-          className={styles.card}
-          onClick={() => onProductClick(product)}
-        >
-          <img
-            src={
-              product.images[0]?.src ||
-              "https://placeholder.pics/svg/300/DEDEDE/555555/Placeholder"
-            }
-            alt={product.name || "photo produit"}
-            className={styles.image}
-          />
-          <div className={styles.title}>{product.name}</div>
+    <>
+      {filteredProducts.length === 0 ? (
+        <div className={styles.noProducts}>
+          <p>Aucun produit ne correspond à votre recherche.</p>
         </div>
-        // </Link>
-      ))}
-    </div>
+      ) : (
+        <div className={styles.grid}>
+          {filteredProducts.map((product) => (
+            // <Link key={product.id} to={"/product/" + product.slug}>
+            <div
+              key={product.id}
+              className={styles.card}
+              onClick={() => onProductClick(product)}
+            >
+              <img
+                src={
+                  product.images[0]?.src ||
+                  "https://placeholder.pics/svg/300/DEDEDE/555555/Placeholder"
+                }
+                alt={product.name || "photo produit"}
+                className={styles.image}
+              />
+              <div className={styles.title}>{product.name}</div>
+            </div>
+            // </Link>
+          ))}
+        </div>
+      )}
+    </>
   );
 }
