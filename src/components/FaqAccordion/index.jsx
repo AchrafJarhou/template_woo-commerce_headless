@@ -25,6 +25,10 @@ export default function FaqAccordion({ html, lang }) {
     );
   }
 
+  // Un titre de rubrique unique ne distingue rien : il ne fait que répéter
+  // le titre de la page. On ne l'affiche qu'à partir de deux rubriques.
+  const showSectionTitles = faq.sections.length > 1;
+
   return (
     <div className="faq" lang={lang}>
       {faq.intro && (
@@ -33,7 +37,7 @@ export default function FaqAccordion({ html, lang }) {
 
       {faq.sections.map((section, sectionIndex) => (
         <section className="faq__section" key={section.title || sectionIndex}>
-          {section.title && <h2>{section.title}</h2>}
+          {showSectionTitles && section.title && <h2>{section.title}</h2>}
 
           {section.intro && (
             <div dangerouslySetInnerHTML={{ __html: section.intro }} />
