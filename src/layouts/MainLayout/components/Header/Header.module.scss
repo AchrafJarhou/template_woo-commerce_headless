@@ -1,13 +1,20 @@
 @import "../../../../styles/variables.scss";
 
+/* La barre n'a aucun palier : tout est interpolé entre 320 px et 1280 px de
+   large. Un palier laisse toujours une largeur intermédiaire mal servie. */
 .header {
+  /* Taille d'icône partagée : la pastille du panier s'y accroche, les deux
+     ne peuvent donc pas se désaccorder. */
+  --icon-size: clamp(21px, 5.6vw, 28px);
+
   position: sticky;
   top: 0;
   background: $primary-blue;
-  padding: $spacing-sm $spacing-md;
+  padding: clamp(6px, 1.6vw, 12px) clamp(10px, 3vw, 24px);
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: clamp(6px, 2vw, 16px);
   z-index: $z-header;
 }
 
@@ -15,34 +22,45 @@
 .headerRight {
   display: flex;
   align-items: center;
-  flex: 1;
-  gap: $spacing-md;
+  /* flex-basis 0 pour que les deux côtés pèsent pareil et laissent le logo
+     réellement centré ; min-width 0 pour qu'ils puissent se resserrer. */
+  flex: 1 1 0;
+  min-width: 0;
+  gap: clamp(2px, 1.5vw, 12px);
 }
 
 .headerRight {
   justify-content: flex-end;
 }
 
+/* Les commandes gardent leur taille ; c'est le logo, au centre, qui cède
+   de la place en premier si l'écran devient trop étroit. */
+.headerLeft > *,
+.headerRight > * {
+  flex: none;
+}
+
 .logo {
-  flex: 1;
   text-align: center;
-  font-size: 24px;
-  font-weight: 800;
-  letter-spacing: $letter-spacing-lg;
+  font-family: var(--font-heading);
+  font-size: clamp(17px, 4.6vw, 24px);
+  font-weight: $font-weight-bold;
+  letter-spacing: clamp(2px, 0.8vw, 4px);
   color: $text-primary;
+  white-space: nowrap;
 }
 
 .logoImg {
-  max-height: 40px;
+  max-height: clamp(26px, 7vw, 40px);
   width: auto;
-  max-width: 120px;
+  max-width: clamp(78px, 24vw, 120px);
   object-fit: contain;
   display: block;
 }
 
 .icon {
-  width: 28px;
-  height: 28px;
+  width: var(--icon-size);
+  height: var(--icon-size);
   cursor: pointer;
   color: $text-primary;
   transition: opacity $transition-fast;
@@ -50,6 +68,20 @@
   &:hover {
     opacity: 0.7;
   }
+}
+
+/* Toutes les commandes de la barre partagent la même cible tactile.
+   La hauteur est gratuite — la barre fait déjà plus de 44 px — et la
+   largeur reste fluide pour ne pas faire déborder les petits écrans. */
+.menuButton,
+.userIconButton,
+.cartWrapper {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding-inline: clamp(3px, 1.4vw, 9px);
 }
 
 .userMenuContainer {
@@ -60,7 +92,6 @@
   background: none;
   border: none;
   cursor: pointer;
-  padding: 0;
 }
 
 .userDropdown {
@@ -110,32 +141,36 @@
   }
 }
 
-.cartIcon {
-  width: 18px;
-}
-
 .cartWrapper {
-  display: flex;
-  align-items: center;
-  gap: $spacing-xs;
   cursor: pointer;
   position: relative;
 }
 
+/* Pastille posée sur l'icône plutôt que placée à côté : elle ne consomme
+   plus de largeur, ce qui compte sur un écran de 320 px. */
 .cartCount {
-  font-size: $font-size-sm;
+  position: absolute;
+  /* Centrée sur le coin supérieur droit de l'icône, quelle que soit sa
+     taille : les deux offsets se déduisent de --icon-size. */
+  top: calc(50% - var(--icon-size) / 2);
+  left: calc(50% + var(--icon-size) / 2);
+  transform: translate(-50%, -50%);
+  min-width: 16px;
+  padding: 0 4px;
+  border-radius: 999px;
+  background-color: var(--dark-color);
+  color: $white;
+  font-family: var(--font-heading);
+  font-size: 10px;
   font-weight: $font-weight-bold;
-  color: $text-primary;
+  line-height: 16px;
+  text-align: center;
 }
 
 .menuButton {
   background: none;
   border: none;
-  padding: 0;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 
   &:hover {
     opacity: 0.7;
@@ -159,17 +194,29 @@
 
 .closeButton {
   position: absolute;
-  top: $spacing-md;
-  left: $spacing-md;
+  top: clamp(6px, 1.6vw, 12px);
+  left: clamp(6px, 2vw, 16px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0;
   background: none;
   border: none;
-  font-size: 1.8rem;
+  font-size: 1.6rem;
+  line-height: 1;
   cursor: pointer;
   color: $text-primary;
   transition: opacity $transition-fast;
 
   &:hover {
     opacity: 0.7;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $text-primary;
+    outline-offset: 2px;
   }
 }
 
