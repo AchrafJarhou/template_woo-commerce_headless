@@ -85,10 +85,6 @@ function headless_create_order_from_checkout($request)
     $order->set_payment_method_title('Stripe');
     $order->set_payment_method('stripe');
 
-    if (!empty($shipping_method)) {
-        $order->add_shipping_method('flat_rate:1', 1);
-    }
-
     $order->calculate_totals();
     $order->save();
 
