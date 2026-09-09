@@ -441,7 +441,7 @@ export default function CheckoutForm({ shippingMethod, setShippingMethod }) {
       if (data.success && data.order_id) {
         dispatch(showToast(`Commande n°${data.order_id} confirmée`));
         dispatch(emptyCartThunk());
-        navigate(`/order-confirmation/${data.order_id}`);
+        navigate(`/success/${data.order_id}`);
       } else {
         throw new Error("Commande non créée");
       }
