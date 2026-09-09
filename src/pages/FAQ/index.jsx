@@ -1,11 +1,11 @@
 import PageContent from "../../components/PageContent";
-import FaqAccordion from "../../components/FaqAccordion";
+import Accordion from "../../components/Accordion";
 
 export default function FAQ() {
   return (
     <PageContent
       slug="faq"
-      renderBody={(html, lang) => <FaqAccordion html={html} lang={lang} />}
+      renderBody={(html, lang) => <Accordion html={html} lang={lang} />}
     />
   );
 }
