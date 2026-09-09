@@ -79,6 +79,7 @@
   flex-direction: column; /* Force le retour à la ligne */
   gap: 5px;
   border-bottom: rgb(62, 62, 62) 1px solid;
+  width: 90%;
 }
 
 .data-label {
@@ -108,6 +109,16 @@
 
 .data-input:focus {
   background-color: rgba(255, 255, 255, 0.3);
+}
+
+.facturation-title {
+  margin-top: 4rem;
+}
+
+.facturation-text {
+  font-size: 1rem;
+  margin-bottom: 20px;
+  opacity: 0.8;
 }
 
 /* --- BOUTONS --- */
@@ -214,6 +225,23 @@
   font-size: 0.9rem;
   margin: 5px 0;
   opacity: 0.9;
+}
+
+.text-delete-account {
+  font-size: 1rem;
+  opacity: 0.8;
+}
+
+.danger-divider {
+  margin-top: 60px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.delete-confirmation-message {
+  font-size: 1rem;
+  opacity: 0.8;
+  margin-bottom: 10px;
 }
 
 /* === DESKTOP OVERRIDES === */

@@ -159,13 +159,13 @@ export default function AddressBook() {
       {/* =========================================
           SECTION : ADRESSE DE FACTURATION
       ========================================= */}
-      <h2 className="section-title" style={{ marginTop: "60px" }}>
+      <h2 className="section-title facturation-title">
         Adresse de Facturation
       </h2>
 
       {!hasSeparateBilling ? (
         <>
-          <p style={{ fontSize: "14px", marginBottom: "20px", opacity: 0.8 }}>
+          <p className="facturation-text">
             Identique à l'adresse de livraison.
           </p>
           <div className="action-buttons">
