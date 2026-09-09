@@ -93,7 +93,33 @@
   padding-bottom: 0.5rem;
 }
 
+/* --- INPUTS MODE ÉDITION --- */
+.data-input {
+  font-size: 1rem;
+  padding: 0.5rem 0.8rem;
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid #000; /* Bordure bien visible */
+  outline: none;
+  color: #000;
+  font-family: inherit;
+  width: 100%;
+  margin-top: 5px;
+}
+
+.data-input:focus {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
 /* --- BOUTONS --- */
+
+/* --- CONTENEUR DES BOUTONS --- */
+.action-buttons {
+  display: flex;
+  flex-direction: column; /* Empile les boutons sur mobile */
+  gap: 15px;
+  margin-top: 10px;
+}
+
 .action-btn {
   background-color: #000;
   color: #fff;
@@ -105,9 +131,8 @@
   letter-spacing: 2px;
   cursor: pointer;
   transition: opacity 0.3s;
-  display: block;
-  width: fit-content;
-  margin: 10px auto 0 auto;
+  width: 100%; /* Prend toute la largeur sur mobile */
+  margin: 0; /* On retire le margin auto qui forçait le centrage */
 }
 
 .action-btn:hover {
@@ -243,8 +268,13 @@
     flex-direction: row;
   }
 
+  .action-buttons {
+    flex-direction: row; /* Aligne les boutons horizontalement sur PC */
+    justify-content: flex-start; /* Place les boutons tout à gauche */
+    background-color: transparent; /* Retire le fond rose de test */
+  }
+
   .action-btn {
-    display: inline-block;
-    margin-top: 10px;
+    width: fit-content; /* Le bouton s'adapte à la taille du texte sur PC */
   }
 }
