@@ -24,15 +24,21 @@
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: clamp(12px, 2vw, 24px);
+  gap: clamp(10px, 2vw, 24px);
   width: 100%;
-  padding: clamp(14px, 1.8vw, 20px) 0;
+  /* 44 px est la cible tactile minimale recommandée : un doigt n'a pas la
+     précision d'un curseur. */
+  min-height: 44px;
+  padding: clamp(13px, 1.6vw, 18px) 0;
   border: none;
+  border-radius: 0;
   background: none;
   color: var(--ink);
   font-family: var(--font-heading);
   font-weight: 700;
-  font-size: clamp(15px, 1.15vw, 17px);
+  /* Exprimée en em : la question reste toujours 5 % plus grande que sa
+     réponse, à toutes les tailles d'écran, sans second réglage à maintenir. */
+  font-size: 1.05em;
   line-height: 1.45;
   text-align: left;
   cursor: pointer;
