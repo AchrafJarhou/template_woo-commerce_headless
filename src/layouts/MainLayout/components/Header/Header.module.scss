@@ -3,9 +3,11 @@
 /* La barre n'a aucun palier : tout est interpolé entre 320 px et 1280 px de
    large. Un palier laisse toujours une largeur intermédiaire mal servie. */
 .header {
-  /* Taille d'icône partagée : la pastille du panier s'y accroche, les deux
-     ne peuvent donc pas se désaccorder. */
+  /* Hauteur d'icône partagée : la pastille du panier s'y accroche, les deux
+     ne peuvent donc pas se désaccorder. Le retrait des commandes est lui
+     aussi partagé, car la pastille s'aligne sur le bord de l'image. */
   --icon-size: clamp(21px, 5.6vw, 28px);
+  --control-pad: clamp(3px, 1.4vw, 9px);
 
   position: sticky;
   top: 0;
@@ -60,9 +62,12 @@
   display: block;
 }
 
+/* Seule la hauteur est imposée ; la largeur suit les proportions du fichier.
+   Fixer les deux revenait à étirer le sac du panier (243 × 439 px) de 81 %,
+   puisqu'un <img> remplit sa boîte par défaut. */
 .icon {
-  width: var(--icon-size);
   height: var(--icon-size);
+  width: auto;
   cursor: pointer;
   color: $text-primary;
 }
@@ -78,7 +83,11 @@
   align-items: center;
   justify-content: center;
   min-height: 44px;
-  padding-inline: clamp(3px, 1.4vw, 9px);
+  /* Le sac du panier ne fait plus que ~15 px de large une fois à ses
+     proportions : sans largeur plancher, sa cible tactile passerait sous
+     le minimum de 24 px exigé sur petit écran. */
+  min-width: 40px;
+  padding-inline: var(--control-pad);
   transition: opacity $transition-fast;
 
   /* Le survol appartient à la commande, pas à l'une de ses parties : faire
@@ -161,13 +170,19 @@
 
 /* Pastille posée sur l'icône plutôt que placée à côté : elle ne consomme
    plus de largeur, ce qui compte sur un écran de 320 px. */
+/* Épouse exactement l'image : c'est lui qui sert de repère à la pastille,
+   quelles que soient les proportions du fichier d'icône. */
+.cartIconBox {
+  position: relative;
+  display: inline-flex;
+}
+
 .cartCount {
   position: absolute;
-  /* Centrée sur le coin supérieur droit de l'icône, quelle que soit sa
-     taille : les deux offsets se déduisent de --icon-size. */
-  top: calc(50% - var(--icon-size) / 2);
-  left: calc(50% + var(--icon-size) / 2);
-  transform: translate(-50%, -50%);
+  /* Centrée sur le coin supérieur droit de l'image. */
+  top: 0;
+  right: 0;
+  transform: translate(50%, -50%);
   min-width: 16px;
   padding: 0 4px;
   border-radius: 999px;
