@@ -1,6 +1,8 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import "./Checkout.scss";
 import CheckoutForm from "../../components/CheckoutForm";
+import StripeWrapper from "../../components/StripeWrapper";
 import OrderSummaryK from "../../components/OrderSummary";
 import {
   MOCK_CART_ITEMS,
@@ -10,16 +12,18 @@ import {
 export default function Checkout() {
   const [shippingMethod, setShippingMethod] = useState(null);
 
-  // Utilisation directe du mock (à remplacer plus tard par useSelector((state) => state.cart))
-  const items = MOCK_CART_ITEMS;
-  const totals = MOCK_CART_TOTALS;
+  const cartState = useSelector((state) => state.cart);
+  const items = cartState?.items?.length > 0 ? cartState.items : MOCK_CART_ITEMS;
+  const totals = cartState?.totals || MOCK_CART_TOTALS;
 
   return (
     <div className="checkout-container">
-      <CheckoutForm
-        shippingMethod={shippingMethod}
-        setShippingMethod={setShippingMethod}
-      />
+      <StripeWrapper>
+        <CheckoutForm
+          shippingMethod={shippingMethod}
+          setShippingMethod={setShippingMethod}
+        />
+      </StripeWrapper>
       <OrderSummaryK
         items={items}
         totals={totals}

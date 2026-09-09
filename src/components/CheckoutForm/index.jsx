@@ -324,18 +324,47 @@
 // }
 
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
+import { useSelector, useDispatch } from "react-redux";
 import ShippingAddress from "./ShippingAddress";
 import BillingAddress from "./BillingAddress";
 import ShippingOptions from "./ShippingOptions";
+import { showToast } from "../../slices/toastSlice";
+import { emptyCartThunk } from "../../thunkActionsCreator/cartThunks";
 
 export default function CheckoutForm({ shippingMethod, setShippingMethod }) {
+  const navigate = useNavigate();
+  const stripe = useStripe();
+  const elements = useElements();
+  const dispatch = useDispatch();
+
+  const cart = useSelector((state) => state.cart);
+
   const [paymentType, setPaymentType] = useState("card");
   const [sameAsBilling, setSameAsBilling] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   // États locaux pour gérer les champs des sous-composants
-  const [shippingAddress, setShippingAddress] = useState({});
-  const [billingAddress, setBillingAddress] = useState({});
+  const [shippingAddress, setShippingAddress] = useState({
+    first_name: "",
+    last_name: "",
+    address_1: "",
+    city: "",
+    postcode: "",
+    country: "FR",
+    email: "",
+  });
+  const [billingAddress, setBillingAddress] = useState({
+    first_name: "",
+    last_name: "",
+    address_1: "",
+    city: "",
+    postcode: "",
+    country: "FR",
+    email: "",
+  });
 
   const shippingOptions = [
     { id: "mondial_relay", name: "Mondial Relay (Point Relais)", price: 4.5 },
@@ -349,6 +378,78 @@ export default function CheckoutForm({ shippingMethod, setShippingMethod }) {
 
   const handleBillingChange = (e) => {
     setBillingAddress({ ...billingAddress, [e.target.name]: e.target.value });
+  };
+
+  const processCheckout = async (e) => {
+    e.preventDefault();
+
+    if (!stripe || !elements || loading) return;
+    if (paymentType !== "card") {
+      setError("Seul le paiement par carte est actuellement disponible");
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+
+    const cardElement = elements.getElement(CardElement);
+    if (!cardElement) {
+      setError("Erreur: champ de carte non trouvé");
+      setLoading(false);
+      return;
+    }
+
+    const { paymentMethod, error: stripeError } = await stripe.createPaymentMethod({
+      type: "card",
+      card: cardElement,
+      billing_details: {
+        name: `${billingAddress.first_name || ""} ${billingAddress.last_name || ""}`.trim(),
+        email: shippingAddress.email,
+      },
+    });
+
+    if (stripeError) {
+      setError(stripeError.message);
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/wp-json/custom/v1/checkout`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            shippingAddress: shippingAddress,
+            billingAddress: sameAsBilling ? shippingAddress : billingAddress,
+            cartItems: cart.items || [],
+            paymentMethodId: paymentMethod.id,
+            shippingMethod: shippingMethod,
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Erreur lors de la commande");
+      }
+
+      if (data.success && data.order_id) {
+        dispatch(showToast(`Commande n°${data.order_id} confirmée`));
+        dispatch(emptyCartThunk());
+        navigate(`/success/${data.order_id}`);
+      } else {
+        throw new Error("Commande non créée");
+      }
+    } catch (err) {
+      setError(err.message || "Erreur lors de la commande");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -383,7 +484,7 @@ export default function CheckoutForm({ shippingMethod, setShippingMethod }) {
 
       <div className="divider">OU CONTINUER CI-DESSOUS</div>
 
-      <form id="checkout-payment-form">
+      <form id="checkout-payment-form" onSubmit={processCheckout}>
         <ShippingAddress
           address={shippingAddress}
           onChange={handleShippingChange}
@@ -435,15 +536,31 @@ export default function CheckoutForm({ shippingMethod, setShippingMethod }) {
 
           {paymentType === "card" && (
             <div className="stripe-elements-box">
-              <p style={{ fontSize: "12px", opacity: 0.5 }}>
-                Champs Stripe (Numéro, Date, CVC) à insérer ici...
-              </p>
+              <CardElement
+                options={{
+                  style: {
+                    base: {
+                      fontSize: "16px",
+                      color: "#424770",
+                      fontFamily: "system-ui, -apple-system, sans-serif",
+                      "::placeholder": {
+                        color: "#aab7c4",
+                      },
+                    },
+                    invalid: {
+                      color: "#fa755a",
+                    },
+                  },
+                }}
+              />
             </div>
           )}
         </div>
 
-        <button type="submit" className="submit-btn desktop-submit">
-          Valider la commande
+        {error && <div style={{ color: "red", marginTop: "10px" }}>{error}</div>}
+
+        <button type="submit" className="submit-btn desktop-submit" disabled={!stripe || loading}>
+          {loading ? "Traitement en cours..." : "Valider la commande"}
         </button>
       </form>
     </div>

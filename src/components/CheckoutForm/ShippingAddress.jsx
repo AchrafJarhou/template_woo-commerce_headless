@@ -79,6 +79,16 @@ export default function ShippingAddress({ address, onChange }) {
             />
           </div>
         </div>
+        <div className="input-field">
+          <label>Email</label>
+          <input
+            type="email"
+            name="email"
+            value={address.email || ""}
+            onChange={onChange}
+            required
+          />
+        </div>
       </div>
     </>
   );
