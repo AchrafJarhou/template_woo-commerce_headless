@@ -3,6 +3,10 @@
 .catalog {
   position: relative;
   z-index: $z-catalog;
+  // Réserve l'écran occupé par la vidéo en position fixed. Additionnée à la
+  // hauteur de .heroSpacer, cette valeur donne le défilement au bout duquel
+  // le catalogue recouvre entièrement la vidéo — soit la FIN du fondu, que
+  // FADE_DURATION_RATIO (HeroVideo.jsx) reprend. À reporter si elle change.
   margin-top: 100vh;
   background: $primary-blue;
   min-height: 100vh;

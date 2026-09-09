@@ -1,11 +1,11 @@
 @import "../../../styles/variables.scss";
 
-// Cet élément RESTE dans le flux normal : il repousse le contenu suivant
-// et ne peint RIEN par-dessus le bleu du body pendant qu'on scrolle dedans.
 // Reste dans le flux normal : il repousse le contenu suivant sans rien
-// peindre par-dessus le bleu du body pendant qu'on le traverse. Sa hauteur
-// s'ajoute au margin-top du catalogue pour fixer le moment où celui-ci
-// recouvre la vidéo — moment que le fondu de HeroVideo.jsx doit précéder.
+// peindre par-dessus le bleu du body pendant qu'on le traverse.
+//
+// Cette hauteur est aussi le moment où le catalogue entre par le bas de
+// l'écran, donc le DÉPART du fondu de la vidéo : elle est reprise dans
+// FADE_START_RATIO (HeroVideo.jsx). La modifier ici impose de l'y reporter.
 .heroSpacer {
   position: relative;
   height: 30vh;
