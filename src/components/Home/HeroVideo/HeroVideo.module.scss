@@ -1,11 +1,15 @@
 @import "../../../styles/variables.scss";
 
-// Cet élément RESTE dans le flux normal : il repousse le contenu suivant
-// et ne peint RIEN par-dessus le bleu du body pendant qu'on scrolle dedans.
+// Reste dans le flux normal : il repousse le contenu suivant sans rien
+// peindre par-dessus le bleu du body pendant qu'on le traverse.
+//
+// Cette hauteur est aussi le moment où le catalogue entre par le bas de
+// l'écran, donc le DÉPART du fondu de la vidéo : elle est reprise dans
+// FADE_START_RATIO (HeroVideo.jsx). La modifier ici impose de l'y reporter.
 .heroSpacer {
   position: relative;
-  height: 30vh; // doit être >= à la distance de fondu (800px dans votre JS)
-  background: transparent; // important : ne pas remettre de fond ici
+  height: 30vh;
+  background: transparent;
 }
 
 .hero {
@@ -41,5 +45,5 @@
   letter-spacing: $letter-spacing-xl;
   z-index: 2;
   margin: 0;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--font-wordmark);
 }

@@ -1,13 +1,22 @@
 @import "../../../../styles/variables.scss";
 
+/* La barre n'a aucun palier : tout est interpolé entre 320 px et 1280 px de
+   large. Un palier laisse toujours une largeur intermédiaire mal servie. */
 .header {
+  /* Hauteur d'icône partagée : la pastille du panier s'y accroche, les deux
+     ne peuvent donc pas se désaccorder. Le retrait des commandes est lui
+     aussi partagé, car la pastille s'aligne sur le bord de l'image. */
+  --icon-size: clamp(21px, 5.6vw, 28px);
+  --control-pad: clamp(2px, 0.8vw, 5px);
+
   position: sticky;
   top: 0;
   background: $primary-blue;
-  padding: $spacing-sm $spacing-md;
+  padding: clamp(6px, 1.6vw, 12px) clamp(10px, 3vw, 24px);
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: clamp(6px, 2vw, 16px);
   z-index: $z-header;
 }
 
@@ -15,40 +24,84 @@
 .headerRight {
   display: flex;
   align-items: center;
-  flex: 1;
-  gap: $spacing-md;
+  /* flex-basis 0 pour que les deux côtés pèsent pareil et laissent le logo
+     réellement centré ; min-width 0 pour qu'ils puissent se resserrer. */
+  flex: 1 1 0;
+  min-width: 0;
+  gap: clamp(1px, 0.6vw, 4px);
 }
 
 .headerRight {
   justify-content: flex-end;
 }
 
+/* Les commandes gardent leur taille ; c'est le logo, au centre, qui cède
+   de la place en premier si l'écran devient trop étroit. */
+.headerLeft > *,
+.headerRight > * {
+  flex: none;
+}
+
 .logo {
-  flex: 1;
   text-align: center;
-  font-size: 24px;
-  font-weight: 800;
-  letter-spacing: $letter-spacing-lg;
+  font-family: var(--font-wordmark);
+  font-size: clamp(17px, 4.6vw, 24px);
+  font-weight: $font-weight-bold;
+  /* En em plutôt qu'en px : l'interlettrage reste proportionné à toutes
+     les tailles, sans second réglage à maintenir. */
+  letter-spacing: 0.16em;
   color: $text-primary;
+  white-space: nowrap;
 }
 
 .logoImg {
-  max-height: 40px;
+  max-height: clamp(26px, 7vw, 40px);
   width: auto;
-  max-width: 120px;
+  max-width: clamp(78px, 24vw, 120px);
   object-fit: contain;
   display: block;
 }
 
+/* Seule la hauteur est imposée ; la largeur suit les proportions du fichier.
+   Fixer les deux revenait à étirer le sac du panier (243 × 439 px) de 81 %,
+   puisqu'un <img> remplit sa boîte par défaut. */
 .icon {
-  width: 28px;
-  height: 28px;
+  height: var(--icon-size);
+  width: auto;
   cursor: pointer;
   color: $text-primary;
+}
+
+/* Toutes les commandes de la barre partagent la même cible tactile.
+   La hauteur est gratuite — la barre fait déjà plus de 44 px — et la
+   largeur reste fluide pour ne pas faire déborder les petits écrans. */
+.menuButton,
+.userIconButton,
+.cartWrapper {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  /* Le sac du panier ne fait plus que ~15 px de large une fois à ses
+     proportions : sans largeur plancher, sa cible tactile passerait sous
+     le minimum de 24 px exigé sur petit écran. */
+  min-width: 40px;
+  padding-inline: var(--control-pad);
   transition: opacity $transition-fast;
 
+  /* Le survol appartient à la commande entière, pas à l'une de ses parties :
+     ne faire pâlir que l'icône laissait le compte à pleine opacité. */
   &:hover {
     opacity: 0.7;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .menuButton,
+  .userIconButton,
+  .cartWrapper {
+    transition: none;
   }
 }
 
@@ -60,7 +113,6 @@
   background: none;
   border: none;
   cursor: pointer;
-  padding: 0;
 }
 
 .userDropdown {
@@ -110,32 +162,32 @@
   }
 }
 
-.cartIcon {
-  width: 18px;
-}
-
 .cartWrapper {
-  display: flex;
-  align-items: center;
-  gap: $spacing-xs;
   cursor: pointer;
-  position: relative;
+  gap: clamp(3px, 1vw, 6px);
 }
 
+/* Le compte se lit à gauche du sac, posé sur le fond de la barre. Aucune
+   superposition avec l'icône, donc plus rien qui puisse se recouvrir. */
 .cartCount {
-  font-size: $font-size-sm;
+  font-family: var(--font-heading);
+  /* Proportionné à l'icône, avec un plancher pour rester lisible. */
+  font-size: max(11px, calc(var(--icon-size) * 0.5));
   font-weight: $font-weight-bold;
+  line-height: 1;
   color: $text-primary;
+}
+
+/* Le corps du sac est un rectangle plein qui occupe toute la boîte de
+   l'image : arrondir la boîte arrondit donc la forme elle-même. */
+.cartWrapper .icon {
+  border-radius: calc(var(--icon-size) * 0.11);
 }
 
 .menuButton {
   background: none;
   border: none;
-  padding: 0;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 
   &:hover {
     opacity: 0.7;
@@ -159,17 +211,29 @@
 
 .closeButton {
   position: absolute;
-  top: $spacing-md;
-  left: $spacing-md;
+  top: clamp(6px, 1.6vw, 12px);
+  left: clamp(6px, 2vw, 16px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0;
   background: none;
   border: none;
-  font-size: 1.8rem;
+  font-size: 1.6rem;
+  line-height: 1;
   cursor: pointer;
   color: $text-primary;
   transition: opacity $transition-fast;
 
   &:hover {
     opacity: 0.7;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $text-primary;
+    outline-offset: 2px;
   }
 }
 
