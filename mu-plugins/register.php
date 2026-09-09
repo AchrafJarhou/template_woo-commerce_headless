@@ -68,6 +68,8 @@ function headless_register_user($request)
     update_user_meta($user_id, 'first_name', $firstName);
     update_user_meta($user_id, 'last_name', $lastName);
 
+    headless_send_welcome_email($firstName, $email);
+
     $token_request = new WP_REST_Request('POST', '/jwt-auth/v1/token');
     $token_request->set_param('username', $username);
     $token_request->set_param('password', $password);
@@ -78,4 +80,18 @@ function headless_register_user($request)
     }
 
     return rest_ensure_response($token_response->get_data());
+}
+
+function headless_send_welcome_email($firstName, $email)
+{
+    $subject = 'Bienvenue !';
+    $body = "Bonjour " . sanitize_text_field($firstName) . ",\n\n";
+    $body .= "Merci de vous être inscrit sur notre boutique.\n\n";
+    $body .= "Vous pouvez maintenant commencer à faire vos achats.\n\n";
+    $body .= "Si vous avez des questions, n'hésitez pas à nous contacter.\n\n";
+    $body .= "Cordialement,\nL'équipe";
+
+    $headers = ['Content-Type: text/plain; charset=UTF-8'];
+
+    wp_mail($email, $subject, $body, $headers);
 }
