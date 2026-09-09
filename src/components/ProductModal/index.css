@@ -137,6 +137,29 @@
   max-width: 42ch;
 }
 
+.modal-description--scrollable {
+  max-height: 180px;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+}
+
+.modal-description--scrollable::-webkit-scrollbar {
+  width: 4px;
+}
+
+.modal-description--scrollable::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.modal-description--scrollable::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 2px;
+}
+
+.modal-description--scrollable::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.4);
+}
+
 /* Attributs (Taille, Couleur, etc.) */
 .modal-attributes {
   display: flex;
