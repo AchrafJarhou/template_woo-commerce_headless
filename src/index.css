@@ -18,6 +18,10 @@
   --bg-color: rgb(103, 132, 200);
   --font-body: "InterCustom", sans-serif;
   --font-heading: "PoppinsCustom", sans-serif;
+  /* Police du mot-symbole RAVI. Partagée par le logo du header et le titre
+     de la page d'accueil : le nom de la marque ne doit s'écrire que d'une
+     seule façon. */
+  --font-wordmark: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 * {

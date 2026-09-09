@@ -42,10 +42,12 @@
 
 .logo {
   text-align: center;
-  font-family: var(--font-heading);
+  font-family: var(--font-wordmark);
   font-size: clamp(17px, 4.6vw, 24px);
   font-weight: $font-weight-bold;
-  letter-spacing: clamp(2px, 0.8vw, 4px);
+  /* En em plutôt qu'en px : l'interlettrage reste proportionné à toutes
+     les tailles, sans second réglage à maintenir. */
+  letter-spacing: 0.16em;
   color: $text-primary;
   white-space: nowrap;
 }
@@ -63,11 +65,6 @@
   height: var(--icon-size);
   cursor: pointer;
   color: $text-primary;
-  transition: opacity $transition-fast;
-
-  &:hover {
-    opacity: 0.7;
-  }
 }
 
 /* Toutes les commandes de la barre partagent la même cible tactile.
@@ -82,6 +79,22 @@
   justify-content: center;
   min-height: 44px;
   padding-inline: clamp(3px, 1.4vw, 9px);
+  transition: opacity $transition-fast;
+
+  /* Le survol appartient à la commande, pas à l'une de ses parties : faire
+     pâlir la seule icône laissait la pastille du panier à pleine opacité,
+     qui semblait alors changer de forme. */
+  &:hover {
+    opacity: 0.7;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .menuButton,
+  .userIconButton,
+  .cartWrapper {
+    transition: none;
+  }
 }
 
 .userMenuContainer {
@@ -159,6 +172,10 @@
   padding: 0 4px;
   border-radius: 999px;
   background-color: var(--dark-color);
+  /* Anneau de la couleur de la barre : la pastille se détache toujours, y
+     compris posée sur l'icône noire du panier. box-shadow plutôt que border,
+     pour ne rien changer aux dimensions. */
+  box-shadow: 0 0 0 2px $primary-blue;
   color: $white;
   font-family: var(--font-heading);
   font-size: 10px;
