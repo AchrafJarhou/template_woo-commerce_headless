@@ -2,7 +2,9 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { CartProduct } from "../CartProduct";
 import { formatPrice } from "../../utils/formatPrice";
+import { HOME_CATALOG_PATH } from "../../constants/navigation";
 import Loader from "../Loader";
+import cartIcon from "../../assets/icons/logo-panier.png";
 import "./index.scss";
 
 export default function Cart() {
@@ -13,9 +15,13 @@ export default function Cart() {
   // panier inconnu sont indiscernables : afficher « vide » serait un mensonge.
   if (!totals) {
     return (
-      <section className="cart cart--empty">
-        <h1 className="cart__title">Votre panier</h1>
-        <Loader size="lg" />
+      <section className="cart-state">
+        <div className="cart-state__inner">
+          <h1 className="cart-state__title">Votre panier</h1>
+          <div className="cart-state__loader">
+            <Loader size="lg" />
+          </div>
+        </div>
       </section>
     );
   }
@@ -25,12 +31,20 @@ export default function Cart() {
 
   if (items.length === 0) {
     return (
-      <section className="cart cart--empty">
-        <h1 className="cart__title">Votre panier</h1>
-        <p className="cart__empty-message">Votre panier est vide.</p>
-        <Link to="/catalogue" className="cart__continue">
-          Continuer mon shopping
-        </Link>
+      <section className="cart-state">
+        <div className="cart-state__inner">
+          {/* Décoratif : alt vide pour que les lecteurs d'écran l'ignorent,
+              le message juste en dessous dit déjà tout. */}
+          <img src={cartIcon} alt="" className="cart-state__icon" />
+          <h1 className="cart-state__title">Votre panier</h1>
+          <p className="cart-state__message">Votre panier est vide.</p>
+          <p className="cart-state__hint">
+            Parcourez le catalogue pour y ajouter vos premiers articles.
+          </p>
+          <Link to={HOME_CATALOG_PATH} className="cart-state__cta">
+            Continuer mon shopping
+          </Link>
+        </div>
       </section>
     );
   }
@@ -79,7 +93,7 @@ export default function Cart() {
           Passer la commande
         </Link>
 
-        <Link to="/" className="cart__continue">
+        <Link to={HOME_CATALOG_PATH} className="cart__continue">
           Continuer mon shopping
         </Link>
       </aside>
