@@ -129,15 +129,130 @@
   }
 }
 
-.cart--empty {
-  justify-items: start;
-  min-height: 40vh;
+/* ─────────────────────────────────────────────────────────────────────────
+   Panier sans articles : chargement en cours, ou panier réellement vide.
+
+   Ce bloc ne réutilise PAS la grille de .cart. Celle-ci passe à deux colonnes
+   en paysage — contenu à gauche, récapitulatif à droite — et le message s'y
+   retrouvait placé dans la colonne du récapitulatif, à l'autre bout de
+   l'écran, loin de son titre. Un écran qui n'a qu'une chose à dire la dit au
+   centre, dans une seule colonne.
+   ───────────────────────────────────────────────────────────────────────── */
+.cart-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* `inherit` reprend la min-height calculée de .main-layout__content plutôt
+     que d'en recopier la valeur : la hauteur réservée au contenu reste
+     définie à un seul endroit, dans MainLayout.css. Le bloc est ainsi centré
+     dans l'espace disponible, et non tassé en haut d'une page vide. */
+  min-height: inherit;
+  padding: clamp(40px, 8vh, 88px) clamp(20px, 5vw, 64px);
 }
 
-.cart__empty-message {
+.cart-state__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* En ch : la mesure suit la taille réelle de la police, la ligne reste
+     lisible sans second réglage par palier. */
+  max-width: 46ch;
+  text-align: center;
+}
+
+/* Reprend l'icône du header : le panier vide montre l'objet dont il parle.
+   Assez pâle pour poser la composition sans concurrencer le titre. Aucun
+   critère de contraste ne s'y applique — l'image est décorative, le message
+   qui suit porte seul l'information. */
+.cart-state__icon {
+  height: clamp(38px, 7vw, 52px);
+  width: auto;
+  margin-bottom: clamp(18px, 3vh, 28px);
+  opacity: 0.28;
+}
+
+/* Les règles globales dimensionnent h1 en vw (6vw, 2vw au-delà du carré) :
+   le titre grossissait avec l'écran sans rapport avec le bloc qu'il coiffe. */
+.cart-state__title {
   margin: 0;
-  font-size: clamp(15px, 1.5vw, 20px);
-  color: var(--muted);
+  font-size: clamp(26px, 3vw, 40px);
+  line-height: 1.15;
+  color: var(--dark-color);
+}
+
+/* Filet court : sépare l'identité de la page de son message, sans ajouter
+   d'élément au HTML pour un trait. */
+.cart-state__title::after {
+  content: "";
+  display: block;
+  width: 48px;
+  height: 1px;
+  margin: clamp(16px, 2.5vh, 24px) auto 0;
+  background-color: rgb(15 23 42 / 0.25);
+}
+
+/* Sur le bleu du site, l'encre pleine ne dépasse pas 4,86:1 : la moindre
+   transparence fait tomber le texte courant sous le seuil AA de 4,5:1
+   (0,6 d'opacité n'atteint que 2,68:1). La hiérarchie entre le message et
+   son complément se joue donc sur la taille, jamais sur la pâleur. */
+.cart-state__message {
+  margin: clamp(16px, 2.5vh, 24px) 0 0;
+  font-size: clamp(16px, 1.6vw, 21px);
+  line-height: 1.5;
+  color: var(--dark-color);
+}
+
+.cart-state__hint {
+  margin: clamp(6px, 1vh, 10px) 0 0;
+  font-size: clamp(13px, 1.2vw, 15px);
+  line-height: 1.6;
+  color: var(--dark-color);
+}
+
+.cart-state__loader {
+  margin-top: clamp(24px, 4vh, 36px);
+}
+
+/* Bouton plein du site, repris à l'identique de .add-btn (ProductModal) :
+   même noir, même graisse, même interlettrage, mêmes angles vifs. Une action
+   principale doit se reconnaître au même geste visuel d'un écran à l'autre. */
+.cart-state__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: clamp(28px, 4vh, 40px);
+  padding: 19px 32px;
+  /* Plein cadre sur mobile, jamais démesuré au-delà : la cible reste franche
+     sans que le bouton ne s'étire sur toute la largeur d'un grand écran. */
+  width: 100%;
+  max-width: 340px;
+  background-color: #000;
+  color: #fff;
+  border-radius: 0;
+  /* Les <a> reçoivent une taille en vw des règles globales (4,5vw, puis
+     1,5vw) : sans valeur explicite, le libellé suivrait la largeur d'écran. */
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+
+  &:hover {
+    opacity: 0.82;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--dark-color);
+    outline-offset: 3px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cart-state__cta {
+    transition: none;
+  }
 }
 
 @media screen and (aspect-ratio > 1/1) {
