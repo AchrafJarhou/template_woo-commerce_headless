@@ -17,7 +17,7 @@ export default function CatalogSection({ products }) {
     filter === "tous"
       ? products
       : products.filter((p) =>
-          p.categories?.some((cat) => cat.slug === filter)
+          p.categories?.some((cat) => cat.slug === filter),
         );
 
   return (
@@ -46,8 +46,7 @@ export default function CatalogSection({ products }) {
           onClose={() => setSelectedProduct(null)}
         />
       )}
-    <Footer />
-
+      <Footer />
     </div>
   );
 }
