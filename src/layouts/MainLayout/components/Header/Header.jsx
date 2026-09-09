@@ -124,14 +124,10 @@ export default function Header() {
           {/* Icône Panier avec compteur */}
           <Link to="/panier" aria-label={t("header.cart")}>
             <div className={styles.cartWrapper}>
-              {/* La pastille se positionne par rapport à l'image seule, et
-                  non par rapport à la zone tactile qui l'entoure. */}
-              <span className={styles.cartIconBox}>
-                <img src={cartIcon} alt="" className={styles.icon} />
-                {cartCount > 0 && (
-                  <span className={styles.cartCount}>{cartBadgeValue}</span>
-                )}
-              </span>
+              {cartCount > 0 && (
+                <span className={styles.cartCount}>{cartBadgeValue}</span>
+              )}
+              <img src={cartIcon} alt="" className={styles.icon} />
             </div>
           </Link>
         </div>

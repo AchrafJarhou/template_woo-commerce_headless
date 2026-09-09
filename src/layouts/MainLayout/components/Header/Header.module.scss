@@ -90,9 +90,8 @@
   padding-inline: var(--control-pad);
   transition: opacity $transition-fast;
 
-  /* Le survol appartient à la commande, pas à l'une de ses parties : faire
-     pâlir la seule icône laissait la pastille du panier à pleine opacité,
-     qui semblait alors changer de forme. */
+  /* Le survol appartient à la commande entière, pas à l'une de ses parties :
+     ne faire pâlir que l'icône laissait le compte à pleine opacité. */
   &:hover {
     opacity: 0.7;
   }
@@ -165,38 +164,24 @@
 
 .cartWrapper {
   cursor: pointer;
-  position: relative;
+  gap: clamp(3px, 1vw, 6px);
 }
 
-/* Pastille posée sur l'icône plutôt que placée à côté : elle ne consomme
-   plus de largeur, ce qui compte sur un écran de 320 px. */
-/* Épouse exactement l'image : c'est lui qui sert de repère à la pastille,
-   quelles que soient les proportions du fichier d'icône. */
-.cartIconBox {
-  position: relative;
-  display: inline-flex;
-}
-
+/* Le compte se lit à gauche du sac, posé sur le fond de la barre. Aucune
+   superposition avec l'icône, donc plus rien qui puisse se recouvrir. */
 .cartCount {
-  position: absolute;
-  /* Centrée sur le coin supérieur droit de l'image. */
-  top: 0;
-  right: 0;
-  transform: translate(50%, -50%);
-  min-width: 16px;
-  padding: 0 4px;
-  border-radius: 999px;
-  background-color: var(--dark-color);
-  /* Anneau de la couleur de la barre : la pastille se détache toujours, y
-     compris posée sur l'icône noire du panier. box-shadow plutôt que border,
-     pour ne rien changer aux dimensions. */
-  box-shadow: 0 0 0 2px $primary-blue;
-  color: $white;
   font-family: var(--font-heading);
-  font-size: 10px;
+  /* Proportionné à l'icône, avec un plancher pour rester lisible. */
+  font-size: max(11px, calc(var(--icon-size) * 0.5));
   font-weight: $font-weight-bold;
-  line-height: 16px;
-  text-align: center;
+  line-height: 1;
+  color: $text-primary;
+}
+
+/* Le corps du sac est un rectangle plein qui occupe toute la boîte de
+   l'image : arrondir la boîte arrondit donc la forme elle-même. */
+.cartWrapper .icon {
+  border-radius: calc(var(--icon-size) * 0.11);
 }
 
 .menuButton {
