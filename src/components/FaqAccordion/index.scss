@@ -1,0 +1,116 @@
+/* L'accordéon vit à l'intérieur de .page-content et hérite de ses variables
+   (--ink, --hairline). Les sélecteurs préfixés par .page-content sont là pour
+   reprendre la main sur les styles de titres du document, à égalité de
+   spécificité sinon. */
+
+.faq__section + .faq__section {
+  margin-top: clamp(30px, 4vw, 44px);
+}
+
+.faq__item {
+  border-bottom: 1px solid var(--hairline);
+}
+
+/* Le <h3> ne sert plus qu'à porter le niveau de titre : toute la mise en
+   forme appartient au bouton, qui est la vraie cible de l'utilisateur. */
+.page-content .faq__question {
+  margin: 0;
+  font-size: inherit;
+  letter-spacing: normal;
+  color: inherit;
+}
+
+.faq__trigger {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: clamp(12px, 2vw, 24px);
+  width: 100%;
+  padding: clamp(14px, 1.8vw, 20px) 0;
+  border: none;
+  background: none;
+  color: var(--ink);
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: clamp(15px, 1.15vw, 17px);
+  line-height: 1.45;
+  text-align: left;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+
+  &:hover {
+    opacity: 0.65;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--ink);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+}
+
+/* Un « + » qui devient « − » : la barre verticale pivote. */
+.faq__sign {
+  position: relative;
+  flex: none;
+  width: 14px;
+  height: 1.45em;
+
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 1.5px;
+    background-color: currentColor;
+    transition: transform 0.28s ease;
+  }
+
+  &::after {
+    transform: rotate(90deg);
+  }
+}
+
+.faq__item[data-open="true"] .faq__sign::after {
+  transform: rotate(0deg);
+}
+
+/* L'animation de hauteur passe par une grille : 0fr → 1fr est la seule façon
+   d'animer vers une hauteur automatique sans la mesurer en JavaScript.
+   visibility retire le contenu replié du parcours au clavier et des lecteurs
+   d'écran ; son changement est différé pour laisser la fermeture s'achever. */
+.faq__panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  visibility: hidden;
+  transition:
+    grid-template-rows 0.28s ease,
+    visibility 0s linear 0.28s;
+}
+
+.faq__item[data-open="true"] .faq__panel {
+  grid-template-rows: 1fr;
+  visibility: visible;
+  transition:
+    grid-template-rows 0.28s ease,
+    visibility 0s;
+}
+
+.faq__answer {
+  overflow: hidden;
+  /* Sans min-height: 0, un élément de grille refuse de descendre sous la
+     hauteur de son contenu et l'animation ne se produit pas. */
+  min-height: 0;
+  padding-bottom: clamp(14px, 2vw, 22px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .faq__panel,
+  .faq__sign::before,
+  .faq__sign::after,
+  .faq__trigger {
+    transition: none;
+  }
+}
