@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./Checkout.scss";
 import CheckoutForm from "../../components/CheckoutForm";
+import StripeWrapper from "../../components/StripeWrapper";
 import OrderSummaryK from "../../components/OrderSummary";
 import {
   MOCK_CART_ITEMS,
@@ -16,10 +17,12 @@ export default function Checkout() {
 
   return (
     <div className="checkout-container">
-      <CheckoutForm
-        shippingMethod={shippingMethod}
-        setShippingMethod={setShippingMethod}
-      />
+      <StripeWrapper>
+        <CheckoutForm
+          shippingMethod={shippingMethod}
+          setShippingMethod={setShippingMethod}
+        />
+      </StripeWrapper>
       <OrderSummaryK
         items={items}
         totals={totals}
