@@ -7,7 +7,7 @@
      ne peuvent donc pas se désaccorder. Le retrait des commandes est lui
      aussi partagé, car la pastille s'aligne sur le bord de l'image. */
   --icon-size: clamp(21px, 5.6vw, 28px);
-  --control-pad: clamp(3px, 1.4vw, 9px);
+  --control-pad: clamp(2px, 0.8vw, 5px);
 
   position: sticky;
   top: 0;
@@ -28,7 +28,7 @@
      réellement centré ; min-width 0 pour qu'ils puissent se resserrer. */
   flex: 1 1 0;
   min-width: 0;
-  gap: clamp(2px, 1.5vw, 12px);
+  gap: clamp(1px, 0.6vw, 4px);
 }
 
 .headerRight {

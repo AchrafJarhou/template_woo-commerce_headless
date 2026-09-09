@@ -2,10 +2,14 @@
 
 // Cet élément RESTE dans le flux normal : il repousse le contenu suivant
 // et ne peint RIEN par-dessus le bleu du body pendant qu'on scrolle dedans.
+// Reste dans le flux normal : il repousse le contenu suivant sans rien
+// peindre par-dessus le bleu du body pendant qu'on le traverse. Sa hauteur
+// s'ajoute au margin-top du catalogue pour fixer le moment où celui-ci
+// recouvre la vidéo — moment que le fondu de HeroVideo.jsx doit précéder.
 .heroSpacer {
   position: relative;
-  height: 30vh; // doit être >= à la distance de fondu (800px dans votre JS)
-  background: transparent; // important : ne pas remettre de fond ici
+  height: 30vh;
+  background: transparent;
 }
 
 .hero {
