@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import "./Checkout.scss";
 import CheckoutForm from "../../components/CheckoutForm";
 import StripeWrapper from "../../components/StripeWrapper";
-import OrderSummaryK from "../../components/OrderSummary";
+import OrderSummary from "../../components/OrderSummary";
 import {
   MOCK_CART_ITEMS,
   MOCK_CART_TOTALS,
@@ -13,7 +13,8 @@ export default function Checkout() {
   const [shippingMethod, setShippingMethod] = useState(null);
 
   const cartState = useSelector((state) => state.cart);
-  const items = cartState?.items?.length > 0 ? cartState.items : MOCK_CART_ITEMS;
+  const items =
+    cartState?.items?.length > 0 ? cartState.items : MOCK_CART_ITEMS;
   const totals = cartState?.totals || MOCK_CART_TOTALS;
 
   return (
@@ -24,7 +25,7 @@ export default function Checkout() {
           setShippingMethod={setShippingMethod}
         />
       </StripeWrapper>
-      <OrderSummaryK
+      <OrderSummary
         items={items}
         totals={totals}
         shippingCost={shippingMethod ? shippingMethod.price : 0}
