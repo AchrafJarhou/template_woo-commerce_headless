@@ -347,8 +347,24 @@ export default function CheckoutForm({ shippingMethod, setShippingMethod }) {
   const [error, setError] = useState(null);
 
   // États locaux pour gérer les champs des sous-composants
-  const [shippingAddress, setShippingAddress] = useState({});
-  const [billingAddress, setBillingAddress] = useState({});
+  const [shippingAddress, setShippingAddress] = useState({
+    first_name: "",
+    last_name: "",
+    address_1: "",
+    city: "",
+    postcode: "",
+    country: "FR",
+    email: "",
+  });
+  const [billingAddress, setBillingAddress] = useState({
+    first_name: "",
+    last_name: "",
+    address_1: "",
+    city: "",
+    postcode: "",
+    country: "FR",
+    email: "",
+  });
 
   const shippingOptions = [
     { id: "mondial_relay", name: "Mondial Relay (Point Relais)", price: 4.5 },
