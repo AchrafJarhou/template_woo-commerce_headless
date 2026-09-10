@@ -1,6 +1,8 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export default function AddressBook() {
+  const { t } = useTranslation();
   // --- ÉTATS POUR L'ADRESSE DE LIVRAISON ---
   const initialShipping = {
     name: "Jean Dupont",
@@ -70,10 +72,10 @@ export default function AddressBook() {
       {/* =========================================
           SECTION : ADRESSE DE LIVRAISON
       ========================================= */}
-      <h2 className="section-title">Adresse de Livraison (Par défaut)</h2>
+      <h2 className="section-title">{t("address.defaultShipping")}</h2>
       <div className="data-grid">
         <div className="data-item">
-          <span className="data-label">Nom Complet</span>
+          <span className="data-label">{t("address.fullName")}</span>
           {isEditingShipping ? (
             <input
               type="text"
@@ -88,7 +90,7 @@ export default function AddressBook() {
         </div>
 
         <div className="data-item">
-          <span className="data-label">Adresse</span>
+          <span className="data-label">{t("address.street")}</span>
           {isEditingShipping ? (
             <input
               type="text"
@@ -103,7 +105,7 @@ export default function AddressBook() {
         </div>
 
         <div className="data-item">
-          <span className="data-label">Ville & Code Postal</span>
+          <span className="data-label">{t("address.cityAndPostcode")}</span>
           {isEditingShipping ? (
             <input
               type="text"
@@ -118,7 +120,7 @@ export default function AddressBook() {
         </div>
 
         <div className="data-item">
-          <span className="data-label">Téléphone</span>
+          <span className="data-label">{t("address.phone")}</span>
           {isEditingShipping ? (
             <input
               type="tel"
@@ -137,13 +139,13 @@ export default function AddressBook() {
         {isEditingShipping ? (
           <>
             <button className="action-btn" onClick={handleShippingSave}>
-              Enregistrer
+              {t("common.save")}
             </button>
             <button
               className="action-btn outline"
               onClick={handleShippingCancel}
             >
-              Annuler
+              {t("common.cancel")}
             </button>
           </>
         ) : (
@@ -151,7 +153,7 @@ export default function AddressBook() {
             className="action-btn"
             onClick={() => setIsEditingShipping(true)}
           >
-            Modifier l'adresse
+            {t("address.editAddress")}
           </button>
         )}
       </div>
@@ -160,17 +162,17 @@ export default function AddressBook() {
           SECTION : ADRESSE DE FACTURATION
       ========================================= */}
       <h2 className="section-title facturation-title">
-        Adresse de Facturation
+        {t("address.billing")}
       </h2>
 
       {!hasSeparateBilling ? (
         <>
           <p className="facturation-text">
-            Identique à l'adresse de livraison.
+            {t("address.identical")}
           </p>
           <div className="action-buttons">
             <button className="action-btn outline" onClick={handleAddBilling}>
-              Ajouter une adresse de facturation
+              {t("address.addBilling")}
             </button>
           </div>
         </>
@@ -178,7 +180,7 @@ export default function AddressBook() {
         <>
           <div className="data-grid">
             <div className="data-item">
-              <span className="data-label">Nom Complet</span>
+              <span className="data-label">{t("address.fullName")}</span>
               {isEditingBilling ? (
                 <input
                   type="text"
@@ -186,7 +188,7 @@ export default function AddressBook() {
                   value={billingData.name}
                   onChange={handleBillingChange}
                   className="data-input"
-                  placeholder="Jean Dupont"
+                  placeholder={t("address.namePlaceholder")}
                 />
               ) : (
                 <span className="data-value">{billingData.name}</span>
@@ -194,7 +196,7 @@ export default function AddressBook() {
             </div>
 
             <div className="data-item">
-              <span className="data-label">Adresse</span>
+              <span className="data-label">{t("address.street")}</span>
               {isEditingBilling ? (
                 <input
                   type="text"
@@ -202,7 +204,7 @@ export default function AddressBook() {
                   value={billingData.address}
                   onChange={handleBillingChange}
                   className="data-input"
-                  placeholder="10 Rue de la Paix"
+                  placeholder={t("address.streetExample")}
                 />
               ) : (
                 <span className="data-value">{billingData.address}</span>
@@ -210,7 +212,7 @@ export default function AddressBook() {
             </div>
 
             <div className="data-item">
-              <span className="data-label">Ville & Code Postal</span>
+              <span className="data-label">{t("address.cityAndPostcode")}</span>
               {isEditingBilling ? (
                 <input
                   type="text"
@@ -218,7 +220,7 @@ export default function AddressBook() {
                   value={billingData.city}
                   onChange={handleBillingChange}
                   className="data-input"
-                  placeholder="75001 Paris"
+                  placeholder={t("address.cityExample")}
                 />
               ) : (
                 <span className="data-value">{billingData.city}</span>
@@ -226,7 +228,7 @@ export default function AddressBook() {
             </div>
 
             <div className="data-item">
-              <span className="data-label">Téléphone</span>
+              <span className="data-label">{t("address.phone")}</span>
               {isEditingBilling ? (
                 <input
                   type="tel"
@@ -246,13 +248,13 @@ export default function AddressBook() {
             {isEditingBilling ? (
               <>
                 <button className="action-btn" onClick={handleBillingSave}>
-                  Enregistrer
+                  {t("common.save")}
                 </button>
                 <button
                   className="action-btn outline"
                   onClick={handleBillingCancel}
                 >
-                  Annuler
+                  {t("common.cancel")}
                 </button>
               </>
             ) : (
@@ -260,7 +262,7 @@ export default function AddressBook() {
                 className="action-btn"
                 onClick={() => setIsEditingBilling(true)}
               >
-                Modifier l'adresse
+                {t("address.editAddress")}
               </button>
             )}
           </div>

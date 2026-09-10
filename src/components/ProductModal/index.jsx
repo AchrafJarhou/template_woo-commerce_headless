@@ -4,20 +4,24 @@ import DOMPurify from "dompurify";
 import { addProductToCart } from "../../thunkActionsCreator/cartThunks";
 import { showToast } from "../../slices/toastSlice";
 import "./index.css";
+import { formatPrice } from "../../utils/formatPrice";
+import { useTranslation } from "react-i18next";
 
 export default function ProductModal({ product, onClose }) {
   const dispatch = useDispatch();
+  const { t } = useTranslation();
   const [itemVariation, setItemVariation] = useState({});
   const [descriptionNeedsScroll, setDescriptionNeedsScroll] = useState(false);
 
-  const formatPrice = (priceInCents, currencyCode) => {
-    if (!priceInCents) return "Prix sur demande";
-    const priceInUnits = parseFloat(priceInCents) / 100;
-    return new Intl.NumberFormat("fr-FR", {
-      style: "currency",
-      currency: currencyCode || "EUR",
-    }).format(priceInUnits);
-  };
+  // Le formatage des prix était réécrit ici, avec sa propre locale figée.
+  // Il passe désormais par la fonction partagée, qui suit la langue affichée.
+  const formatModalPrice = (priceInCents, currencyCode) =>
+    priceInCents
+      ? formatPrice(priceInCents, {
+          currency_code: currencyCode || "EUR",
+          currency_minor_unit: 2,
+        })
+      : t("product.priceOnRequest");
 
   useEffect(() => {
     if (!product || !product.attributes) return;
@@ -62,7 +66,7 @@ export default function ProductModal({ product, onClose }) {
       dispatch(showToast(`${product.name} ajouté au panier`));
       onClose();
     } else {
-      dispatch(showToast(result.payload || "Erreur lors de l'ajout au panier"));
+      dispatch(showToast(result.payload || t("product.addError")));
     }
   };
 
@@ -71,7 +75,7 @@ export default function ProductModal({ product, onClose }) {
   return (
     <div className="modal-backdrop" onClick={onClose}>
       <div className="modal-content" onClick={stopPropagation}>
-        <button className="close-btn" onClick={onClose}>
+        <button className="close-btn" onClick={onClose} aria-label={t("common.close")}>
           ✕
         </button>
 
@@ -85,13 +89,13 @@ export default function ProductModal({ product, onClose }) {
 
         <div className="modal-txt-container">
           <div className="modal-category">
-            {product.category} · RÉF. {product.slug}
+            {product.category} · {t("product.reference")} {product.slug}
           </div>
 
           <h2 className="modal-title">{product.name}</h2>
 
           <div className="modal-price">
-            {formatPrice(product.prices?.price, product.prices?.currency_code)}
+            {formatModalPrice(product.prices?.price, product.prices?.currency_code)}
           </div>
 
           <div
@@ -119,7 +123,7 @@ export default function ProductModal({ product, onClose }) {
                       }
                       className="modal-attribute-select"
                     >
-                      <option value="">-- Choisir --</option>
+                      <option value="">{t("product.chooseOption")}</option>
                       {options?.map((option) => (
                         <option key={option} value={option}>
                           {option}
@@ -133,7 +137,7 @@ export default function ProductModal({ product, onClose }) {
           )}
 
           <button className="add-btn" onClick={handleAddToCart}>
-            Ajouter au panier
+            {t("product.addToCart")}
           </button>
         </div>
       </div>

@@ -1,8 +1,10 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { deleteCurrentUserThunk } from "../../thunkActionsCreator/userThunks";
+import { useTranslation } from "react-i18next";
 
 export default function DeleteAccountButton() {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { loading, error } = useSelector((state) => state.user);
@@ -23,7 +25,7 @@ export default function DeleteAccountButton() {
     dispatch(deleteCurrentUserThunk({ password }))
       .unwrap()
       .then(() => {
-        alert("Votre compte a été supprimé avec succès.");
+        alert(t("auth.accountDeleted"));
         navigate("/"); // Redirection vers l'accueil après suppression
       })
       .catch((err) => {
@@ -38,7 +40,7 @@ export default function DeleteAccountButton() {
         disabled={loading}
         style={{ backgroundColor: "red", color: "white" }}
       >
-        {loading ? "Suppression en cours..." : "Supprimer mon compte"}
+        {loading ? t("account.deleting") : t("account.deleteTitle")}
       </button>
 
       {error && <p style={{ color: "red" }}>{error}</p>}

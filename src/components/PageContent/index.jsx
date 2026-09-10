@@ -1,11 +1,11 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useTranslation } from "react-i18next";
 import DOMPurify from "dompurify";
 import { fetchPageThunk } from "../../thunkActionsCreator/pagesThunks";
 import { localizedPageSlug, DEFAULT_LANGUAGE } from "../../i18n";
 import Loader from "../Loader";
 import "./PageContent.css";
+import { useTranslation } from "react-i18next";
 
 // renderBody permet à une page d'afficher le contenu WordPress autrement
 // qu'en bloc — la FAQ en fait un accordéon — sans dupliquer le chargement,

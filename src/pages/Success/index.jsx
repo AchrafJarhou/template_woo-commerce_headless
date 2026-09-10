@@ -4,14 +4,19 @@ import { useDispatch } from "react-redux";
 import { showToast } from "../../slices/toastSlice";
 import OrderDetails from "../../components/OrderDetails";
 import "./Success.scss";
+import { useTranslation } from "react-i18next";
+
+// Adresse d'assistance : hors dictionnaire, ce n'est pas du texte à traduire.
+const SUPPORT_EMAIL = "support@example.com";
 
 export default function Success() {
+  const { t } = useTranslation();
   const { orderId } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   useEffect(() => {
-    dispatch(showToast(`Commande n°${orderId} confirmée`));
+    dispatch(showToast(t("order.confirmedToast", { id: orderId })));
   }, [orderId, dispatch]);
 
   return (
@@ -19,29 +24,31 @@ export default function Success() {
       <div className="success-container">
         <div className="success-header">
           <div className="success-icon">✓</div>
-          <h1>Commande confirmée !</h1>
-          <p className="order-number">Numéro de commande: <strong>#{orderId}</strong></p>
+          <h1>{t("order.confirmed")}</h1>
+          <p className="order-number">
+            {t("order.number")} : <strong>#{orderId}</strong>
+          </p>
         </div>
 
         <div className="success-message">
-          <p>Merci beaucoup pour votre achat ! 🎉</p>
-          <p>Un email de confirmation a été envoyé avec les détails de votre commande.</p>
+          <p>{t("order.thanks")}</p>
+          <p>{t("order.emailSent")}</p>
         </div>
 
         <div className="order-info">
           <div className="info-card">
-            <h3>📧 Email de confirmation</h3>
-            <p>Vérifiez votre boîte de réception pour le reçu et les informations de suivi.</p>
+            <h3>{t("order.emailTitle")}</h3>
+            <p>{t("order.emailBody")}</p>
           </div>
 
           <div className="info-card">
-            <h3>📦 Suivi de commande</h3>
-            <p>Vous recevrez des mises à jour sur l'état de votre livraison par email.</p>
+            <h3>{t("order.trackingTitle")}</h3>
+            <p>{t("order.trackingBody")}</p>
           </div>
 
           <div className="info-card">
-            <h3>❓ Besoin d'aide ?</h3>
-            <p>Contactez-nous à support@example.com pour toute question.</p>
+            <h3>{t("order.helpTitle")}</h3>
+            <p>{t("order.helpBody", { email: SUPPORT_EMAIL })}</p>
           </div>
         </div>
 
@@ -52,13 +59,13 @@ export default function Success() {
             className="btn btn-primary"
             onClick={() => navigate("/")}
           >
-            Retour à la boutique
+            {t("order.backToShop")}
           </button>
           <button
             className="btn btn-secondary"
             onClick={() => navigate("/profile")}
           >
-            Mes commandes
+            {t("order.myOrders")}
           </button>
         </div>
       </div>

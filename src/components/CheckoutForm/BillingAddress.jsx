@@ -1,11 +1,14 @@
+import { useTranslation } from "react-i18next";
 export default function BillingAddress({ address, onChange }) {
+  const { t } = useTranslation();
+
   return (
     <>
-      <h3>Adresse de facturation</h3>
+      <h3>{t("address.billing")}</h3>
       <div className="form-group">
         <div className="form-row">
           <div className="input-field">
-            <label>Prénom</label>
+            <label>{t("common.firstName")}</label>
             <input
               type="text"
               name="first_name"
@@ -15,7 +18,7 @@ export default function BillingAddress({ address, onChange }) {
             />
           </div>
           <div className="input-field">
-            <label>Nom</label>
+            <label>{t("common.lastName")}</label>
             <input
               type="text"
               name="last_name"
@@ -26,19 +29,19 @@ export default function BillingAddress({ address, onChange }) {
           </div>
         </div>
         <div className="input-field">
-          <label>Adresse</label>
+          <label>{t("address.street")}</label>
           <input
             type="text"
             name="address_1"
             value={address.address_1 || ""}
-            placeholder="Commencez à saisir votre adresse..."
+            placeholder={t("address.streetPlaceholder")}
             onChange={onChange}
             required
           />
         </div>
         <div className="form-row">
           <div className="input-field">
-            <label>Ville</label>
+            <label>{t("address.city")}</label>
             <input
               type="text"
               name="city"
@@ -48,7 +51,7 @@ export default function BillingAddress({ address, onChange }) {
             />
           </div>
           <div className="input-field">
-            <label>Pays</label>
+            <label>{t("address.country")}</label>
             <input
               type="text"
               name="country"
@@ -60,7 +63,7 @@ export default function BillingAddress({ address, onChange }) {
         </div>
         <div className="form-row">
           <div className="input-field">
-            <label>Code Postal</label>
+            <label>{t("address.postcode")}</label>
             <input
               type="text"
               name="postcode"
@@ -70,7 +73,7 @@ export default function BillingAddress({ address, onChange }) {
             />
           </div>
           <div className="input-field">
-            <label>Téléphone</label>
+            <label>{t("address.phone")}</label>
             <input
               type="tel"
               name="phone"

@@ -4,8 +4,10 @@ import "./index.css";
 import { closeAuthModal } from "../../slices/authModalSlice";
 import AuthForm from "../AuthForm/";
 import ResetPasswordForm from "../ResetPasswordForm/ResetPasswordForm";
+import { useTranslation } from "react-i18next";
 
 export default function AuthModal() {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const { isOpen, view } = useSelector((state) => state.authModal);
 
@@ -19,7 +21,7 @@ export default function AuthModal() {
         <button
           className="auth-modal__close"
           onClick={close}
-          aria-label="Close"
+          aria-label={t("common.close")}
         >
           ✕
         </button>

@@ -3,6 +3,7 @@ import {
   readGuestWishlist,
   clearGuestWishlistStorage,
 } from "../utils/guestWishlist";
+import { apiError, apiErrorMessage } from "../i18n/apiError";
 
 export const fetchWishlistThunk = createAsyncThunk(
   "wishlist/fetch",
@@ -17,7 +18,7 @@ export const fetchWishlistThunk = createAsyncThunk(
       );
       const data = await response.json();
       if (!response.ok) {
-        throw new Error(data.message || "Impossible de récupérer les favoris.");
+        throw new Error(apiErrorMessage(data.message, "errors.wishlistFetch"));
       }
       return data;
     } catch (error) {
@@ -44,7 +45,7 @@ export const addToWishlistThunk = createAsyncThunk(
       );
       const data = await response.json();
       if (!response.ok) {
-        throw new Error(data.message || "Impossible d'ajouter aux favoris.");
+        throw new Error(apiErrorMessage(data.message, "errors.wishlistAdd"));
       }
       return data;
     } catch (error) {
@@ -87,7 +88,7 @@ export const mergeGuestWishlistThunk = createAsyncThunk(
       const data = await response.json();
       if (!response.ok) {
         throw new Error(
-          data.message || "Impossible de fusionner les favoris.",
+          apiErrorMessage(data.message, "errors.wishlistMerge"),
         );
       }
 
@@ -117,7 +118,7 @@ export const removeFromWishlistThunk = createAsyncThunk(
       );
       const data = await response.json();
       if (!response.ok) {
-        throw new Error(data.message || "Impossible de retirer des favoris.");
+        throw new Error(apiErrorMessage(data.message, "errors.wishlistRemove"));
       }
       return data;
     } catch (error) {

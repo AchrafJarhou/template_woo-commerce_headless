@@ -1,10 +1,11 @@
-import React, { useEffect } from "react"; // 1. Ajoute useEffect
-import { useSelector, useDispatch } from "react-redux"; // 2. Ajoute useDispatch
-import { fetchCurrentUserOrdersThunk } from "../../../thunkActionsCreator/userThunks"; // 3. Importe le thunk
-import { formatStatus } from "../../../utils/formatStatus";
+import React from "react";
+import { useSelector } from "react-redux";
+import { formatDate } from "../../../utils/formatDate";
+import { useTranslation } from "react-i18next";
 
 export default function OrdersList() {
-  const dispatch = useDispatch();
+  const { t } = useTranslation();
+  // Récupération des commandes depuis le store Redux
   const orders = useSelector((state) => state.user.orders);
 
   console.log("orders :", orders);
@@ -30,8 +31,8 @@ export default function OrdersList() {
   if (!paidOrders || paidOrders.length === 0) {
     return (
       <div>
-        <h2 className="section-title">Mes Commandes</h2>
-        <p className="facturation-text">Aucune commande trouvée.</p>
+        <h2 className="section-title">{t("account.myOrders")}</h2>
+        <p className="facturation-text">{t("order.none")}</p>
       </div>
     );
   }
@@ -53,8 +54,7 @@ export default function OrdersList() {
                   Commande N° {order.number ?? order.id}
                 </div>
                 <div className="order-date">
-                  {order.date &&
-                    new Date(order.date).toLocaleDateString("fr-FR")}
+                  {formatDate(order.date)}
                 </div>
               </div>
               <div className="order-header-main">
