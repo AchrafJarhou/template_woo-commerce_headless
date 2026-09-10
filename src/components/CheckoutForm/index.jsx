@@ -432,7 +432,7 @@ export default function CheckoutForm({ shippingMethod, setShippingMethod }) {
             cartItems: cart.items || [],
             paymentMethodId: paymentMethod.id,
             shippingMethod: shippingMethod,
-            userId: user?.id || 0,
+            userId: user?.profile?.id || 0,
           }),
         }
       );
