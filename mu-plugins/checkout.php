@@ -41,6 +41,11 @@ function headless_create_order_from_checkout($request)
     }
 
     $user_id = get_current_user_id();
+    // Fallback : utiliser l'user_id envoyé dans les params si get_current_user_id() retourne 0
+    if ($user_id === 0 && isset($params['userId']) && is_numeric($params['userId'])) {
+        $user_id = intval($params['userId']);
+    }
+
     $order = wc_create_order();
 
     // Associer la commande au user connecté si disponible
@@ -95,7 +100,6 @@ function headless_create_order_from_checkout($request)
     $order->save();
 
     $order_id = $order->get_id();
-    $user_id = get_current_user_id();
 
     // Sauvegarder les adresses dans le profil du customer si connecté
     if ($user_id > 0) {

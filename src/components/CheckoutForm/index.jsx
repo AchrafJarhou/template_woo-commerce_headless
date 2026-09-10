@@ -342,6 +342,7 @@ export default function CheckoutForm({ shippingMethod, setShippingMethod }) {
   const dispatch = useDispatch();
 
   const cart = useSelector((state) => state.cart);
+  const user = useSelector((state) => state.user);
 
   const [paymentType, setPaymentType] = useState("card");
   const [sameAsBilling, setSameAsBilling] = useState(true);
@@ -421,6 +422,7 @@ export default function CheckoutForm({ shippingMethod, setShippingMethod }) {
         `${import.meta.env.VITE_API_URL}/wp-json/custom/v1/checkout`,
         {
           method: "POST",
+          credentials: "include",
           headers: {
             "Content-Type": "application/json",
           },
@@ -430,6 +432,7 @@ export default function CheckoutForm({ shippingMethod, setShippingMethod }) {
             cartItems: cart.items || [],
             paymentMethodId: paymentMethod.id,
             shippingMethod: shippingMethod,
+            userId: user?.id || 0,
           }),
         }
       );
