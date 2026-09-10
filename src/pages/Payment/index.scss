@@ -306,7 +306,7 @@
   justify-content: center;
   padding: clamp(9px, 1.1vw, 13px) clamp(14px, 1.5vw, 20px);
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-button);
   font-family: var(--font-heading);
   font-size: clamp(11px, 0.9vw, 13px);
   font-weight: 600;

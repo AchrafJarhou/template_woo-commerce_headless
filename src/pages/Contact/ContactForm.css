@@ -92,7 +92,7 @@
   background: #6784c8;
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: var(--radius-button);
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
