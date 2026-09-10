@@ -110,6 +110,26 @@ for (const p of walk("src")) {
     if (isVisible(m[1]) && /[À-ÿ]|\b(le|la|les|une|un|des|est|impossible|erreur|votre|vos)\b/i.test(m[1])) hits.push(m[1]);
   if (hits.length) untranslated[p] = hits;
 }
+/* ── 3 bis. Mémoïsation qui ignore la langue ──────────────────────────────
+   Un useMemo/useCallback qui produit du texte traduit DOIT dépendre de la
+   langue. Sinon la valeur calculée au premier rendu est conservée telle
+   quelle : le composant continue d'afficher le français après un changement
+   de langue, sans erreur, sans avertissement, sans rien qui le signale.
+
+   Ce défaut échappe au rendu serveur — chaque langue y monte un composant
+   neuf, donc la mémoïsation est toujours recalculée et le test passe. Seule
+   une lecture du code peut le voir : d'où cette règle.                     */
+const staleMemo = [];
+for (const p of walk("src")) {
+  if (DEAD.some((d) => p.startsWith(d)) || p.includes("/i18n/") || FIXTURES.test(p)) continue;
+  const src = readFileSync(p, "utf8");
+  for (const m of src.matchAll(/\buse(?:Memo|Callback)\(([\s\S]*?)\}\s*,\s*\[([^\]]*)\]\s*\)/g)) {
+    const [, body, deps] = m;
+    if (/\bt\(\s*["'`]/.test(body) && !/\bt\b|i18n|language|lang/.test(deps))
+      staleMemo.push(`${p}:${src.slice(0, m.index).split("\n").length} — deps=[${deps.trim()}]`);
+  }
+}
+
 const total = Object.values(untranslated).reduce((n, h) => n + h.length, 0);
 
 /* ── Rapport ─────────────────────────────────────────────────────────────── */
@@ -121,7 +141,9 @@ dash("Chaînes visibles non traduites", total);
 dash("Fichiers concernés", Object.keys(untranslated).length);
 dash("Écarts entre dictionnaires", parity.length);
 dash("Locales figées en français", hardcodedLocale.length);
+dash("Mémoïsations ignorant la langue", staleMemo.length);
 if (parity.length) { console.log("\n  Clés désynchronisées :"); parity.forEach((l) => console.log("    ✗ " + l)); }
+if (staleMemo.length) { console.log("\n  Mémoïsations qui resteront en français :"); staleMemo.forEach((l) => console.log("    ✗ " + l)); }
 if (hardcodedLocale.length) { console.log("\n  Locales en dur :"); [...new Set(hardcodedLocale)].forEach((l) => console.log("    ✗ " + l)); }
 if (total) {
   console.log("\n  Fichiers les plus chargés :");
@@ -136,7 +158,7 @@ if (!existsSync(BASELINE)) {
   const b = JSON.parse(readFileSync(BASELINE, "utf8"));
   const delta = total - b.untranslated;
   console.log(`\n  Référence du ${b.recordedAt} : ${b.untranslated} → aujourd'hui ${total} (${delta >= 0 ? "+" : ""}${delta})`);
-  if (strict && (delta > 0 || parity.length)) {
+  if (strict && (delta > 0 || parity.length || staleMemo.length)) {
     console.error("\n  ÉCHEC : la dette de traduction a augmenté, ou les dictionnaires divergent.\n");
     process.exit(1);
   }

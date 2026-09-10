@@ -6,7 +6,7 @@ import { setFilters } from "../../../slices/filtersSlice";
 import { useTranslation } from "react-i18next";
 
 export default function FilterBar({ onFilterChange, hasProducts }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const dispatch = useDispatch();
   const [activeFilter, setActiveFilter] = useState("tous");
   const [searchOpen, setSearchOpen] = useState(false);
@@ -36,7 +36,11 @@ export default function FilterBar({ onFilterChange, hasProducts }) {
       { id: "tous", label: t("catalog.all") },
       ...uniqueFilters.sort((a, b) => a.label.localeCompare(b.label)),
     ];
-  }, [products]);
+    // La langue fait partie des dépendances : sans elle, useMemo conserve les
+    // libellés calculés au premier rendu et les filtres restent en français
+    // après un changement de langue. `products` ne bouge pas quand on bascule,
+    // la valeur mémoïsée n'était donc jamais réévaluée.
+  }, [products, i18n.resolvedLanguage]);
 
   const handleFilterClick = (filterId) => {
     setActiveFilter(filterId);
