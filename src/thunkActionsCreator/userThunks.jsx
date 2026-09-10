@@ -86,7 +86,9 @@ export const updateCurrentUserThunk = createAsyncThunk(
       );
       const data = await response.json();
       if (!response.ok) {
-        throw new Error(data.message || "Impossible de mettre a jour le profil.");
+        throw new Error(
+          data.message || "Impossible de mettre a jour le profil.",
+        );
       }
       return {
         id: data.id,
@@ -139,6 +141,8 @@ export const fetchCurrentUserOrdersThunk = createAsyncThunk(
         },
       );
       const data = await response.json();
+
+      console.log("DONNÉES BRUTES REÇUES DE L'API ORDERS :", data); // <-- Ajoute ceci
       if (!response.ok) {
         throw new Error(
           data.message || "Impossible de recuperer les commandes.",

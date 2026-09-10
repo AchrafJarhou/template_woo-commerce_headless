@@ -109,10 +109,8 @@ export default function UserInfo() {
   };
 
   if (loading && !profile)
-    return (
-      <p style={{ marginTop: "20px" }}>Chargement de vos informations...</p>
-    );
-  if (error) return <p style={{ color: "red" }}>Erreur: {error}</p>;
+    return <p className="loading-message">Chargement de vos informations...</p>;
+  if (error) return <p className="error-message">Erreur: {error}</p>;
 
   return (
     <div>

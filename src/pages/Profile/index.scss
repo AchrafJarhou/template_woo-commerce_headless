@@ -244,6 +244,15 @@
   margin-bottom: 10px;
 }
 
+.loading-message {
+  margin-top: 20px;
+  font-size: 0.9rem;
+}
+
+.error-message {
+  font-size: 0.9rem;
+}
+
 /* === DESKTOP OVERRIDES === */
 @media (min-width: 768px) {
   .profile-container {
