@@ -68,7 +68,7 @@ export function PaymentForm({ total }) {
           disabled={loading || !cardNumber || !expiryDate || !cvc}
           className="payment__button payment__button--primary payment__button--full"
         >
-          {loading ? 'Traitement...' : `Payer ${total}`}
+          {loading ? t("payment.processing") : t("payment.pay", { amount: total })}
         </button>
       </form>
     </div>

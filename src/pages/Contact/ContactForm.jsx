@@ -52,7 +52,7 @@ export default function ContactForm() {
         }
       }
     } catch (error) {
-      setErrors({ general: "Erreur réseau. Veuillez réessayer." });
+      setErrors({ general: t("contact.networkError") });
     } finally {
       setLoading(false);
     }
@@ -118,7 +118,7 @@ export default function ContactForm() {
       </div>
 
       <button type="submit" className="contact-form__button" disabled={loading}>
-        {loading ? "Envoi en cours..." : "Envoyer le message"}
+        {loading ? t("contact.sending") : t("contact.send")}
       </button>
     </form>
   );

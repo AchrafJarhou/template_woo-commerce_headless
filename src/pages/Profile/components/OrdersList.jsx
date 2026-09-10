@@ -1,14 +1,15 @@
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { formatDate } from "../../../utils/formatDate";
+import { formatAmount } from "../../../utils/formatPrice";
+import { fetchCurrentUserOrdersThunk } from "../../../thunkActionsCreator/userThunks";
 import { useTranslation } from "react-i18next";
 
 export default function OrdersList() {
   const { t } = useTranslation();
   // Récupération des commandes depuis le store Redux
+  const dispatch = useDispatch();
   const orders = useSelector((state) => state.user.orders);
-
-  console.log("orders :", orders);
 
   const paidOrders = orders.filter(
     (order) => order.status === "processing" || order.status === "completed",
@@ -18,14 +19,13 @@ export default function OrdersList() {
     dispatch(fetchCurrentUserOrdersThunk());
   }, [dispatch]);
 
-  // Fonction de formatage des prix
-  const formatPrice = (price, minorUnit = 2) => {
-    if (!price) return "0,00 €";
-    const numericPrice =
-      Number(price) > 10000
-        ? Number(price) / Math.pow(10, minorUnit)
-        : Number(price);
-    return `${numericPrice.toFixed(2).replace(".", ",")} €`;
+  // Les commandes renvoient tantôt des centimes, tantôt des euros : on garde
+  // l'heuristique d'origine, mais le formatage passe par Intl et suit donc la
+  // langue affichée — « 24,99 € » en français, « €24.99 » en anglais.
+  const formatOrderPrice = (price) => {
+    if (!price) return formatAmount(0);
+    const value = Number(price) > 10000 ? Number(price) / 100 : Number(price);
+    return formatAmount(value);
   };
 
   if (!paidOrders || paidOrders.length === 0) {
@@ -78,7 +78,7 @@ export default function OrdersList() {
                       <p>Quantité : {item.quantity}</p>
 
                       <br />
-                      <p>Prix total: {formatPrice(item.total, 2)}</p>
+                      <p>Prix total: {formatOrderPrice(item.total)}</p>
                     </div>
                   </div>
                 );

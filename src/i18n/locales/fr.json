@@ -23,6 +23,7 @@
     "previous": "← Précédent",
     "saveInfo": "Enregistrer les informations",
     "updateError": "La mise à jour du profil a échoué.",
+    "updateProfile": "Mettre à jour le profil",
     "updated": "Profil mis à jour."
   },
   "address": {
@@ -65,6 +66,7 @@
     "login": "Identifiant",
     "loginHint": "Utilisez votre prénom ou votre adresse e-mail",
     "loginPlaceholder": "Votre identifiant",
+    "loginTitle": "Connexion",
     "newEmailPlaceholder": "nouvel e-mail",
     "newPassword": "Nouveau mot de passe",
     "newPasswordPlaceholder": "nouveau mot de passe",
@@ -118,6 +120,7 @@
     "total": "Total"
   },
   "catalog": {
+    "all": "TOUT",
     "allCategories": "Toutes les catégories",
     "categories": {
       "femme": "Femme",
@@ -132,7 +135,8 @@
     "priceDesc": "Prix : du plus cher au moins cher",
     "priceMax": "Prix max (€)",
     "priceMin": "Prix min (€)",
-    "searchProduct": "Rechercher un produit…"
+    "searchProduct": "Rechercher un produit…",
+    "showLess": "Afficher moins"
   },
   "checkout": {
     "backToShop": "← Retour à la boutique",
@@ -146,7 +150,10 @@
     },
     "orContinue": "Ou continuer ci-dessous",
     "paymentDetails": "Détails du paiement",
+    "shippingExpress": "Chronopost (express 24 h)",
     "shippingMethod": "Mode de livraison",
+    "shippingRelay": "Mondial Relay (point relais)",
+    "shippingStandard": "Colissimo (standard)",
     "submit": "Valider la commande",
     "submitting": "Traitement en cours…"
   },
@@ -157,19 +164,26 @@
     "delete": "Supprimer",
     "edit": "Modifier",
     "email": "E-mail",
+    "error": "Erreur",
     "firstName": "Prénom",
     "lastName": "Nom",
     "loading": "Chargement…",
     "optional": "facultatif",
     "password": "Mot de passe",
     "save": "Enregistrer",
-    "saving": "Enregistrement…"
+    "saving": "Enregistrement…",
+    "showLess": "Voir moins",
+    "showMore": "Voir plus",
+    "updating": "Mise à jour…"
   },
   "contact": {
     "message": "Message",
     "messagePlaceholder": "Votre message…",
     "name": "Nom",
     "namePlaceholder": "Votre nom",
+    "networkError": "Erreur réseau. Veuillez réessayer.",
+    "send": "Envoyer le message",
+    "sending": "Envoi en cours…",
     "sent": "✓ Message envoyé avec succès !"
   },
   "coupon": {
@@ -282,6 +296,8 @@
     "expiry": "Date d'expiration",
     "initError": "Impossible d'initialiser le paiement.",
     "keyError": "Impossible de récupérer la clé Stripe.",
+    "pay": "Payer {{amount}}",
+    "processing": "Traitement…",
     "reassurance": "🔒 Vos données sont sécurisées et chiffrées par Stripe",
     "secure": "Paiement sécurisé",
     "stripeLinked": "Connecté à Stripe (WordPress)"
@@ -300,6 +316,7 @@
     "similar": "Produits similaires"
   },
   "review": {
+    "anonymous": "Anonyme",
     "checking": "Vérification de vos achats…",
     "customersOnly": "🔒 Seuls les clients ayant acheté cet article peuvent laisser un avis.",
     "loadError": "Impossible de charger les avis.",
@@ -311,6 +328,8 @@
     "ratingHint": "Choisissez une note de 1 à 5.",
     "sendError": "L'envoi de l'avis a échoué.",
     "signInPrompt": "ℹ️ Connectez-vous pour ajouter un avis.",
+    "submit": "Publier l'avis",
+    "submitting": "Envoi…",
     "title": "Avis",
     "write": "Rédiger un avis"
   },
@@ -319,9 +338,20 @@
     "label": "Rechercher",
     "placeholder": "Rechercher…"
   },
+  "status": {
+    "cancelled": "Annulée",
+    "completed": "Terminée",
+    "failed": "Échouée",
+    "on-hold": "En attente",
+    "pending": "En attente de paiement",
+    "processing": "En préparation",
+    "refunded": "Remboursée"
+  },
   "wishlist": {
+    "add": "Ajouter aux favoris",
     "empty": "Aucun favori pour le moment.",
     "error": "Une erreur est survenue avec les favoris.",
+    "remove": "Retirer des favoris",
     "title": "Mes favoris"
   }
 }
