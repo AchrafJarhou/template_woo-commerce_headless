@@ -39,7 +39,7 @@ export function OrderAll() {
                 setOpened((prev) => (prev === order.id ? null : order.id))
               }
             >
-              {opened === order.id ? "Voir moins" : "Voir plus"}
+              {opened === order.id ? t("common.showLess") : t("common.showMore")}
             </button>
           </div>
 

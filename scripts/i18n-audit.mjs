@@ -30,6 +30,9 @@ const NEUTRAL = new Set(
 );
 // Composants non importés : les corriger n'aurait aucun effet à l'écran.
 const DEAD = ["src/components/Product/", "src/components/Header/"];
+// Jeux de données de démonstration : ce ne sont pas des textes
+// d'interface mais du contenu factice, remplacé par l'API en production.
+const FIXTURES = /mock|\/data\//i;
 const ATTRS = ["aria-label", "placeholder", "alt", "title", "label"];
 
 /* ── 1. Parité des dictionnaires ─────────────────────────────────────────── */
@@ -56,14 +59,21 @@ const walk = (dir) =>
     return /\.jsx?$/.test(p) ? [p] : [];
   });
 
-const TECHNICAL = /^[\s\d\W]*$|^[a-z0-9_-]+$|^https?:|^\/|^#/;
+// Ajout des types MIME et en-têtes HTTP : ils prennent la forme d'un
+// littéral de chaîne mais ne sont jamais affichés à personne.
+const TECHNICAL = /^[\s\d\W]*$|^[a-z0-9_-]+$|^https?:|^\/|^#|^[a-z]+\/[a-z0-9.+-]+$/;
+// Verbes HTTP et valeurs CSS : forme d'un littéral, jamais affichés.
+const NOT_UI = /^(GET|POST|PUT|PATCH|DELETE|HEAD|OPTIONS)$|^\d+px |[#][0-9a-f]{3,8}\b|^(system-ui|-apple-system)/i;
+// Identifiant camelCase (« authModal ») : un nom de code, pas une phrase.
+// Un vrai libellé d'interface commence par une majuscule ou contient un espace.
+const IDENTIFIER = /^[a-z][a-zA-Z0-9]*$/;
 // Un texte d'interface ne commence jamais par une parenthèse fermante et
 // ne finit jamais par une ouvrante : ces formes viennent d'un ternaire JSX
 // dont le `>` et le `<` encadrent du code, pas du texte.
 const CODE = /[;=`]|=>|&&|\|\||\breturn\b|\bconst\b|\bnew\b|\.\w+\(|\}\s*$|^\s*\{|^\)|\($/;
 const isVisible = (s) => {
   const t = s.trim();
-  if (NEUTRAL.has(t)) return false;
+  if (NEUTRAL.has(t) || NOT_UI.test(t) || IDENTIFIER.test(t)) return false;
   return t.length >= 2 && !TECHNICAL.test(t) && !CODE.test(t) && !t.includes("\n") && /[A-Za-zÀ-ÿ]{2}/.test(t);
 };
 const stripComments = (s) =>
@@ -72,7 +82,7 @@ const stripComments = (s) =>
 const untranslated = {};
 let tCalls = 0, hardcodedLocale = [];
 for (const p of walk("src")) {
-  if (DEAD.some((d) => p.startsWith(d)) || p.includes("/i18n/")) continue;
+  if (DEAD.some((d) => p.startsWith(d)) || p.includes("/i18n/") || FIXTURES.test(p)) continue;
   const raw = readFileSync(p, "utf8");
   tCalls += (raw.match(/\bt\(\s*["'`]/g) || []).length;
   for (const m of raw.matchAll(/["'](fr-FR|fr)["']/g)) {
@@ -84,6 +94,18 @@ for (const p of walk("src")) {
   for (const m of s.matchAll(/>([^<>{}]+)</g)) if (isVisible(m[1])) hits.push(m[1].trim());
   for (const m of s.matchAll(new RegExp(`\\b(${ATTRS.join("|")})="([^"]*)"`, "g"))) if (isVisible(m[2])) hits.push(m[2]);
   for (const m of s.matchAll(/\b(showToast|alert|setError|setMessage|setStatus)\(\s*["']([^"']+)["']/g)) if (isVisible(m[2])) hits.push(m[2]);
+  // Libellés déclarés dans un objet JS — invisibles pour un détecteur de JSX.
+  // C'est ainsi que « TOUT » avait échappé au premier passage.
+  for (const m of s.matchAll(/\b(label|title|heading|placeholder)\s*:\s*["']([^"']+)["']/g))
+    if (isVisible(m[2])) hits.push(m[2]);
+
+  // [rule:jsx-ternary] Chaînes rendues depuis un ternaire JSX :
+  //   {loading ? <Loader /> : "Voir plus"}
+  // Ce ne sont ni des noeuds de texte ni des attributs : les autres passes
+  // les ignorent. On écarte les listes de classes CSS, tout en minuscules,
+  // qui prennent exactement la même forme dans un className.
+  for (const m of s.matchAll(/[?:]\s*["']([^"']{2,})["']/g))
+    if (isVisible(m[1]) && !/^[a-z0-9 _-]+$/.test(m[1].trim())) hits.push(m[1]);
   for (const m of s.matchAll(/(?:new Error|rejectWithValue|\|\|)\s*\(?\s*["']([^"']{6,})["']/g))
     if (isVisible(m[1]) && /[À-ÿ]|\b(le|la|les|une|un|des|est|impossible|erreur|votre|vos)\b/i.test(m[1])) hits.push(m[1]);
   if (hits.length) untranslated[p] = hits;

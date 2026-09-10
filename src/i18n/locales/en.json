@@ -23,6 +23,7 @@
     "previous": "← Back",
     "saveInfo": "Save details",
     "updateError": "Your profile could not be updated.",
+    "updateProfile": "Update profile",
     "updated": "Profile updated."
   },
   "address": {
@@ -65,6 +66,7 @@
     "login": "Username",
     "loginHint": "Use your first name or your email address",
     "loginPlaceholder": "Your username",
+    "loginTitle": "Sign in",
     "newEmailPlaceholder": "new email",
     "newPassword": "New password",
     "newPasswordPlaceholder": "new password",
@@ -118,6 +120,7 @@
     "total": "Total"
   },
   "catalog": {
+    "all": "ALL",
     "allCategories": "All categories",
     "categories": {
       "femme": "Women",
@@ -132,7 +135,8 @@
     "priceDesc": "Price: high to low",
     "priceMax": "Max price (€)",
     "priceMin": "Min price (€)",
-    "searchProduct": "Search for a product…"
+    "searchProduct": "Search for a product…",
+    "showLess": "Show less"
   },
   "checkout": {
     "backToShop": "← Back to the shop",
@@ -146,7 +150,10 @@
     },
     "orContinue": "Or continue below",
     "paymentDetails": "Payment details",
+    "shippingExpress": "Chronopost (express, 24 h)",
     "shippingMethod": "Shipping method",
+    "shippingRelay": "Mondial Relay (pickup point)",
+    "shippingStandard": "Colissimo (standard)",
     "submit": "Place order",
     "submitting": "Processing…"
   },
@@ -157,19 +164,26 @@
     "delete": "Delete",
     "edit": "Edit",
     "email": "Email",
+    "error": "Error",
     "firstName": "First name",
     "lastName": "Last name",
     "loading": "Loading…",
     "optional": "optional",
     "password": "Password",
     "save": "Save",
-    "saving": "Saving…"
+    "saving": "Saving…",
+    "showLess": "Show less",
+    "showMore": "Show more",
+    "updating": "Updating…"
   },
   "contact": {
     "message": "Message",
     "messagePlaceholder": "Your message…",
     "name": "Name",
     "namePlaceholder": "Your name",
+    "networkError": "Network error. Please try again.",
+    "send": "Send message",
+    "sending": "Sending…",
     "sent": "✓ Message sent successfully!"
   },
   "coupon": {
@@ -282,6 +296,8 @@
     "expiry": "Expiry date",
     "initError": "Payment could not be initialised.",
     "keyError": "The Stripe key could not be retrieved.",
+    "pay": "Pay {{amount}}",
+    "processing": "Processing…",
     "reassurance": "🔒 Your data is secured and encrypted by Stripe",
     "secure": "Secure payment",
     "stripeLinked": "Connected to Stripe (WordPress)"
@@ -300,6 +316,7 @@
     "similar": "Similar products"
   },
   "review": {
+    "anonymous": "Anonymous",
     "checking": "Checking your purchases…",
     "customersOnly": "🔒 Only customers who bought this item can leave a review.",
     "loadError": "Reviews could not be loaded.",
@@ -311,6 +328,8 @@
     "ratingHint": "Choose a rating from 1 to 5.",
     "sendError": "Your review could not be sent.",
     "signInPrompt": "ℹ️ Sign in to leave a review.",
+    "submit": "Publish review",
+    "submitting": "Sending…",
     "title": "Reviews",
     "write": "Write a review"
   },
@@ -319,9 +338,20 @@
     "label": "Search",
     "placeholder": "Search…"
   },
+  "status": {
+    "cancelled": "Cancelled",
+    "completed": "Completed",
+    "failed": "Failed",
+    "on-hold": "On hold",
+    "pending": "Awaiting payment",
+    "processing": "Processing",
+    "refunded": "Refunded"
+  },
   "wishlist": {
+    "add": "Add to wishlist",
     "empty": "Nothing in your wishlist yet.",
     "error": "Something went wrong with your wishlist.",
+    "remove": "Remove from wishlist",
     "title": "My wishlist"
   }
 }

@@ -260,7 +260,7 @@ const Review = ({ productId }) => {
             </div>
 
             <button type="submit" disabled={submitting}>
-              {submitting ? "Envoi..." : "Publier l'avis"}
+              {submitting ? t("review.submitting") : t("review.submit")}
             </button>
           </form>
         ) : (
@@ -273,7 +273,7 @@ const Review = ({ productId }) => {
 
       {/* --- LISTE DES AVIS --- */}
       {loading && <Loader size="lg" />}
-      {error && <p className="review-error">Erreur : {error}</p>}
+      {error && <p className="review-error">{t("common.error")} : {error}</p>}
       {!loading && !error && reviews.length === 0 && <p>{t("review.none")}</p>}
 
       {reviews.map((review) => (
@@ -281,7 +281,7 @@ const Review = ({ productId }) => {
           <div className="review-stars">{renderStars(review.rating)}</div>
           <div className="review-meta">
             <strong>
-              {review.reviewer ?? "Anonyme"}
+              {review.reviewer ?? t("review.anonymous")}
               {" - "}
             </strong>
             <span>

@@ -58,9 +58,9 @@ export default function WishlistButton({ product }) {
       className={`wishlist-button ${isWishlisted ? "active" : ""}`}
       aria-pressed={isWishlisted}
       aria-label={
-        isWishlisted ? "Retirer des favoris" : "Ajouter aux favoris"
+        isWishlisted ? t("wishlist.remove") : t("wishlist.add")
       }
-      title={isWishlisted ? "Retirer des favoris" : "Ajouter aux favoris"}
+      title={isWishlisted ? t("wishlist.remove") : t("wishlist.add")}
       onClick={toggleWishlist}
     >
       {isWishlisted ? "❤️" : "🤍"}

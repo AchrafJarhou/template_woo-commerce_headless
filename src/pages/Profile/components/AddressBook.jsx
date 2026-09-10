@@ -5,9 +5,9 @@ export default function AddressBook() {
   const { t } = useTranslation();
   // --- ÉTATS POUR L'ADRESSE DE LIVRAISON ---
   const initialShipping = {
-    name: "Jean Dupont",
-    address: "10 Rue de la Paix",
-    city: "75001 Paris",
+    name: t("address.namePlaceholder"),
+    address: t("address.streetExample"),
+    city: t("address.cityExample"),
     phone: "+33 6 12 34 56 78",
   };
 

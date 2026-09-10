@@ -14,17 +14,26 @@ export default function FilterBar({ onFilterChange, hasProducts }) {
 
   const products = useSelector((state) => state.products.list.data);
 
+  // Le nom d'une catégorie vient de l'API, donc dans la langue du serveur.
+  // Une traduction locale l'emporte si la clé existe, sinon on garde le nom
+  // renvoyé : le composant reste juste que le catalogue soit traduit côté
+  // WordPress (Polylang) ou pas encore.
+  const categoryLabel = (cat) =>
+    t(`catalog.categories.${cat.slug}`, { defaultValue: cat.name });
+
   const filters = useMemo(() => {
     const categories = new Set();
     products?.forEach((product) => {
       product.categories?.forEach((cat) => {
-        categories.add(JSON.stringify({ id: cat.slug, label: cat.name }));
+        categories.add(
+          JSON.stringify({ id: cat.slug, label: categoryLabel(cat) }),
+        );
       });
     });
 
     const uniqueFilters = Array.from(categories).map((cat) => JSON.parse(cat));
     return [
-      { id: "tous", label: "TOUT" },
+      { id: "tous", label: t("catalog.all") },
       ...uniqueFilters.sort((a, b) => a.label.localeCompare(b.label)),
     ];
   }, [products]);

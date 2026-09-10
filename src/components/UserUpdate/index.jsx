@@ -59,7 +59,7 @@ export function UserUpdate() {
           onChange={(e) => setNewPassword(e.target.value)}
         />
         <button type="submit" disabled={user.loading}>
-          {user.loading ? "Mise a jour..." : "Mettre a jour le profil"}
+          {user.loading ? t("common.updating") : t("account.updateProfile")}
         </button>
       </form>
     </div>

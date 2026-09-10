@@ -205,7 +205,7 @@ export default function AuthDrawer() {
           <>
             <div className="drawer-header">
               <h2 className="drawer-title">
-                {mode === "login" ? "Connexion" : "Créer un compte"}
+                {mode === "login" ? t("auth.loginTitle") : t("auth.createAccountTitle")}
               </h2>
             </div>
 
@@ -368,7 +368,7 @@ export default function AuthDrawer() {
 
               <button type="submit" className="submit-btn" disabled={loading}>
                 {loading
-                  ? "Chargement..."
+                  ? t("common.loading")
                   : mode === "login"
                     ? t("auth.signIn")
                     : t("auth.signUp")}

@@ -369,9 +369,9 @@ export default function CheckoutForm({ shippingMethod, setShippingMethod }) {
   });
 
   const shippingOptions = [
-    { id: "mondial_relay", name: "Mondial Relay (Point Relais)", price: 4.5 },
-    { id: "colissimo", name: "Colissimo (Standard)", price: 7.9 },
-    { id: "express", name: "Chronopost (Express 24h)", price: 12.9 },
+    { id: "mondial_relay", name: t("checkout.shippingRelay"), price: 4.5 },
+    { id: "colissimo", name: t("checkout.shippingStandard"), price: 7.9 },
+    { id: "express", name: t("checkout.shippingExpress"), price: 12.9 },
   ];
 
   const handleShippingChange = (e) => {
