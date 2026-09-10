@@ -23,3 +23,52 @@
     padding: $spacing-md $spacing-sm 60px;
   }
 }
+
+.loadMoreContainer {
+  display: flex;
+  justify-content: center;
+  margin-top: 50px;
+  padding: 30px 0;
+}
+
+.loadMoreBtn {
+  padding: 15px 50px;
+  background-color: #000;
+  border: none;
+  color: #fff;
+  border-radius: 8px;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  &:hover:not(:disabled) {
+    background-color: #333;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(-1px);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  @media (max-width: $breakpoint-mobile) {
+    padding: 12px 30px;
+    font-size: 16px;
+  }
+}
+
+.loaderContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 300px;
+}

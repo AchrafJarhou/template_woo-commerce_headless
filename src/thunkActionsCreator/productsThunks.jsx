@@ -40,8 +40,9 @@ export const fetchProductsThunk = createAsyncThunk(
         throw new Error("Impossible de récupérer les produits.");
       }
       const data = await response.json();
+      const total = parseInt(response.headers.get("X-WP-Total") || "0", 10);
 
-      return { data, page, perPage };
+      return { data, page, perPage, total };
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
     }
