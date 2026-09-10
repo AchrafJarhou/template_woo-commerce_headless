@@ -1,20 +1,15 @@
-import { Link, useNavigate } from "react-router-dom";
-import { useState, useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import styles from "./Header.module.scss";
 import menuBurgerIcon from "../../../../assets/icons/menu-burger.png";
 import cartIcon from "../../../../assets/icons/logo-panier.png";
 import { openAuthModal } from "../../../../slices/authModalSlice";
-import { logout } from "../../../../slices/userSlice";
-import { showToast } from "../../../../slices/toastSlice";
 import LanguageSwitcher from "../../../../components/LanguageSwitcher";
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [userMenuOpen, setUserMenuOpen] = useState(false);
-  const userMenuRef = useRef(null);
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const cartItems = useSelector((state) => state.cart.items);
@@ -28,31 +23,20 @@ export default function Header() {
   );
   const cartBadgeValue = cartCount > 9 ? "9+" : String(cartCount);
 
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (userMenuRef.current && !userMenuRef.current.contains(event.target)) {
-        setUserMenuOpen(false);
-      }
-    };
-
-    if (userMenuOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [userMenuOpen]);
-
-  const handleUserClick = () => {
-    if (token) {
-      setUserMenuOpen(!userMenuOpen);
-    } else {
-      dispatch(openAuthModal("login"));
-    }
-  };
-
   const closeMenu = () => setMenuOpen(false);
+
+  // Défini une fois : le lien et le bouton ci-dessous affichent rigoureusement
+  // le même dessin, il ne peut donc pas diverger de l'un à l'autre.
+  const userIcon = (
+    <svg
+      className={styles.icon}
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      aria-hidden="true"
+    >
+      <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+    </svg>
+  );
 
   return (
     <>
@@ -80,46 +64,30 @@ export default function Header() {
         </Link>
 
         <div className={styles.headerRight}>
-          {/* Icône Utilisateur */}
-          <div className={styles.userMenuContainer} ref={userMenuRef}>
-            <button
+          {/* Icône Utilisateur : le profil est atteint d'un seul clic, sans
+              menu intermédiaire. Quand la session existe, c'est un vrai lien —
+              la navigation est immédiate, et le clic milieu, l'ouverture dans
+              un onglet et l'aperçu de l'URL fonctionnent comme partout
+              ailleurs. Sans session il n'y a rien à montrer sur /profile,
+              qui n'est protégé par aucun garde : on ouvre la connexion. */}
+          {token ? (
+            <Link
+              to="/profile"
               className={styles.userIconButton}
-              onClick={handleUserClick}
-              aria-label="Profil ou Connexion"
+              aria-label={t("header.account")}
             >
-              <svg
-                className={styles.icon}
-                viewBox="0 0 24 24"
-                fill="currentColor"
-              >
-                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
-              </svg>
+              {userIcon}
+            </Link>
+          ) : (
+            <button
+              type="button"
+              className={styles.userIconButton}
+              onClick={() => dispatch(openAuthModal("login"))}
+              aria-label={t("header.account")}
+            >
+              {userIcon}
             </button>
-            {token && userMenuOpen && (
-              <div className={styles.userDropdown}>
-                <Link
-                  to="/profile"
-                  className={styles.dropdownItem}
-                  onClick={() => setUserMenuOpen(false)}
-                >
-                  Mon profil
-                </Link>
-                <button
-                  type="button"
-                  className={`${styles.dropdownItem} ${styles.logoutBtn}`}
-                  onClick={() => {
-                    dispatch(logout());
-                    dispatch(showToast("Vous avez été déconnecté"));
-                    dispatch(openAuthModal("login"));
-                    setUserMenuOpen(false);
-                    navigate("/");
-                  }}
-                >
-                  Déconnexion
-                </button>
-              </div>
-            )}
-          </div>
+          )}
 
           {/* Icône Panier avec compteur */}
           <Link to="/panier" aria-label={t("header.cart")}>
