@@ -40,7 +40,13 @@ function headless_create_order_from_checkout($request)
         return new WP_Error('invalid_email', 'Email invalide.', ['status' => 400]);
     }
 
+    $user_id = get_current_user_id();
     $order = wc_create_order();
+
+    // Associer la commande au user connecté si disponible
+    if ($user_id > 0) {
+        $order->set_customer_id($user_id);
+    }
 
     foreach ($cart_items as $item) {
         $product_id = isset($item['id']) ? intval($item['id']) : 0;
