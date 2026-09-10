@@ -1,4 +1,8 @@
 import React, { useRef, useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { logout } from "../../../slices/userSlice";
+import { showToast } from "../../../slices/toastSlice";
 
 export default function ProfileNavigation({ activeTab, onTabChange }) {
   const tabs = [
@@ -9,6 +13,17 @@ export default function ProfileNavigation({ activeTab, onTabChange }) {
 
   const navRef = useRef(null);
   const [indicatorStyle, setIndicatorStyle] = useState({});
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  // La barre du header n'expose plus de menu : c'est ici que la déconnexion
+  // se fait désormais. `logout` vide aussi le jeton de panier invité, via
+  // l'écouteur du store — la session suivante repart d'un panier propre.
+  const handleLogout = () => {
+    dispatch(logout());
+    dispatch(showToast("Vous avez été déconnecté"));
+    navigate("/");
+  };
 
   // Met à jour la position de la ligne animée
   useEffect(() => {
@@ -47,7 +62,7 @@ export default function ProfileNavigation({ activeTab, onTabChange }) {
       {/* La ligne qui glisse */}
       <div className="nav-indicator" style={indicatorStyle} />
 
-      <button className="logout-btn" onClick={() => alert("Déconnexion...")}>
+      <button className="logout-btn" onClick={handleLogout}>
         Déconnexion
       </button>
     </nav>
