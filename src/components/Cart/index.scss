@@ -108,7 +108,7 @@
   display: block;
   margin-top: clamp(18px, 2vw, 26px);
   padding: 14px 20px;
-  border-radius: var(--panel-radius);
+  border-radius: var(--radius-button);
   background-color: var(--dark-color);
   color: #fff;
   font-family: var(--font-heading);
@@ -165,8 +165,14 @@
    critère de contraste ne s'y applique — l'image est décorative, le message
    qui suit porte seul l'information. */
 .cart-state__icon {
-  height: clamp(38px, 7vw, 52px);
+  /* Nommée pour servir deux fois : la hauteur fixe aussi l'arrondi, comme
+     dans le header. Les deux ne peuvent donc pas se désaccorder. */
+  --icon-h: clamp(38px, 7vw, 52px);
+  height: var(--icon-h);
   width: auto;
+  /* Même rapport que l'icône de la barre du header : le sac se reconnaît
+     à la même silhouette, quelle que soit sa taille. */
+  border-radius: calc(var(--icon-h) * var(--cart-icon-radius-ratio));
   margin-bottom: clamp(18px, 3vh, 28px);
   opacity: 0.28;
 }
@@ -228,7 +234,7 @@
   max-width: 340px;
   background-color: #000;
   color: #fff;
-  border-radius: 0;
+  border-radius: var(--radius-button);
   /* Les <a> reçoivent une taille en vw des règles globales (4,5vw, puis
      1,5vw) : sans valeur explicite, le libellé suivrait la largeur d'écran. */
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;

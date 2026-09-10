@@ -217,7 +217,7 @@
 .btn {
   padding: 12px 30px;
   border: none;
-  border-radius: 6px;
+  border-radius: var(--radius-button);
   font-size: 15px;
   font-weight: 600;
   cursor: pointer;

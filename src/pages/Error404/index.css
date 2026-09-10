@@ -109,7 +109,7 @@
   font-size: 4vw;
   font-family: var(--font-body);
   border: none;
-  border-radius: 2vw;
+  border-radius: var(--radius-button);
   text-decoration: none;
   transition: all 0.3s ease;
   cursor: pointer;
@@ -225,7 +225,6 @@
   .btn {
     padding: 1vw 2.5vw;
     font-size: 1.1vw;
-    border-radius: 0.5vw;
     flex: 1;
     max-width: 250px;
   }
@@ -286,7 +285,6 @@
   .btn {
     padding: 1.5lvh 3lvh;
     font-size: 2lvh;
-    border-radius: 0.7lvh;
   }
 
   .error-404-suggestions {

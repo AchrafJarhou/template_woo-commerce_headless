@@ -181,7 +181,7 @@
 /* Le corps du sac est un rectangle plein qui occupe toute la boîte de
    l'image : arrondir la boîte arrondit donc la forme elle-même. */
 .cartWrapper .icon {
-  border-radius: calc(var(--icon-size) * 0.11);
+  border-radius: calc(var(--icon-size) * var(--cart-icon-radius-ratio));
 }
 
 .menuButton {

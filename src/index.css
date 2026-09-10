@@ -22,6 +22,15 @@
      de la page d'accueil : le nom de la marque ne doit s'écrire que d'une
      seule façon. */
   --font-wordmark: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  /* Rayon partagé par TOUS les boutons du site. Bords francs : la valeur
+     n'est écrite qu'ici, aucun bouton ne peut donc diverger, et revenir à des
+     angles adoucis se ferait en changeant ce seul nombre. */
+  --radius-button: 0;
+  /* Le sac du panier est une image rectangulaire pleine : arrondir sa boîte
+     arrondit la forme elle-même. En rapport et non en pixels, l'icône garde
+     exactement la même allure à ses deux tailles — barre du header et page
+     panier vide. */
+  --cart-icon-radius-ratio: 0.11;
 }
 
 * {
@@ -281,20 +290,18 @@ button {
   font-size: 4.5vw;
   width: -moz-fit-content;
   width: fit-content;
-  border-radius: 2vw;
+  border-radius: var(--radius-button);
 }
 @media screen and (aspect-ratio > 1/1) {
   button {
     padding: 1vw 2vw;
     font-size: 1.5vw;
-    border-radius: 0.5vw;
   }
 }
 @media screen and (aspect-ratio > 2.6/1) {
   button {
     padding: 2lvh 4lvh;
     font-size: 3.5lvh;
-    border-radius: 1lvh;
   }
 }
 /* button:hover {
