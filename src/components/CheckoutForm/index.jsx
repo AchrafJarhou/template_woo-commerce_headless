@@ -332,8 +332,10 @@ import BillingAddress from "./BillingAddress";
 import ShippingOptions from "./ShippingOptions";
 import { showToast } from "../../slices/toastSlice";
 import { emptyCartThunk } from "../../thunkActionsCreator/cartThunks";
+import { useTranslation } from "react-i18next";
 
 export default function CheckoutForm({ shippingMethod, setShippingMethod }) {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const stripe = useStripe();
   const elements = useElements();
@@ -385,7 +387,7 @@ export default function CheckoutForm({ shippingMethod, setShippingMethod }) {
 
     if (!stripe || !elements || loading) return;
     if (paymentType !== "card") {
-      setError("Seul le paiement par carte est actuellement disponible");
+      setError(t("checkout.errors.cardOnly"));
       return;
     }
 
@@ -394,7 +396,7 @@ export default function CheckoutForm({ shippingMethod, setShippingMethod }) {
 
     const cardElement = elements.getElement(CardElement);
     if (!cardElement) {
-      setError("Erreur: champ de carte non trouvé");
+      setError(t("checkout.errors.cardField"));
       setLoading(false);
       return;
     }
@@ -435,7 +437,7 @@ export default function CheckoutForm({ shippingMethod, setShippingMethod }) {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.message || "Erreur lors de la commande");
+        throw new Error(data.message || t("checkout.errors.order"));
       }
 
       if (data.success && data.order_id) {
@@ -443,10 +445,10 @@ export default function CheckoutForm({ shippingMethod, setShippingMethod }) {
         dispatch(emptyCartThunk());
         navigate(`/success/${data.order_id}`);
       } else {
-        throw new Error("Commande non créée");
+        throw new Error(t("checkout.errors.notCreated"));
       }
     } catch (err) {
-      setError(err.message || "Erreur lors de la commande");
+      setError(err.message || t("checkout.errors.order"));
     } finally {
       setLoading(false);
     }
@@ -455,7 +457,7 @@ export default function CheckoutForm({ shippingMethod, setShippingMethod }) {
   return (
     <div className="checkout-left">
       <Link to="/cart" className="back-link">
-        ← RETOUR À LA BOUTIQUE
+        {t("checkout.backToShop")}
       </Link>
 
       <div className="express-payment">
@@ -482,7 +484,7 @@ export default function CheckoutForm({ shippingMethod, setShippingMethod }) {
         </button>
       </div>
 
-      <div className="divider">OU CONTINUER CI-DESSOUS</div>
+      <div className="divider">{t("checkout.orContinue")}</div>
 
       <form id="checkout-payment-form" onSubmit={processCheckout}>
         <ShippingAddress
@@ -497,7 +499,7 @@ export default function CheckoutForm({ shippingMethod, setShippingMethod }) {
               checked={sameAsBilling}
               onChange={(e) => setSameAsBilling(e.target.checked)}
             />
-            Adresse de facturation identique à l'adresse de livraison
+            {t("address.sameAsShipping")}
           </label>
         </div>
 
@@ -514,7 +516,7 @@ export default function CheckoutForm({ shippingMethod, setShippingMethod }) {
           onSelect={setShippingMethod}
         />
 
-        <h3>Détails du paiement</h3>
+        <h3>{t("checkout.paymentDetails")}</h3>
         <div className="form-group">
           <label
             className={`payment-method ${paymentType !== "card" ? "inactive-method" : ""}`}
@@ -522,8 +524,8 @@ export default function CheckoutForm({ shippingMethod, setShippingMethod }) {
             <div className="payment-method-header">
               <span className="card-icon">💳</span>
               <div className="card-options">
-                <strong>CARTE DE CRÉDIT / DÉBIT</strong>
-                <div>Visa, Mastercard, Amex</div>
+                <strong>{t("checkout.card")}</strong>
+                <div>{t("checkout.cardBrands")}</div>
               </div>
             </div>
             <input
@@ -560,7 +562,7 @@ export default function CheckoutForm({ shippingMethod, setShippingMethod }) {
         {error && <div style={{ color: "red", marginTop: "10px" }}>{error}</div>}
 
         <button type="submit" className="submit-btn desktop-submit" disabled={!stripe || loading}>
-          {loading ? "Traitement en cours..." : "Valider la commande"}
+          {loading ? t("checkout.submitting") : t("checkout.submit")}
         </button>
       </form>
     </div>

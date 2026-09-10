@@ -1,4 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import { apiError, apiErrorMessage } from "../i18n/apiError";
 
 const fetchPageBySlug = async (slug) => {
   const response = await fetch(
@@ -10,7 +11,7 @@ const fetchPageBySlug = async (slug) => {
   );
 
   if (!response.ok) {
-    throw new Error("Impossible de récupérer la page.");
+    throw new Error(apiError("errors.page"));
   }
 
   const data = await response.json();
@@ -35,7 +36,7 @@ export const fetchPageThunk = createAsyncThunk(
         }
       }
 
-      return thunkAPI.rejectWithValue("Page non trouvée");
+      return thunkAPI.rejectWithValue(apiError("errors.pageNotFound"));
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
     }

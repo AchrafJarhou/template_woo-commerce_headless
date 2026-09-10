@@ -2,8 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import Loader from "../Loader";
 import "./index.css";
+import { formatDate } from "../../utils/formatDate";
+import { useTranslation } from "react-i18next";
 
 const Review = ({ productId }) => {
+  const { t } = useTranslation();
   const userState = useSelector((state) => state.user || {});
 
   const user = userState.profile || userState.customer || null;
@@ -45,7 +48,7 @@ const Review = ({ productId }) => {
         return response.json();
       })
       .then((data) => setReviews(Array.isArray(data) ? data : []))
-      .catch((err) => setError(err.message || "Impossible de charger les avis"))
+      .catch((err) => setError(err.message || t("review.loadError")))
       .finally(() => setLoading(false));
   };
 
@@ -187,7 +190,7 @@ const Review = ({ productId }) => {
 
       if (!response.ok) {
         const errData = await response.json();
-        throw new Error(errData.message || "Erreur lors de l'envoi de l'avis");
+        throw new Error(errData.message || t("review.sendError"));
       }
 
       setSubmitSuccess(true);
@@ -195,7 +198,7 @@ const Review = ({ productId }) => {
       setRating(0);
       fetchReviews();
     } catch (err) {
-      setSubmitError(err.message || "Erreur lors de la publication.");
+      setSubmitError(err.message || t("review.publishError"));
     } finally {
       setSubmitting(false);
     }
@@ -210,23 +213,23 @@ const Review = ({ productId }) => {
 
   return (
     <div id="reviews-section" className="review-list">
-      <h2>Avis</h2>
+      <h2>{t("review.title")}</h2>
 
       {/* --- BLOC NOUVEL AVIS --- */}
       <div className="add-review-section">
         {!user ? (
-          <p className="review-info">ℹ️ Connectez-vous pour ajouter un avis.</p>
+          <p className="review-info">{t("review.signInPrompt")}</p>
         ) : checkingPurchase ? (
-          <p className="review-info">Vérification de vos achats...</p>
+          <p className="review-info">{t("review.checking")}</p>
         ) : hasPurchased ? (
           <form onSubmit={handleSubmitReview} className="review-form">
-            <h3>Rédiger un avis </h3>
+            <h3>{t("review.write")}</h3>
 
-            {submitSuccess && <p>Merci ! Votre avis a été publié.</p>}
+            {submitSuccess && <p>{t("review.published")}</p>}
             {submitError && <p>{submitError}</p>}
 
             <div>
-              <label>Note : </label>
+              <label>{t("review.rating")} : </label>
               {[1, 2, 3, 4, 5].map((star) => (
                 <button
                   type="button"
@@ -240,7 +243,7 @@ const Review = ({ productId }) => {
               ))}
               {!rating && (
                 <p className="review-helper-text">
-                  Choisissez une note de 1 à 5.
+                  {t("review.ratingHint")}
                 </p>
               )}
             </div>
@@ -249,7 +252,7 @@ const Review = ({ productId }) => {
               <textarea
                 rows="3"
                 className="review-textarea"
-                placeholder="Votre avis sur ce produit..."
+                placeholder={t("review.placeholder")}
                 value={comment}
                 onChange={(e) => setComment(e.target.value)}
                 required
@@ -262,7 +265,7 @@ const Review = ({ productId }) => {
           </form>
         ) : (
           <p className="review-info">
-            🔒 Seuls les clients ayant acheté cet article peuvent laisser un
+            {t("review.customersOnly")}
             avis.
           </p>
         )}
@@ -271,7 +274,7 @@ const Review = ({ productId }) => {
       {/* --- LISTE DES AVIS --- */}
       {loading && <Loader size="lg" />}
       {error && <p className="review-error">Erreur : {error}</p>}
-      {!loading && !error && reviews.length === 0 && <p>Aucun avis trouvé.</p>}
+      {!loading && !error && reviews.length === 0 && <p>{t("review.none")}</p>}
 
       {reviews.map((review) => (
         <article key={review.id || review.review_id} className="review-item">
@@ -282,9 +285,7 @@ const Review = ({ productId }) => {
               {" - "}
             </strong>
             <span>
-              {review.date_created
-                ? new Date(review.date_created).toLocaleDateString("fr-FR")
-                : ""}
+              {formatDate(review.date_created)}
             </span>
           </div>
           <div

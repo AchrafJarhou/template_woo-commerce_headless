@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { setSite, setSiteSettings } from "../slices/siteSlice";
+import { apiError, apiErrorMessage } from "../i18n/apiError";
 
 export const fetchSiteThunk = createAsyncThunk(
   "site/fetchSite",
@@ -10,7 +11,7 @@ export const fetchSiteThunk = createAsyncThunk(
       });
 
       if (!response.ok) {
-        throw new Error("Impossible de récupérer les informations du site.");
+        throw new Error(apiError("errors.site"));
       }
 
       let siteData = await response.json();

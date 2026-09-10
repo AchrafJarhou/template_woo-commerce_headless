@@ -9,8 +9,10 @@ import {
 } from "../../slices/wishlistSlice";
 import { showToast } from "../../slices/toastSlice";
 import "./index.css";
+import { useTranslation } from "react-i18next";
 
 export default function WishlistButton({ product }) {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const token = useSelector((state) => state.user.token);
   const isWishlisted = useSelector((state) =>
@@ -44,7 +46,7 @@ export default function WishlistButton({ product }) {
       addToWishlistThunk.rejected.match(result) ||
       removeFromWishlistThunk.rejected.match(result)
     ) {
-      dispatch(showToast(result.payload || "Erreur avec les favoris"));
+      dispatch(showToast(result.payload || t("wishlist.error")));
     } else if (!isWishlisted) {
       dispatch(showToast(`${product.name || "Produit"} ajouté aux favoris`));
     }

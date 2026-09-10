@@ -1,4 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import { apiError, apiErrorMessage } from "../i18n/apiError";
 
 export const fetchCategoriesThunk = createAsyncThunk(
   "categories/fetchAll",
@@ -10,7 +11,7 @@ export const fetchCategoriesThunk = createAsyncThunk(
         headers: { "Content-Type": "application/json" },
       });
       if (!response.ok) {
-        throw new Error("Impossible de récupérer les catégories.");
+        throw new Error(apiError("errors.categories"));
       }
       const data = await response.json();
       return data;

@@ -1,4 +1,7 @@
+import { useTranslation } from "react-i18next";
 export function AddressSection({ title, address }) {
+  const { t } = useTranslation();
+
   return (
     <section className="profile__section">
       <h2 className="profile__section-title">{title}</h2>
@@ -10,7 +13,7 @@ export function AddressSection({ title, address }) {
         </div>
       </div>
       <button className="profile__button profile__button--secondary">
-        Modifier cette adresse
+        {t("address.editThisAddress")}
       </button>
     </section>
   );

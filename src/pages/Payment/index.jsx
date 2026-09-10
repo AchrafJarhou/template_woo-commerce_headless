@@ -8,18 +8,21 @@ import {
   mockBillingAddress,
 } from "./mockData";
 import "./index.scss";
+import { useTranslation } from "react-i18next";
 
 export default function Payment() {
+  const { t } = useTranslation();
+
   return (
     <div className="payment">
-      <h1 className="payment__title">Passer la commande</h1>
+      <h1 className="payment__title">{t("cart.checkout")}</h1>
 
       <div className="payment__container">
         {/* Section Gauche: Informations */}
         <div className="payment__left">
           <section className="payment__card">
             <AddressForm
-              title="Adresse de Livraison"
+              title={t("address.shipping")}
               address={mockShippingAddress}
               type="shipping"
             />
@@ -27,7 +30,7 @@ export default function Payment() {
 
           <section className="payment__card">
             <AddressForm
-              title="Adresse de Facturation"
+              title={t("address.billing")}
               address={mockBillingAddress}
               type="billing"
             />

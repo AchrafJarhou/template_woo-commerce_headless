@@ -22,6 +22,12 @@ import { join } from "node:path";
 
 const LOCALES = "src/i18n/locales";
 const BASELINE = "scripts/i18n-baseline.json";
+// Textes volontairement non traduits (marques, sigles, masques de saisie).
+// Les déclarer les rend visibles et discutables ; les ignorer en silence
+// rendrait la dette impossible à distinguer d'un choix délibéré.
+const NEUTRAL = new Set(
+  JSON.parse(readFileSync("scripts/i18n-neutral.json", "utf8")).neutral,
+);
 // Composants non importés : les corriger n'aurait aucun effet à l'écran.
 const DEAD = ["src/components/Product/", "src/components/Header/"];
 const ATTRS = ["aria-label", "placeholder", "alt", "title", "label"];
@@ -51,9 +57,13 @@ const walk = (dir) =>
   });
 
 const TECHNICAL = /^[\s\d\W]*$|^[a-z0-9_-]+$|^https?:|^\/|^#/;
-const CODE = /[;=`]|=>|&&|\|\||\breturn\b|\bconst\b|\bnew\b|\.\w+\(|\}\s*$|^\s*\{/;
+// Un texte d'interface ne commence jamais par une parenthèse fermante et
+// ne finit jamais par une ouvrante : ces formes viennent d'un ternaire JSX
+// dont le `>` et le `<` encadrent du code, pas du texte.
+const CODE = /[;=`]|=>|&&|\|\||\breturn\b|\bconst\b|\bnew\b|\.\w+\(|\}\s*$|^\s*\{|^\)|\($/;
 const isVisible = (s) => {
   const t = s.trim();
+  if (NEUTRAL.has(t)) return false;
   return t.length >= 2 && !TECHNICAL.test(t) && !CODE.test(t) && !t.includes("\n") && /[A-Za-zÀ-ÿ]{2}/.test(t);
 };
 const stripComments = (s) =>

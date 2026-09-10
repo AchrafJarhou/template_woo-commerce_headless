@@ -3,8 +3,10 @@ import { useSelector, useDispatch } from "react-redux";
 import styles from "./FilterBar.module.scss";
 import searchBarIcon from "../../../assets/icons/search-bar.png";
 import { setFilters } from "../../../slices/filtersSlice";
+import { useTranslation } from "react-i18next";
 
 export default function FilterBar({ onFilterChange, hasProducts }) {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const [activeFilter, setActiveFilter] = useState("tous");
   const [searchOpen, setSearchOpen] = useState(false);
@@ -57,9 +59,9 @@ export default function FilterBar({ onFilterChange, hasProducts }) {
       <button
         className={styles.searchButton}
         onClick={toggleSearch}
-        aria-label="Recherche"
+        aria-label={t("search.label")}
       >
-        <img src={searchBarIcon} alt="Recherche" className={styles.searchIcon} />
+        <img src={searchBarIcon} alt="" className={styles.searchIcon} />
       </button>
 
       {/* Input de recherche */}
@@ -69,7 +71,7 @@ export default function FilterBar({ onFilterChange, hasProducts }) {
           <input
             type="text"
             className={styles.searchInput}
-            placeholder="Rechercher un article..."
+            placeholder={t("search.articlePlaceholder")}
             value={searchQuery}
             onChange={handleSearchChange}
             autoFocus
