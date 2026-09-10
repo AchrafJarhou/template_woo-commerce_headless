@@ -140,6 +140,8 @@ export const fetchCurrentUserOrdersThunk = createAsyncThunk(
         },
       );
       const data = await response.json();
+
+      console.log("DONNÉES BRUTES REÇUES DE L'API ORDERS :", data); // <-- Ajoute ceci
       if (!response.ok) {
         throw new Error(
           apiErrorMessage(data.message, "errors.ordersFetch"),

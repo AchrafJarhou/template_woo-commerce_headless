@@ -40,7 +40,13 @@ function headless_create_order_from_checkout($request)
         return new WP_Error('invalid_email', 'Email invalide.', ['status' => 400]);
     }
 
+    $user_id = get_current_user_id();
     $order = wc_create_order();
+
+    // Associer la commande au user connecté si disponible
+    if ($user_id > 0) {
+        $order->set_customer_id($user_id);
+    }
 
     foreach ($cart_items as $item) {
         $product_id = isset($item['id']) ? intval($item['id']) : 0;
@@ -89,6 +95,12 @@ function headless_create_order_from_checkout($request)
     $order->save();
 
     $order_id = $order->get_id();
+    $user_id = get_current_user_id();
+
+    // Sauvegarder les adresses dans le profil du customer si connecté
+    if ($user_id > 0) {
+        headless_save_customer_addresses_from_order($order, $user_id);
+    }
 
     headless_send_order_confirmation_email($order, $email);
     headless_send_order_notification_to_admin($order);
@@ -121,6 +133,46 @@ function headless_send_order_confirmation_email($order, $customer_email)
     $headers = ['Content-Type: text/plain; charset=UTF-8'];
 
     wp_mail($customer_email, $subject, $body, $headers);
+}
+
+function headless_save_customer_addresses_from_order($order, $user_id)
+{
+    if (!class_exists('WC_Customer')) {
+        return;
+    }
+
+    $customer = new WC_Customer($user_id);
+
+    // Récupérer les adresses de la commande
+    $shipping = $order->get_address('shipping');
+    $billing = $order->get_address('billing');
+
+    // Mettre à jour l'adresse de livraison si elle existe dans la commande
+    if (!empty($shipping)) {
+        if (isset($shipping['first_name'])) $customer->set_shipping_first_name(sanitize_text_field($shipping['first_name']));
+        if (isset($shipping['last_name'])) $customer->set_shipping_last_name(sanitize_text_field($shipping['last_name']));
+        if (isset($shipping['company'])) $customer->set_shipping_company(sanitize_text_field($shipping['company']));
+        if (isset($shipping['address_1'])) $customer->set_shipping_address_1(sanitize_text_field($shipping['address_1']));
+        if (isset($shipping['address_2'])) $customer->set_shipping_address_2(sanitize_text_field($shipping['address_2']));
+        if (isset($shipping['city'])) $customer->set_shipping_city(sanitize_text_field($shipping['city']));
+        if (isset($shipping['postcode'])) $customer->set_shipping_postcode(sanitize_text_field($shipping['postcode']));
+        if (isset($shipping['country'])) $customer->set_shipping_country(sanitize_text_field(strtoupper($shipping['country'])));
+    }
+
+    // Mettre à jour l'adresse de facturation si elle existe dans la commande
+    if (!empty($billing)) {
+        if (isset($billing['first_name'])) $customer->set_billing_first_name(sanitize_text_field($billing['first_name']));
+        if (isset($billing['last_name'])) $customer->set_billing_last_name(sanitize_text_field($billing['last_name']));
+        if (isset($billing['company'])) $customer->set_billing_company(sanitize_text_field($billing['company']));
+        if (isset($billing['address_1'])) $customer->set_billing_address_1(sanitize_text_field($billing['address_1']));
+        if (isset($billing['address_2'])) $customer->set_billing_address_2(sanitize_text_field($billing['address_2']));
+        if (isset($billing['city'])) $customer->set_billing_city(sanitize_text_field($billing['city']));
+        if (isset($billing['postcode'])) $customer->set_billing_postcode(sanitize_text_field($billing['postcode']));
+        if (isset($billing['country'])) $customer->set_billing_country(sanitize_text_field(strtoupper($billing['country'])));
+        if (isset($billing['phone'])) $customer->set_billing_phone(sanitize_text_field($billing['phone']));
+    }
+
+    $customer->save();
 }
 
 function headless_send_order_notification_to_admin($order)
