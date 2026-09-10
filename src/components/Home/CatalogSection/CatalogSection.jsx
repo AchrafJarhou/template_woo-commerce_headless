@@ -11,8 +11,10 @@ import Loader from "../../Loader";
 export default function CatalogSection({
   products,
   hasMore = false,
+  canShowLess = false,
   loading = false,
   onLoadMore,
+  onShowLess,
 }) {
   const [filter, setFilter] = useState("tous");
   const [selectedProduct, setSelectedProduct] = useState(null);
@@ -45,15 +47,26 @@ export default function CatalogSection({
               filter={filter}
               onProductClick={setSelectedProduct}
             />
-            {hasMore && (
-              <div className={styles.loadMoreContainer}>
-                <button
-                  onClick={onLoadMore}
-                  disabled={loading}
-                  className={styles.loadMoreBtn}
-                >
-                  {loading ? <Loader size="sm" /> : "Voir plus"}
-                </button>
+            {(hasMore || canShowLess) && (
+              <div className={styles.buttonsContainer}>
+                {hasMore && (
+                  <button
+                    onClick={onLoadMore}
+                    disabled={loading}
+                    className={styles.loadMoreBtn}
+                  >
+                    {loading ? <Loader size="sm" /> : "Voir plus"}
+                  </button>
+                )}
+                {canShowLess && (
+                  <button
+                    onClick={onShowLess}
+                    disabled={loading}
+                    className={styles.showLessBtn}
+                  >
+                    Afficher moins
+                  </button>
+                )}
               </div>
             )}
           </>
