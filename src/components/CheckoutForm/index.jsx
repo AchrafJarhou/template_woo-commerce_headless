@@ -334,6 +334,7 @@ import { showToast } from "../../slices/toastSlice";
 import { emptyCartThunk } from "../../thunkActionsCreator/cartThunks";
 import { fetchCurrentCustomerThunk } from "../../thunkActionsCreator/userThunks";
 import { useTranslation } from "react-i18next";
+import { HOME_CATALOG_PATH } from "../../constants/navigation";
 
 export default function CheckoutForm({ shippingMethod, setShippingMethod }) {
   const { t } = useTranslation();
@@ -512,7 +513,7 @@ export default function CheckoutForm({ shippingMethod, setShippingMethod }) {
 
   return (
     <div className="checkout-left">
-      <Link to="/cart" className="back-link">
+      <Link to={HOME_CATALOG_PATH} className="back-link">
         {t("checkout.backToShop")}
       </Link>
 
