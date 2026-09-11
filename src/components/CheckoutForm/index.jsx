@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { useSelector, useDispatch } from "react-redux";
@@ -7,7 +7,9 @@ import BillingAddress from "./BillingAddress";
 import ShippingOptions from "./ShippingOptions";
 import { showToast } from "../../slices/toastSlice";
 import { emptyCartThunk } from "../../thunkActionsCreator/cartThunks";
+import { fetchCurrentCustomerThunk } from "../../thunkActionsCreator/userThunks";
 import { useTranslation } from "react-i18next";
+import { HOME_CATALOG_PATH } from "../../constants/navigation";
 
 export default function CheckoutForm({ shippingMethod, setShippingMethod }) {
   const { t } = useTranslation();
@@ -51,6 +53,58 @@ export default function CheckoutForm({ shippingMethod, setShippingMethod }) {
     { id: "colissimo", name: t("checkout.shippingStandard"), price: 7.9 },
     { id: "express", name: t("checkout.shippingExpress"), price: 12.9 },
   ];
+
+  // Charger les données du client si connecté
+  useEffect(() => {
+    if (user?.token && !user?.customer) {
+      dispatch(fetchCurrentCustomerThunk());
+    }
+  }, [user?.token, user?.customer, dispatch]);
+
+  // Pré-remplir les champs avec les données du profil
+  useEffect(() => {
+    if (user?.customer) {
+      const { shipping, billing } = user.customer;
+
+      if (shipping) {
+        setShippingAddress((prev) => ({
+          ...prev,
+          first_name: shipping.firstName || prev.first_name,
+          last_name: shipping.lastName || prev.last_name,
+          address_1: shipping.address1 || prev.address_1,
+          city: shipping.city || prev.city,
+          postcode: shipping.postcode || prev.postcode,
+          country: shipping.country || prev.country,
+          phone: shipping.phone || prev.phone,
+        }));
+      }
+
+      if (billing) {
+        setBillingAddress((prev) => ({
+          ...prev,
+          first_name: billing.firstName || prev.first_name,
+          last_name: billing.lastName || prev.last_name,
+          address_1: billing.address1 || prev.address_1,
+          city: billing.city || prev.city,
+          postcode: billing.postcode || prev.postcode,
+          country: billing.country || prev.country,
+          phone: billing.phone || prev.phone,
+        }));
+      }
+
+      if (shipping?.email) {
+        setShippingAddress((prev) => ({ ...prev, email: shipping.email }));
+      } else if (user?.profile?.email) {
+        setShippingAddress((prev) => ({ ...prev, email: user.profile.email }));
+      }
+
+      if (billing?.email) {
+        setBillingAddress((prev) => ({ ...prev, email: billing.email }));
+      } else if (user?.profile?.email) {
+        setBillingAddress((prev) => ({ ...prev, email: user.profile.email }));
+      }
+    }
+  }, [user?.customer, user?.profile?.email]);
 
   const handleShippingChange = (e) => {
     setShippingAddress({ ...shippingAddress, [e.target.name]: e.target.value });
@@ -140,7 +194,7 @@ export default function CheckoutForm({ shippingMethod, setShippingMethod }) {
 
   return (
     <div className="checkout-left">
-      <Link to="/cart" className="back-link">
+      <Link to={HOME_CATALOG_PATH} className="back-link">
         {t("checkout.backToShop")}
       </Link>
 
