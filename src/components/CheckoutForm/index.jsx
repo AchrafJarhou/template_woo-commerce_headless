@@ -402,14 +402,15 @@ export default function CheckoutForm({ shippingMethod, setShippingMethod }) {
       return;
     }
 
-    const { paymentMethod, error: stripeError } = await stripe.createPaymentMethod({
-      type: "card",
-      card: cardElement,
-      billing_details: {
-        name: `${billingAddress.first_name || ""} ${billingAddress.last_name || ""}`.trim(),
-        email: shippingAddress.email,
-      },
-    });
+    const { paymentMethod, error: stripeError } =
+      await stripe.createPaymentMethod({
+        type: "card",
+        card: cardElement,
+        billing_details: {
+          name: `${billingAddress.first_name || ""} ${billingAddress.last_name || ""}`.trim(),
+          email: shippingAddress.email,
+        },
+      });
 
     if (stripeError) {
       setError(stripeError.message);
@@ -434,7 +435,7 @@ export default function CheckoutForm({ shippingMethod, setShippingMethod }) {
             shippingMethod: shippingMethod,
             userId: user?.profile?.id || 0,
           }),
-        }
+        },
       );
 
       const data = await response.json();
@@ -562,10 +563,16 @@ export default function CheckoutForm({ shippingMethod, setShippingMethod }) {
           )}
         </div>
 
-        {error && <div style={{ color: "red", marginTop: "10px" }}>{error}</div>}
+        {error && (
+          <div style={{ color: "red", marginTop: "10px" }}>{error}</div>
+        )}
 
-        <button type="submit" className="submit-btn desktop-submit" disabled={!stripe || loading}>
-          {loading ? t("checkout.submitting") : t("checkout.submit")}
+        <button
+          type="submit"
+          className="submit-btn desktop-submit"
+          disabled={!stripe || loading}
+        >
+          {loading ? "Traitement en cours..." : "Valider la commande"}
         </button>
       </form>
     </div>
