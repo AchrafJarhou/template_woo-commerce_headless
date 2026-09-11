@@ -76,6 +76,7 @@ function headless_create_order_from_checkout($request)
             'postcode'   => sanitize_text_field($shipping_address['postcode'] ?? ''),
             'country'    => sanitize_text_field($shipping_address['country'] ?? ''),
             'email'      => $email,
+            'phone'      => sanitize_text_field($shipping_address['phone'] ?? ''),
         ], 'shipping');
     }
 
@@ -161,6 +162,7 @@ function headless_save_customer_addresses_from_order($order, $user_id)
         if (isset($shipping['city'])) $customer->set_shipping_city(sanitize_text_field($shipping['city']));
         if (isset($shipping['postcode'])) $customer->set_shipping_postcode(sanitize_text_field($shipping['postcode']));
         if (isset($shipping['country'])) $customer->set_shipping_country(sanitize_text_field(strtoupper($shipping['country'])));
+        if (isset($shipping['phone'])) $customer->set_shipping_phone(sanitize_text_field($shipping['phone']));
     }
 
     // Mettre à jour l'adresse de facturation si elle existe dans la commande

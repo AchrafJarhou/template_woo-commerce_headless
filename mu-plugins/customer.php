@@ -59,6 +59,7 @@ function headless_get_current_customer($request)
             'state'     => $customer->get_shipping_state(),
             'postcode'  => $customer->get_shipping_postcode(),
             'country'   => $customer->get_shipping_country(),
+            'phone'     => $customer->get_shipping_phone(),
         ],
         'ordersCount'    => function_exists('wc_get_customer_order_count') ? wc_get_customer_order_count($user_id) : null,
         'totalSpent'     => function_exists('wc_get_customer_total_spent') ? wc_get_customer_total_spent($user_id) : null,
