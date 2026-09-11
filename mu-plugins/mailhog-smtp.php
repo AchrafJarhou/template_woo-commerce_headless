@@ -1,35 +1,42 @@
 <?php
 /**
- * Mailhog SMTP Configuration
- * Configure WordPress to send emails via Mailhog (localhost:1025)
- * Mailhog Web UI: http://localhost:8025
+ * Email Configuration for Gmail SMTP
+ * Using PHPMailer with Gmail App Password for development
  */
 
-// Configure PHPMailer to use SMTP via Mailhog
+if (!defined('ABSPATH')) {
+    exit;
+}
+
+// Hook into PHPMailer and configure Gmail SMTP
 add_action('phpmailer_init', function($phpmailer) {
     $phpmailer->isSMTP();
-    $phpmailer->Host = 'localhost';
-    $phpmailer->Port = 1025;
-    $phpmailer->SMTPAuth = false; // Mailhog doesn't require auth
-    $phpmailer->SMTPSecure = ''; // No encryption needed
+    $phpmailer->Host = 'smtp.gmail.com';
+    $phpmailer->Port = 587;
+    $phpmailer->SMTPSecure = 'tls';
+    $phpmailer->SMTPAuth = true;
+
+    $phpmailer->Username = 'achraf.jarhou@laplateforme.io';
+    $phpmailer->Password = 'ydbsvsahgpduysfz';
+
+    $phpmailer->SMTPKeepAlive = true;
+    $phpmailer->Timeout = 10;
+
+    error_log('📧 Envoi via Gmail SMTP: ' . $phpmailer->Username);
 });
 
-// Set the "From" email and name
+// Log emails being sent
+add_filter('wp_mail', function($atts) {
+    $to = is_array($atts['to']) ? implode(', ', $atts['to']) : $atts['to'];
+    error_log('📧 EMAIL: To=' . $to . ' | Subject=' . $atts['subject']);
+    return $atts;
+});
+
+// Set from email
 add_filter('wp_mail_from', function($from) {
-    return 'noreply@localhost.test';
+    return 'achraf.jarhou@laplateforme.io';
 });
 
 add_filter('wp_mail_from_name', function($name) {
     return get_option('blogname', 'Test Site');
-});
-
-// Log emails for debugging
-add_action('wp_mail_failed', function($wp_error) {
-    error_log('Email failed: ' . $wp_error->get_error_message());
-});
-
-// Success logging
-add_filter('wp_mail', function($atts) {
-    error_log('Email sent to: ' . implode(', ', (array)$atts['to']) . ' | Subject: ' . $atts['subject']);
-    return $atts;
 });
