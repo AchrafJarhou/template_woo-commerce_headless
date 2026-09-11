@@ -1,7 +1,10 @@
 import { Link } from 'react-router-dom';
 import './index.css';
+import { useTranslation } from "react-i18next";
+import { HOME_CATALOG_PATH } from "../../constants/navigation";
 
 export default function Error404() {
+  const { t } = useTranslation();
   return (
     <div className="error-404-container">
       <div className="error-404-content">
@@ -18,25 +21,25 @@ export default function Error404() {
         </div>
 
         <div className="error-404-text">
-          <h1>Oups ! Page non trouvée</h1>
-          <p>Désolé, la page que vous recherchez n'existe pas ou a été supprimée.</p>
+          <h1>{t("error404.title")}</h1>
+          <p>{t("error404.body")}</p>
         </div>
 
         <div className="error-404-actions">
           <Link to="/" className="btn btn-primary">
-            Retour à l'accueil
+            {t("error404.home")}
           </Link>
-          <Link to="/shop" className="btn btn-secondary">
-            Continuer vos achats
+          <Link to={HOME_CATALOG_PATH} className="btn btn-secondary">
+            {t("error404.continue")}
           </Link>
         </div>
 
         <div className="error-404-suggestions">
-          <h3>Suggestions</h3>
+          <h3>{t("error404.suggestions")}</h3>
           <ul>
-            <li><Link to="/">Parcourir notre catalogue</Link></li>
-            <li><Link to="/contact">Nous contacter</Link></li>
-            <li><Link to="/faq">FAQ</Link></li>
+            <li><Link to="/">{t("error404.browse")}</Link></li>
+            <li><Link to="/contact">{t("nav.contactUs")}</Link></li>
+            <li><Link to="/faq">{t("nav.faq")}</Link></li>
           </ul>
         </div>
       </div>

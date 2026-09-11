@@ -1,7 +1,9 @@
 import { useState } from "react";
 import "./ContactForm.css";
+import { useTranslation } from "react-i18next";
 
 export default function ContactForm() {
+  const { t } = useTranslation();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -50,7 +52,7 @@ export default function ContactForm() {
         }
       }
     } catch (error) {
-      setErrors({ general: "Erreur réseau. Veuillez réessayer." });
+      setErrors({ general: t("contact.networkError") });
     } finally {
       setLoading(false);
     }
@@ -60,7 +62,7 @@ export default function ContactForm() {
     <form className="contact-form" onSubmit={handleSubmit}>
       {success && (
         <div className="contact-form__message contact-form__message--success">
-          ✓ Message envoyé avec succès!
+          {t("contact.sent")}
         </div>
       )}
 
@@ -71,14 +73,14 @@ export default function ContactForm() {
       )}
 
       <div className="contact-form__group">
-        <label htmlFor="name">Nom *</label>
+        <label htmlFor="name">{t("contact.name")} *</label>
         <input
           type="text"
           id="name"
           name="name"
           value={formData.name}
           onChange={handleChange}
-          placeholder="Votre nom"
+          placeholder={t("contact.namePlaceholder")}
           disabled={loading}
           aria-invalid={!!errors.name}
         />
@@ -86,14 +88,14 @@ export default function ContactForm() {
       </div>
 
       <div className="contact-form__group">
-        <label htmlFor="email">Email *</label>
+        <label htmlFor="email">{t("common.email")} *</label>
         <input
           type="email"
           id="email"
           name="email"
           value={formData.email}
           onChange={handleChange}
-          placeholder="votre@email.com"
+          placeholder={t("auth.emailPlaceholder")}
           disabled={loading}
           aria-invalid={!!errors.email}
         />
@@ -101,13 +103,13 @@ export default function ContactForm() {
       </div>
 
       <div className="contact-form__group">
-        <label htmlFor="message">Message *</label>
+        <label htmlFor="message">{t("contact.message")} *</label>
         <textarea
           id="message"
           name="message"
           value={formData.message}
           onChange={handleChange}
-          placeholder="Votre message..."
+          placeholder={t("contact.messagePlaceholder")}
           rows="6"
           disabled={loading}
           aria-invalid={!!errors.message}
@@ -116,7 +118,7 @@ export default function ContactForm() {
       </div>
 
       <button type="submit" className="contact-form__button" disabled={loading}>
-        {loading ? "Envoi en cours..." : "Envoyer le message"}
+        {loading ? t("contact.sending") : t("contact.send")}
       </button>
     </form>
   );

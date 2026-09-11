@@ -5,8 +5,10 @@ import AddressBook from "./components/AddressBook";
 import UserInfo from "./components/UserInfo";
 import OrdersList from "./components/OrdersList";
 import ProfileNavigation from "./components/ProfileNavigation";
+import { useTranslation } from "react-i18next";
 
 export default function Profile() {
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState("profil");
   const [isMobileMenuVisible, setIsMobileMenuVisible] = useState(true);
   const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 768);
@@ -56,7 +58,7 @@ export default function Profile() {
         <div className="profile-content-wrapper">
           {!isDesktop && (
             <button className="back-btn" onClick={handleBackToMenu}>
-              ← Précédent
+              {t("account.previous")}
             </button>
           )}
           {renderContent()}

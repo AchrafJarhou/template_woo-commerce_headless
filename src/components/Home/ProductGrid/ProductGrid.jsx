@@ -23,8 +23,10 @@
 
 import { Link } from "react-router-dom";
 import styles from "./ProductGrid.module.scss";
+import { useTranslation } from "react-i18next";
 
 export default function ProductGrid({ products, filter, onProductClick }) {
+  const { t } = useTranslation();
   const filteredProducts =
     filter === "tous"
       ? products
@@ -36,7 +38,7 @@ export default function ProductGrid({ products, filter, onProductClick }) {
     <>
       {filteredProducts.length === 0 ? (
         <div className={styles.noProducts}>
-          <p>Aucun produit ne correspond à votre recherche.</p>
+          <p>{t("catalog.noMatch")}</p>
         </div>
       ) : (
         <div className={styles.grid}>

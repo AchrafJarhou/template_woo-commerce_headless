@@ -5,10 +5,13 @@ import {
   removeCouponThunk,
 } from "../../thunkActionsCreator/cartThunks";
 import { showToast } from "../../slices/toastSlice";
+import { formatAmount } from "../../utils/formatPrice";
+import { useTranslation } from "react-i18next";
 
 export default function Coupon() {
   const { totals, coupons } = useSelector((state) => state.cart);
   const dispatch = useDispatch();
+  const { t } = useTranslation();
   const [code, setCode] = useState("");
 
   const applyCoupon = async (e) => {
@@ -16,10 +19,10 @@ export default function Coupon() {
     if (!code) return;
     const result = await dispatch(applyCouponThunk({ code }));
     if (applyCouponThunk.fulfilled.match(result)) {
-      dispatch(showToast("Code promo appliqué"));
+      dispatch(showToast(t("coupon.applied")));
       setCode("");
     } else {
-      dispatch(showToast(result.payload || "Code promo invalide"));
+      dispatch(showToast(result.payload || t("coupon.invalid")));
     }
   };
 
@@ -27,11 +30,11 @@ export default function Coupon() {
     <>
       <form onSubmit={applyCoupon}>
         <input
-          placeholder="Code promo"
+          placeholder={t("coupon.placeholder")}
           value={code}
           onChange={(e) => setCode(e.target.value)}
         />
-        <button type="submit">Appliquer</button>
+        <button type="submit">{t("coupon.apply")}</button>
       </form>
 
       {coupons.map((coupon) => (
@@ -40,16 +43,17 @@ export default function Coupon() {
           <button
             onClick={() => dispatch(removeCouponThunk({ code: coupon.code }))}
           >
-            Retirer
+            {t("coupon.remove")}
           </button>
         </p>
       ))}
 
       {totals && parseInt(totals.total_discount) > 0 && (
         <div>
-          Réduction: -
-          {(parseInt(totals.total_discount) / 100).toFixed(2) +
-            totals.currency_suffix}
+          {t("coupon.discount")} : −{formatAmount(
+            parseInt(totals.total_discount) / 100,
+            totals.currency_code,
+          )}
         </div>
       )}
     </>

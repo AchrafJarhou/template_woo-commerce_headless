@@ -1,4 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import { apiError, apiErrorMessage } from "../i18n/apiError";
 
 // Produits à la une (page d'accueil) : copie de fetchProductsThunk mais
 // avec son propre type d'action et son propre state, pour ne pas partager
@@ -16,7 +17,7 @@ export const fetchSpotlightProductsThunk = createAsyncThunk(
         headers: { "Content-Type": "application/json" },
       });
       if (!response.ok) {
-        throw new Error("Impossible de récupérer les produits à la une.");
+        throw new Error(apiError("errors.spotlight"));
       }
       const data = await response.json();
       return { data, page, perPage };

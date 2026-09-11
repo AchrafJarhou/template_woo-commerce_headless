@@ -2,8 +2,10 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { switchAuthModalView } from "../../slices/authModalSlice";
 import "./ResetPasswordForm.css";
+import { useTranslation } from "react-i18next";
 
 export default function ResetPasswordForm() {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
@@ -25,15 +27,15 @@ export default function ResetPasswordForm() {
   return (
     <>
       <div className="drawer-header">
-        <h2 className="drawer-title">Mot de passe oublié</h2>
+        <h2 className="drawer-title">{t("auth.resetTitle")}</h2>
         <p className="drawer-subtitle">
-          Recevez un lien pour réinitialiser votre mot de passe
+          {t("auth.resetHint")}
         </p>
       </div>
 
       <form className="drawer-form" onSubmit={handleSubmit} noValidate>
         <div className="input-group">
-          <label htmlFor="reset-email">Email</label>
+          <label htmlFor="reset-email">{t("common.email")}</label>
           <input
             id="reset-email"
             type="email"
@@ -47,7 +49,7 @@ export default function ResetPasswordForm() {
         {message && <p className="drawer-message">{message}</p>}
 
         <button className="submit-btn" type="submit">
-          Envoyer le lien
+          {t("auth.sendLink")}
         </button>
       </form>
 
@@ -57,7 +59,7 @@ export default function ResetPasswordForm() {
           className="toggle-btn"
           onClick={() => dispatch(switchAuthModalView("login"))}
         >
-          ← Retour à la connexion
+          {t("auth.backToSignIn")}
         </button>
       </div>
     </>

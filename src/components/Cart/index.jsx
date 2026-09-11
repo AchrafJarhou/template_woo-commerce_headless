@@ -6,8 +6,10 @@ import { HOME_CATALOG_PATH } from "../../constants/navigation";
 import Loader from "../Loader";
 import cartIcon from "../../assets/icons/logo-panier.png";
 import "./index.scss";
+import { useTranslation } from "react-i18next";
 
 export default function Cart() {
+  const { t } = useTranslation();
   const items = useSelector((state) => state.cart.items);
   const totals = useSelector((state) => state.cart.totals);
 
@@ -17,7 +19,7 @@ export default function Cart() {
     return (
       <section className="cart-state">
         <div className="cart-state__inner">
-          <h1 className="cart-state__title">Votre panier</h1>
+          <h1 className="cart-state__title">{t("cart.title")}</h1>
           <div className="cart-state__loader">
             <Loader size="lg" />
           </div>
@@ -27,7 +29,6 @@ export default function Cart() {
   }
 
   const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
-  const countLabel = `${itemCount} article${itemCount > 1 ? "s" : ""}`;
 
   if (items.length === 0) {
     return (
@@ -36,13 +37,11 @@ export default function Cart() {
           {/* Décoratif : alt vide pour que les lecteurs d'écran l'ignorent,
               le message juste en dessous dit déjà tout. */}
           <img src={cartIcon} alt="" className="cart-state__icon" />
-          <h1 className="cart-state__title">Votre panier</h1>
-          <p className="cart-state__message">Votre panier est vide.</p>
-          <p className="cart-state__hint">
-            Parcourez le catalogue pour y ajouter vos premiers articles.
-          </p>
+          <h1 className="cart-state__title">{t("cart.title")}</h1>
+          <p className="cart-state__message">{t("cart.empty")}</p>
+          <p className="cart-state__hint">{t("cart.emptyHint")}</p>
           <Link to={HOME_CATALOG_PATH} className="cart-state__cta">
-            Continuer mon shopping
+            {t("cart.continueShopping")}
           </Link>
         </div>
       </section>
@@ -51,7 +50,7 @@ export default function Cart() {
 
   return (
     <section className="cart">
-      <h1 className="cart__title">Votre panier</h1>
+      <h1 className="cart__title">{t("cart.title")}</h1>
 
       <div className="cart__main">
         <ul className="cart__list">
@@ -61,7 +60,7 @@ export default function Cart() {
         </ul>
 
         <p className="cart__subtotal">
-          Sous-total ({countLabel}) :{" "}
+          {t("cart.subtotal", { count: itemCount })} :{" "}
           <strong>{formatPrice(totals.total_items, totals)}</strong>
         </p>
       </div>
@@ -69,32 +68,32 @@ export default function Cart() {
       <aside className="cart__aside">
         <dl className="cart__summary">
           <div className="cart__summary-row">
-            <dt>Sous-total ({countLabel})</dt>
+            <dt>{t("cart.subtotal", { count: itemCount })}</dt>
             <dd>{formatPrice(totals.total_items, totals)}</dd>
           </div>
 
           <div className="cart__summary-row">
-            <dt>Livraison</dt>
-            <dd>Calculée à l'étape suivante</dd>
+            <dt>{t("cart.shipping")}</dt>
+            <dd>{t("cart.shippingLater")}</dd>
           </div>
 
           <div className="cart__summary-row">
-            <dt>Taxes</dt>
+            <dt>{t("cart.taxes")}</dt>
             <dd>{formatPrice(totals.total_tax, totals)}</dd>
           </div>
 
           <div className="cart__summary-row cart__summary-row--total">
-            <dt>Total</dt>
+            <dt>{t("cart.total")}</dt>
             <dd>{formatPrice(totals.total_price, totals)}</dd>
           </div>
         </dl>
 
         <Link to="/checkout" className="cart__checkout">
-          Passer la commande
+          {t("cart.checkout")}
         </Link>
 
         <Link to={HOME_CATALOG_PATH} className="cart__continue">
-          Continuer mon shopping
+          {t("cart.continueShopping")}
         </Link>
       </aside>
     </section>

@@ -41,6 +41,11 @@ function headless_create_order_from_checkout($request)
     }
 
     $user_id = get_current_user_id();
+    // Fallback : utiliser l'user_id envoyé dans les params si get_current_user_id() retourne 0
+    if ($user_id === 0 && isset($params['userId']) && is_numeric($params['userId'])) {
+        $user_id = intval($params['userId']);
+    }
+
     $order = wc_create_order();
 
     // Associer la commande au user connecté si disponible
@@ -71,6 +76,7 @@ function headless_create_order_from_checkout($request)
             'postcode'   => sanitize_text_field($shipping_address['postcode'] ?? ''),
             'country'    => sanitize_text_field($shipping_address['country'] ?? ''),
             'email'      => $email,
+            'phone'      => sanitize_text_field($shipping_address['phone'] ?? ''),
         ], 'shipping');
     }
 
@@ -95,7 +101,6 @@ function headless_create_order_from_checkout($request)
     $order->save();
 
     $order_id = $order->get_id();
-    $user_id = get_current_user_id();
 
     // Sauvegarder les adresses dans le profil du customer si connecté
     if ($user_id > 0) {
@@ -157,6 +162,7 @@ function headless_save_customer_addresses_from_order($order, $user_id)
         if (isset($shipping['city'])) $customer->set_shipping_city(sanitize_text_field($shipping['city']));
         if (isset($shipping['postcode'])) $customer->set_shipping_postcode(sanitize_text_field($shipping['postcode']));
         if (isset($shipping['country'])) $customer->set_shipping_country(sanitize_text_field(strtoupper($shipping['country'])));
+        if (isset($shipping['phone'])) $customer->set_shipping_phone(sanitize_text_field($shipping['phone']));
     }
 
     // Mettre à jour l'adresse de facturation si elle existe dans la commande

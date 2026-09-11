@@ -8,9 +8,11 @@ import {
 } from "../../thunkActionsCreator/cartThunks";
 import { showToast } from "../../slices/toastSlice";
 import "./index.scss";
+import { useTranslation } from "react-i18next";
 
 export function CartProduct({ item }) {
   const dispatch = useDispatch();
+  const { t } = useTranslation();
   // Chaque réponse renvoie le panier entier : deux requêtes simultanées
   // s'écraseraient l'une l'autre, d'où le gel des commandes pendant l'appel.
   const isSyncing = useSelector((state) => state.cart.isSyncing);
@@ -33,21 +35,21 @@ export function CartProduct({ item }) {
     runCartAction(
       incrementProductInCart,
       { itemKey: item.key, quantity: item.quantity },
-      "Impossible d'ajouter cet article.",
+      t("cart.errors.increase"),
     );
 
   const handleDecrement = () =>
     runCartAction(
       substractProductFromCart,
       { itemKey: item.key, quantity: item.quantity },
-      "Impossible de retirer cet article.",
+      t("cart.errors.decrease"),
     );
 
   const handleRemove = () =>
     runCartAction(
       deleteProductFromCart,
       { itemKey: item.key },
-      "Impossible de supprimer cet article.",
+      t("cart.errors.remove"),
     );
 
   return (
@@ -75,12 +77,12 @@ export function CartProduct({ item }) {
 
         <div className="cart-product__actions">
           <div className="cart-product__quantity">
-            <span className="cart-product__quantity-label">Qté</span>
+            <span className="cart-product__quantity-label">{t("cart.quantity")}</span>
             <button
               type="button"
               className="cart-product__step"
               disabled={atMinimum || isSyncing}
-              aria-label={`Retirer un ${item.name}`}
+              aria-label={t("cart.decreaseOne", { name: item.name })}
               onClick={handleDecrement}
             >
               −
@@ -92,7 +94,7 @@ export function CartProduct({ item }) {
               type="button"
               className="cart-product__step"
               disabled={atMaximum || isSyncing}
-              aria-label={`Ajouter un ${item.name}`}
+              aria-label={t("cart.increaseOne", { name: item.name })}
               onClick={handleIncrement}
             >
               +
@@ -103,10 +105,10 @@ export function CartProduct({ item }) {
             type="button"
             className="cart-product__remove"
             disabled={isSyncing}
-            aria-label={`Supprimer ${item.name} du panier`}
+            aria-label={t("cart.removeFromCart", { name: item.name })}
             onClick={handleRemove}
           >
-            Supprimer
+            {t("cart.remove")}
           </button>
         </div>
       </div>

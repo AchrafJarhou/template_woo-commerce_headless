@@ -1,4 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import { apiError, apiErrorMessage } from "../i18n/apiError";
 
 export const loginThunk = createAsyncThunk(
   "user/login",
@@ -45,7 +46,7 @@ export const fetchCurrentUserThunk = createAsyncThunk(
       );
       const data = await response.json();
       if (!response.ok) {
-        throw new Error(data.message || "Impossible de recuperer le profil.");
+        throw new Error(apiErrorMessage(data.message, "errors.profileFetch"));
       }
       return {
         id: data.id,
@@ -86,9 +87,7 @@ export const updateCurrentUserThunk = createAsyncThunk(
       );
       const data = await response.json();
       if (!response.ok) {
-        throw new Error(
-          data.message || "Impossible de mettre a jour le profil.",
-        );
+        throw new Error(apiErrorMessage(data.message, "errors.profileUpdate"));
       }
       return {
         id: data.id,
@@ -119,7 +118,7 @@ export const fetchCurrentCustomerThunk = createAsyncThunk(
       const data = await response.json();
       if (!response.ok) {
         throw new Error(
-          data.message || "Impossible de recuperer les infos client.",
+          apiErrorMessage(data.message, "errors.customerFetch"),
         );
       }
       return data;
@@ -145,7 +144,7 @@ export const fetchCurrentUserOrdersThunk = createAsyncThunk(
       console.log("DONNÉES BRUTES REÇUES DE L'API ORDERS :", data); // <-- Ajoute ceci
       if (!response.ok) {
         throw new Error(
-          data.message || "Impossible de recuperer les commandes.",
+          apiErrorMessage(data.message, "errors.ordersFetch"),
         );
       }
       return data;
@@ -173,7 +172,7 @@ export const registerThunk = createAsyncThunk(
       );
       const data = await response.json();
       if (!response.ok) {
-        throw new Error(data.message || "Impossible de creer le compte.");
+        throw new Error(apiErrorMessage(data.message, "errors.accountCreate"));
       }
       thunkAPI.dispatch(fetchCurrentCustomerThunk(data.token));
       thunkAPI.dispatch(fetchCurrentUserOrdersThunk(data.token));
@@ -216,7 +215,7 @@ export const updateCurrentCustomerThunk = createAsyncThunk(
       if (!response.ok) {
         throw new Error(
           data.message ||
-            "Impossible de mettre à jour les informations client.",
+            apiError("errors.customerUpdate"),
         );
       }
 
@@ -249,7 +248,7 @@ export const deleteCurrentUserThunk = createAsyncThunk(
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.message || "Impossible de supprimer le compte.");
+        throw new Error(apiErrorMessage(data.message, "errors.accountDelete"));
       }
 
       return data;

@@ -8,8 +8,11 @@ import {
   MOCK_CART_ITEMS,
   MOCK_CART_TOTALS,
 } from "../../components/Cart/mockCart";
+import { useTranslation } from "react-i18next";
 
 export default function Checkout() {
+  const { t } = useTranslation();
+
   const [shippingMethod, setShippingMethod] = useState(null);
 
   const cartState = useSelector((state) => state.cart);
@@ -36,7 +39,7 @@ export default function Checkout() {
         form="checkout-payment-form"
         className="submit-btn mobile-submit"
       >
-        Valider la commande
+        {t("checkout.submit")}
       </button>
     </div>
   );
