@@ -1,7 +1,9 @@
+import { useTranslation } from "react-i18next";
 export function OrderSummary({ items, totals }) {
+  const { t } = useTranslation();
   return (
     <div className="payment__summary">
-      <h3 className="payment__summary-title">Résumé de la commande</h3>
+      <h3 className="payment__summary-title">{t("order.summary")}</h3>
 
       <div className="payment__items">
         {items.map((item) => (
@@ -19,19 +21,19 @@ export function OrderSummary({ items, totals }) {
 
       <div className="payment__totals">
         <div className="payment__total-row">
-          <span>Sous-total</span>
+          <span>{t("order.subtotal")}</span>
           <span>{totals.subtotal}</span>
         </div>
         <div className="payment__total-row">
-          <span>Livraison</span>
+          <span>{t("cart.shipping")}</span>
           <span>{totals.shipping}</span>
         </div>
         <div className="payment__total-row">
-          <span>Taxes</span>
+          <span>{t("cart.taxes")}</span>
           <span>{totals.tax}</span>
         </div>
         <div className="payment__total-row payment__total-row--final">
-          <span>Total</span>
+          <span>{t("cart.total")}</span>
           <span>{totals.total}</span>
         </div>
       </div>

@@ -1,329 +1,4 @@
-// import React, { useState, useEffect } from "react";
-// import { useNavigate } from "react-router-dom";
-// import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
-// import { useDispatch, useSelector } from "react-redux";
-// import { showToast } from "../../slices/toastSlice";
-// import { emptyCartThunk } from "../../thunkActionsCreator/cartThunks";
-// import {
-//   fetchCurrentCustomerThunk,
-//   fetchCurrentUserOrdersThunk,
-//   fetchCurrentUserThunk,
-// } from "../../thunkActionsCreator/userThunks";
-// import CheckoutAuthPromptModal from "../CheckoutAuthPromptModal";
-
-// export default function CheckoutForm() {
-//   const navigate = useNavigate();
-//   const stripe = useStripe();
-//   const elements = useElements();
-//   const dispatch = useDispatch();
-//   const [loading, setLoading] = useState(false);
-//   const [error, setError] = useState(null);
-//   const [showGuestModal, setShowGuestModal] = useState(false);
-
-//   const user = useSelector((state) => state.user);
-//   const cart = useSelector((state) => state.cart);
-
-//   const [sameAsBilling, setSameAsBilling] = useState(false);
-
-//   const [shippingAddress, setShippingAddress] = useState({
-//     first_name: user?.customer?.shipping?.firstName || "Jean",
-//     last_name: user?.customer?.shipping?.lastName || "Dupont",
-//     address_1: user?.customer?.shipping?.address1 || "10 Rue de la Paix",
-//     city: user?.customer?.shipping?.city || "Paris",
-//     postcode: user?.customer?.shipping?.postcode || "75001",
-//     country: user?.customer?.shipping?.country || "FR",
-//     email: user?.profile?.email || "jean.dupont@example.com",
-//   });
-
-//   const [billingAddress, setBillingAddress] = useState({
-//     first_name: user?.customer?.billing?.firstName || "Jean",
-//     last_name: user?.customer?.billing?.lastName || "Dupont",
-//     address_1: user?.customer?.billing?.address1 || "10 Rue de la Paix",
-//     city: user?.customer?.billing?.city || "Paris",
-//     postcode: user?.customer?.billing?.postcode || "75001",
-//     country: user?.customer?.billing?.country || "FR",
-//     email: user?.profile?.email || "jean.dupont@example.com",
-//   });
-
-//   useEffect(() => {
-//     if (sameAsBilling) {
-//       setBillingAddress(shippingAddress);
-//     }
-//   }, [shippingAddress, sameAsBilling]);
-
-//   const processCheckout = async () => {
-//     if (!stripe || !elements || loading) return;
-//     setLoading(true);
-//     setError(null);
-
-//     const cardElement = elements.getElement(CardElement);
-//     const { paymentMethod, error: stripeError } =
-//       await stripe.createPaymentMethod({
-//         type: "card",
-//         card: cardElement,
-//         billing_details: {
-//           name: `${billingAddress?.first_name} ${billingAddress?.last_name}`,
-//           email: billingAddress?.email,
-//         },
-//       });
-
-//     if (stripeError) {
-//       setError(stripeError.message);
-//       setLoading(false);
-//       return;
-//     }
-
-//     try {
-//       const response = await fetch(
-//         `${import.meta.env.VITE_API_URL}/wp-json/wc/store/v1/checkout`,
-//         {
-//           method: "POST",
-//           credentials: "include",
-//           headers: {
-//             "Content-Type": "application/json",
-//             Nonce: cart?.nonce || "",
-//             ...(user?.token && { Authorization: `Bearer ${user.token}` }),
-//           },
-//           body: JSON.stringify({
-//             payment_method: "stripe",
-//             payment_data: [
-//               { key: "stripe_source", value: paymentMethod.id },
-//               { key: "wc-stripe-payment-method", value: paymentMethod.id },
-//               { key: "payment_method", value: paymentMethod.id },
-//             ],
-//             billing_address: billingAddress,
-//             shipping_address: shippingAddress,
-//           }),
-//         },
-//       );
-
-//       const data = await response.json();
-//       if (!response.ok) {
-//         throw new Error(data.message || "Erreur lors de la commande.");
-//       }
-//       if (data.payment_result?.redirect_url) {
-//         dispatch(showToast(`Commande n°${data.order_id} confirmée`));
-//         dispatch(emptyCartThunk());
-//         dispatch(fetchCurrentUserThunk());
-//         dispatch(fetchCurrentCustomerThunk());
-//         dispatch(fetchCurrentUserOrdersThunk());
-//         navigate(`/success/${data.order_id}`);
-//       }
-//     } catch (err) {
-//       setError(err.message);
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   const handleSubmit = (e) => {
-//     e.preventDefault();
-//     if (!user?.token) {
-//       setShowGuestModal(true);
-//       return;
-//     }
-//     processCheckout();
-//   };
-
-//   const handleContinueAsGuest = (e) => {
-//     setShowGuestModal(false);
-//     processCheckout();
-//   };
-
-//   const handleChangeAddress = (e) => {
-//     const { name, value } = e.target;
-//     setBillingAddress((prev) => ({ ...prev, [name]: value }));
-//   };
-
-//   const handleChangeShippingAddress = (e) => {
-//     const { name, value } = e.target;
-//     setShippingAddress((prev) => ({ ...prev, [name]: value }));
-//   };
-
-//   const handleCheckboxChange = (e) => {
-//     const checked = e.target.checked;
-//     setSameAsBilling(checked);
-//     if (checked) {
-//       setBillingAddress(shippingAddress);
-//     }
-//   };
-
-//   return (
-//     <>
-//       <form onSubmit={handleSubmit}>
-//         <h3>Adresse de livraison</h3>
-//         <div>
-//           <label>
-//             Prénom
-//             <input
-//               name="first_name"
-//               value={shippingAddress.first_name}
-//               onChange={handleChangeShippingAddress}
-//               required
-//             />
-//           </label>
-
-//           <label>
-//             Nom
-//             <input
-//               name="last_name"
-//               value={shippingAddress.last_name}
-//               onChange={handleChangeShippingAddress}
-//               required
-//             />
-//           </label>
-
-//           <label>
-//             Adresse
-//             <input
-//               name="address_1"
-//               value={shippingAddress.address_1}
-//               onChange={handleChangeShippingAddress}
-//               required
-//             />
-//           </label>
-
-//           <label>
-//             Ville
-//             <input
-//               name="city"
-//               value={shippingAddress.city}
-//               onChange={handleChangeShippingAddress}
-//               required
-//             />
-//           </label>
-
-//           <label>
-//             Code postal
-//             <input
-//               name="postcode"
-//               value={shippingAddress.postcode}
-//               onChange={handleChangeShippingAddress}
-//               required
-//             />
-//           </label>
-
-//           <label>
-//             Pays
-//             <input
-//               name="country"
-//               value={shippingAddress.country}
-//               onChange={handleChangeShippingAddress}
-//               required
-//             />
-//           </label>
-
-//           <br />
-//           <label>
-//             <input
-//               type="checkbox"
-//               id="sameAsBilling"
-//               checked={sameAsBilling}
-//               onChange={handleCheckboxChange}
-//             />
-//             Livrer à la même adresse (facturation identique)
-//           </label>
-
-//           {!sameAsBilling && (
-//             <>
-//               <h3>Adresse de facturation</h3>
-//               <label>
-//                 Prénom
-//                 <input
-//                   name="first_name"
-//                   value={billingAddress.first_name}
-//                   onChange={handleChangeAddress}
-//                   required
-//                 />
-//               </label>
-
-//               <label>
-//                 Nom
-//                 <input
-//                   name="last_name"
-//                   value={billingAddress.last_name}
-//                   onChange={handleChangeAddress}
-//                   required
-//                 />
-//               </label>
-
-//               <label>
-//                 Adresse
-//                 <input
-//                   name="address_1"
-//                   value={billingAddress.address_1}
-//                   onChange={handleChangeAddress}
-//                   required
-//                 />
-//               </label>
-
-//               <label>
-//                 Ville
-//                 <input
-//                   name="city"
-//                   value={billingAddress.city}
-//                   onChange={handleChangeAddress}
-//                   required
-//                 />
-//               </label>
-
-//               <label>
-//                 Code postal
-//                 <input
-//                   name="postcode"
-//                   value={billingAddress.postcode}
-//                   onChange={handleChangeAddress}
-//                   required
-//                 />
-//               </label>
-
-//               <label>
-//                 Pays
-//                 <input
-//                   name="country"
-//                   value={billingAddress.country}
-//                   onChange={handleChangeAddress}
-//                   required
-//                 />
-//               </label>
-//             </>
-//           )}
-
-//           <br />
-//           <label>
-//             Email
-//             <input
-//               name="email"
-//               type="email"
-//               value={billingAddress.email}
-//               onChange={handleChangeAddress}
-//               required
-//             />
-//           </label>
-
-//           <div>
-//             <CardElement />
-//           </div>
-
-//           <button type="submit" disabled={!stripe || loading}>
-//             {loading ? "Traitement..." : "Payer maintenant"}
-//           </button>
-
-//           {error && <p>{error}</p>}
-//         </div>
-//       </form>
-
-//       {showGuestModal && (
-//         <CheckoutAuthPromptModal
-//           handleContinueAsGuest={handleContinueAsGuest}
-//           onClose={() => setShowGuestModal(false)}
-//         />
-//       )}
-//     </>
-//   );
-// }
-
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { useSelector, useDispatch } from "react-redux";
@@ -332,14 +7,19 @@ import BillingAddress from "./BillingAddress";
 import ShippingOptions from "./ShippingOptions";
 import { showToast } from "../../slices/toastSlice";
 import { emptyCartThunk } from "../../thunkActionsCreator/cartThunks";
+import { fetchCurrentCustomerThunk } from "../../thunkActionsCreator/userThunks";
+import { useTranslation } from "react-i18next";
+import { HOME_CATALOG_PATH } from "../../constants/navigation";
 
 export default function CheckoutForm({ shippingMethod, setShippingMethod }) {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const stripe = useStripe();
   const elements = useElements();
   const dispatch = useDispatch();
 
   const cart = useSelector((state) => state.cart);
+  const user = useSelector((state) => state.user);
 
   const [paymentType, setPaymentType] = useState("card");
   const [sameAsBilling, setSameAsBilling] = useState(true);
@@ -355,6 +35,7 @@ export default function CheckoutForm({ shippingMethod, setShippingMethod }) {
     postcode: "",
     country: "FR",
     email: "",
+    phone: "",
   });
   const [billingAddress, setBillingAddress] = useState({
     first_name: "",
@@ -364,13 +45,66 @@ export default function CheckoutForm({ shippingMethod, setShippingMethod }) {
     postcode: "",
     country: "FR",
     email: "",
+    phone: "",
   });
 
   const shippingOptions = [
-    { id: "mondial_relay", name: "Mondial Relay (Point Relais)", price: 4.5 },
-    { id: "colissimo", name: "Colissimo (Standard)", price: 7.9 },
-    { id: "express", name: "Chronopost (Express 24h)", price: 12.9 },
+    { id: "mondial_relay", name: t("checkout.shippingRelay"), price: 4.5 },
+    { id: "colissimo", name: t("checkout.shippingStandard"), price: 7.9 },
+    { id: "express", name: t("checkout.shippingExpress"), price: 12.9 },
   ];
+
+  // Charger les données du client si connecté
+  useEffect(() => {
+    if (user?.token && !user?.customer) {
+      dispatch(fetchCurrentCustomerThunk());
+    }
+  }, [user?.token, user?.customer, dispatch]);
+
+  // Pré-remplir les champs avec les données du profil
+  useEffect(() => {
+    if (user?.customer) {
+      const { shipping, billing } = user.customer;
+
+      if (shipping) {
+        setShippingAddress((prev) => ({
+          ...prev,
+          first_name: shipping.firstName || prev.first_name,
+          last_name: shipping.lastName || prev.last_name,
+          address_1: shipping.address1 || prev.address_1,
+          city: shipping.city || prev.city,
+          postcode: shipping.postcode || prev.postcode,
+          country: shipping.country || prev.country,
+          phone: shipping.phone || prev.phone,
+        }));
+      }
+
+      if (billing) {
+        setBillingAddress((prev) => ({
+          ...prev,
+          first_name: billing.firstName || prev.first_name,
+          last_name: billing.lastName || prev.last_name,
+          address_1: billing.address1 || prev.address_1,
+          city: billing.city || prev.city,
+          postcode: billing.postcode || prev.postcode,
+          country: billing.country || prev.country,
+          phone: billing.phone || prev.phone,
+        }));
+      }
+
+      if (shipping?.email) {
+        setShippingAddress((prev) => ({ ...prev, email: shipping.email }));
+      } else if (user?.profile?.email) {
+        setShippingAddress((prev) => ({ ...prev, email: user.profile.email }));
+      }
+
+      if (billing?.email) {
+        setBillingAddress((prev) => ({ ...prev, email: billing.email }));
+      } else if (user?.profile?.email) {
+        setBillingAddress((prev) => ({ ...prev, email: user.profile.email }));
+      }
+    }
+  }, [user?.customer, user?.profile?.email]);
 
   const handleShippingChange = (e) => {
     setShippingAddress({ ...shippingAddress, [e.target.name]: e.target.value });
@@ -385,7 +119,7 @@ export default function CheckoutForm({ shippingMethod, setShippingMethod }) {
 
     if (!stripe || !elements || loading) return;
     if (paymentType !== "card") {
-      setError("Seul le paiement par carte est actuellement disponible");
+      setError(t("checkout.errors.cardOnly"));
       return;
     }
 
@@ -394,7 +128,7 @@ export default function CheckoutForm({ shippingMethod, setShippingMethod }) {
 
     const cardElement = elements.getElement(CardElement);
     if (!cardElement) {
-      setError("Erreur: champ de carte non trouvé");
+      setError(t("checkout.errors.cardField"));
       setLoading(false);
       return;
     }
@@ -406,6 +140,7 @@ export default function CheckoutForm({ shippingMethod, setShippingMethod }) {
         billing_details: {
           name: `${billingAddress.first_name || ""} ${billingAddress.last_name || ""}`.trim(),
           email: shippingAddress.email,
+          phone: shippingAddress.phone,
         },
       });
 
@@ -420,6 +155,7 @@ export default function CheckoutForm({ shippingMethod, setShippingMethod }) {
         `${import.meta.env.VITE_API_URL}/wp-json/custom/v1/checkout`,
         {
           method: "POST",
+          credentials: "include",
           headers: {
             "Content-Type": "application/json",
           },
@@ -429,6 +165,7 @@ export default function CheckoutForm({ shippingMethod, setShippingMethod }) {
             cartItems: cart.items || [],
             paymentMethodId: paymentMethod.id,
             shippingMethod: shippingMethod,
+            userId: user?.profile?.id || 0,
           }),
         },
       );
@@ -436,7 +173,7 @@ export default function CheckoutForm({ shippingMethod, setShippingMethod }) {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.message || "Erreur lors de la commande");
+        throw new Error(data.message || t("checkout.errors.order"));
       }
 
       if (data.success && data.order_id) {
@@ -444,19 +181,21 @@ export default function CheckoutForm({ shippingMethod, setShippingMethod }) {
         dispatch(emptyCartThunk());
         navigate(`/success/${data.order_id}`);
       } else {
-        throw new Error("Commande non créée");
+        throw new Error(t("checkout.errors.notCreated"));
       }
     } catch (err) {
-      setError(err.message || "Erreur lors de la commande");
+      setError(err.message || t("checkout.errors.order"));
     } finally {
       setLoading(false);
     }
   };
 
+  console.log("Shippingadress : ", shippingAddress);
+
   return (
     <div className="checkout-left">
-      <Link to="/cart" className="back-link">
-        ← RETOUR À LA BOUTIQUE
+      <Link to={HOME_CATALOG_PATH} className="back-link">
+        {t("checkout.backToShop")}
       </Link>
 
       <div className="express-payment">
@@ -483,7 +222,7 @@ export default function CheckoutForm({ shippingMethod, setShippingMethod }) {
         </button>
       </div>
 
-      <div className="divider">OU CONTINUER CI-DESSOUS</div>
+      <div className="divider">{t("checkout.orContinue")}</div>
 
       <form id="checkout-payment-form" onSubmit={processCheckout}>
         <ShippingAddress
@@ -498,7 +237,7 @@ export default function CheckoutForm({ shippingMethod, setShippingMethod }) {
               checked={sameAsBilling}
               onChange={(e) => setSameAsBilling(e.target.checked)}
             />
-            Adresse de facturation identique à l'adresse de livraison
+            {t("address.sameAsShipping")}
           </label>
         </div>
 
@@ -515,7 +254,7 @@ export default function CheckoutForm({ shippingMethod, setShippingMethod }) {
           onSelect={setShippingMethod}
         />
 
-        <h3>Détails du paiement</h3>
+        <h3>{t("checkout.paymentDetails")}</h3>
         <div className="form-group">
           <label
             className={`payment-method ${paymentType !== "card" ? "inactive-method" : ""}`}
@@ -523,8 +262,8 @@ export default function CheckoutForm({ shippingMethod, setShippingMethod }) {
             <div className="payment-method-header">
               <span className="card-icon">💳</span>
               <div className="card-options">
-                <strong>CARTE DE CRÉDIT / DÉBIT</strong>
-                <div>Visa, Mastercard, Amex</div>
+                <strong>{t("checkout.card")}</strong>
+                <div>{t("checkout.cardBrands")}</div>
               </div>
             </div>
             <input

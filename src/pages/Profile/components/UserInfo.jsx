@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 import {
   fetchCurrentUserThunk,
   updateCurrentUserThunk,
@@ -8,6 +9,7 @@ import {
 import { showToast } from "../../../slices/toastSlice"; // À ajuster selon ton arborescence
 
 export default function UserInfo() {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
 
   const user = useSelector((state) => state.user);
@@ -66,12 +68,12 @@ export default function UserInfo() {
     dispatch(updateCurrentUserThunk(updatePayload))
       .unwrap()
       .then(() => {
-        dispatch(showToast("Profil mis à jour avec succès !"));
+        dispatch(showToast(t("account.updated")));
         setSavedUser(formData);
         setIsEditing(false);
       })
       .catch((err) => {
-        dispatch(showToast(err || "Erreur lors de la mise à jour du profil."));
+        dispatch(showToast(err || t("account.updateError")));
       });
   };
 
@@ -83,21 +85,21 @@ export default function UserInfo() {
   // --- LOGIQUE DE SUPPRESSION ---
   const handleConfirmDelete = () => {
     if (!deletePassword) {
-      dispatch(showToast("Veuillez saisir votre mot de passe pour confirmer."));
+      dispatch(showToast(t("account.passwordRequired")));
       return;
     }
 
     dispatch(deleteCurrentUserThunk({ password: deletePassword }))
       .unwrap()
       .then(() => {
-        dispatch(showToast("Votre compte a été supprimé."));
+        dispatch(showToast(t("account.deleted")));
         // L'utilisateur est supprimé, il faudra le rediriger vers l'accueil
         // ou vider le store via un window.location.href = "/"
       })
       .catch((err) => {
         dispatch(
           showToast(
-            err || "Mot de passe incorrect ou erreur lors de la suppression.",
+            err || t("account.deleteError"),
           ),
         );
       });
@@ -109,15 +111,17 @@ export default function UserInfo() {
   };
 
   if (loading && !profile)
-    return <p className="loading-message">Chargement de vos informations...</p>;
-  if (error) return <p className="error-message">Erreur: {error}</p>;
+    return (
+      <p style={{ marginTop: "20px" }}>{t("account.loading")}</p>
+    );
+  if (error) return <p style={{ color: "red" }}>Erreur: {error}</p>;
 
   return (
     <div>
-      <h2 className="section-title">Informations Personnelles</h2>
+      <h2 className="section-title">{t("account.personalInfo")}</h2>
       <div className="data-grid">
         <div className="data-item">
-          <span className="data-label">Prénom</span>
+          <span className="data-label">{t("common.firstName")}</span>
           {isEditing ? (
             <input
               type="text"
@@ -132,7 +136,7 @@ export default function UserInfo() {
         </div>
 
         <div className="data-item">
-          <span className="data-label">Nom</span>
+          <span className="data-label">{t("common.lastName")}</span>
           {isEditing ? (
             <input
               type="text"
@@ -147,7 +151,7 @@ export default function UserInfo() {
         </div>
 
         <div className="data-item">
-          <span className="data-label">E-mail</span>
+          <span className="data-label">{t("common.email")}</span>
           {isEditing ? (
             <input
               type="email"
@@ -162,7 +166,7 @@ export default function UserInfo() {
         </div>
 
         <div className="data-item">
-          <span className="data-label">Mot de passe</span>
+          <span className="data-label">{t("common.password")}</span>
           {isEditing ? (
             <input
               type="password"
@@ -185,58 +189,57 @@ export default function UserInfo() {
               onClick={handleSave}
               disabled={loading}
             >
-              {loading ? "Enregistrement..." : "Enregistrer"}
+              {loading ? t("common.saving") : t("common.save")}
             </button>
             <button className="action-btn outline" onClick={handleCancel}>
-              Annuler
+              {t("common.cancel")}
             </button>
           </>
         ) : (
           <button className="action-btn" onClick={() => setIsEditing(true)}>
-            Modifier mes informations
+            {t("account.editInfo")}
           </button>
         )}
       </div>
 
       {/* --- ZONE DE DANGER --- */}
       <div className="danger-divider">
-        <h2 className="section-title">Supprimer mon compte</h2>
+        <h2 className="section-title">{t("account.deleteTitle")}</h2>
 
         {/* Bascule conditionnelle entre le bouton initial et l'input de confirmation */}
         {!showDeleteConfirm ? (
           <>
             <p className="text-delete-account">
-              La suppression de votre compte est irréversible. Toutes vos
-              données seront effacées.
+              {t("account.deleteIntro")}
             </p>
             <button
               className="action-btn outline"
               onClick={() => setShowDeleteConfirm(true)}
             >
-              Supprimer mon compte
+              {t("account.deleteTitle")}
             </button>
           </>
         ) : (
           <div>
             <p className="delete-confirmation-message">
-              Action irréversible. Veuillez confirmer avec votre mot de passe :
+              {t("account.deleteConfirmIntro")}
             </p>
             <input
               type="password"
               value={deletePassword}
               onChange={(e) => setDeletePassword(e.target.value)}
-              placeholder="Votre mot de passe"
+              placeholder={t("account.passwordPlaceholder")}
               className="data-input"
             />
             <div className="action-buttons">
               <button className="action-btn" onClick={handleConfirmDelete}>
-                Confirmer la suppression
+                {t("account.deleteConfirm")}
               </button>
               <button
                 className="action-btn outline"
                 onClick={handleCancelDelete}
               >
-                Annuler
+                {t("common.cancel")}
               </button>
             </div>
           </div>

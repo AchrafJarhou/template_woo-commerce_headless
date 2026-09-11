@@ -1,12 +1,12 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useTranslation } from "react-i18next";
 import styles from "./Header.module.scss";
 import menuBurgerIcon from "../../../../assets/icons/menu-burger.png";
 import cartIcon from "../../../../assets/icons/logo-panier.png";
 import { openAuthModal } from "../../../../slices/authModalSlice";
 import LanguageSwitcher from "../../../../components/LanguageSwitcher";
+import { useTranslation } from "react-i18next";
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);

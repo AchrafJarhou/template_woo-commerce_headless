@@ -3,8 +3,10 @@ import { useSelector, useDispatch } from "react-redux";
 import styles from "./FilterBar.module.scss";
 import searchBarIcon from "../../../assets/icons/search-bar.png";
 import { setFilters } from "../../../slices/filtersSlice";
+import { useTranslation } from "react-i18next";
 
 export default function FilterBar({ onFilterChange, hasProducts }) {
+  const { t, i18n } = useTranslation();
   const dispatch = useDispatch();
   const [activeFilter, setActiveFilter] = useState("tous");
   const [searchOpen, setSearchOpen] = useState(false);
@@ -12,20 +14,33 @@ export default function FilterBar({ onFilterChange, hasProducts }) {
 
   const products = useSelector((state) => state.products.list.data);
 
+  // Le nom d'une catégorie vient de l'API, donc dans la langue du serveur.
+  // Une traduction locale l'emporte si la clé existe, sinon on garde le nom
+  // renvoyé : le composant reste juste que le catalogue soit traduit côté
+  // WordPress (Polylang) ou pas encore.
+  const categoryLabel = (cat) =>
+    t(`catalog.categories.${cat.slug}`, { defaultValue: cat.name });
+
   const filters = useMemo(() => {
     const categories = new Set();
     products?.forEach((product) => {
       product.categories?.forEach((cat) => {
-        categories.add(JSON.stringify({ id: cat.slug, label: cat.name }));
+        categories.add(
+          JSON.stringify({ id: cat.slug, label: categoryLabel(cat) }),
+        );
       });
     });
 
     const uniqueFilters = Array.from(categories).map((cat) => JSON.parse(cat));
     return [
-      { id: "tous", label: "TOUT" },
+      { id: "tous", label: t("catalog.all") },
       ...uniqueFilters.sort((a, b) => a.label.localeCompare(b.label)),
     ];
-  }, [products]);
+    // La langue fait partie des dépendances : sans elle, useMemo conserve les
+    // libellés calculés au premier rendu et les filtres restent en français
+    // après un changement de langue. `products` ne bouge pas quand on bascule,
+    // la valeur mémoïsée n'était donc jamais réévaluée.
+  }, [products, i18n.resolvedLanguage]);
 
   const handleFilterClick = (filterId) => {
     setActiveFilter(filterId);
@@ -57,9 +72,9 @@ export default function FilterBar({ onFilterChange, hasProducts }) {
       <button
         className={styles.searchButton}
         onClick={toggleSearch}
-        aria-label="Recherche"
+        aria-label={t("search.label")}
       >
-        <img src={searchBarIcon} alt="Recherche" className={styles.searchIcon} />
+        <img src={searchBarIcon} alt="" className={styles.searchIcon} />
       </button>
 
       {/* Input de recherche */}
@@ -69,7 +84,7 @@ export default function FilterBar({ onFilterChange, hasProducts }) {
           <input
             type="text"
             className={styles.searchInput}
-            placeholder="Rechercher un article..."
+            placeholder={t("search.articlePlaceholder")}
             value={searchQuery}
             onChange={handleSearchChange}
             autoFocus

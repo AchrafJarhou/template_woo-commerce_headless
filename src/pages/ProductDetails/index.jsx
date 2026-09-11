@@ -4,8 +4,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchProductByIdThunk } from "../../thunkActionsCreator/productsThunks";
 import ProductModal from "../../components/ProductModal";
 import Loader from "../../components/Loader";
+import { useTranslation } from "react-i18next";
 
 export default function ProductDetails() {
+  const { t } = useTranslation();
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -40,7 +42,7 @@ export default function ProductDetails() {
   }
 
   if (!productToDisplay) {
-    return <div className="not-found-state">Aucun produit trouvé.</div>;
+    return <div className="not-found-state">{t("catalog.noProduct")}</div>;
   }
 
   return showModal ? (

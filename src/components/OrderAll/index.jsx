@@ -1,14 +1,17 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import OrderDetails from "../OrderDetails";
+import { formatDate } from "../../utils/formatDate";
+import { useTranslation } from "react-i18next";
 
 export function OrderAll() {
+  const { t } = useTranslation();
   const orders = useSelector((state) => state.user.orders);
 
   const [opened, setOpened] = useState(null);
 
   if (!orders?.length) {
-    return <p>Aucune commande trouvée.</p>;
+    return <p>{t("order.none")}</p>;
   }
 
   const sortedOrders = [...orders].sort(
@@ -24,8 +27,7 @@ export function OrderAll() {
               <strong>Commande n°{order.number ?? order.id}</strong>
 
               <p>
-                {order.date &&
-                  new Date(order.date).toLocaleDateString("fr-FR")}
+                {formatDate(order.date)}
               </p>
 
               <p>{order.status}</p>
@@ -37,7 +39,7 @@ export function OrderAll() {
                 setOpened((prev) => (prev === order.id ? null : order.id))
               }
             >
-              {opened === order.id ? "Voir moins" : "Voir plus"}
+              {opened === order.id ? t("common.showLess") : t("common.showMore")}
             </button>
           </div>
 

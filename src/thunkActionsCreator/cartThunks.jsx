@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { setCart, setNonce, setCartToken } from "../slices/cartSlice";
+import { apiError, apiErrorMessage } from "../i18n/apiError";
 
 // Le Cart-Token porte la session panier de l'invité : le front et WooCommerce
 // étant sur deux origines différentes, aucun cookie de session ne circule et
@@ -54,7 +55,7 @@ export const initializeCartThunk = createAsyncThunk(
 
       await assertCartResponse(
         response,
-        "Impossible de récupérer le panier initial.",
+        apiError("errors.cartFetch"),
       );
 
       syncCartSession(response, thunkAPI);
@@ -80,7 +81,7 @@ export const emptyCartThunk = createAsyncThunk(
         },
       );
 
-      await assertCartResponse(response, "Impossible de vider le panier.");
+      await assertCartResponse(response, apiError("errors.cartEmpty"));
 
       syncCartSession(response, thunkAPI);
 
@@ -120,7 +121,7 @@ export const addProductToCart = createAsyncThunk(
 
       await assertCartResponse(
         response,
-        "Impossible d'ajouter l'article au panier.",
+        apiError("errors.cartAdd"),
       );
 
       syncCartSession(response, thunkAPI);
@@ -149,7 +150,7 @@ export const deleteProductFromCart = createAsyncThunk(
 
       await assertCartResponse(
         response,
-        "Impossible de supprimer l'article du panier.",
+        apiError("errors.cartRemove"),
       );
 
       syncCartSession(response, thunkAPI);
@@ -216,7 +217,7 @@ export const incrementProductInCart = createAsyncThunk(
         },
       );
 
-      await assertCartResponse(response, "Impossible de modifier l'article.");
+      await assertCartResponse(response, apiError("errors.cartUpdate"));
 
       syncCartSession(response, thunkAPI);
 
@@ -250,7 +251,7 @@ export const substractProductFromCart = createAsyncThunk(
         },
       );
 
-      await assertCartResponse(response, "Impossible de modifier l'article.");
+      await assertCartResponse(response, apiError("errors.cartUpdate"));
 
       syncCartSession(response, thunkAPI);
 

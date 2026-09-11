@@ -5,8 +5,10 @@ import { Link, redirect } from "react-router-dom";
 import { useState, useEffect } from "react";
 import WishlistButton from "../WishlistButton"; // TEMP: wishlist testing, remove before commit
 import "./index.css";
+import { useTranslation } from "react-i18next";
 
 export default function ProductCard({ product }) {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const [itemVariation, setItemVariation] = useState({});
 
@@ -21,7 +23,7 @@ export default function ProductCard({ product }) {
     if (addProductToCart.fulfilled.match(result)) {
       dispatch(showToast(`${name} ajouté au panier`));
     } else {
-      dispatch(showToast(result.payload || "Erreur lors de l'ajout au panier"));
+      dispatch(showToast(result.payload || t("product.addError")));
     }
   };
 
@@ -91,11 +93,11 @@ export default function ProductCard({ product }) {
       ) : null} */}
 
       <span>
-        <p>Prix:</p>
+        <p>{t("product.price")} :</p>
         <p dangerouslySetInnerHTML={{ __html: product.price_html }}></p>
       </span>
 
-      {product.is_in_stock ? <p>En stock</p> : <p>Rupture de stock</p>}
+      {product.is_in_stock ? <p>{t("product.inStock")}</p> : <p>{t("product.outOfStock")}</p>}
       {product.attributes?.map((attribute) => (
         <div key={attribute.name}>
           <label htmlFor={attribute.name}>{attribute.name}</label>
@@ -115,10 +117,10 @@ export default function ProductCard({ product }) {
         <button
           onClick={() => addProduct(product.id, 1, itemVariation, product.name)}
         >
-          Ajouter au panier
+          {t("product.addToCart")}
         </button>
       ) : (
-        <button disabled>Rupture de stock</button>
+        <button disabled>{t("product.outOfStock")}</button>
       )}
     </div>
   );

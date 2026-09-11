@@ -6,9 +6,11 @@ import {
   fetchCurrentUserOrdersThunk,
 } from "../../../thunkActionsCreator/userThunks";
 import { showToast } from "../../../slices/toastSlice";
+import { useTranslation } from "react-i18next";
 
 export default function AddressBook() {
   const dispatch = useDispatch();
+  const { t } = useTranslation();
 
   const customer = useSelector((state) => state.user.customer);
   const orders = useSelector((state) => state.user.orders || []);
@@ -50,9 +52,9 @@ export default function AddressBook() {
   });
   const [savedBilling, setSavedBilling] = useState(billingData);
 
-  // Synchronisation avec les données reçues de l'API /wp-json/custom/v1/customer
+  // Synchronisation initiale avec les données reçues de l'API /wp-json/custom/v1/customer
   useEffect(() => {
-    if (customer) {
+    if (customer && !isEditingShipping && !isEditingBilling) {
       if (customer.shipping && customer.shipping.address1) {
         const ship = {
           firstName: customer.shipping.firstName || "",
@@ -80,7 +82,7 @@ export default function AddressBook() {
         setHasSeparateBilling(true);
       }
     }
-  }, [customer]);
+  }, [customer, isEditingShipping, isEditingBilling]);
 
   const handleShippingChange = (e) => {
     const { name, value } = e.target;
@@ -250,13 +252,13 @@ export default function AddressBook() {
         {isEditingShipping ? (
           <>
             <button className="action-btn" onClick={handleShippingSave}>
-              Enregistrer
+              {t("common.save")}
             </button>
             <button
               className="action-btn outline"
               onClick={handleShippingCancel}
             >
-              Annuler
+              {t("common.cancel")}
             </button>
           </>
         ) : (
@@ -290,7 +292,7 @@ export default function AddressBook() {
           </p>
           <div className="action-buttons">
             <button className="action-btn outline" onClick={handleAddBilling}>
-              Ajouter une adresse de facturation
+              {t("address.addBilling")}
             </button>
           </div>
         </>
@@ -326,7 +328,7 @@ export default function AddressBook() {
             </div>
 
             <div className="data-item">
-              <span className="data-label">Adresse</span>
+              <span className="data-label">{t("address.street")}</span>
               {isEditingBilling ? (
                 <input
                   type="text"
@@ -369,7 +371,7 @@ export default function AddressBook() {
             </div>
 
             <div className="data-item">
-              <span className="data-label">Téléphone</span>
+              <span className="data-label">{t("address.phone")}</span>
               {isEditingBilling ? (
                 <input
                   type="tel"
@@ -390,13 +392,13 @@ export default function AddressBook() {
             {isEditingBilling ? (
               <>
                 <button className="action-btn" onClick={handleBillingSave}>
-                  Enregistrer
+                  {t("common.save")}
                 </button>
                 <button
                   className="action-btn outline"
                   onClick={handleBillingCancel}
                 >
-                  Annuler
+                  {t("common.cancel")}
                 </button>
               </>
             ) : (
@@ -404,7 +406,7 @@ export default function AddressBook() {
                 className="action-btn"
                 onClick={() => setIsEditingBilling(true)}
               >
-                Modifier l'adresse
+                {t("address.editAddress")}
               </button>
             )}
           </div>

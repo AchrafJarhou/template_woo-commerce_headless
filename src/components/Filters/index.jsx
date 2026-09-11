@@ -3,8 +3,10 @@ import { fetchCategoriesThunk } from "../../thunkActionsCreator/categoriesThunks
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProductsThunk } from "../../thunkActionsCreator/productsThunks";
 import { setFilters } from "../../slices/filtersSlice";
+import { useTranslation } from "react-i18next";
 
 export default function Filters() {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const { items: categories, loading: categoriesLoading } = useSelector(
     (state) => state.categories,
@@ -40,10 +42,10 @@ export default function Filters() {
         type="text"
         value={filters.search}
         onChange={(e) => dispatch(setFilters({ search: e.target.value }))}
-        placeholder="Rechercher un produit..."
+        placeholder={t("catalog.searchProduct")}
       />
       <select value={filters.category} onChange={handleCategoryChange}>
-        <option value="">Toutes les catégories</option>
+        <option value="">{t("catalog.allCategories")}</option>
         {categories.map((cat) => (
           <option
             key={cat.id}
@@ -57,23 +59,23 @@ export default function Filters() {
         name="min_price"
         value={filters.min_price}
         onChange={handlePriceChange}
-        placeholder="Prix min (€)"
+        placeholder={t("catalog.priceMin")}
       />
       <input
         type="number"
         name="max_price"
         value={filters.max_price}
         onChange={handlePriceChange}
-        placeholder="Prix max (€)"
+        placeholder={t("catalog.priceMax")}
       />
       <select
         value={`${filters.orderby}-${filters.order}`}
         onChange={handleSortChange}
       >
-        <option value="date-desc">Nouveautés</option>
-        <option value="price-asc">Prix : du - cher au + cher</option>
-        <option value="price-desc">Prix : du + cher au - cher</option>
-        <option value="title-asc">Nom : A à Z</option>
+        <option value="date-desc">{t("catalog.newest")}</option>
+        <option value="price-asc">{t("catalog.priceAsc")}</option>
+        <option value="price-desc">{t("catalog.priceDesc")}</option>
+        <option value="title-asc">{t("catalog.nameAsc")}</option>
       </select>
     </>
   );

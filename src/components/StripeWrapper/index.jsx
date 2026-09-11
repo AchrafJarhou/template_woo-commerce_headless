@@ -3,8 +3,10 @@ import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import CheckoutForm from "../CheckoutForm";
 import Loader from "../Loader";
+import { useTranslation } from "react-i18next";
 
 export default function StripeWrapper({ shippingAddress }) {
+  const { t } = useTranslation();
   const [stripePromise, setStripePromise] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -18,7 +20,7 @@ export default function StripeWrapper({ shippingAddress }) {
         const data = await response.json();
         if (!response.ok || !data.publishable_key) {
           throw new Error(
-            data.message || "Impossible de récupérer la clé Stripe.",
+            data.message || t("payment.keyError"),
           );
         }
         setStripePromise(loadStripe(data.publishable_key));
@@ -37,7 +39,7 @@ export default function StripeWrapper({ shippingAddress }) {
   }
 
   if (error || !stripePromise) {
-    return <p>{error || "Erreur lors de l'initialisation de Stripe."}</p>;
+    return <p>{error || t("payment.initError")}</p>;
   }
   return (
     <Elements stripe={stripePromise}>

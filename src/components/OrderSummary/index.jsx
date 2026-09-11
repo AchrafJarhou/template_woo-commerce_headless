@@ -1,11 +1,9 @@
 import React from "react";
+import { formatPrice, formatAmount } from "../../utils/formatPrice";
+import { useTranslation } from "react-i18next";
 
 export default function OrderSummary({ items, totals, shippingCost }) {
-  // Fonction pour convertir les prix API WooCommerce (ex: "54000" -> 540,00 €)
-  const formatPrice = (priceString, minorUnit = 2) => {
-    const numericPrice = Number(priceString) / Math.pow(10, minorUnit);
-    return `${numericPrice.toFixed(2).replace(".", ",")} €`;
-  };
+  const { t } = useTranslation();
 
   // Calcul du nombre total d'articles
   const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
@@ -42,15 +40,12 @@ export default function OrderSummary({ items, totals, shippingCost }) {
                     {v.attribute} : {v.value}
                   </span>
                 ))}
-                <span>QTÉ : {item.quantity}</span>
+                <span>{t("cart.quantity")} : {item.quantity}</span>
               </div>
             </div>
             {/* Le line_total inclut déjà la multiplication par la quantité */}
             <div className="cart-item-price">
-              {formatPrice(
-                item.totals.line_total,
-                item.totals.currency_minor_unit,
-              )}
+              {formatPrice(item.totals.line_total, item.totals)}
             </div>
           </div>
         ))}
@@ -58,24 +53,22 @@ export default function OrderSummary({ items, totals, shippingCost }) {
 
       <dl className="cart__summary">
         <div className="cart__summary-row">
-          <dt>
-            Sous-total ({itemCount} article{itemCount > 1 ? "s" : ""})
-          </dt>
-          <dd>{formatPrice(totals.total_items, totals.currency_minor_unit)}</dd>
+          <dt>{t("cart.subtotal", { count: itemCount })}</dt>
+          <dd>{formatPrice(totals.total_items, totals)}</dd>
         </div>
 
         <div className="cart__summary-row">
-          <dt>Livraison</dt>
+          <dt>{t("cart.shipping")}</dt>
           <dd>
             {shippingCost === 0
-              ? "À définir"
-              : `${shippingCost.toFixed(2).replace(".", ",")} €`}
+              ? t("cart.shippingTbd")
+              : formatAmount(shippingCost, totals.currency_code)}
           </dd>
         </div>
 
         <div className="cart__summary-row cart__summary-row--total">
-          <dt>Total</dt>
-          <dd>{`${finalTotal.toFixed(2).replace(".", ",")} €`}</dd>
+          <dt>{t("cart.total")}</dt>
+          <dd>{formatAmount(finalTotal, totals.currency_code)}</dd>
         </div>
       </dl>
     </aside>

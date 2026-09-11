@@ -7,6 +7,7 @@ import { HOME_CATALOG_ANCHOR } from "../../../constants/navigation";
 import Footer from "../../../layouts/MainLayout/components/Footer/Footer.jsx";
 import ProductModal from "../../ProductModal";
 import Loader from "../../Loader";
+import { useTranslation } from "react-i18next";
 
 export default function CatalogSection({
   products,
@@ -16,6 +17,7 @@ export default function CatalogSection({
   onLoadMore,
   onShowLess,
 }) {
+  const { t } = useTranslation();
   const [filter, setFilter] = useState("tous");
   const [selectedProduct, setSelectedProduct] = useState(null);
 
@@ -55,7 +57,7 @@ export default function CatalogSection({
                     disabled={loading}
                     className={styles.loadMoreBtn}
                   >
-                    {loading ? <Loader size="sm" /> : "Voir plus"}
+                    {loading ? <Loader size="sm" /> : t("common.showMore")}
                   </button>
                 )}
                 {canShowLess && (
@@ -64,7 +66,7 @@ export default function CatalogSection({
                     disabled={loading}
                     className={styles.showLessBtn}
                   >
-                    Afficher moins
+                    {t("catalog.showLess")}
                   </button>
                 )}
               </div>

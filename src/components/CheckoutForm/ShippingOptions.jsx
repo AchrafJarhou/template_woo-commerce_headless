@@ -1,7 +1,10 @@
+import { useTranslation } from "react-i18next";
 export default function ShippingOptions({ options, selectedMethod, onSelect }) {
+  const { t } = useTranslation();
+
   return (
     <>
-      <h3>Mode de livraison</h3>
+      <h3>{t("checkout.shippingMethod")}</h3>
       <div className="form-group shipping-methods">
         {options.map((option) => (
           <label key={option.id} className="shipping-option">
