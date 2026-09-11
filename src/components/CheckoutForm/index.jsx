@@ -198,32 +198,6 @@ export default function CheckoutForm({ shippingMethod, setShippingMethod }) {
         {t("checkout.backToShop")}
       </Link>
 
-      <div className="express-payment">
-        <button
-          type="button"
-          className={`express-btn ${paymentType === "apple" ? "selected" : ""}`}
-          onClick={() => setPaymentType("apple")}
-        >
-          A Pay
-        </button>
-        <button
-          type="button"
-          className={`express-btn ${paymentType === "google" ? "selected" : ""}`}
-          onClick={() => setPaymentType("google")}
-        >
-          G Pay
-        </button>
-        <button
-          type="button"
-          className={`express-btn ${paymentType === "crypto" ? "selected" : ""}`}
-          onClick={() => setPaymentType("crypto")}
-        >
-          Crypto
-        </button>
-      </div>
-
-      <div className="divider">{t("checkout.orContinue")}</div>
-
       <form id="checkout-payment-form" onSubmit={processCheckout}>
         <ShippingAddress
           address={shippingAddress}
