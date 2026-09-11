@@ -25,6 +25,11 @@ add_action('phpmailer_init', function($phpmailer) {
     error_log('📧 Envoi via Gmail SMTP: ' . $phpmailer->Username);
 });
 
+// Set email format to HTML
+add_filter('wp_mail_content_type', function() {
+    return 'text/html; charset=UTF-8';
+});
+
 // Log emails being sent
 add_filter('wp_mail', function($atts) {
     $to = is_array($atts['to']) ? implode(', ', $atts['to']) : $atts['to'];
