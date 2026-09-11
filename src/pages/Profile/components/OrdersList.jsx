@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { formatDate } from "../../../utils/formatDate";
 import { formatAmount } from "../../../utils/formatPrice";
+import { formatStatus } from "../../../utils/formatStatus";
 import { fetchCurrentUserOrdersThunk } from "../../../thunkActionsCreator/userThunks";
 import { useTranslation } from "react-i18next";
 
@@ -53,9 +54,7 @@ export default function OrdersList() {
                 <div className="order-header-main">
                   Commande N° {order.number ?? order.id}
                 </div>
-                <div className="order-date">
-                  {formatDate(order.date)}
-                </div>
+                <div className="order-date">{formatDate(order.date)}</div>
               </div>
               <div className="order-header-main">
                 statut : {formatStatus(order.status)}
