@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import './index.css';
 import { useTranslation } from "react-i18next";
+import { HOME_CATALOG_PATH } from "../../constants/navigation";
 
 export default function Error404() {
   const { t } = useTranslation();
@@ -28,7 +29,7 @@ export default function Error404() {
           <Link to="/" className="btn btn-primary">
             {t("error404.home")}
           </Link>
-          <Link to="/shop" className="btn btn-secondary">
+          <Link to={HOME_CATALOG_PATH} className="btn btn-secondary">
             {t("error404.continue")}
           </Link>
         </div>
