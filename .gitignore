@@ -3,6 +3,9 @@ package-lock.json
 dist
 wp-content/
 
+# WordPress configuration (never commit - contains credentials!)
+wp-config.php
+
 # Environment variables (never commit these!)
 .env.development
 .env.development.local

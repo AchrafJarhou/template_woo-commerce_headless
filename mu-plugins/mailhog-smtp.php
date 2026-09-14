@@ -16,8 +16,8 @@ add_action('phpmailer_init', function($phpmailer) {
     $phpmailer->SMTPSecure = 'tls';
     $phpmailer->SMTPAuth = true;
 
-    $phpmailer->Username = 'achraf.jarhou@laplateforme.io';
-    $phpmailer->Password = 'ydbsvsahgpduysfz';
+    $phpmailer->Username = defined('GMAIL_USERNAME') ? GMAIL_USERNAME : '';
+    $phpmailer->Password = defined('GMAIL_PASSWORD') ? GMAIL_PASSWORD : '';
 
     $phpmailer->SMTPKeepAlive = true;
     $phpmailer->Timeout = 10;
