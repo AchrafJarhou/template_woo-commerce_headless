@@ -3,6 +3,10 @@
 .catalog {
   position: relative;
   z-index: $z-catalog;
+  // Réserve l'écran occupé par la vidéo en position fixed. Additionnée à la
+  // hauteur de .heroSpacer, cette valeur donne le défilement au bout duquel
+  // le catalogue recouvre entièrement la vidéo — soit la FIN du fondu, que
+  // FADE_DURATION_RATIO (HeroVideo.jsx) reprend. À reporter si elle change.
   margin-top: 100vh;
   background: $primary-blue;
   min-height: 100vh;
@@ -18,4 +22,60 @@
   @media (max-width: $breakpoint-mobile) {
     padding: $spacing-md $spacing-sm 60px;
   }
+}
+
+.buttonsContainer {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 50px;
+  padding: 30px 0;
+  flex-wrap: wrap;
+
+  @media (max-width: $breakpoint-mobile) {
+    gap: 10px;
+  }
+}
+
+.loadMoreBtn,
+.showLessBtn {
+  padding: 15px 50px;
+  background-color: #000;
+  border: none;
+  color: #fff;
+  border-radius: 8px;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  &:hover:not(:disabled) {
+    background-color: #333;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(-1px);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  @media (max-width: $breakpoint-mobile) {
+    padding: 12px 30px;
+    font-size: 16px;
+  }
+}
+
+.loaderContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 300px;
 }

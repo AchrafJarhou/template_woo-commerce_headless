@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import DOMPurify from "dompurify";
 import {
   closeAuthModal,
   switchAuthModalView,
@@ -11,28 +13,59 @@ import {
 } from "../../thunkActionsCreator/userThunks";
 import ResetPasswordForm from "../ResetPasswordForm/ResetPasswordForm";
 import "./index.css";
+import { useTranslation } from "react-i18next";
 
 export default function AuthDrawer() {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { isOpen, view } = useSelector((state) => state.authModal);
   const { loading, error, token } = useSelector((state) => state.user);
 
   const [mode, setMode] = useState("login");
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState({});
+  const [justAuthenticated, setJustAuthenticated] = useState(false);
   const [form, setForm] = useState({
     username: "",
     email: "",
     password: "",
     confirmPassword: "",
+    firstName: "",
+    lastName: "",
   });
 
   useEffect(() => {
-    if (token) dispatch(closeAuthModal());
-  }, [dispatch, token]);
+    if (token && justAuthenticated && isOpen) {
+      dispatch(closeAuthModal());
+      setForm({
+        username: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+        firstName: "",
+        lastName: "",
+      });
+      setErrors({});
+      navigate("/profile");
+      setJustAuthenticated(false);
+    }
+  }, [token, justAuthenticated, isOpen, dispatch, navigate]);
 
   useEffect(() => {
-    if (error) dispatch(showToast(error));
+    if (isOpen && view !== "reset-password") {
+      setMode(view === "login" ? "login" : "register");
+      setErrors({});
+    }
+  }, [isOpen, view]);
+
+  useEffect(() => {
+    if (error) {
+      dispatch(showToast(error));
+      const parsedErrors = parseBackendError(error);
+      setErrors(parsedErrors);
+      setJustAuthenticated(false);
+    }
   }, [error, dispatch]);
 
   if (!isOpen) return null;
@@ -44,12 +77,41 @@ export default function AuthDrawer() {
     setErrors({});
   };
 
+  const parseBackendError = (errorMsg) => {
+    const fieldErrors = {};
+    const errorLower = errorMsg.toLowerCase();
+
+    if (errorLower.includes("email")) {
+      fieldErrors.email = errorMsg;
+    }
+    if (errorLower.includes("mot de passe") || errorLower.includes("password")) {
+      fieldErrors.password = errorMsg;
+    }
+    if (errorLower.includes("prenom") || errorLower.includes("prénom")) {
+      fieldErrors.firstName = errorMsg;
+    }
+    if (errorLower.includes("nom")) {
+      fieldErrors.lastName = errorMsg;
+    }
+    if (errorLower.includes("identifiant") || errorLower.includes("username")) {
+      fieldErrors.username = errorMsg;
+    }
+
+    return Object.keys(fieldErrors).length > 0
+      ? fieldErrors
+      : { general: errorMsg };
+  };
+
   const validateLogin = (e, updatedForm = form) => {
     setErrors({});
     const newErrors = {};
-    if (!updatedForm.username.trim()) {
-      newErrors.username = "Le nom d'utilisateur est requis.";
+
+    if (mode === "login") {
+      if (!updatedForm.username.trim()) {
+        newErrors.username = "Le nom d'utilisateur est requis.";
+      }
     }
+
     if (!updatedForm.password) {
       newErrors.password = "Le mot de passe est requis.";
     } else if (updatedForm.password.length < 8) {
@@ -61,6 +123,12 @@ export default function AuthDrawer() {
         newErrors.email = "L'adresse e-mail est requise.";
       } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(updatedForm.email)) {
         newErrors.email = "Entrez une adresse e-mail valide.";
+      }
+      if (!updatedForm.firstName.trim()) {
+        newErrors.firstName = "Le prénom est requis.";
+      }
+      if (!updatedForm.lastName.trim()) {
+        newErrors.lastName = "Le nom est requis.";
       }
       if (!updatedForm.confirmPassword) {
         newErrors.confirmPassword = "Veuillez confirmer votre mot de passe.";
@@ -88,6 +156,7 @@ export default function AuthDrawer() {
       return;
     }
 
+    setJustAuthenticated(true);
     if (mode === "login") {
       dispatch(
         loginThunk({ username: form.username.trim(), password: form.password }),
@@ -95,9 +164,10 @@ export default function AuthDrawer() {
     } else {
       dispatch(
         registerThunk({
-          username: form.username.trim(),
           email: form.email.trim(),
           password: form.password,
+          firstName: form.firstName.trim(),
+          lastName: form.lastName.trim(),
         }),
       );
     }
@@ -135,28 +205,38 @@ export default function AuthDrawer() {
           <>
             <div className="drawer-header">
               <h2 className="drawer-title">
-                {mode === "login" ? "Connexion" : "Créer un compte"}
+                {mode === "login" ? t("auth.loginTitle") : t("auth.createAccountTitle")}
               </h2>
             </div>
 
-            <form className="drawer-form" onSubmit={handleSubmit}>
-              {/* <div className="input-group">
-                <label htmlFor="username">Nom d'utilisateur</label>
-                <input
-                  id="username"
-                  name="username"
-                  type="text"
-                  value={form.username}
-                  onChange={handleChange}
-                  className={errors.username ? "input-error" : ""}
-                  placeholder={errors.username || "Votre identifiant"}
-                  autoComplete="username"
-                />
-              </div> */}
+            {errors.general && (
+              <div className="error-message" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(errors.general) }} />
+            )}
 
-              {/* {mode === "register" && (
+            <form className="drawer-form" onSubmit={handleSubmit}>
+              {mode === "login" && (
                 <div className="input-group">
-                  <label htmlFor="email">Email</label>
+                  <label htmlFor="username">{t("auth.login")}</label>
+                  <input
+                    id="username"
+                    name="username"
+                    type="text"
+                    value={form.username}
+                    onChange={handleChange}
+                    className={errors.username ? "input-error" : ""}
+                    placeholder={t("auth.loginPlaceholder")}
+                    autoComplete="username"
+                  />
+                  {errors.username && <p className="error-text" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(errors.username) }} />}
+                  <p className="help-text">
+                    {t("auth.loginHint")}
+                  </p>
+                </div>
+              )}
+
+              {mode === "register" && (
+                <div className="input-group">
+                  <label htmlFor="email">{t("common.email")}</label>
                   <input
                     id="email"
                     name="email"
@@ -164,28 +244,49 @@ export default function AuthDrawer() {
                     value={form.email}
                     onChange={handleChange}
                     className={errors.email ? "input-error" : ""}
-                    placeholder={errors.email || "votre@email.com"}
+                    placeholder={t("auth.emailPlaceholder")}
                     autoComplete="email"
                   />
+                  {errors.email && <p className="error-text" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(errors.email) }} />}
                 </div>
-              )} */}
+              )}
+
+              {mode === "register" && (
+                <div className="input-group">
+                  <label htmlFor="firstName">{t("common.firstName")}</label>
+                  <input
+                    id="firstName"
+                    name="firstName"
+                    type="text"
+                    value={form.firstName}
+                    onChange={handleChange}
+                    className={errors.firstName ? "input-error" : ""}
+                    placeholder={t("auth.firstNamePlaceholder")}
+                    autoComplete="given-name"
+                  />
+                  {errors.firstName && <p className="error-text" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(errors.firstName) }} />}
+                </div>
+              )}
+
+              {mode === "register" && (
+                <div className="input-group">
+                  <label htmlFor="lastName">{t("common.lastName")}</label>
+                  <input
+                    id="lastName"
+                    name="lastName"
+                    type="text"
+                    value={form.lastName}
+                    onChange={handleChange}
+                    className={errors.lastName ? "input-error" : ""}
+                    placeholder={t("auth.lastNamePlaceholder")}
+                    autoComplete="family-name"
+                  />
+                  {errors.lastName && <p className="error-text" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(errors.lastName) }} />}
+                </div>
+              )}
 
               <div className="input-group">
-                <label htmlFor="email">Email</label>
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  value={form.email}
-                  onChange={handleChange}
-                  className={errors.email ? "input-error" : ""}
-                  placeholder={errors.email || "votre@email.com"}
-                  autoComplete="email"
-                />
-              </div>
-
-              <div className="input-group">
-                <label htmlFor="password">Mot de passe</label>
+                <label htmlFor="password">{t("common.password")}</label>
                 <div className="password-wrapper">
                   <input
                     id="password"
@@ -194,7 +295,7 @@ export default function AuthDrawer() {
                     value={form.password}
                     onChange={handleChange}
                     className={errors.password ? "input-error" : ""}
-                    placeholder={errors.password || "••••••••"}
+                    placeholder="••••••••"
                     autoComplete={
                       mode === "login" ? "current-password" : "new-password"
                     }
@@ -203,17 +304,31 @@ export default function AuthDrawer() {
                     type="button"
                     className="eye-btn"
                     onClick={() => setShowPassword(!showPassword)}
-                    aria-label="Afficher le mot de passe"
+                    aria-label={t("auth.showPassword")}
                   >
                     {renderEyeIcon()}
                   </button>
                 </div>
+                {errors.password && <p className="error-text" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(errors.password) }} />}
+                {mode === "register" && (
+                  <div className="password-strength">
+                    <div className="strength-bar">
+                      <div
+                        className={`strength-fill ${form.password.length >= 8 ? "valid" : ""}`}
+                        style={{ width: `${Math.min((form.password.length / 8) * 100, 100)}%` }}
+                      />
+                    </div>
+                    <span className={`strength-text ${form.password.length >= 8 ? "valid" : ""}`}>
+                      {form.password.length}/8 caractères
+                    </span>
+                  </div>
+                )}
               </div>
 
               {mode === "register" && (
                 <div className="input-group">
                   <label htmlFor="confirmPassword">
-                    Confirmez le mot de passe
+                    {t("auth.confirmPassword")}
                   </label>
                   <div className="password-wrapper">
                     <input
@@ -223,18 +338,19 @@ export default function AuthDrawer() {
                       value={form.confirmPassword}
                       onChange={handleChange}
                       className={errors.confirmPassword ? "input-error" : ""}
-                      placeholder={errors.confirmPassword || "••••••••"}
+                      placeholder="••••••••"
                       autoComplete="new-password"
                     />
                     <button
                       type="button"
                       className="eye-btn"
                       onClick={() => setShowPassword(!showPassword)}
-                      aria-label="Afficher le mot de passe"
+                      aria-label={t("auth.showPassword")}
                     >
                       {renderEyeIcon()}
                     </button>
                   </div>
+                  {errors.confirmPassword && <p className="error-text" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(errors.confirmPassword) }} />}
                 </div>
               )}
 
@@ -246,23 +362,23 @@ export default function AuthDrawer() {
                     dispatch(switchAuthModalView("reset-password"))
                   }
                 >
-                  Mot de passe oublié ?
+                  {t("auth.forgotPassword")}
                 </button>
               )}
 
               <button type="submit" className="submit-btn" disabled={loading}>
                 {loading
-                  ? "Chargement..."
+                  ? t("common.loading")
                   : mode === "login"
-                    ? "Se connecter"
-                    : "S'inscrire"}
+                    ? t("auth.signIn")
+                    : t("auth.signUp")}
               </button>
             </form>
 
             <div className="drawer-footer">
               {mode === "login" ? (
                 <>
-                  <span>Pas encore de compte ?</span>
+                  <span>{t("auth.noAccount")}</span>
                   <button
                     type="button"
                     className="toggle-btn"
@@ -271,12 +387,12 @@ export default function AuthDrawer() {
                       setErrors({});
                     }}
                   >
-                    Créer un compte gratuit
+                    {t("auth.createAccount")}
                   </button>
                 </>
               ) : (
                 <>
-                  <span>Déjà un compte ?</span>
+                  <span>{t("auth.hasAccount")}</span>
                   <button
                     type="button"
                     className="toggle-btn"
@@ -285,7 +401,7 @@ export default function AuthDrawer() {
                       setErrors({});
                     }}
                   >
-                    Connectez-vous
+                    {t("auth.signIn")}
                   </button>
                 </>
               )}

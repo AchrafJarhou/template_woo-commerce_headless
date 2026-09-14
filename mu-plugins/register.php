@@ -19,7 +19,7 @@ function headless_register_rate_limit_check()
 
     $attempts = (int) get_transient($key);
 
-    if ($attempts >= 5) {
+    if ($attempts >= 20) {
         return false;
     }
 
@@ -30,15 +30,16 @@ function headless_register_rate_limit_check()
 function headless_register_user($request)
 {
     if (!headless_register_rate_limit_check()) {
-        return new WP_Error('too_many_requests', 'Trion depuis cette adresse. Reessayez plus tard.', ['status' => 429]);
+        return new WP_Error('too_many_requests', 'Trop de tentatives. Reessayez dans une heure.', ['status' => 429]);
     }
 
-    $username = sanitize_user($request->get_param('username'));
-    $email    = sanitize_email($request->get_param('email'));
-    $password = (string) $request->get_param('password');
+    $email     = sanitize_email($request->get_param('email'));
+    $password  = (string) $request->get_param('password');
+    $firstName = sanitize_text_field($request->get_param('firstName'));
+    $lastName  = sanitize_text_field($request->get_param('lastName'));
 
-    if (empty($username) || empty($email) || empty($password)) {
-        return new WP_Error('missing_fields', 'Identifiant, email et mot de passe sont requis.', ['status' => 400]);
+    if (empty($email) || empty($password) || empty($firstName) || empty($lastName)) {
+        return new WP_Error('missing_fields', 'Email, mot de passe, prénom et nom sont requis.', ['status' => 400]);
     }
     if (!is_email($email)) {
         return new WP_Error('invalid_email', 'Adresse email invalide.', ['status' => 400]);
@@ -46,14 +47,28 @@ function headless_register_user($request)
     if (strlen($password) < 8) {
         return new WP_Error('weak_password', 'Le mot de passe doit contenir au moins 8 caracteres.', ['status' => 400]);
     }
-    if (username_exists($username) || email_exists($email)) {
-        return new WP_Error('registration_unavailable', 'Impossible de creer ce compte avec ces informations.', ['status' => 409]);
+    if (email_exists($email)) {
+        return new WP_Error('email_exists', 'Un compte existe deja avec cet email.', ['status' => 409]);
+    }
+
+    $base_username = sanitize_user(strtolower($firstName));
+    $username      = $base_username;
+    $counter       = 1;
+
+    while (username_exists($username)) {
+        $username = $base_username . $counter;
+        $counter++;
     }
 
     $user_id = wp_create_user($username, $password, $email);
     if (is_wp_error($user_id)) {
         return new WP_Error('registration_failed', $user_id->get_error_message(), ['status' => 500]);
     }
+
+    update_user_meta($user_id, 'first_name', $firstName);
+    update_user_meta($user_id, 'last_name', $lastName);
+
+    headless_send_welcome_email($firstName, $email);
 
     $token_request = new WP_REST_Request('POST', '/jwt-auth/v1/token');
     $token_request->set_param('username', $username);
@@ -65,4 +80,18 @@ function headless_register_user($request)
     }
 
     return rest_ensure_response($token_response->get_data());
+}
+
+function headless_send_welcome_email($firstName, $email)
+{
+    $subject = 'Bienvenue !';
+    $body = "Bonjour " . sanitize_text_field($firstName) . ",\n\n";
+    $body .= "Merci de vous être inscrit sur notre boutique.\n\n";
+    $body .= "Vous pouvez maintenant commencer à faire vos achats.\n\n";
+    $body .= "Si vous avez des questions, n'hésitez pas à nous contacter.\n\n";
+    $body .= "Cordialement,\nL'équipe";
+
+    $headers = ['Content-Type: text/plain; charset=UTF-8'];
+
+    wp_mail($email, $subject, $body, $headers);
 }

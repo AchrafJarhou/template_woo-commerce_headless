@@ -1,0 +1,66 @@
+@import "../../styles/variables.scss";
+
+/* Contrôle segmenté : le segment actif est rempli, l'inactif reste nu.
+   La distinction ne repose donc pas sur une nuance de couleur — sur le bleu
+   du site, aucune encre atténuée ne tient le seuil de contraste, seul le
+   remplissage permet de distinguer les deux états de façon lisible. */
+.language-switcher {
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+  padding: 2px;
+  border: 1px solid rgb(15 23 42 / 0.22);
+  border-radius: 999px;
+}
+
+.language-switcher__option {
+  position: relative;
+  min-width: 28px;
+  padding: 3px 6px;
+  border: none;
+  border-radius: 999px;
+  background: none;
+  color: var(--dark-color);
+  font-family: var(--font-heading);
+  font-size: clamp(11px, 2.6vw, 12px);
+  font-weight: $font-weight-bold;
+  letter-spacing: 0.06em;
+  line-height: 1.5;
+  cursor: pointer;
+  transition:
+    background-color $transition-fast,
+    color $transition-fast;
+
+  /* Porte la zone tactile à 44 px sans épaissir la barre : le pseudo-élément
+     déborde en hauteur, la mise en page n'en sait rien. */
+  &::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 44px;
+    transform: translateY(-50%);
+  }
+
+  &:hover:not([aria-pressed="true"]) {
+    background-color: rgb(15 23 42 / 0.09);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--dark-color);
+    outline-offset: 2px;
+  }
+
+  &[aria-pressed="true"] {
+    background-color: var(--dark-color);
+    color: $white;
+    cursor: default;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .language-switcher__option {
+    transition: none;
+  }
+}

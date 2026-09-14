@@ -20,6 +20,18 @@
   --bg-color: rgb(103, 132, 200);
   --font-body: "InterCustom", sans-serif;
   --font-heading: "PoppinsCustom", sans-serif;
+  /* Police du mot-symbole RAVI, partagée par le logo du header et le
+     titre de la page d'accueil. */
+  --font-wordmark: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  /* Rayon partagé par TOUS les boutons du site. Bords francs : la valeur
+     n'est écrite qu'ici, aucun bouton ne peut donc diverger, et revenir à des
+     angles adoucis se ferait en changeant ce seul nombre. */
+  --radius-button: 0;
+  /* Le sac du panier est une image rectangulaire pleine : arrondir sa boîte
+     arrondit la forme elle-même. En rapport et non en pixels, l'icône garde
+     exactement la même allure à ses deux tailles — barre du header et page
+     panier vide. */
+  --cart-icon-radius-ratio: 0.11;
 }
 * {
   box-sizing: border-box;
@@ -229,16 +241,14 @@ button {
   padding: 3vw 6vw;
   font-size: 4.5vw;
   width: fit-content;
-  border-radius: 2vw;
+  border-radius: var(--radius-button);
   @media screen and (aspect-ratio > 1/1) {
     padding: 1vw 2vw;
     font-size: 1.5vw;
-    border-radius: 0.5vw;
   }
   @media screen and (aspect-ratio > 2.6/1) {
     padding: 2lvh 4lvh;
     font-size: 3.5lvh;
-    border-radius: 1lvh;
   }
   &:hover {
     transform: scale(1.1);

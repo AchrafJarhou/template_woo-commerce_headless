@@ -135,9 +135,9 @@
   border: none;
   border-radius: 0;
   background-color: transparent;
-  color: var(--primary-color);
+  color: #070707;
   font-size: clamp(12px, 1.1vw, 14px);
-  text-decoration: underline;
+  text-decoration: none;
   text-underline-offset: 3px;
 
   &:hover {

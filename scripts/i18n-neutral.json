@@ -1,0 +1,22 @@
+{
+  "_comment": "Textes volontairement identiques dans toutes les langues : noms de marque, sigles et masques de saisie. Déclarés ici plutôt que traduits, pour que l'audit ne les compte pas comme une dette — et pour que le choix reste visible et discutable.",
+  "neutral": [
+    "A Pay",
+    "Blog",
+    "CGV",
+    "CVC",
+    "Catalogue",
+    "Contact",
+    "Crypto",
+    "EN",
+    "FAQ",
+    "FR",
+    "France",
+    "G Pay",
+    "MM/YY",
+    "Message",
+    "RAVI",
+    "Suggestions",
+    "Total"
+  ]
+}

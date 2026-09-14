@@ -1,4 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import { apiError, apiErrorMessage } from "../i18n/apiError";
 
 function stripHtml(value = "") {
   return value
@@ -27,7 +28,7 @@ export const fetchBlogDataThunk = createAsyncThunk(
       ]);
 
       if (!postsResponse.ok) {
-        throw new Error("Impossible de charger les articles du blog.");
+        throw new Error(apiError("errors.blogList"));
       }
 
       const postsData = await postsResponse.json();
@@ -60,7 +61,7 @@ export const fetchBlogDataThunk = createAsyncThunk(
       };
     } catch (error) {
       return thunkAPI.rejectWithValue(
-        error.message || "Une erreur est survenue lors du chargement du blog.",
+        apiErrorMessage(error.message, "errors.blogGeneric"),
       );
     }
   },
@@ -75,7 +76,7 @@ export const fetchBlogPostBySlugThunk = createAsyncThunk(
       );
 
       if (!response.ok) {
-        throw new Error("Impossible de charger cet article.");
+        throw new Error(apiError("errors.blogPost"));
       }
 
       const data = await response.json();
@@ -94,7 +95,7 @@ export const fetchBlogPostBySlugThunk = createAsyncThunk(
       };
     } catch (error) {
       return thunkAPI.rejectWithValue(
-        error.message || "Une erreur est survenue lors du chargement de l'article.",
+        apiErrorMessage(error.message, "errors.blogPostGeneric"),
       );
     }
   },

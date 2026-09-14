@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import ProductCard from "../ProductCard";
+import { useTranslation } from "react-i18next";
 
 export default function SimilarProducts({
   currentProduct,
   reduxProducts = [],
 }) {
+  const { t } = useTranslation();
   const [similarProducts, setSimilarProducts] = useState([]);
   const [loadingSimilar, setLoadingSimilar] = useState(false);
 
@@ -85,7 +87,7 @@ export default function SimilarProducts({
 
   return (
     <section className="similar-products-section">
-      <h2>Produits similaires</h2>
+      <h2>{t("product.similar")}</h2>
 
       {loadingSimilar ? (
         <Loader size="lg" />
@@ -96,7 +98,7 @@ export default function SimilarProducts({
           ))}
         </div>
       ) : (
-        <p className="no-similar-text">Aucun produit similaire trouvé.</p>
+        <p className="no-similar-text">{t("product.noSimilar")}</p>
       )}
     </section>
   );

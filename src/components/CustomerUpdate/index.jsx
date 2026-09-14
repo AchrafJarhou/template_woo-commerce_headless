@@ -3,8 +3,10 @@ import { useState } from "react";
 
 import { updateCurrentCustomerThunk } from "../../thunkActionsCreator/userThunks";
 import { fetchCurrentCustomerThunk } from "../../thunkActionsCreator/userThunks";
+import { useTranslation } from "react-i18next";
 
 export function BillingUpdate() {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const customer = useSelector((state) => state.user.customer);
   const [billing, setBilling] = useState(customer?.billing || {});
@@ -20,7 +22,7 @@ export function BillingUpdate() {
   return (
     <div>
       <form onSubmit={handleSubmitBilling}>
-        <h3>Modifier vos informations de facturation</h3>
+        <h3>{t("account.editBilling")}</h3>
         {Object.keys(billing).map((key) => (
           <input
             key={key}
@@ -29,13 +31,14 @@ export function BillingUpdate() {
             onChange={(e) => handleBillingChange(key, e.target.value)}
           />
         ))}
-        <button type="submit">Enregistrer informations</button>
+        <button type="submit">{t("account.saveInfo")}</button>
       </form>
     </div>
   );
 }
 
 export function ShippingUpdate() {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const customer = useSelector((state) => state.user.customer);
   const [shipping, setShipping] = useState(customer?.shipping || {});
@@ -49,7 +52,7 @@ export function ShippingUpdate() {
   return (
     <div>
       <form onSubmit={handleSubmitShipping}>
-        <h3>Modifier vos informations de Livraison</h3>
+        <h3>{t("account.editShipping")}</h3>
         {Object.keys(shipping).map((key) => (
           <input
             key={key}
@@ -58,7 +61,7 @@ export function ShippingUpdate() {
             onChange={(e) => handleShippingChange(key, e.target.value)}
           />
         ))}
-        <button type="submit">Enregistrer informations</button>
+        <button type="submit">{t("account.saveInfo")}</button>
       </form>
     </div>
   );

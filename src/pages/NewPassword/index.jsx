@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 export default function NewPassword() {
+  const { t } = useTranslation();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const key = searchParams.get("key");
@@ -27,9 +29,9 @@ export default function NewPassword() {
 
   return (
     <main>
-      <h1>Nouveau mot de passe</h1>
+      <h1>{t("auth.newPassword")}</h1>
       <form onSubmit={handleSubmit}>
-        <label htmlFor="password">Nouveau mot de passe</label>
+        <label htmlFor="password">{t("auth.newPassword")}</label>
         <input
           id="password"
           type="password"
@@ -37,7 +39,7 @@ export default function NewPassword() {
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-        <button type="submit">Confirmer</button>
+        <button type="submit">{t("auth.confirm")}</button>
       </form>
       {message && <p>{message}</p>}
     </main>

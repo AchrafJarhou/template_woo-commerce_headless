@@ -11,8 +11,10 @@ import {
   loginThunk,
   registerThunk,
 } from "../../thunkActionsCreator/userThunks";
+import { useTranslation } from "react-i18next";
 
 export default function AuthForm() {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const { loading, error, token } = useSelector((state) => state.user);
   const [mode, setMode] = useState("login");
@@ -22,7 +24,11 @@ export default function AuthForm() {
     email: "",
     password: "",
     confirmPassword: "",
+    firstName: "",
+    lastName: "",
   });
+
+  const isLogin = mode === "login";
 
   useEffect(() => {
     if (token) dispatch(closeAuthModal());
@@ -48,6 +54,12 @@ export default function AuthForm() {
         newErrors.email = "L'adresse e-mail est requise.";
       } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(updatedForm.email)) {
         newErrors.email = "Entrez une adresse e-mail valide.";
+      }
+      if (!updatedForm.firstName.trim()) {
+        newErrors.firstName = "Le prénom est requis.";
+      }
+      if (!updatedForm.lastName.trim()) {
+        newErrors.lastName = "Le nom est requis.";
       }
       if (!updatedForm.confirmPassword) {
         newErrors.confirmPassword = "Veuillez confirmer votre mot de passe.";
@@ -83,9 +95,10 @@ export default function AuthForm() {
     if (mode === "register") {
       dispatch(
         registerThunk({
-          username: form.username.trim(),
           email: form.email.trim(),
           password: form.password,
+          firstName: form.firstName.trim(),
+          lastName: form.lastName.trim(),
         }),
       );
     }
@@ -96,34 +109,36 @@ export default function AuthForm() {
     <form className="auth-form">
       <h2>
         {mode === "login"
-          ? "Bonjour"
+          ? t("auth.greeting")
           : mode === "register"
-            ? "Créer un compte"
-            : "Confirmez votre mot de passe"}
+            ? t("auth.createAccountTitle")
+            : t("auth.confirmPasswordTitle")}
       </h2>
-      <div className="auth-form__field">
-        <label htmlFor="username">Nom d'utilisateur</label>
-        <input
-          id="username"
-          name="username"
-          type="text"
-          value={form.username}
-          onChange={handleChange}
-          className={errors.username ? "input--error" : ""}
-          autoComplete="username"
-          placeholder={errors.username}
-          title={errors.username}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              e.preventDefault();
-              handleSubmit(e);
-            }
-          }}
-        />
-      </div>
+      {isLogin && (
+        <div className="auth-form__field">
+          <label htmlFor="username">{t("auth.username")}</label>
+          <input
+            id="username"
+            name="username"
+            type="text"
+            value={form.username}
+            onChange={handleChange}
+            className={errors.username ? "input--error" : ""}
+            autoComplete="username"
+            placeholder={errors.username}
+            title={errors.username}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                handleSubmit(e);
+              }
+            }}
+          />
+        </div>
+      )}
       {mode === "register" && (
         <div className="auth-form__field">
-          <label htmlFor="email">E-mail</label>
+          <label htmlFor="email">{t("common.email")}</label>
           <input
             id="email"
             name="email"
@@ -143,8 +158,52 @@ export default function AuthForm() {
           />
         </div>
       )}
+      {mode === "register" && (
+        <div className="auth-form__field">
+          <label htmlFor="firstName">{t("common.firstName")}</label>
+          <input
+            id="firstName"
+            name="firstName"
+            type="text"
+            value={form.firstName}
+            onChange={handleChange}
+            className={errors.firstName ? "input--error" : ""}
+            autoComplete="given-name"
+            placeholder={errors.firstName}
+            title={errors.firstName}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                handleSubmit(e);
+              }
+            }}
+          />
+        </div>
+      )}
+      {mode === "register" && (
+        <div className="auth-form__field">
+          <label htmlFor="lastName">{t("common.lastName")}</label>
+          <input
+            id="lastName"
+            name="lastName"
+            type="text"
+            value={form.lastName}
+            onChange={handleChange}
+            className={errors.lastName ? "input--error" : ""}
+            autoComplete="family-name"
+            placeholder={errors.lastName}
+            title={errors.lastName}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                handleSubmit(e);
+              }
+            }}
+          />
+        </div>
+      )}
       <div className="auth-form__field">
-        <label htmlFor="password">Mot de passe</label>
+        <label htmlFor="password">{t("common.password")}</label>
         <input
           id="password"
           name="password"
@@ -165,7 +224,7 @@ export default function AuthForm() {
       </div>
       {mode === "register" && (
         <div className="auth-form__field">
-          <label htmlFor="confirmPassword">Confirmez le mot de passe</label>
+          <label htmlFor="confirmPassword">{t("auth.confirmPassword")}</label>
           <input
             id="confirmPassword"
             name="confirmPassword"
@@ -191,7 +250,7 @@ export default function AuthForm() {
         className="auth-form__forgot"
         onClick={() => dispatch(switchAuthModalView("reset-password"))}
       >
-        Mot de passe oublié ?
+        {t("auth.forgotPassword")}
       </button>
       <div className="auth-form__buttons">
         <button
@@ -199,14 +258,14 @@ export default function AuthForm() {
           type="button"
           onClick={(e) => handleSubmit(e)}
         >
-          Se connecter
+          {t("auth.signIn")}
         </button>
         <button
           type="button"
           className="signin"
           onClick={(e) => handleSubmit(e)}
         >
-          S'inscrire
+          {t("auth.signUp")}
         </button>{" "}
       </div>
     </form>

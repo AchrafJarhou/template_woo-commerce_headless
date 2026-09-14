@@ -4,8 +4,11 @@ import { useParams } from "react-router-dom";
 import { fetchBlogPostBySlugThunk} from "../../thunkActionsCreator/blogThunks";
 import Seo from "../Seo";
 import "./index.css";
+import { formatLongDate } from "../../utils/formatDate";
+import { useTranslation } from "react-i18next";
 
 export default function BlogPostComponent() {
+  const { t } = useTranslation();
   const { slug } = useParams();
   const dispatch = useDispatch();
   const { singlePost, loadingSingle, errorSingle } = useSelector(
@@ -22,7 +25,7 @@ export default function BlogPostComponent() {
   }
 
   if (errorSingle || !singlePost) {
-    return <div >Article introuvable.</div>;
+    return <div>{t("blog.notFound")}</div>;
   }
 
   return (
@@ -37,9 +40,7 @@ export default function BlogPostComponent() {
 
       <h1>{singlePost.titleText}</h1>
       <p className="blog-post-date">
-        {new Date(singlePost.date).toLocaleDateString("fr-FR", {
-          day: "numeric", month: "long", year: "numeric",
-        })}
+        {formatLongDate(singlePost.date)}
       </p>
 
       <div dangerouslySetInnerHTML={{ __html: singlePost.contentHtml || "" }} />

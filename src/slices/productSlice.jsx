@@ -9,6 +9,7 @@ export const productsSlice = createSlice({
       data: [],
       page: 1,
       perPage: 20,
+      total: 0,
     },
     loading: false,
     error: null,
@@ -25,7 +26,7 @@ export const productsSlice = createSlice({
       })
       .addCase(fetchProductsThunk.fulfilled, (state, action) => {
         state.loading = false;
-        const { data, page, perPage } = action.payload;
+        const { data, page, perPage, total } = action.payload;
         if (page === 1) {
           state.list.data = data;
         } else {
@@ -33,6 +34,7 @@ export const productsSlice = createSlice({
         }
         state.list.page = page;
         state.list.perPage = perPage;
+        state.list.total = total || 0;
       })
       .addCase(fetchProductsThunk.rejected, (state, action) => {
         state.loading = false;

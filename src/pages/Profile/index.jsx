@@ -1,26 +1,69 @@
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 
-import DeleteAccountButton from "../../components/DeleteAccountButton";
-import { UserDisplay, CustomerDisplay } from "../../components/UserDisplay";
-import { OrderAll } from "../../components/OrderAll";
-import { useEffect } from "react";
+import "./index.scss";
+import AddressBook from "./components/AddressBook";
+import UserInfo from "./components/UserInfo";
+import OrdersList from "./components/OrdersList";
+import ProfileNavigation from "./components/ProfileNavigation";
+import { useTranslation } from "react-i18next";
 
 export default function Profile() {
-  const isAuthentificated = useSelector((state) => state.user?.token);
+  const { t } = useTranslation();
+  const [activeTab, setActiveTab] = useState("profil");
+  const [isMobileMenuVisible, setIsMobileMenuVisible] = useState(true);
+  const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 768);
+
   useEffect(() => {
-    !isAuthentificated && navigate("/catalogue", { replace: true });
-  }, [isAuthentificated]);
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  if (isAuthentificated) {
-    return (
-      <div>
-        <UserDisplay />
-        <CustomerDisplay />
-        <OrderAll />
-        <DeleteAccountButton />
-      </div>
-    );
-  }
+    const handleResize = () => setIsDesktop(window.innerWidth >= 768);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const handleTabChange = (tabId) => {
+    setActiveTab(tabId);
+    if (!isDesktop) {
+      setIsMobileMenuVisible(false); // Cache le menu vertical sur mobile
+    }
+  };
+
+  const handleBackToMenu = () => {
+    setIsMobileMenuVisible(true);
+  };
+
+  const renderContent = () => {
+    switch (activeTab) {
+      case "profil":
+        return <UserInfo />;
+      case "adresses":
+        return <AddressBook />;
+      case "commandes":
+        return <OrdersList />;
+      default:
+        return <UserInfo />;
+    }
+  };
+
+  return (
+    <div className="profile-container">
+      {/* Navigation visible si desktop OU si menu mobile actif */}
+      {(isDesktop || isMobileMenuVisible) && (
+        <ProfileNavigation
+          activeTab={activeTab}
+          onTabChange={handleTabChange}
+        />
+      )}
+
+      {/* Contenu visible si desktop OU si un onglet a été cliqué en mobile */}
+      {(isDesktop || !isMobileMenuVisible) && (
+        <div className="profile-content-wrapper">
+          {!isDesktop && (
+            <button className="back-btn" onClick={handleBackToMenu}>
+              {t("account.previous")}
+            </button>
+          )}
+          {renderContent()}
+        </div>
+      )}
+    </div>
+  );
 }

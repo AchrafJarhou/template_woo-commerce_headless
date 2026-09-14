@@ -1,4 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import { apiError, apiErrorMessage } from "../i18n/apiError";
 
 export const fetchProductsThunk = createAsyncThunk(
   "products/fetchAll",
@@ -37,11 +38,12 @@ export const fetchProductsThunk = createAsyncThunk(
         headers: { "Content-Type": "application/json" },
       });
       if (!response.ok) {
-        throw new Error("Impossible de récupérer les produits.");
+        throw new Error(apiError("errors.products"));
       }
       const data = await response.json();
+      const total = parseInt(response.headers.get("X-WP-Total") || "0", 10);
 
-      return { data, page, perPage };
+      return { data, page, perPage, total };
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
     }
@@ -64,7 +66,7 @@ export const fetchSearchSuggestionsThunk = createAsyncThunk(
         headers: { "Content-Type": "application/json" },
       });
       if (!response.ok) {
-        throw new Error("Impossible de récupérer les suggestions.");
+        throw new Error(apiError("errors.suggestions"));
       }
       return await response.json();
     } catch (error) {
@@ -89,7 +91,7 @@ export const fetchProductByIdThunk = createAsyncThunk(
         // Capture du message d'erreur réel de WooCommerce s'il existe
         const errorData = await response.json().catch(() => ({}));
         const serverMessage =
-          errorData.message || "Impossible de récupérer le produit.";
+          apiErrorMessage(errorData.message, "errors.product");
         throw new Error(serverMessage);
       }
 

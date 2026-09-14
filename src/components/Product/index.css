@@ -75,7 +75,7 @@
   }
 }
 .product-details-page button {
-  border-radius: 50px;
+  border-radius: var(--radius-button);
   color: #2563eb;
   background-color: #ffffff;
   border: 1px solid #2563eb;

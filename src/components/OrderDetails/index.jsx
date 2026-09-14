@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import SucessMessage from "../SucessMessage";
+import { formatAmount } from "../../utils/formatPrice";
+import { useTranslation } from "react-i18next";
 
 const ordersCache = {};
 
 export default function OrderDetails({ order = null, orderId = null }) {
+  const { t } = useTranslation();
   const token = useSelector((state) => state.user.token);
 
   const [detail, setDetail] = useState(
@@ -38,7 +41,7 @@ export default function OrderDetails({ order = null, orderId = null }) {
 
         if (!response.ok)
           throw new Error(
-            data.message || "Impossible de récupérer la commande."
+            data.message || t("order.fetchError")
           );
 
         ordersCache[orderId] = data;
@@ -60,7 +63,7 @@ export default function OrderDetails({ order = null, orderId = null }) {
 
   const current = detail || order;
 
-  if (loading) return <p>Chargement...</p>;
+  if (loading) return <p>{t("common.loading")}</p>;
   if (error) return <p>{error}</p>;
   if (!current) return null;
 
@@ -80,7 +83,7 @@ export default function OrderDetails({ order = null, orderId = null }) {
 
       {detail && (
         <>
-          <h3>Produits</h3>
+          <h3>{t("order.products")}</h3>
 
           <div className="order-items">
             {detail.items?.map((item) => (
@@ -108,7 +111,7 @@ export default function OrderDetails({ order = null, orderId = null }) {
 
           {detail.shipping_address && (
             <>
-              <h3>Adresse de livraison</h3>
+              <h3>{t("address.shipping")}</h3>
 
               <p>
                 {detail.shipping_address.first_name}{" "}
@@ -132,8 +135,8 @@ export default function OrderDetails({ order = null, orderId = null }) {
               </p>
 
               <p>
-                Livraison :{" "}
-                {(Number(detail.totals.total_shipping) / 100).toFixed(2)} €
+                {t("cart.shipping")} :{" "}
+                {formatAmount(Number(detail.totals.total_shipping) / 100)}
               </p>
             </>
           )}

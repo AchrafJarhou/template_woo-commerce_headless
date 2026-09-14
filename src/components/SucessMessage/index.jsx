@@ -1,6 +1,10 @@
 import StatusBadge from "../StatusBadge";
+import { formatAmount } from "../../utils/formatPrice";
+import { useTranslation } from "react-i18next";
 
 export default function SuccessMessage({ order }) {
+  const { t } = useTranslation();
+
   if (!order) {
     return null;
   }
@@ -11,7 +15,7 @@ export default function SuccessMessage({ order }) {
 
       {order.status && (
         <p>
-          Statut : <StatusBadge status={order.status} />
+          {t("order.status")} : <StatusBadge status={order.status} />
         </p>
       )}
 
@@ -28,7 +32,7 @@ export default function SuccessMessage({ order }) {
       </ul>
 
       <p>
-        <strong>Total : {Number(order.total).toFixed(2)} €</strong>
+        <strong>{t("cart.total")} : {formatAmount(order.total)}</strong>
       </p>
     </div>
   );

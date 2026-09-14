@@ -3,6 +3,7 @@ import { loginThunk, registerThunk } from "../thunkActionsCreator/userThunks";
 import { initializeCartThunk } from "../thunkActionsCreator/cartThunks";
 import { mergeGuestWishlistThunk } from "../thunkActionsCreator/wishlistThunks";
 import { logout } from "../slices/userSlice";
+import { setCartToken } from "../slices/cartSlice";
 import { resetToGuestWishlist } from "../slices/wishlistSlice";
 
 // Le nonce Store API est lie a l'identite (invite vs client connecte via le
@@ -19,9 +20,19 @@ cartIdentityListener.startListening({
     registerThunk.fulfilled.match(action) ||
     logout.match(action),
   effect: async (action, listenerApi) => {
+    const isLogout = logout.match(action);
+
+    // A la deconnexion on abandonne la session panier : la conserver rendrait
+    // le panier du client precedent visible par le visiteur suivant. A la
+    // connexion on la garde au contraire, pour que WooCommerce rattache le
+    // panier d'invite au compte.
+    if (isLogout) {
+      listenerApi.dispatch(setCartToken(null));
+    }
+
     listenerApi.dispatch(initializeCartThunk());
 
-    if (logout.match(action)) {
+    if (isLogout) {
       listenerApi.dispatch(resetToGuestWishlist());
     } else {
       listenerApi.dispatch(mergeGuestWishlistThunk());

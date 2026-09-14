@@ -1,97 +1,258 @@
+/* Feuille de style des pages éditoriales : mentions légales, CGV, CGU,
+   cookies, confidentialité, FAQ, à propos, contact. Toutes passent par le
+   composant PageContent, donc tout se règle ici.
+
+   Parti pris : un document, pas une interface. La hiérarchie naît de la
+   taille, de l'interlettrage et de l'espace — pas de filets ni de couleurs
+   supplémentaires. Le fond bleu du site étant soutenu, il laisse peu de
+   marge de contraste : les valeurs ci-dessous sont mesurées, pas estimées. */
+
 .page-content {
-  max-width: 900px;
-  margin: 60px auto;
-  padding: 0 20px;
-  line-height: 1.8;
-  color: #333;
+  --ink: var(--dark-color);
+  /* Opacité mesurée, pas choisie à l'œil : sur ce fond bleu, une encre
+     atténuée descend sous le seuil de contraste AA dès 0.86. La hiérarchie
+     repose donc sur la taille et l'interlettrage, pas sur le ton. */
+  --ink-muted: rgb(15 23 42 / 0.9);
+  --hairline: rgb(15 23 42 / 0.16);
+  --wash: rgb(255 255 255 / 0.14);
+
+  /* Sur un écran étroit, chaque pixel de marge est pris à la ligne de texte :
+     les minima sont volontairement bas pour préserver la longueur de ligne. */
+  --pad-x: clamp(18px, 5vw, 56px);
+  --gutter: clamp(12px, 4vw, 40px);
+
+  /* La longueur de ligne est le premier facteur de confort de lecture :
+     au-delà de ~75 signes, l'œil peine à retrouver la ligne suivante.
+     La largeur du cadre suit donc la mesure du texte, pas l'inverse. */
+  max-width: min(calc(58ch + 2 * var(--pad-x)), calc(100% - 2 * var(--gutter)));
+  margin: clamp(32px, 5vw, 72px) auto clamp(56px, 8vw, 96px);
+  padding: clamp(32px, 5vw, 56px) var(--pad-x) clamp(48px, 7vw, 72px);
+
+  background-color: rgb(255 255 255 / 0.08);
+  border-radius: 12px;
+
+  color: var(--ink);
+  /* Taille de référence du texte courant : elle interpole linéairement de
+     15 px à 17 px entre 360 px et 1280 px de large. Les bornes sont en rem
+     et non en px pour suivre la taille de police choisie par le visiteur
+     dans son navigateur ; les titres, eux, ont leur propre échelle. */
+  font-size: clamp(
+    0.9375rem,
+    calc(0.9375rem + 2 * (100vw - 360px) / 920),
+    1.0625rem
+  );
+  line-height: 1.75;
+  /* Une URL ou un mot très long ne doit jamais élargir la page. */
+  overflow-wrap: break-word;
 }
+
+/* index.css impose une taille et un interligne à p, li et a par sélecteur
+   d'élément. Or un sélecteur d'élément l'emporte sur l'héritage : sans cette
+   remise à zéro, la taille définie ci-dessus ne descendait jamais jusqu'au
+   texte, qui atteignait 34 px sur tablette en portrait et 31 px sur un
+   écran de 24 pouces. */
+.page-content :is(p, li, a) {
+  font-size: inherit;
+  line-height: inherit;
+}
+
+/* ---------- Titre du document ---------- */
 
 .page-content h1 {
-  font-size: 32px;
-  font-weight: 800;
-  margin-bottom: 40px;
+  margin-bottom: clamp(28px, 4vw, 44px);
+  padding-bottom: clamp(18px, 2.5vw, 26px);
+  border-bottom: 1px solid var(--hairline);
+
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: clamp(26px, 4vw, 40px);
+  line-height: 1.15;
   text-transform: uppercase;
-  letter-spacing: -0.01em;
-  color: #182240;
+  /* Les capitales demandent un interlettrage positif : leurs formes fermées
+     se collent là où les bas-de-casse respirent. */
+  letter-spacing: 0.03em;
+  color: var(--ink);
 }
 
+/* ---------- Sections ---------- */
+
+/* Un titre appartient au texte qui le suit : beaucoup d'air au-dessus,
+   peu en dessous. C'est ce déséquilibre qui rend la structure lisible. */
 .page-content h2 {
-  font-size: 24px;
+  margin: clamp(44px, 6vw, 68px) 0 clamp(12px, 1.6vw, 18px);
+  font-family: var(--font-heading);
   font-weight: 700;
-  margin: 40px 0 20px;
-  color: #182240;
-  border-bottom: 2px solid #6784c8;
-  padding-bottom: 10px;
+  font-size: clamp(19px, 1.7vw, 25px);
+  line-height: 1.3;
+  color: var(--ink);
 }
 
 .page-content h3 {
-  font-size: 18px;
-  font-weight: 600;
-  margin: 30px 0 15px;
-  color: #4a5f9f;
+  margin: clamp(32px, 4vw, 44px) 0 clamp(8px, 1.2vw, 14px);
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: clamp(14px, 1.05vw, 16px);
+  line-height: 1.4;
+  letter-spacing: 0.09em;
+  color: var(--ink-muted);
 }
 
+/* Deux titres qui se suivent ne doivent pas creuser un trou. */
+.page-content h1 + h2,
+.page-content h2 + h3 {
+  margin-top: 0;
+}
+
+/* ---------- Texte courant ---------- */
+
 .page-content p {
-  margin-bottom: 15px;
-  font-size: 15px;
-  text-align: justify;
+  margin-bottom: 1.1em;
+}
+
+.page-content p:last-child {
+  margin-bottom: 0;
 }
 
 .page-content strong {
-  color: #182240;
-  font-weight: 600;
+  font-weight: 700;
+  color: var(--ink);
 }
 
-.page-content ul,
-.page-content ol {
-  margin: 20px 0 20px 30px;
-  font-size: 15px;
+.page-content em {
+  font-style: italic;
+  color: var(--ink-muted);
 }
 
-.page-content li {
-  margin-bottom: 10px;
-}
-
+/* Même encre que le texte : le soulignement suffit à signaler le lien, et
+   il reste perceptible sans distinguer les couleurs. Étant le seul indice
+   visuel du lien, il doit tenir 3:1 — d'où cette opacité et pas moins. */
 .page-content a {
-  color: #6784c8;
-  text-decoration: none;
-  transition: color 0.2s;
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-decoration-color: rgb(15 23 42 / 0.8);
+  text-underline-offset: 0.18em;
+  transition: text-decoration-color 0.2s ease;
 }
 
 .page-content a:hover {
-  color: #4a5f9f;
-  text-decoration: underline;
+  text-decoration-color: currentColor;
 }
+
+.page-content a:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* ---------- Listes ---------- */
+
+/* Le reset global supprime les retraits : sans padding, aucune puce ni
+   numéro ne s'affiche. Les numéros comptent dans un texte contractuel. */
+.page-content ul,
+.page-content ol {
+  margin: 0 0 1.1em;
+  padding-left: 1.5em;
+}
+
+.page-content ul {
+  list-style: disc;
+}
+
+.page-content ol {
+  list-style: decimal;
+}
+
+.page-content li {
+  margin-bottom: 0.45em;
+  /* Neutralise le « list-style: square » global : la puce doit venir du
+     ul ou du ol parent, seul à savoir s'il s'agit d'une liste numérotée. */
+  list-style: inherit;
+}
+
+.page-content li::marker {
+  color: var(--ink-muted);
+}
+
+.page-content li:last-child {
+  margin-bottom: 0;
+}
+
+/* ---------- Éléments ponctuels ---------- */
 
 .page-content blockquote {
-  border-left: 4px solid #6784c8;
-  padding-left: 20px;
-  margin: 20px 0;
+  margin: clamp(24px, 3vw, 32px) 0;
+  padding-left: clamp(16px, 2vw, 22px);
+  border-left: 2px solid var(--hairline);
   font-style: italic;
-  color: #666;
+  color: var(--ink-muted);
 }
 
-@media (max-width: 768px) {
-  .page-content {
-    margin: 40px auto;
-    padding: 0 15px;
-  }
+.page-content code {
+  padding: 0.15em 0.4em;
+  border-radius: 3px;
+  background-color: var(--wash);
+  font-family: ui-monospace, "SFMono-Regular", "Menlo", monospace;
+  font-size: 0.9em;
+}
 
-  .page-content h1 {
-    font-size: 24px;
-    margin-bottom: 30px;
-  }
+.page-content hr {
+  margin: clamp(40px, 5vw, 60px) 0;
+  border: none;
+  border-top: 1px solid var(--hairline);
+}
 
-  .page-content h2 {
-    font-size: 20px;
-    margin: 30px 0 15px;
-  }
+.page-content img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border-radius: 6px;
+}
 
-  .page-content h3 {
-    font-size: 16px;
-  }
+.page-content details {
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--hairline);
+}
 
-  .page-content p {
-    font-size: 14px;
-  }
+.page-content details summary {
+  cursor: pointer;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 1.05em;
+  list-style: none;
+  user-select: none;
+}
+
+.page-content details summary::-webkit-details-marker {
+  display: none;
+}
+
+.page-content details summary::after {
+  content: "+";
+  float: right;
+  color: var(--ink-muted);
+}
+
+.page-content details[open] summary::after {
+  content: "−";
+}
+
+.page-content details[open] summary {
+  margin-bottom: 10px;
+}
+
+.page-content details p:last-child {
+  margin-bottom: 0;
+}
+
+/* ---------- Bandeau de repli linguistique ---------- */
+
+.page-content__translation-notice {
+  margin-bottom: clamp(28px, 4vw, 40px);
+  padding-left: clamp(14px, 1.8vw, 18px);
+  border-left: 2px solid var(--hairline);
+  font-size: 0.9em;
+  line-height: 1.6;
+  color: var(--ink-muted);
 }

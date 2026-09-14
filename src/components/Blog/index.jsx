@@ -4,18 +4,15 @@ import { fetchBlogDataThunk } from "../../thunkActionsCreator/blogThunks";
 import Seo from "../../components/Seo";
 import { Link } from "react-router-dom";
 import Loader from "../Loader";
+import { formatLongDate } from "../../utils/formatDate";
+import { useTranslation } from "react-i18next";
 
-function formatDate(value) {
-  if (!value) return "";
-
-  return new Date(value).toLocaleDateString("fr-FR", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
-}
+// Le format long est défini une seule fois, dans utils/formatDate : la date
+// d'un article et celle d'un avis ne doivent pas s'écrire différemment.
+const formatDate = (value) => (value ? formatLongDate(value) : "");
 
 export default function Blog() {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const { posts, categories, loading, loadingMore, error, page, hasMore } =
     useSelector((state) => state.blog);
@@ -61,12 +58,12 @@ export default function Blog() {
   return (
     <div style={{ padding: 24, maxWidth: 1100, margin: "0 auto" }}>
       <Seo
-        title="Blog"
-        description="Découvrez nos derniers articles classés par catégorie."
+        title={t("blog.title")}
+        description={t("blog.intro")}
       />
-      <h1 style={{ marginBottom: 8 }}>Blog</h1>
+      <h1 style={{ marginBottom: 8 }}>{t("blog.title")}</h1>
       <p style={{ marginTop: 0, marginBottom: 24 }}>
-        Découvrez nos derniers articles classés par catégorie.
+        {t("blog.intro")}
       </p>
 
       <div
@@ -82,7 +79,7 @@ export default function Blog() {
           htmlFor="blog-category-select"
           style={{ fontWeight: 600, color: "#374151" }}
         >
-          Catégorie :
+          {t("blog.category")} :
         </label>
         <select
           id="blog-category-select"
@@ -95,7 +92,7 @@ export default function Blog() {
             minWidth: 220,
           }}
         >
-          <option value="all">Toutes les catégories</option>
+          <option value="all">{t("catalog.allCategories")}</option>
           {categories.map((category) => (
             <option key={category.id} value={String(category.id)}>
               {category.name}
@@ -105,7 +102,7 @@ export default function Blog() {
       </div>
 
       {filteredPosts.length === 0 ? (
-        <p>Aucun article disponible pour le moment.</p>
+        <p>{t("blog.empty")}</p>
       ) : (
         <div style={{ display: "grid", gap: 16 }}>
   {filteredPosts.map((post) => (
@@ -134,7 +131,7 @@ export default function Blog() {
         <Loader size="lg" />
       )}
       {!hasMore && !loading && (
-        <p style={{ marginTop: 20 }}>Tous les articles ont été chargés.</p>
+        <p style={{ marginTop: 20 }}>{t("blog.allLoaded")}</p>
       )}
     </div>
   );

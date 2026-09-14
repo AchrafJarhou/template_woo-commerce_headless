@@ -9,8 +9,10 @@ import {
 
 import { BillingUpdate, ShippingUpdate } from "../CustomerUpdate";
 import { UserUpdate } from "../UserUpdate";
+import { useTranslation } from "react-i18next";
 
 export function UserDisplay() {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const profile = useSelector((state) => state.user.profile);
   const loading = useSelector((state) => state.user.loading);
@@ -21,7 +23,7 @@ export function UserDisplay() {
   }, [dispatch]);
   if (loading) return <Loader size="lg" />;
   if (error) return <p>{error}</p>;
-  if (!profile) return <p>Aucun profil.</p>;
+  if (!profile) return <p>{t("auth.noProfile")}</p>;
 
   return (
     <div>
@@ -35,13 +37,14 @@ export function UserDisplay() {
 }
 
 export function CustomerDisplay() {
+  const { t } = useTranslation();
   const customer = useSelector((state) => state.user.customer);
   const billing = customer?.billing;
   const shipping = customer?.shipping;
   if (!customer) return <Loader size="lg"/>;
   return (
     <div>
-      <h2>Informations de facturation</h2>
+      <h2>{t("auth.billingInfo")}</h2>
       {customer &&
         Object.entries(billing).map(([key, value]) => (
           <p key={key}>
@@ -49,7 +52,7 @@ export function CustomerDisplay() {
           </p>
         ))}
       <BillingUpdate />
-      <h2>Informations de livraison</h2>
+      <h2>{t("auth.shippingInfo")}</h2>
       {customer &&
         Object.entries(shipping).map(([key, value]) => (
           <p key={key}>

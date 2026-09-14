@@ -1,0 +1,250 @@
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
+import {
+  fetchCurrentUserThunk,
+  updateCurrentUserThunk,
+  deleteCurrentUserThunk,
+} from "../../../thunkActionsCreator/userThunks"; // À ajuster selon ton arborescence
+import { showToast } from "../../../slices/toastSlice"; // À ajuster selon ton arborescence
+
+export default function UserInfo() {
+  const { t } = useTranslation();
+  const dispatch = useDispatch();
+
+  const user = useSelector((state) => state.user);
+  const profile = user?.profile;
+  const loading = useSelector((state) => state.user.loading);
+  const error = useSelector((state) => state.user.error);
+
+  const [isEditing, setIsEditing] = useState(false);
+
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "••••••••",
+  });
+  const [savedUser, setSavedUser] = useState(formData);
+
+  // Nouveaux états pour la suppression du compte
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [deletePassword, setDeletePassword] = useState("");
+
+  useEffect(() => {
+    dispatch(fetchCurrentUserThunk());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (profile) {
+      const loadedData = {
+        firstName: profile.firstName || "",
+        lastName: profile.lastName || "",
+        email: profile.email || "",
+        password: "••••••••",
+      };
+      setFormData(loadedData);
+      setSavedUser(loadedData);
+    }
+  }, [profile]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSave = () => {
+    const updatePayload = {
+      firstName: formData.firstName,
+      lastName: formData.lastName,
+      email: formData.email,
+    };
+
+    if (formData.password !== "••••••••") {
+      updatePayload.password = formData.password;
+    }
+
+    // Utilisation de unwrap() pour gérer le succès ou l'échec du Thunk
+    dispatch(updateCurrentUserThunk(updatePayload))
+      .unwrap()
+      .then(() => {
+        dispatch(showToast(t("account.updated")));
+        setSavedUser(formData);
+        setIsEditing(false);
+      })
+      .catch((err) => {
+        dispatch(showToast(err || t("account.updateError")));
+      });
+  };
+
+  const handleCancel = () => {
+    setFormData(savedUser);
+    setIsEditing(false);
+  };
+
+  // --- LOGIQUE DE SUPPRESSION ---
+  const handleConfirmDelete = () => {
+    if (!deletePassword) {
+      dispatch(showToast(t("account.passwordRequired")));
+      return;
+    }
+
+    dispatch(deleteCurrentUserThunk({ password: deletePassword }))
+      .unwrap()
+      .then(() => {
+        dispatch(showToast(t("account.deleted")));
+        // L'utilisateur est supprimé, il faudra le rediriger vers l'accueil
+        // ou vider le store via un window.location.href = "/"
+      })
+      .catch((err) => {
+        dispatch(
+          showToast(
+            err || t("account.deleteError"),
+          ),
+        );
+      });
+  };
+
+  const handleCancelDelete = () => {
+    setShowDeleteConfirm(false);
+    setDeletePassword(""); // On vide le champ par sécurité
+  };
+
+  if (loading && !profile)
+    return (
+      <p style={{ marginTop: "20px" }}>{t("account.loading")}</p>
+    );
+  if (error) return <p style={{ color: "red" }}>Erreur: {error}</p>;
+
+  return (
+    <div>
+      <h2 className="section-title">{t("account.personalInfo")}</h2>
+      <div className="data-grid">
+        <div className="data-item">
+          <span className="data-label">{t("common.firstName")}</span>
+          {isEditing ? (
+            <input
+              type="text"
+              name="firstName"
+              value={formData.firstName}
+              onChange={handleChange}
+              className="data-input"
+            />
+          ) : (
+            <span className="data-value">{formData.firstName}</span>
+          )}
+        </div>
+
+        <div className="data-item">
+          <span className="data-label">{t("common.lastName")}</span>
+          {isEditing ? (
+            <input
+              type="text"
+              name="lastName"
+              value={formData.lastName}
+              onChange={handleChange}
+              className="data-input"
+            />
+          ) : (
+            <span className="data-value">{formData.lastName}</span>
+          )}
+        </div>
+
+        <div className="data-item">
+          <span className="data-label">{t("common.email")}</span>
+          {isEditing ? (
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              className="data-input"
+            />
+          ) : (
+            <span className="data-value">{formData.email}</span>
+          )}
+        </div>
+
+        <div className="data-item">
+          <span className="data-label">{t("common.password")}</span>
+          {isEditing ? (
+            <input
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              className="data-input"
+            />
+          ) : (
+            <span className="data-value">{formData.password}</span>
+          )}
+        </div>
+      </div>
+
+      <div className="action-buttons">
+        {isEditing ? (
+          <>
+            <button
+              className="action-btn"
+              onClick={handleSave}
+              disabled={loading}
+            >
+              {loading ? t("common.saving") : t("common.save")}
+            </button>
+            <button className="action-btn outline" onClick={handleCancel}>
+              {t("common.cancel")}
+            </button>
+          </>
+        ) : (
+          <button className="action-btn" onClick={() => setIsEditing(true)}>
+            {t("account.editInfo")}
+          </button>
+        )}
+      </div>
+
+      {/* --- ZONE DE DANGER --- */}
+      <div className="danger-divider">
+        <h2 className="section-title">{t("account.deleteTitle")}</h2>
+
+        {/* Bascule conditionnelle entre le bouton initial et l'input de confirmation */}
+        {!showDeleteConfirm ? (
+          <>
+            <p className="text-delete-account">
+              {t("account.deleteIntro")}
+            </p>
+            <button
+              className="action-btn outline"
+              onClick={() => setShowDeleteConfirm(true)}
+            >
+              {t("account.deleteTitle")}
+            </button>
+          </>
+        ) : (
+          <div>
+            <p className="delete-confirmation-message">
+              {t("account.deleteConfirmIntro")}
+            </p>
+            <input
+              type="password"
+              value={deletePassword}
+              onChange={(e) => setDeletePassword(e.target.value)}
+              placeholder={t("account.passwordPlaceholder")}
+              className="data-input"
+            />
+            <div className="action-buttons">
+              <button className="action-btn" onClick={handleConfirmDelete}>
+                {t("account.deleteConfirm")}
+              </button>
+              <button
+                className="action-btn outline"
+                onClick={handleCancelDelete}
+              >
+                {t("common.cancel")}
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}

@@ -2,7 +2,7 @@
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   gap: $spacing-2xl $spacing-md;
   align-items: end;
 
@@ -42,4 +42,19 @@
   letter-spacing: $letter-spacing-sm;
   text-transform: uppercase;
   color: $text-primary;
+}
+
+.noProducts {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  text-align: center;
+  color: $text-secondary;
+  font-size: $font-size-lg;
+
+  p {
+    margin: 0;
+    font-weight: $font-weight-normal;
+  }
 }

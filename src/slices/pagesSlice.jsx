@@ -17,9 +17,11 @@ export const pagesSlice = createSlice({
       })
       .addCase(fetchPageThunk.fulfilled, (state, action) => {
         state.loading = false;
-        const page = action.payload;
-        if (page && page.slug) {
-          state.items[page.slug] = page;
+        // Indexé sur le slug demandé, pas sur celui renvoyé : en cas de repli
+        // linguistique les deux diffèrent, et le lecteur interroge le premier.
+        const { key, page, isFallback } = action.payload;
+        if (key && page) {
+          state.items[key] = { page, isFallback };
         }
       })
       .addCase(fetchPageThunk.rejected, (state, action) => {

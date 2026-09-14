@@ -8,8 +8,10 @@ import {
 } from "../../thunkActionsCreator/productsThunks";
 import "./index.css";
 import { decodeHtml } from "../../utils/decodeHtml";
+import { useTranslation } from "react-i18next";
 
 export default function Autocomplete() {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const search = useSelector((state) => state.filters.search);
@@ -41,13 +43,13 @@ export default function Autocomplete() {
       <input
         type="search"
         className="autocomplete-input"
-        placeholder="Rechercher..."
+        placeholder={t("search.placeholder")}
         value={search}
         onChange={handleChange}
         onKeyDown={handleKeyDown}
         onFocus={() => setFocused(true)}
         onBlur={() => setFocused(false)}
-        aria-label="Rechercher"
+        aria-label={t("search.label")}
       />
 
       {focused && list.data.length > 0 && (
@@ -63,7 +65,7 @@ export default function Autocomplete() {
                     product.images[0]?.src ||
                     "https://placeholder.pics/svg/300/DEDEDE/555555/Placeholder"
                   }
-                  alt={decodeHtml(product.name) || "la photo du produit"}
+                  alt={decodeHtml(product.name)}
                 />
                 <span>{decodeHtml(product.name)}</span>
               </Link>
