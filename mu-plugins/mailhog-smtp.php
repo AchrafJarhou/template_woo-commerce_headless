@@ -43,5 +43,5 @@ add_filter('wp_mail_from', function($from) {
 });
 
 add_filter('wp_mail_from_name', function($name) {
-    return get_option('blogname', 'Test Site');
+    return 'Ravi';
 });

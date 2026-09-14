@@ -41,10 +41,22 @@ function headless_get_current_user_orders($request)
             'total'    => $order->get_total(),
             'currency' => $order->get_currency(),
             'items'    => array_map(function ($item) {
+                $product = $item->get_product();
+                $image_url = '';
+
+                if ($product) {
+                    $image_id = $product->get_image_id();
+                    if ($image_id) {
+                        $image_url = wp_get_attachment_image_src($image_id, 'medium')[0];
+                    }
+                }
+
                 return [
+                    'id'       => $item->get_id(),
                     'name'     => $item->get_name(),
                     'quantity' => $item->get_quantity(),
                     'total'    => $item->get_total(),
+                    'image'    => ['src' => $image_url],
                 ];
             }, array_values($order->get_items())),
         ];
