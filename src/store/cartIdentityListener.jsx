@@ -1,5 +1,9 @@
 import { createListenerMiddleware } from "@reduxjs/toolkit";
-import { loginThunk, registerThunk } from "../thunkActionsCreator/userThunks";
+import {
+  loginThunk,
+  registerThunk,
+  deleteCurrentUserThunk,
+} from "../thunkActionsCreator/userThunks";
 import { initializeCartThunk } from "../thunkActionsCreator/cartThunks";
 import { mergeGuestWishlistThunk } from "../thunkActionsCreator/wishlistThunks";
 import { logout } from "../slices/userSlice";
@@ -12,15 +16,21 @@ import { resetToGuestWishlist } from "../slices/wishlistSlice";
 // La wishlist invite vit en localStorage (pas de session cote WooCommerce
 // comme pour le panier) : a la connexion on la fusionne dans le compte, a la
 // deconnexion on retombe sur la wishlist locale de l'invite.
+// La suppression du compte ferme la session au meme titre qu'une deconnexion :
+// sans ce nettoyage, le panier et les favoris du compte supprime resteraient
+// affiches, et la requete panier suivante rejouerait son Cart-Token.
 export const cartIdentityListener = createListenerMiddleware();
+
+const endsSession = (action) =>
+  logout.match(action) || deleteCurrentUserThunk.fulfilled.match(action);
 
 cartIdentityListener.startListening({
   matcher: (action) =>
     loginThunk.fulfilled.match(action) ||
     registerThunk.fulfilled.match(action) ||
-    logout.match(action),
+    endsSession(action),
   effect: async (action, listenerApi) => {
-    const isLogout = logout.match(action);
+    const isLogout = endsSession(action);
 
     // A la deconnexion on abandonne la session panier : la conserver rendrait
     // le panier du client precedent visible par le visiteur suivant. A la
