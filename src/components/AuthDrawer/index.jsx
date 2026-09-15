@@ -35,6 +35,31 @@ export default function AuthDrawer() {
     lastName: "",
   });
 
+  const parseBackendError = (errorMsg) => {
+    const fieldErrors = {};
+    const errorLower = errorMsg.toLowerCase();
+
+    if (errorLower.includes("email")) {
+      fieldErrors.email = errorMsg;
+    }
+    if (errorLower.includes("mot de passe") || errorLower.includes("password")) {
+      fieldErrors.password = errorMsg;
+    }
+    if (errorLower.includes("prenom") || errorLower.includes("prénom")) {
+      fieldErrors.firstName = errorMsg;
+    }
+    if (errorLower.includes("nom")) {
+      fieldErrors.lastName = errorMsg;
+    }
+    if (errorLower.includes("identifiant") || errorLower.includes("username")) {
+      fieldErrors.username = errorMsg;
+    }
+
+    return Object.keys(fieldErrors).length > 0
+      ? fieldErrors
+      : { general: errorMsg };
+  };
+
   useEffect(() => {
     if (token && justAuthenticated && isOpen) {
       // Relevée avant la fermeture, qui efface la destination du store.
@@ -77,31 +102,6 @@ export default function AuthDrawer() {
   const toggleMode = () => {
     setMode(mode === "login" ? "register" : "login");
     setErrors({});
-  };
-
-  const parseBackendError = (errorMsg) => {
-    const fieldErrors = {};
-    const errorLower = errorMsg.toLowerCase();
-
-    if (errorLower.includes("email")) {
-      fieldErrors.email = errorMsg;
-    }
-    if (errorLower.includes("mot de passe") || errorLower.includes("password")) {
-      fieldErrors.password = errorMsg;
-    }
-    if (errorLower.includes("prenom") || errorLower.includes("prénom")) {
-      fieldErrors.firstName = errorMsg;
-    }
-    if (errorLower.includes("nom")) {
-      fieldErrors.lastName = errorMsg;
-    }
-    if (errorLower.includes("identifiant") || errorLower.includes("username")) {
-      fieldErrors.username = errorMsg;
-    }
-
-    return Object.keys(fieldErrors).length > 0
-      ? fieldErrors
-      : { general: errorMsg };
   };
 
   const validateLogin = (e, updatedForm = form) => {

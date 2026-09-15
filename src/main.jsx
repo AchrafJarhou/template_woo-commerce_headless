@@ -16,6 +16,7 @@ import {
   fetchSiteThunk,
   fetchSiteSettingsThunk,
 } from "./thunkActionsCreator/siteThunk";
+import { setSiteSettings } from "./slices/siteSlice";
 
 import Home from "./pages/Home";
 import Store from "./pages/Store";
@@ -54,7 +55,9 @@ async function initializeApp() {
   store.dispatch(initializeCartThunk());
   store.dispatch(fetchSiteThunk());
 
-  await store.dispatch(fetchSiteSettingsThunk());
+  await store.dispatch(fetchSiteSettingsThunk()).catch(() => {
+    store.dispatch(setSiteSettings({}));
+  });
 
   if (store.getState().user.token) {
     store.dispatch(fetchCurrentUserThunk());
