@@ -14,7 +14,9 @@ $allowed_origins = array(
     'http://127.0.0.1:5173',
     'http://10.60.4.51:5173',
     'https://template-woo-commerce-headless.vercel.app',
+    'https://template-woo-commerce-headless.vercel.app/',
     'https://template-woo-commerce-headless-3jh7wv8rz.vercel.app',
+    'https://template-woo-commerce-headless-3jh7wv8rz.vercel.app/',
 );
 
 // Hook VERY early - at plugins_loaded priority 0 which runs AFTER mu-plugins are loaded
