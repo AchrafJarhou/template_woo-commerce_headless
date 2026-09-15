@@ -10,6 +10,7 @@ import { emptyCartThunk } from "../../thunkActionsCreator/cartThunks";
 import { fetchCurrentCustomerThunk } from "../../thunkActionsCreator/userThunks";
 import { useTranslation } from "react-i18next";
 import { HOME_CATALOG_PATH } from "../../constants/navigation";
+import { buildCheckoutPrefill } from "./checkoutPrefill";
 
 export default function CheckoutForm({ shippingMethod, setShippingMethod }) {
   const { t } = useTranslation();
@@ -22,31 +23,21 @@ export default function CheckoutForm({ shippingMethod, setShippingMethod }) {
   const user = useSelector((state) => state.user);
 
   const [paymentType, setPaymentType] = useState("card");
-  const [sameAsBilling, setSameAsBilling] = useState(true);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // États locaux pour gérer les champs des sous-composants
-  const [shippingAddress, setShippingAddress] = useState({
-    first_name: "",
-    last_name: "",
-    address_1: "",
-    city: "",
-    postcode: "",
-    country: "FR",
-    email: "",
-    phone: "",
-  });
-  const [billingAddress, setBillingAddress] = useState({
-    first_name: "",
-    last_name: "",
-    address_1: "",
-    city: "",
-    postcode: "",
-    country: "FR",
-    email: "",
-    phone: "",
-  });
+  // Chaque champ affiche la saisie du client s'il en a fait une, sinon la
+  // valeur connue du compte. Rien n'est recopié dans un état : des données
+  // arrivées après l'affichage complètent les champs encore intacts sans
+  // jamais écraser ce qui a été tapé, et une déconnexion les retire.
+  const prefill = buildCheckoutPrefill(user.customer, user.profile);
+  const [shippingEdits, setShippingEdits] = useState({});
+  const [billingEdits, setBillingEdits] = useState({});
+  const [sameAsBillingChoice, setSameAsBillingChoice] = useState(null);
+
+  const shippingAddress = { ...prefill.shipping, ...shippingEdits };
+  const billingAddress = { ...prefill.billing, ...billingEdits };
+  const sameAsBilling = sameAsBillingChoice ?? prefill.sameAddress;
 
   const shippingOptions = [
     { id: "mondial_relay", name: t("checkout.shippingRelay"), price: 4.5 },
@@ -54,64 +45,22 @@ export default function CheckoutForm({ shippingMethod, setShippingMethod }) {
     { id: "express", name: t("checkout.shippingExpress"), price: 12.9 },
   ];
 
-  // Charger les données du client si connecté
+  // Rechargé à chaque arrivée sur la page, et non seulement s'il manque : la
+  // commande précédente a pu enregistrer une nouvelle adresse sur le compte.
   useEffect(() => {
-    if (user?.token && !user?.customer) {
+    if (user.token) {
       dispatch(fetchCurrentCustomerThunk());
     }
-  }, [user?.token, user?.customer, dispatch]);
-
-  // Pré-remplir les champs avec les données du profil
-  useEffect(() => {
-    if (user?.customer) {
-      const { shipping, billing } = user.customer;
-
-      if (shipping) {
-        setShippingAddress((prev) => ({
-          ...prev,
-          first_name: shipping.firstName || prev.first_name,
-          last_name: shipping.lastName || prev.last_name,
-          address_1: shipping.address1 || prev.address_1,
-          city: shipping.city || prev.city,
-          postcode: shipping.postcode || prev.postcode,
-          country: shipping.country || prev.country,
-          phone: shipping.phone || prev.phone,
-        }));
-      }
-
-      if (billing) {
-        setBillingAddress((prev) => ({
-          ...prev,
-          first_name: billing.firstName || prev.first_name,
-          last_name: billing.lastName || prev.last_name,
-          address_1: billing.address1 || prev.address_1,
-          city: billing.city || prev.city,
-          postcode: billing.postcode || prev.postcode,
-          country: billing.country || prev.country,
-          phone: billing.phone || prev.phone,
-        }));
-      }
-
-      if (shipping?.email) {
-        setShippingAddress((prev) => ({ ...prev, email: shipping.email }));
-      } else if (user?.profile?.email) {
-        setShippingAddress((prev) => ({ ...prev, email: user.profile.email }));
-      }
-
-      if (billing?.email) {
-        setBillingAddress((prev) => ({ ...prev, email: billing.email }));
-      } else if (user?.profile?.email) {
-        setBillingAddress((prev) => ({ ...prev, email: user.profile.email }));
-      }
-    }
-  }, [user?.customer, user?.profile?.email]);
+  }, [user.token, dispatch]);
 
   const handleShippingChange = (e) => {
-    setShippingAddress({ ...shippingAddress, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setShippingEdits((edits) => ({ ...edits, [name]: value }));
   };
 
   const handleBillingChange = (e) => {
-    setBillingAddress({ ...billingAddress, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setBillingEdits((edits) => ({ ...edits, [name]: value }));
   };
 
   const processCheckout = async (e) => {
@@ -158,6 +107,10 @@ export default function CheckoutForm({ shippingMethod, setShippingMethod }) {
           credentials: "include",
           headers: {
             "Content-Type": "application/json",
+            // Seul le jeton identifie le client côté WordPress : la commande
+            // rejoint son historique et ses adresses sont enregistrées pour
+            // pré-remplir la suivante. Sans lui, elle est passée en invité.
+            ...(user.token && { Authorization: `Bearer ${user.token}` }),
           },
           body: JSON.stringify({
             shippingAddress: shippingAddress,
@@ -165,7 +118,6 @@ export default function CheckoutForm({ shippingMethod, setShippingMethod }) {
             cartItems: cart.items || [],
             paymentMethodId: paymentMethod.id,
             shippingMethod: shippingMethod,
-            userId: user?.profile?.id || 0,
           }),
         },
       );
@@ -190,8 +142,6 @@ export default function CheckoutForm({ shippingMethod, setShippingMethod }) {
     }
   };
 
-  console.log("Shippingadress : ", shippingAddress);
-
   return (
     <div className="checkout-left">
       <Link to={HOME_CATALOG_PATH} className="back-link">
@@ -209,7 +159,7 @@ export default function CheckoutForm({ shippingMethod, setShippingMethod }) {
             <input
               type="checkbox"
               checked={sameAsBilling}
-              onChange={(e) => setSameAsBilling(e.target.checked)}
+              onChange={(e) => setSameAsBillingChoice(e.target.checked)}
             />
             {t("address.sameAsShipping")}
           </label>

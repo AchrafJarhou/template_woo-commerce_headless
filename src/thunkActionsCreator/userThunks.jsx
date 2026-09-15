@@ -25,6 +25,11 @@ export const loginThunk = createAsyncThunk(
           email: data.user_email,
           displayName: data.user_display_name,
           nicename: data.user_nicename,
+          // Ajoutés à la réponse du jeton par le mu-plugin
+          // jwt-auth-enrichment.php, comme pour l'inscription : le formulaire
+          // de commande s'en sert tant qu'aucune adresse n'est enregistrée.
+          firstName: data.first_name,
+          lastName: data.last_name,
         },
       };
     } catch (error) {
