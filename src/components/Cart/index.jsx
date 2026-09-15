@@ -1,9 +1,11 @@
+import { useCallback, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { CartProduct } from "../CartProduct";
 import { formatPrice } from "../../utils/formatPrice";
 import { HOME_CATALOG_PATH } from "../../constants/navigation";
 import Loader from "../Loader";
+import CheckoutAuthPromptModal from "../CheckoutAuthPromptModal";
 import cartIcon from "../../assets/icons/logo-panier.png";
 import "./index.scss";
 import { useTranslation } from "react-i18next";
@@ -12,6 +14,21 @@ export default function Cart() {
   const { t } = useTranslation();
   const items = useSelector((state) => state.cart.items);
   const totals = useSelector((state) => state.cart.totals);
+  const token = useSelector((state) => state.user.token);
+  const [isCheckoutPromptOpen, setCheckoutPromptOpen] = useState(false);
+  const closeCheckoutPrompt = useCallback(() => setCheckoutPromptOpen(false), []);
+
+  // La modale ne s'adresse qu'aux invités : un client connecté passe
+  // directement. Un clic avec modificateur (nouvel onglet, Ctrl, clic milieu)
+  // garde le comportement natif du lien.
+  const handleCheckoutClick = (event) => {
+    const isModifiedClick =
+      event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey;
+    if (token || isModifiedClick) return;
+
+    event.preventDefault();
+    setCheckoutPromptOpen(true);
+  };
 
   // Tant que le premier chargement n'a pas répondu, un panier vide et un
   // panier inconnu sont indiscernables : afficher « vide » serait un mensonge.
@@ -49,53 +66,63 @@ export default function Cart() {
   }
 
   return (
-    <section className="cart">
-      <h1 className="cart__title">{t("cart.title")}</h1>
+    <>
+      <section className="cart">
+        <h1 className="cart__title">{t("cart.title")}</h1>
 
-      <div className="cart__main">
-        <ul className="cart__list">
-          {items.map((item) => (
-            <CartProduct key={item.key} item={item} />
-          ))}
-        </ul>
+        <div className="cart__main">
+          <ul className="cart__list">
+            {items.map((item) => (
+              <CartProduct key={item.key} item={item} />
+            ))}
+          </ul>
 
-        <p className="cart__subtotal">
-          {t("cart.subtotal", { count: itemCount })} :{" "}
-          <strong>{formatPrice(totals.total_items, totals)}</strong>
-        </p>
-      </div>
+          <p className="cart__subtotal">
+            {t("cart.subtotal", { count: itemCount })} :{" "}
+            <strong>{formatPrice(totals.total_items, totals)}</strong>
+          </p>
+        </div>
 
-      <aside className="cart__aside">
-        <dl className="cart__summary">
-          <div className="cart__summary-row">
-            <dt>{t("cart.subtotal", { count: itemCount })}</dt>
-            <dd>{formatPrice(totals.total_items, totals)}</dd>
-          </div>
+        <aside className="cart__aside">
+          <dl className="cart__summary">
+            <div className="cart__summary-row">
+              <dt>{t("cart.subtotal", { count: itemCount })}</dt>
+              <dd>{formatPrice(totals.total_items, totals)}</dd>
+            </div>
 
-          <div className="cart__summary-row">
-            <dt>{t("cart.shipping")}</dt>
-            <dd>{t("cart.shippingLater")}</dd>
-          </div>
+            <div className="cart__summary-row">
+              <dt>{t("cart.shipping")}</dt>
+              <dd>{t("cart.shippingLater")}</dd>
+            </div>
 
-          <div className="cart__summary-row">
-            <dt>{t("cart.taxes")}</dt>
-            <dd>{formatPrice(totals.total_tax, totals)}</dd>
-          </div>
+            <div className="cart__summary-row">
+              <dt>{t("cart.taxes")}</dt>
+              <dd>{formatPrice(totals.total_tax, totals)}</dd>
+            </div>
 
-          <div className="cart__summary-row cart__summary-row--total">
-            <dt>{t("cart.total")}</dt>
-            <dd>{formatPrice(totals.total_price, totals)}</dd>
-          </div>
-        </dl>
+            <div className="cart__summary-row cart__summary-row--total">
+              <dt>{t("cart.total")}</dt>
+              <dd>{formatPrice(totals.total_price, totals)}</dd>
+            </div>
+          </dl>
 
-        <Link to="/checkout" className="cart__checkout">
-          {t("cart.checkout")}
-        </Link>
+          <Link
+            to="/checkout"
+            className="cart__checkout"
+            onClick={handleCheckoutClick}
+          >
+            {t("cart.checkout")}
+          </Link>
 
-        <Link to={HOME_CATALOG_PATH} className="cart__continue">
-          {t("cart.continueShopping")}
-        </Link>
-      </aside>
-    </section>
+          <Link to={HOME_CATALOG_PATH} className="cart__continue">
+            {t("cart.continueShopping")}
+          </Link>
+        </aside>
+      </section>
+
+      {isCheckoutPromptOpen && (
+        <CheckoutAuthPromptModal onClose={closeCheckoutPrompt} />
+      )}
+    </>
   );
 }

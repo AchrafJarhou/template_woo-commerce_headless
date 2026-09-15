@@ -19,7 +19,7 @@ export default function AuthDrawer() {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { isOpen, view } = useSelector((state) => state.authModal);
+  const { isOpen, view, redirectTo } = useSelector((state) => state.authModal);
   const { loading, error, token } = useSelector((state) => state.user);
 
   const [mode, setMode] = useState("login");
@@ -37,6 +37,8 @@ export default function AuthDrawer() {
 
   useEffect(() => {
     if (token && justAuthenticated && isOpen) {
+      // Relevée avant la fermeture, qui efface la destination du store.
+      const destination = redirectTo || "/profile";
       dispatch(closeAuthModal());
       setForm({
         username: "",
@@ -47,10 +49,10 @@ export default function AuthDrawer() {
         lastName: "",
       });
       setErrors({});
-      navigate("/profile");
+      navigate(destination);
       setJustAuthenticated(false);
     }
-  }, [token, justAuthenticated, isOpen, dispatch, navigate]);
+  }, [token, justAuthenticated, isOpen, redirectTo, dispatch, navigate]);
 
   useEffect(() => {
     if (isOpen && view !== "reset-password") {
