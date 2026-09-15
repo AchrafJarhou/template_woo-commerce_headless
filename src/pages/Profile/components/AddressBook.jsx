@@ -29,10 +29,12 @@ export default function AddressBook() {
 
   // --- ÉTATS POUR L'ADRESSE DE LIVRAISON PAR DÉFAUT ---
   const [isEditingShipping, setIsEditingShipping] = useState(false);
+  // Clés identiques à celles de /custom/v1/customer : l'objet est envoyé tel
+  // quel, et le serveur ignore silencieusement toute clé qu'il ne connaît pas.
   const [shippingData, setShippingData] = useState({
     firstName: "",
     lastName: "",
-    address_1: "",
+    address1: "",
     city: "",
     postcode: "",
     phone: "",
@@ -46,7 +48,7 @@ export default function AddressBook() {
         const ship = {
           firstName: customer.shipping.firstName || "",
           lastName: customer.shipping.lastName || "",
-          address_1: customer.shipping.address1 || "",
+          address1: customer.shipping.address1 || "",
           city: customer.shipping.city || "",
           postcode: customer.shipping.postcode || "",
           phone: customer.shipping.phone || "",
@@ -81,7 +83,7 @@ export default function AddressBook() {
   };
 
   // L'adresse de livraison est considérée comme vide s'il n'y a pas d'adresse enregistrée
-  const isShippingEmpty = !shippingData.address_1 && !hasOrders;
+  const isShippingEmpty = !shippingData.address1 && !hasOrders;
 
   return (
     <div>
@@ -90,7 +92,9 @@ export default function AddressBook() {
       ========================================= */}
       <h2 className="section-title">Adresse de Livraison (Par défaut)</h2>
 
-      {isShippingEmpty ? (
+      {/* Le message d'absence cède la place aux champs dès que l'ajout
+          commence : sans cela, « Ajouter une adresse » n'ouvrait aucun champ. */}
+      {isShippingEmpty && !isEditingShipping ? (
         <p
           className="facturation-text"
           style={{ marginBottom: "20px", opacity: 0.8 }}
@@ -133,13 +137,13 @@ export default function AddressBook() {
             {isEditingShipping ? (
               <input
                 type="text"
-                name="address_1"
-                value={shippingData.address_1}
+                name="address1"
+                value={shippingData.address1}
                 onChange={handleShippingChange}
                 className="data-input"
               />
             ) : (
-              <span className="data-value">{shippingData.address_1}</span>
+              <span className="data-value">{shippingData.address1}</span>
             )}
           </div>
 

@@ -40,11 +40,11 @@ function headless_create_order_from_checkout($request)
         return new WP_Error('invalid_email', 'Email invalide.', ['status' => 400]);
     }
 
+    // Seule l'identité authentifiée par le jeton JWT compte. Un identifiant lu
+    // dans le corps de la requête laisserait n'importe qui rattacher une
+    // commande au compte de son choix, et en remplacer les adresses
+    // enregistrées — celles que le formulaire de commande pré-remplit.
     $user_id = get_current_user_id();
-    // Fallback : utiliser l'user_id envoyé dans les params si get_current_user_id() retourne 0
-    if ($user_id === 0 && isset($params['userId']) && is_numeric($params['userId'])) {
-        $user_id = intval($params['userId']);
-    }
 
     $order = wc_create_order();
 
