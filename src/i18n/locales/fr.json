@@ -7,7 +7,7 @@
     "deleteIntro": "La suppression de votre compte est irréversible. Toutes vos données seront effacées.",
     "deleteTitle": "Supprimer mon compte",
     "deleteWarning": "Une fois votre compte supprimé, il ne pourra pas être récupéré. Assurez-vous d'en être certain.",
-    "deleted": "Votre compte a été supprimé.",
+    "deleted": "Votre compte a été supprimé. Vous êtes déconnecté.",
     "deleting": "Suppression en cours…",
     "editBilling": "Modifier vos informations de facturation",
     "editInfo": "Modifier mes informations",

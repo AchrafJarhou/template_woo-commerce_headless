@@ -7,7 +7,7 @@
     "deleteIntro": "Deleting your account is irreversible. All your data will be erased.",
     "deleteTitle": "Delete my account",
     "deleteWarning": "Once your account is deleted it cannot be recovered. Please be certain.",
-    "deleted": "Your account has been deleted.",
+    "deleted": "Your account has been deleted. You are signed out.",
     "deleting": "Deleting…",
     "editBilling": "Edit your billing details",
     "editInfo": "Edit my details",

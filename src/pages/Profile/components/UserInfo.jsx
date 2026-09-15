@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 import {
   fetchCurrentUserThunk,
   updateCurrentUserThunk,
@@ -11,6 +12,7 @@ import { showToast } from "../../../slices/toastSlice"; // À ajuster selon ton 
 export default function UserInfo() {
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const user = useSelector((state) => state.user);
   const profile = user?.profile;
@@ -30,6 +32,10 @@ export default function UserInfo() {
   // Nouveaux états pour la suppression du compte
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [deletePassword, setDeletePassword] = useState("");
+  // Propre à la suppression : `user.loading` est partagé par toutes les
+  // requêtes du compte et annoncerait une suppression pendant un simple
+  // rechargement du profil.
+  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     dispatch(fetchCurrentUserThunk());
@@ -89,14 +95,22 @@ export default function UserInfo() {
       return;
     }
 
+    // Un second envoi partirait avant la fin du premier : le compte déjà
+    // supprimé, il échouerait et afficherait une erreur juste après le succès.
+    setIsDeleting(true);
+
     dispatch(deleteCurrentUserThunk({ password: deletePassword }))
       .unwrap()
       .then(() => {
+        // La session est déjà fermée : userSlice vide le jeton, l'écouteur du
+        // store remet panier et favoris à l'état invité. On remplace l'entrée
+        // d'historique pour que « Précédent » ne ramène pas sur le profil d'un
+        // compte qui n'existe plus.
         dispatch(showToast(t("account.deleted")));
-        // L'utilisateur est supprimé, il faudra le rediriger vers l'accueil
-        // ou vider le store via un window.location.href = "/"
+        navigate("/", { replace: true });
       })
       .catch((err) => {
+        setIsDeleting(false);
         dispatch(
           showToast(
             err || t("account.deleteError"),
@@ -232,12 +246,21 @@ export default function UserInfo() {
               className="data-input"
             />
             <div className="action-buttons">
-              <button className="action-btn" onClick={handleConfirmDelete}>
-                {t("account.deleteConfirm")}
+              <button
+                className="action-btn"
+                onClick={handleConfirmDelete}
+                disabled={isDeleting}
+              >
+                {isDeleting
+                  ? t("account.deleting")
+                  : t("account.deleteConfirm")}
               </button>
+              {/* Une requête partie ne s'annule pas : laisser ce bouton actif
+                  ferait croire que la suppression peut encore être arrêtée. */}
               <button
                 className="action-btn outline"
                 onClick={handleCancelDelete}
+                disabled={isDeleting}
               >
                 {t("common.cancel")}
               </button>
