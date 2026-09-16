@@ -8,7 +8,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "i18n": "node scripts/i18n-audit.mjs",
-    "i18n:strict": "node scripts/i18n-audit.mjs --strict"
+    "i18n:strict": "node scripts/i18n-audit.mjs --strict",
+    "pages:parity": "node scripts/pages-parity.mjs"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.12.0",
