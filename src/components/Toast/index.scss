@@ -3,6 +3,12 @@
   bottom: 1.5rem;
   left: 50%;
   transform: translateX(-50%);
+  // Avec `left: 50%` et une largeur automatique, le navigateur ne laisse au
+  // toast que la moitié droite de l'écran : un message de deux phrases passait
+  // sur quatre lignes à 360px. La largeur suit donc le texte, bornée par
+  // l'écran moins une marge ; le translate recentre la boîte obtenue.
+  width: max-content;
+  max-width: calc(100% - 2rem);
   background: var(--dark-color);
   padding: 0.75rem 1.5rem;
   border-radius: 4px;

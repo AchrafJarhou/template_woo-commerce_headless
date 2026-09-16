@@ -7,7 +7,7 @@
     "deleteIntro": "La suppression de votre compte est irréversible. Toutes vos données seront effacées.",
     "deleteTitle": "Supprimer mon compte",
     "deleteWarning": "Une fois votre compte supprimé, il ne pourra pas être récupéré. Assurez-vous d'en être certain.",
-    "deleted": "Votre compte a été supprimé.",
+    "deleted": "Votre compte a été supprimé. Vous êtes déconnecté.",
     "deleting": "Suppression en cours…",
     "editBilling": "Modifier vos informations de facturation",
     "editInfo": "Modifier mes informations",
@@ -82,10 +82,17 @@
     "username": "Nom d'utilisateur"
   },
   "authPrompt": {
-    "guest": "Continuer sans compte",
+    "benefits": {
+      "addresses": "Retrouver vos adresses pré-remplies à chaque commande",
+      "orders": "Suivre vos commandes depuis votre espace client",
+      "wishlist": "Conserver vos favoris sur tous vos appareils"
+    },
+    "guest": "Payer en tant qu'invité",
     "guestWarning": "Vous êtes actuellement en train de commander en tant qu'invité. Sans compte, vous ne pourrez pas suivre votre commande.",
-    "signIn": "Se connecter / S'inscrire",
-    "title": "Créer un compte ou se connecter ?"
+    "intro": "Un compte RAVI vous permet de :",
+    "register": "Créer un compte et commander",
+    "signIn": "Se connecter et commander",
+    "title": "Passer au paiement"
   },
   "blog": {
     "allLoaded": "Tous les articles ont été chargés.",

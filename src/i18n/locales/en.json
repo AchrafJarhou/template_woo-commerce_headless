@@ -7,7 +7,7 @@
     "deleteIntro": "Deleting your account is irreversible. All your data will be erased.",
     "deleteTitle": "Delete my account",
     "deleteWarning": "Once your account is deleted it cannot be recovered. Please be certain.",
-    "deleted": "Your account has been deleted.",
+    "deleted": "Your account has been deleted. You are signed out.",
     "deleting": "Deleting…",
     "editBilling": "Edit your billing details",
     "editInfo": "Edit my details",
@@ -82,10 +82,17 @@
     "username": "Username"
   },
   "authPrompt": {
-    "guest": "Continue as a guest",
+    "benefits": {
+      "addresses": "Have your addresses pre-filled on every order",
+      "orders": "Track your orders from your account",
+      "wishlist": "Keep your wishlist on all your devices"
+    },
+    "guest": "Check out as a guest",
     "guestWarning": "You are checking out as a guest. Without an account you will not be able to track your order.",
-    "signIn": "Sign in / Register",
-    "title": "Create an account or sign in?"
+    "intro": "A RAVI account lets you:",
+    "register": "Create an account and check out",
+    "signIn": "Sign in and check out",
+    "title": "Proceed to checkout"
   },
   "blog": {
     "allLoaded": "All articles have been loaded.",

@@ -15,12 +15,40 @@ import ResetPasswordForm from "../ResetPasswordForm/ResetPasswordForm";
 import "./index.css";
 import { useTranslation } from "react-i18next";
 
+// Rattache le message du serveur au champ qu'il concerne. Fonction pure, donc
+// hors du composant : déclarée dans son corps après `if (!isOpen) return null`,
+// elle n'existait pas pour les rendus où le tiroir était fermé.
+const parseBackendError = (errorMsg) => {
+  const fieldErrors = {};
+  const errorLower = errorMsg.toLowerCase();
+
+  if (errorLower.includes("email")) {
+    fieldErrors.email = errorMsg;
+  }
+  if (errorLower.includes("mot de passe") || errorLower.includes("password")) {
+    fieldErrors.password = errorMsg;
+  }
+  if (errorLower.includes("prenom") || errorLower.includes("prénom")) {
+    fieldErrors.firstName = errorMsg;
+  }
+  if (errorLower.includes("nom")) {
+    fieldErrors.lastName = errorMsg;
+  }
+  if (errorLower.includes("identifiant") || errorLower.includes("username")) {
+    fieldErrors.username = errorMsg;
+  }
+
+  return Object.keys(fieldErrors).length > 0
+    ? fieldErrors
+    : { general: errorMsg };
+};
+
 export default function AuthDrawer() {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { isOpen, view } = useSelector((state) => state.authModal);
-  const { loading, error, token } = useSelector((state) => state.user);
+  const { isOpen, view, redirectTo } = useSelector((state) => state.authModal);
+  const { loading, token } = useSelector((state) => state.user);
 
   const [mode, setMode] = useState("login");
   const [showPassword, setShowPassword] = useState(false);
@@ -34,48 +62,6 @@ export default function AuthDrawer() {
     firstName: "",
     lastName: "",
   });
-
-  useEffect(() => {
-    if (token && justAuthenticated && isOpen) {
-      dispatch(closeAuthModal());
-      setForm({
-        username: "",
-        email: "",
-        password: "",
-        confirmPassword: "",
-        firstName: "",
-        lastName: "",
-      });
-      setErrors({});
-      navigate("/profile");
-      setJustAuthenticated(false);
-    }
-  }, [token, justAuthenticated, isOpen, dispatch, navigate]);
-
-  useEffect(() => {
-    if (isOpen && view !== "reset-password") {
-      setMode(view === "login" ? "login" : "register");
-      setErrors({});
-    }
-  }, [isOpen, view]);
-
-  useEffect(() => {
-    if (error) {
-      dispatch(showToast(error));
-      const parsedErrors = parseBackendError(error);
-      setErrors(parsedErrors);
-      setJustAuthenticated(false);
-    }
-  }, [error, dispatch]);
-
-  if (!isOpen) return null;
-
-  const close = () => dispatch(closeAuthModal());
-  const stopPropagation = (e) => e.stopPropagation();
-  const toggleMode = () => {
-    setMode(mode === "login" ? "register" : "login");
-    setErrors({});
-  };
 
   const parseBackendError = (errorMsg) => {
     const fieldErrors = {};
@@ -100,6 +86,41 @@ export default function AuthDrawer() {
     return Object.keys(fieldErrors).length > 0
       ? fieldErrors
       : { general: errorMsg };
+  };
+
+  useEffect(() => {
+    if (token && justAuthenticated && isOpen) {
+      // Relevée avant la fermeture, qui efface la destination du store.
+      const destination = redirectTo || "/profile";
+      dispatch(closeAuthModal());
+      setForm({
+        username: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+        firstName: "",
+        lastName: "",
+      });
+      setErrors({});
+      navigate(destination);
+      setJustAuthenticated(false);
+    }
+  }, [token, justAuthenticated, isOpen, redirectTo, dispatch, navigate]);
+
+  useEffect(() => {
+    if (isOpen && view !== "reset-password") {
+      setMode(view === "login" ? "login" : "register");
+      setErrors({});
+    }
+  }, [isOpen, view]);
+
+  if (!isOpen) return null;
+
+  const close = () => dispatch(closeAuthModal());
+  const stopPropagation = (e) => e.stopPropagation();
+  const toggleMode = () => {
+    setMode(mode === "login" ? "register" : "login");
+    setErrors({});
   };
 
   const validateLogin = (e, updatedForm = form) => {
@@ -157,20 +178,30 @@ export default function AuthDrawer() {
     }
 
     setJustAuthenticated(true);
-    if (mode === "login") {
-      dispatch(
-        loginThunk({ username: form.username.trim(), password: form.password }),
-      );
-    } else {
-      dispatch(
-        registerThunk({
-          email: form.email.trim(),
-          password: form.password,
-          firstName: form.firstName.trim(),
-          lastName: form.lastName.trim(),
-        }),
-      );
-    }
+    const request =
+      mode === "login"
+        ? loginThunk({
+            username: form.username.trim(),
+            password: form.password,
+          })
+        : registerThunk({
+            email: form.email.trim(),
+            password: form.password,
+            firstName: form.firstName.trim(),
+            lastName: form.lastName.trim(),
+          });
+
+    // Seul l'échec de CETTE soumission concerne le tiroir. Il écoutait
+    // auparavant `user.error`, que remplit n'importe quelle requête du compte
+    // (profil, adresses, commandes…) : il affichait donc leurs erreurs comme
+    // des erreurs de connexion, et plantait quand il était fermé.
+    dispatch(request)
+      .unwrap()
+      .catch((message) => {
+        dispatch(showToast(message));
+        setErrors(parseBackendError(message));
+        setJustAuthenticated(false);
+      });
   };
 
   // Petite fonction pour générer l'icône oeil proprement
