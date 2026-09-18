@@ -84,8 +84,7 @@
   "authPrompt": {
     "benefits": {
       "addresses": "Retrouver vos adresses pré-remplies à chaque commande",
-      "orders": "Suivre vos commandes depuis votre espace client",
-      "wishlist": "Conserver vos favoris sur tous vos appareils"
+      "orders": "Suivre vos commandes depuis votre espace client"
     },
     "guest": "Payer en tant qu'invité",
     "guestWarning": "Vous êtes actuellement en train de commander en tant qu'invité. Sans compte, vous ne pourrez pas suivre votre commande.",

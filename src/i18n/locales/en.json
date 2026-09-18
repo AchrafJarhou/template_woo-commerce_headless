@@ -84,8 +84,7 @@
   "authPrompt": {
     "benefits": {
       "addresses": "Have your addresses pre-filled on every order",
-      "orders": "Track your orders from your account",
-      "wishlist": "Keep your wishlist on all your devices"
+      "orders": "Track your orders from your account"
     },
     "guest": "Check out as a guest",
     "guestWarning": "You are checking out as a guest. Without an account you will not be able to track your order.",

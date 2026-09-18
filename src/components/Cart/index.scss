@@ -36,17 +36,33 @@
   }
 }
 
+/* Action secondaire, juste sous « Passer la commande » : un vrai bouton, mais
+   qui ne lui dispute pas le regard. Tout ce qui fait le poids du bouton
+   principal lui est retiré — le fond plein, la police de titre, les
+   capitales — et il est un peu moins haut : 44 px, la taille d'une cible
+   tactile confortable, contre 47 à 52 px pour le principal. Le filet et le
+   texte restent à l'encre pleine : sur le bleu du site, la moindre
+   transparence ferait passer le texte sous le seuil de lisibilité AA. */
 .cart__continue {
-  display: block;
-  margin-top: clamp(14px, 1.5vw, 20px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  margin-top: clamp(10px, 1vw, 14px);
+  padding: 10px 20px;
+  border: 1px solid var(--dark-color);
+  border-radius: var(--radius-button);
   font-size: clamp(13px, 1.2vw, 16px);
   text-align: center;
-  color: rgb(0, 0, 0);
+  color: var(--dark-color);
   text-decoration: none;
-  text-underline-offset: 4px;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
 
   &:hover {
-    color: var(--dark-color);
+    background-color: var(--dark-color);
+    color: #fff;
   }
 
   &:focus-visible {
@@ -256,7 +272,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .cart-state__cta {
+  .cart-state__cta,
+  .cart__continue {
     transition: none;
   }
 }
