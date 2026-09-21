@@ -122,8 +122,8 @@ add_action('phpmailer_init', function($phpmailer) {
             @file_put_contents($log_path, '[' . date('Y-m-d H:i:s') . '] Brevo mail already sent, overriding PHPMailer\n', FILE_APPEND);
             // Clear recipients to prevent actual sending
             $phpmailer->clearAllRecipients();
-            // Set a dummy recipient so send() doesn't error
-            $phpmailer->addBcc('noreply@localhost');
+            // Set a valid dummy recipient so send() doesn't error
+            $phpmailer->addBcc('noreply@example.com');
             @file_put_contents($log_path, '[' . date('Y-m-d H:i:s') . '] PHPMailer successfully overridden\n', FILE_APPEND);
         }
     } catch (Exception $e) {
