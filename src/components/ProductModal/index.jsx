@@ -27,7 +27,8 @@ export default function ProductModal({ product, onClose }) {
     if (!product || !product.attributes) return;
     const defaults = {};
     product.attributes.forEach((attribute) => {
-      const options = attribute.options || (attribute.terms?.map(t => t.name) || []);
+      const options =
+        attribute.options || attribute.terms?.map((t) => t.name) || [];
       if (options.length > 0) {
         defaults[attribute.name] = options[0];
       }
@@ -49,7 +50,9 @@ export default function ProductModal({ product, onClose }) {
     if (product.attributes?.length > 0) {
       for (const attr of product.attributes) {
         if (!itemVariation[attr.name]) {
-          dispatch(showToast(`Veuillez sélectionner une ${attr.name.toLowerCase()}`));
+          dispatch(
+            showToast(`Veuillez sélectionner une ${attr.name.toLowerCase()}`),
+          );
           return;
         }
       }
@@ -89,7 +92,11 @@ export default function ProductModal({ product, onClose }) {
   return (
     <div className="modal-backdrop" onClick={onClose}>
       <div className="modal-content" onClick={stopPropagation}>
-        <button className="close-btn" onClick={onClose} aria-label={t("common.close")}>
+        <button
+          className="close-btn"
+          onClick={onClose}
+          aria-label={t("common.close")}
+        >
           ✕
         </button>
 
@@ -103,27 +110,36 @@ export default function ProductModal({ product, onClose }) {
 
         <div className="modal-txt-container">
           <div className="modal-category">
-            {product.category} · {t("product.reference")} {product.slug}
+            {t("product.reference")} {product.slug}
           </div>
 
           <h2 className="modal-title">{product.name}</h2>
 
           <div className="modal-price">
-            {formatModalPrice(product.prices?.price, product.prices?.currency_code)}
+            {formatModalPrice(
+              product.prices?.price,
+              product.prices?.currency_code,
+            )}
           </div>
 
           <div
             className={`modal-description ${descriptionNeedsScroll ? "modal-description--scrollable" : ""}`}
-            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(product.short_description) }}
+            dangerouslySetInnerHTML={{
+              __html: DOMPurify.sanitize(product.short_description),
+            }}
           />
 
           {product.attributes && product.attributes.length > 0 && (
             <div className="modal-attributes">
               {product.attributes.map((attr) => {
-                const options = attr.options || (attr.terms?.map(t => t.name) || []);
+                const options =
+                  attr.options || attr.terms?.map((t) => t.name) || [];
                 return (
                   <div key={attr.name} className="modal-attribute-group">
-                    <label htmlFor={attr.name} className="modal-attribute-label">
+                    <label
+                      htmlFor={attr.name}
+                      className="modal-attribute-label"
+                    >
                       {attr.name}
                     </label>
                     <select
