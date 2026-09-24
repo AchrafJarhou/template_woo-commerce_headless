@@ -272,25 +272,29 @@
     "termsUse": "Conditions générales d'utilisation"
   },
   "order": {
-    "backToShop": "Retour à la boutique",
-    "confirmed": "Commande confirmée !",
+    "backToShop": "Continuer mon shopping",
+    "confirmed": "Commande confirmée",
     "confirmedToast": "Commande n°{{id}} confirmée",
-    "emailBody": "Vérifiez votre boîte de réception pour le reçu et les informations de suivi.",
-    "emailSent": "Un e-mail de confirmation vous a été envoyé avec le détail de votre commande.",
-    "emailTitle": "📧 E-mail de confirmation",
     "fetchError": "Impossible de récupérer la commande.",
-    "helpBody": "Écrivez-nous à {{email}} pour toute question.",
-    "helpTitle": "❓ Besoin d'aide ?",
     "myOrders": "Mes commandes",
+    "next": {
+      "emailLabel": "E-mail de confirmation",
+      "emailText": "Le détail de votre commande vient de vous être envoyé par e-mail.",
+      "helpLabel": "Une question",
+      "helpLink": "Nous écrire",
+      "helpText": "Notre équipe vous répond depuis la page contact.",
+      "ordersLabel": "Votre espace client",
+      "ordersText": "Cette commande y est enregistrée : vous pouvez la consulter à tout moment.",
+      "receiptLabel": "Votre récapitulatif",
+      "receiptText": "Conservez cet e-mail : il récapitule votre commande et son numéro."
+    },
     "none": "Aucune commande trouvée.",
     "number": "Numéro de commande",
     "products": "Produits",
     "status": "Statut",
     "subtotal": "Sous-total",
     "summary": "Résumé de la commande",
-    "thanks": "Merci beaucoup pour votre achat ! 🎉",
-    "trackingBody": "Vous recevrez par e-mail les mises à jour de votre livraison.",
-    "trackingTitle": "📦 Suivi de commande"
+    "thanks": "Merci pour votre commande."
   },
   "page": {
     "translationPending": "Cette page n'est pas encore disponible en français. La version d'origine est affichée ci-dessous."
