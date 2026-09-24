@@ -72,6 +72,20 @@ export default function ProductModal({ product, onClose }) {
 
   const stopPropagation = (e) => e.stopPropagation();
 
+  const checkInStock = () => {
+    if (!product.variations || product.variations.length === 0) {
+      return product.is_in_stock;
+    }
+    const variation = product.variations.find((variation) =>
+      variation.attributes.every(
+        (attribute) => itemVariation[attribute.name] === attribute.value,
+      ),
+    );
+    return variation ? variation.is_in_stock : true;
+  };
+
+  const isInStock = checkInStock();
+
   return (
     <div className="modal-backdrop" onClick={onClose}>
       <div className="modal-content" onClick={stopPropagation}>
@@ -136,9 +150,15 @@ export default function ProductModal({ product, onClose }) {
             </div>
           )}
 
-          <button className="add-btn" onClick={handleAddToCart}>
-            {t("product.addToCart")}
-          </button>
+          {isInStock ? (
+            <button className="add-btn" onClick={handleAddToCart}>
+              {t("product.addToCart")}
+            </button>
+          ) : (
+            <button className="add-btn" disabled>
+              {t("product.outOfStock")}
+            </button>
+          )}
         </div>
       </div>
     </div>
