@@ -1,74 +1,79 @@
-import { useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { showToast } from "../../slices/toastSlice";
-import OrderDetails from "../../components/OrderDetails";
-import "./Success.scss";
+import { Link, useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
+import { HOME_CATALOG_PATH } from "../../constants/navigation";
+import "./Success.scss";
 
-// Adresse d'assistance : hors dictionnaire, ce n'est pas du texte à traduire.
-const SUPPORT_EMAIL = "support@example.com";
+// Le numéro vient de l'adresse. On ne l'affiche que s'il en est bien un :
+// recopier à l'écran n'importe quel contenu d'URL n'est jamais une bonne idée.
+const isOrderNumber = (value) => /^\d+$/.test(value ?? "");
 
+/**
+ * Page de confirmation de commande.
+ *
+ * Elle n'annonce que ce que la boutique fait réellement : l'e-mail de
+ * confirmation est envoyé par le mu-plugin qui crée la commande, et l'espace
+ * client n'existe que si le client en a un. Le détail de la commande n'y est
+ * pas affiché : l'API le refuse à qui n'est pas le propriétaire authentifié
+ * de la commande — un invité verrait donc un message d'erreur sous sa
+ * confirmation.
+ */
 export default function Success() {
   const { t } = useTranslation();
   const { orderId } = useParams();
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const isSignedIn = useSelector((state) => Boolean(state.user.token));
 
-  useEffect(() => {
-    dispatch(showToast(t("order.confirmedToast", { id: orderId })));
-  }, [orderId, dispatch]);
+  const steps = [
+    { key: "email" },
+    // Sans compte, il n'y a pas d'espace client où retrouver la commande :
+    // l'e-mail devient le seul justificatif, on le dit.
+    isSignedIn ? { key: "orders" } : { key: "receipt" },
+    { key: "help", to: "/contact" },
+  ];
 
   return (
-    <div className="success-page">
-      <div className="success-container">
-        <div className="success-header">
-          <div className="success-icon">✓</div>
-          <h1>{t("order.confirmed")}</h1>
-          <p className="order-number">
-            {t("order.number")} : <strong>#{orderId}</strong>
+    <section className="order-success">
+      <div className="order-success__inner">
+        {isOrderNumber(orderId) && (
+          <p className="order-success__reference">
+            {t("order.number")} <span>#{orderId}</span>
           </p>
-        </div>
+        )}
 
-        <div className="success-message">
-          <p>{t("order.thanks")}</p>
-          <p>{t("order.emailSent")}</p>
-        </div>
+        <h1 className="order-success__title">{t("order.confirmed")}</h1>
 
-        <div className="order-info">
-          <div className="info-card">
-            <h3>{t("order.emailTitle")}</h3>
-            <p>{t("order.emailBody")}</p>
-          </div>
+        <p className="order-success__message">{t("order.thanks")}</p>
 
-          <div className="info-card">
-            <h3>{t("order.trackingTitle")}</h3>
-            <p>{t("order.trackingBody")}</p>
-          </div>
+        <ul className="order-success__steps">
+          {steps.map(({ key, to }) => (
+            <li key={key} className="order-success__step">
+              <p className="order-success__step-label">
+                {t(`order.next.${key}Label`)}
+              </p>
+              <p className="order-success__step-text">
+                {t(`order.next.${key}Text`)}
+              </p>
+              {to && (
+                <Link className="order-success__step-link" to={to}>
+                  {t(`order.next.${key}Link`)}
+                </Link>
+              )}
+            </li>
+          ))}
+        </ul>
 
-          <div className="info-card">
-            <h3>{t("order.helpTitle")}</h3>
-            <p>{t("order.helpBody", { email: SUPPORT_EMAIL })}</p>
-          </div>
-        </div>
-
-        <OrderDetails orderId={orderId} />
-
-        <div className="success-actions">
-          <button
-            className="btn btn-primary"
-            onClick={() => navigate("/")}
-          >
+        <div className="order-success__actions">
+          <Link className="order-success__cta" to={HOME_CATALOG_PATH}>
             {t("order.backToShop")}
-          </button>
-          <button
-            className="btn btn-secondary"
-            onClick={() => navigate("/profile")}
-          >
-            {t("order.myOrders")}
-          </button>
+          </Link>
+
+          {isSignedIn && (
+            <Link className="order-success__secondary" to="/profile">
+              {t("order.myOrders")}
+            </Link>
+          )}
         </div>
       </div>
-    </div>
+    </section>
   );
 }

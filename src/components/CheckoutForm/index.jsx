@@ -129,7 +129,7 @@ export default function CheckoutForm({ shippingMethod, setShippingMethod }) {
       }
 
       if (data.success && data.order_id) {
-        dispatch(showToast(`Commande n°${data.order_id} confirmée`));
+        dispatch(showToast(t("order.confirmedToast", { id: data.order_id })));
         dispatch(emptyCartThunk());
         navigate(`/success/${data.order_id}`);
       } else {
@@ -230,7 +230,7 @@ export default function CheckoutForm({ shippingMethod, setShippingMethod }) {
           className="submit-btn desktop-submit"
           disabled={!stripe || loading}
         >
-          {loading ? "Traitement en cours..." : "Valider la commande"}
+          {loading ? t("checkout.submitting") : t("checkout.submit")}
         </button>
       </form>
     </div>

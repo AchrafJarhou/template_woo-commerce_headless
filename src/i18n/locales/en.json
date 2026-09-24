@@ -272,25 +272,29 @@
     "termsUse": "Terms of use"
   },
   "order": {
-    "backToShop": "Back to the shop",
-    "confirmed": "Order confirmed!",
+    "backToShop": "Continue shopping",
+    "confirmed": "Order confirmed",
     "confirmedToast": "Order #{{id}} confirmed",
-    "emailBody": "Check your inbox for the receipt and tracking information.",
-    "emailSent": "A confirmation email with your order details is on its way.",
-    "emailTitle": "📧 Confirmation email",
     "fetchError": "This order could not be loaded.",
-    "helpBody": "Write to us at {{email}} with any question.",
-    "helpTitle": "❓ Need help?",
     "myOrders": "My orders",
+    "next": {
+      "emailLabel": "Confirmation email",
+      "emailText": "Your order details have just been sent to you by email.",
+      "helpLabel": "A question",
+      "helpLink": "Write to us",
+      "helpText": "Our team answers from the contact page.",
+      "ordersLabel": "Your account",
+      "ordersText": "This order is saved there: you can look it up at any time.",
+      "receiptLabel": "Your receipt",
+      "receiptText": "Keep that email: it lists your order and its number."
+    },
     "none": "No orders found.",
     "number": "Order number",
     "products": "Products",
     "status": "Status",
     "subtotal": "Subtotal",
     "summary": "Order summary",
-    "thanks": "Thank you for your purchase! 🎉",
-    "trackingBody": "You will receive delivery updates by email.",
-    "trackingTitle": "📦 Order tracking"
+    "thanks": "Thank you for your order."
   },
   "page": {
     "translationPending": "This page is not available in English yet. The French version below is the legally binding one."
