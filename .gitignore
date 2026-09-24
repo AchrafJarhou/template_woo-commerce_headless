@@ -1,7 +1,12 @@
 node_modules
 package-lock.json
 dist
-wp-content/
+
+# WordPress plugins (managed by wp-cli, except mu-plugins)
+wp-content/plugins/
+wp-content/upgrade/
+wp-content/uploads/
+wp-content/cache/
 
 # WordPress configuration (never commit - contains credentials!)
 wp-config.php
