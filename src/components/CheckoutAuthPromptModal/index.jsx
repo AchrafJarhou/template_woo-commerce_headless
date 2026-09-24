@@ -8,9 +8,8 @@ import "./index.scss";
 const CHECKOUT_PATH = "/checkout";
 
 // Uniquement ce qu'un compte apporte réellement sur ce site : pré-remplissage
-// des adresses (CheckoutForm), historique des commandes (OrdersList), favoris
-// fusionnés puis conservés côté serveur (wishlistThunks).
-const BENEFITS = ["addresses", "orders", "wishlist"];
+// des adresses (CheckoutForm) et historique des commandes (OrdersList).
+const BENEFITS = ["addresses", "orders"];
 
 const FOCUSABLE =
   'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])';
