@@ -125,15 +125,10 @@ function headless_create_order_from_checkout($request)
 
     $order_id = $order->get_id();
 
-    // Décrémenter le stock pour chaque produit de la commande
-    foreach ($cart_items as $item) {
-        $product_id = isset($item['id']) ? intval($item['id']) : 0;
-        $quantity = isset($item['quantity']) ? intval($item['quantity']) : 1;
-
-        if ($product_id && $quantity > 0) {
-            headless_decrement_product_stock($product_id, $quantity);
-        }
-    }
+    // Réduction du stock par WooCommerce lui-même : la commande est marquée
+    // « stock réduit », sans quoi il le retirerait une seconde fois au passage
+    // en Terminée, et il le remet de lui-même si la commande est annulée.
+    wc_reduce_stock_levels($order_id);
 
     // Sauvegarder les adresses dans le profil du customer si connecté
     if ($user_id > 0) {
