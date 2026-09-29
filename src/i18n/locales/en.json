@@ -317,6 +317,7 @@
     "addToCart": "Add to cart",
     "chooseOption": "-- Select --",
     "inStock": "In stock",
+    "lowStock": "Only {{count}} left in stock",
     "noSimilar": "No similar product found.",
     "outOfStock": "Out of stock",
     "photoAlt": "Photo of {{name}}",

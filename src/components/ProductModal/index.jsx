@@ -6,6 +6,14 @@ import { showToast } from "../../slices/toastSlice";
 import "./index.css";
 import { formatPrice } from "../../utils/formatPrice";
 import { useTranslation } from "react-i18next";
+import {
+  getAttributeOptions,
+  getDefaultSelection,
+  getLowStockRemaining,
+  getVariationAttributes,
+  isOptionInStock,
+  isSelectionInStock,
+} from "../../utils/variationStock";
 
 export default function ProductModal({ product, onClose }) {
   const dispatch = useDispatch();
@@ -23,17 +31,11 @@ export default function ProductModal({ product, onClose }) {
         })
       : t("product.priceOnRequest");
 
+  const variationAttributes = getVariationAttributes(product);
+
   useEffect(() => {
-    if (!product || !product.attributes) return;
-    const defaults = {};
-    product.attributes.forEach((attribute) => {
-      const options =
-        attribute.options || attribute.terms?.map((t) => t.name) || [];
-      if (options.length > 0) {
-        defaults[attribute.name] = options[0];
-      }
-    });
-    setItemVariation(defaults);
+    if (!product) return;
+    setItemVariation(getDefaultSelection(product));
   }, [product]);
 
   useEffect(() => {
@@ -47,8 +49,8 @@ export default function ProductModal({ product, onClose }) {
 
   const handleAddToCart = async () => {
     // Valider que toutes les tailles/attributs sont sélectionnés
-    if (product.attributes?.length > 0) {
-      for (const attr of product.attributes) {
+    if (variationAttributes.length > 0) {
+      for (const attr of variationAttributes) {
         if (!itemVariation[attr.name]) {
           dispatch(
             showToast(`Veuillez sélectionner une ${attr.name.toLowerCase()}`),
@@ -75,19 +77,8 @@ export default function ProductModal({ product, onClose }) {
 
   const stopPropagation = (e) => e.stopPropagation();
 
-  const checkInStock = () => {
-    if (!product.variations || product.variations.length === 0) {
-      return product.is_in_stock;
-    }
-    const variation = product.variations.find((variation) =>
-      variation.attributes.every(
-        (attribute) => itemVariation[attribute.name] === attribute.value,
-      ),
-    );
-    return variation ? variation.is_in_stock : true;
-  };
-
-  const isInStock = checkInStock();
+  const isInStock = isSelectionInStock(product, itemVariation);
+  const lowStockRemaining = getLowStockRemaining(product, itemVariation);
 
   return (
     <div className="modal-backdrop" onClick={onClose}>
@@ -129,41 +120,54 @@ export default function ProductModal({ product, onClose }) {
             }}
           />
 
-          {product.attributes && product.attributes.length > 0 && (
+          {variationAttributes.length > 0 && (
             <div className="modal-attributes">
-              {product.attributes.map((attr) => {
-                const options =
-                  attr.options || attr.terms?.map((t) => t.name) || [];
-                return (
-                  <div key={attr.name} className="modal-attribute-group">
-                    <label
-                      htmlFor={attr.name}
-                      className="modal-attribute-label"
-                    >
-                      {attr.name}
-                    </label>
-                    <select
-                      id={attr.name}
-                      value={itemVariation[attr.name] || ""}
-                      onChange={(e) =>
-                        setItemVariation((prev) => ({
-                          ...prev,
-                          [attr.name]: e.target.value,
-                        }))
-                      }
-                      className="modal-attribute-select"
-                    >
-                      <option value="">{t("product.chooseOption")}</option>
-                      {options?.map((option) => (
-                        <option key={option} value={option}>
-                          {option}
+              {variationAttributes.map((attr) => (
+                <div key={attr.name} className="modal-attribute-group">
+                  <label htmlFor={attr.name} className="modal-attribute-label">
+                    {attr.name}
+                  </label>
+                  <select
+                    id={attr.name}
+                    value={itemVariation[attr.name] || ""}
+                    onChange={(e) =>
+                      setItemVariation((prev) => ({
+                        ...prev,
+                        [attr.name]: e.target.value,
+                      }))
+                    }
+                    className="modal-attribute-select"
+                  >
+                    <option value="">{t("product.chooseOption")}</option>
+                    {getAttributeOptions(attr).map((option) => {
+                      const available = isOptionInStock(
+                        product,
+                        attr.name,
+                        option.slug,
+                        itemVariation,
+                      );
+                      return (
+                        <option
+                          key={option.slug}
+                          value={option.slug}
+                          disabled={!available}
+                        >
+                          {available
+                            ? option.name
+                            : `${option.name} — ${t("product.outOfStock")}`}
                         </option>
-                      ))}
-                    </select>
-                  </div>
-                );
-              })}
+                      );
+                    })}
+                  </select>
+                </div>
+              ))}
             </div>
+          )}
+
+          {isInStock && lowStockRemaining && (
+            <p className="modal-low-stock">
+              {t("product.lowStock", { count: lowStockRemaining })}
+            </p>
           )}
 
           {isInStock ? (

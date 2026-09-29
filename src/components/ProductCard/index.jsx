@@ -6,6 +6,13 @@ import { useState, useEffect } from "react";
 import WishlistButton from "../WishlistButton"; // TEMP: wishlist testing, remove before commit
 import "./index.css";
 import { useTranslation } from "react-i18next";
+import {
+  getAttributeOptions,
+  getDefaultSelection,
+  getVariationAttributes,
+  isOptionInStock,
+  isSelectionInStock,
+} from "../../utils/variationStock";
 
 export default function ProductCard({ product }) {
   const { t } = useTranslation();
@@ -31,28 +38,8 @@ export default function ProductCard({ product }) {
     setItemVariation((prev) => ({ ...prev, [name]: value }));
   }
 
-  function checkInStock(product) {
-    const variation = product.variations.find((variation) =>
-      variation.attributes.every(
-        (attribute) => itemVariation[attribute.name] === attribute.value,
-      ),
-    );
-
-    return variation ? variation.is_in_stock : true;
-  }
-
   useEffect(() => {
-    if (!product.attributes) return;
-
-    const defaults = {};
-
-    product.attributes.forEach((attribute) => {
-      if (attribute.terms.length > 0) {
-        defaults[attribute.name] = attribute.terms[0].name;
-      }
-    });
-
-    setItemVariation(defaults);
+    setItemVariation(getDefaultSelection(product));
   }, [product]);
 
   return (
@@ -98,22 +85,34 @@ export default function ProductCard({ product }) {
       </span>
 
       {product.is_in_stock ? <p>{t("product.inStock")}</p> : <p>{t("product.outOfStock")}</p>}
-      {product.attributes?.map((attribute) => (
+      {getVariationAttributes(product).map((attribute) => (
         <div key={attribute.name}>
           <label htmlFor={attribute.name}>{attribute.name}</label>
           <select
+            id={attribute.name}
             name={attribute.name}
+            value={itemVariation[attribute.name] || ""}
             onChange={(e) => changeVariation(attribute.name, e.target.value)}
           >
-            {attribute.terms.map((term) => (
-              <option key={term.name} value={term.name}>
-                {term.name}
-              </option>
-            ))}
+            {getAttributeOptions(attribute).map((option) => {
+              const available = isOptionInStock(
+                product,
+                attribute.name,
+                option.slug,
+                itemVariation,
+              );
+              return (
+                <option key={option.slug} value={option.slug} disabled={!available}>
+                  {available
+                    ? option.name
+                    : `${option.name} — ${t("product.outOfStock")}`}
+                </option>
+              );
+            })}
           </select>
         </div>
       ))}
-      {checkInStock(product) ? (
+      {isSelectionInStock(product, itemVariation) ? (
         <button
           onClick={() => addProduct(product.id, 1, itemVariation, product.name)}
         >
