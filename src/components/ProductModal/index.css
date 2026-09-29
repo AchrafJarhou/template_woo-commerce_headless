@@ -216,6 +216,21 @@
   color: #fff;
 }
 
+/* Taille épuisée : visible mais grisée et non sélectionnable. */
+.modal-attribute-select option:disabled {
+  color: #7a8199;
+}
+
+/* « Plus que X en stock » : l'élément p hérite de marges et d'une taille en vw
+   depuis index.scss, on les fixe ici. */
+.modal-low-stock {
+  margin: -16px 0 16px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: #c1121f;
+}
+
 /* Bouton Ajout Panier */
 .add-btn {
   border-radius: var(--radius-button);
