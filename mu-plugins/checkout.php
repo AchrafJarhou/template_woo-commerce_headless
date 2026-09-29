@@ -46,6 +46,29 @@ function headless_create_order_from_checkout($request)
     // enregistrées — celles que le formulaire de commande pré-remplit.
     $user_id = get_current_user_id();
 
+    // Entre l'ajout au panier et le paiement, la derniere piece d'une taille a
+    // pu partir chez un autre client : on refuse la commande plutot que de
+    // vendre un article qui n'existe plus. Pour un produit variable, l'id du
+    // panier est celui de la variation, le stock controle est donc celui de
+    // la taille choisie.
+    foreach ($cart_items as $item) {
+        $product_id = isset($item['id']) ? intval($item['id']) : 0;
+        $quantity = isset($item['quantity']) ? intval($item['quantity']) : 1;
+
+        if (!$product_id) continue;
+
+        $product = wc_get_product($product_id);
+        if (!$product) continue;
+
+        if (!$product->is_in_stock() || !$product->has_enough_stock($quantity)) {
+            return new WP_Error(
+                'insufficient_stock',
+                sprintf('Stock insuffisant pour « %s ». Veuillez modifier votre panier.', $product->get_name()),
+                ['status' => 409]
+            );
+        }
+    }
+
     $order = wc_create_order();
 
     // Associer la commande au user connecté si disponible
