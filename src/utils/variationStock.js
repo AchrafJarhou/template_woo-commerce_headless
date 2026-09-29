@@ -42,21 +42,42 @@ export function isOptionInStock(product, attributeName, slug, selection) {
   return isSelectionInStock(product, { ...selection, [attributeName]: slug });
 }
 
-// Quantité restante quand elle passe sous le seuil de stock faible réglé dans
-// WooCommerce, sinon null. Pour un produit variable, il faut que toutes les
-// tailles soient choisies pour désigner une seule variation.
-export function getLowStockRemaining(product, selection) {
-  if (!product.variations?.length) return product.low_stock_remaining ?? null;
+// La variation désignée par la sélection, seulement une fois tous les
+// attributs choisis : avant, plusieurs variations correspondent encore.
+export function getSelectedVariation(product, selection) {
+  if (!product.variations?.length) return null;
 
   const isComplete = getVariationAttributes(product).every(
     (attribute) => selection[attribute.name],
   );
   if (!isComplete) return null;
 
-  const variation = product.variations.find((candidate) =>
-    matchesSelection(candidate, selection),
+  return (
+    product.variations.find((candidate) =>
+      matchesSelection(candidate, selection),
+    ) || null
   );
-  return variation?.low_stock_remaining ?? null;
+}
+
+// Quantité restante quand elle passe sous le seuil de stock faible réglé dans
+// WooCommerce, sinon null.
+export function getLowStockRemaining(product, selection) {
+  if (!product.variations?.length) return product.low_stock_remaining ?? null;
+  return getSelectedVariation(product, selection)?.low_stock_remaining ?? null;
+}
+
+// Prix à afficher : ceux de la taille choisie, sinon ceux du produit. Sans
+// taille choisie, un produit dont les tailles n'ont pas toutes le même prix
+// s'affiche « à partir de » son prix le plus bas (isFrom).
+export function getDisplayPrices(product, selection) {
+  const variationPrices = getSelectedVariation(product, selection)?.prices;
+  if (variationPrices) return { ...variationPrices, isFrom: false };
+
+  const range = product.prices?.price_range;
+  if (range && range.min_amount !== range.max_amount) {
+    return { price: range.min_amount, regular_price: null, isFrom: true };
+  }
+  return { ...product.prices, isFrom: false };
 }
 
 // Présélectionne la première taille disponible plutôt que la première de la
