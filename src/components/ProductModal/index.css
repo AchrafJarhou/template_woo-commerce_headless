@@ -130,6 +130,13 @@
   color: #fff;
 }
 
+/* Prix normal barré quand la taille choisie est en promotion. */
+.modal-price__regular {
+  margin-right: 10px;
+  font-size: 16px;
+  opacity: 0.6;
+}
+
 .modal-description {
   margin: 0 0 20px;
   font-size: 5px;
