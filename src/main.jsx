@@ -48,6 +48,7 @@ import AppLoader from "./components/AppLoader/AppLoader";
 // import AuthModal from "./components/AuthModal";
 
 import "./index.css";
+import "./styles/page-transition.css";
 import AuthDrawer from "./components/AuthDrawer";
 import Checkout from "./pages/Checkout";
 

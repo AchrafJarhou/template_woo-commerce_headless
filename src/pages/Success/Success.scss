@@ -1,273 +1,221 @@
-.success-page {
-  min-height: calc(100vh - 200px);
+/* ─────────────────────────────────────────────────────────────────────────
+   Confirmation de commande.
+
+   Même langage que le reste de la boutique : le bleu du site sans carte
+   blanche posée dessus, un titre en police de titre, un filet court, des
+   intitulés en petites capitales espacées, et les deux boutons du site —
+   le noir plein pour l'action principale, l'encadré pour la seconde.
+
+   Aucune couleur n'est ajoutée à la charte : pas de vert de validation, pas
+   de dégradé, pas d'émoji. La confirmation se lit dans le titre.
+
+   Les règles globales (src/index.scss) dimensionnent p, li, ul, a et h1 en
+   vw : tout ce qui est utilisé ici reçoit donc une taille et des marges
+   explicites, sans quoi la page changerait de proportions avec l'écran.
+   ───────────────────────────────────────────────────────────────────────── */
+
+.order-success {
+  --hairline: 1px solid rgb(15 23 42 / 0.18);
+
+  /* `inherit` reprend la hauteur réservée au contenu par le gabarit, comme le
+     panier vide : la valeur reste définie à un seul endroit. */
+  min-height: inherit;
   display: flex;
-  align-items: center;
   justify-content: center;
-  padding: 60px 20px;
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  padding-inline: clamp(20px, 5vw, 64px);
 }
 
-.success-container {
-  max-width: 700px;
+.order-success__inner {
+  /* Marges automatiques plutôt que `align-items: center` : le bloc est centré
+     verticalement, et s'il devient plus haut que l'écran il reste accessible
+     par le haut au lieu d'être rogné. */
+  margin-block: auto;
+  padding-block: clamp(40px, 8vh, 88px);
   width: 100%;
-  background: white;
-  border-radius: 12px;
-  padding: 50px 40px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-  animation: slideUp 0.6s ease-out;
+  /* En ch : la mesure suit la taille réelle du texte, la ligne reste lisible
+     sans second réglage par palier. */
+  max-width: 52ch;
 }
 
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.success-header {
+/* Petites capitales espacées, comme les intitulés du récapitulatif du panier.
+   À pleine encre : sur le bleu du site, le texte plafonne à 4,86:1 et la
+   moindre transparence le ferait passer sous le seuil AA. La hiérarchie se
+   joue donc sur la taille et l'espacement, jamais sur la pâleur. */
+.order-success__reference {
+  margin: 0;
+  font-size: clamp(11px, 1vw, 12px);
+  line-height: 1.4;
+  letter-spacing: 3px;
+  text-transform: uppercase;
   text-align: center;
-  margin-bottom: 40px;
+  color: var(--dark-color);
+
+  span {
+    font-variant-numeric: tabular-nums;
+  }
 }
 
-.success-icon {
+.order-success__title {
+  margin: clamp(12px, 1.8vh, 18px) 0 0;
+  font-family: var(--font-heading);
+  font-size: clamp(28px, 3.2vw, 44px);
+  line-height: 1.1;
+  text-align: center;
+  color: var(--dark-color);
+}
+
+/* Filet court, repris de la page panier vide : il sépare l'annonce de ce qui
+   suit sans ajouter d'élément au HTML pour un trait. */
+.order-success__title::after {
+  content: "";
+  display: block;
+  width: 48px;
+  height: 1px;
+  margin: clamp(16px, 2.5vh, 24px) auto 0;
+  background-color: rgb(15 23 42 / 0.25);
+}
+
+.order-success__message {
+  margin: clamp(16px, 2.5vh, 24px) 0 0;
+  font-size: clamp(16px, 1.6vw, 21px);
+  line-height: 1.5;
+  text-align: center;
+  color: var(--dark-color);
+}
+
+/* Ce qui se passe ensuite : des lignes séparées par des filets, comme le
+   récapitulatif du panier, et non des cartes posées sur la page. */
+.order-success__steps {
+  margin: clamp(28px, 4.5vh, 44px) 0 0;
+  padding: 0;
+  list-style: none;
+  border-top: var(--hairline);
+}
+
+.order-success__step {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: clamp(14px, 2.2vh, 20px) 0;
+  border-bottom: var(--hairline);
+  font-size: initial;
+  list-style: none;
+}
+
+.order-success__step-label {
+  margin: 0;
+  /* Poppins Bold est la seule graisse épaisse réellement chargée : l'intitulé
+     est donc net, là où un `font-weight: 600` sur la police de texte serait
+     épaissi par le navigateur. */
+  font-family: var(--font-heading);
+  font-size: clamp(11px, 1vw, 12px);
+  line-height: 1.4;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--dark-color);
+}
+
+.order-success__step-text {
+  margin: 0;
+  font-size: clamp(14px, 1.3vw, 16px);
+  line-height: 1.6;
+  color: var(--dark-color);
+}
+
+.order-success__step-link {
+  justify-self: start;
+  margin-top: 2px;
+  font-size: clamp(13px, 1.2vw, 15px);
+  line-height: 1.4;
+  color: var(--dark-color);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  transition: opacity 0.2s ease;
+
+  &:hover {
+    opacity: 0.7;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--dark-color);
+    outline-offset: 3px;
+  }
+}
+
+.order-success__actions {
+  display: grid;
+  justify-items: center;
+  gap: 12px;
+  margin-top: clamp(28px, 4vh, 40px);
+}
+
+/* Bouton plein du site, aligné sur .cart-state__cta et .add-btn : même noir,
+   même graisse, même interlettrage, mêmes angles vifs. Une action principale
+   se reconnaît au même geste visuel d'un écran à l'autre. */
+.order-success__cta {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 80px;
-  height: 80px;
-  background: linear-gradient(135deg, #34a853 0%, #1e8e3e 100%);
-  color: white;
-  font-size: 48px;
-  border-radius: 50%;
-  margin-bottom: 20px;
-  animation: scaleIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-@keyframes scaleIn {
-  from {
-    transform: scale(0);
-  }
-  to {
-    transform: scale(1);
-  }
-}
-
-.success-header h1 {
-  font-size: 32px;
-  color: #1a1a1a;
-  margin-bottom: 10px;
-  font-weight: 700;
-}
-
-.order-number {
-  font-size: 16px;
-  color: #666;
-  margin: 0;
-
-  strong {
-    color: #34a853;
-    font-weight: 600;
-  }
-}
-
-.success-message {
-  background: #f0f9ff;
-  border-left: 4px solid #34a853;
-  padding: 20px;
-  border-radius: 8px;
-  margin-bottom: 30px;
-
-  p {
-    margin: 10px 0;
-    color: #333;
-    font-size: 15px;
-    line-height: 1.6;
-
-    &:first-child {
-      font-weight: 600;
-      color: #1a1a1a;
-    }
-  }
-}
-
-.order-info {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 20px;
-  margin: 40px 0;
-}
-
-.info-card {
-  background: #f8f9fa;
-  padding: 20px;
-  border-radius: 8px;
-  text-align: center;
-  border-top: 3px solid #34a853;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-
-  &:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  }
-
-  h3 {
-    font-size: 14px;
-    color: #1a1a1a;
-    margin: 0 0 10px 0;
-    font-weight: 600;
-  }
-
-  p {
-    font-size: 13px;
-    color: #666;
-    margin: 0;
-    line-height: 1.5;
-  }
-}
-
-.order-details {
-  background: #f8f9fa;
-  padding: 20px;
-  border-radius: 8px;
-  margin: 30px 0;
-  border: 1px solid #e9ecef;
-
-  h3 {
-    font-size: 16px;
-    color: #1a1a1a;
-    margin: 20px 0 15px 0;
-    font-weight: 600;
-
-    &:first-child {
-      margin-top: 0;
-    }
-  }
-
-  p {
-    color: #666;
-    font-size: 14px;
-    margin: 8px 0;
-    line-height: 1.5;
-  }
-}
-
-.order-items {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-.order-item {
-  display: flex;
-  gap: 15px;
-  padding: 15px;
-  background: white;
-  border-radius: 6px;
-  border: 1px solid #e9ecef;
-
-  img {
-    width: 70px;
-    height: 70px;
-    object-fit: cover;
-    border-radius: 6px;
-    background: #f8f9fa;
-  }
-
-  > div {
-    flex: 1;
-
-    strong {
-      display: block;
-      color: #1a1a1a;
-      font-size: 14px;
-      margin-bottom: 5px;
-    }
-
-    p {
-      font-size: 13px;
-      color: #666;
-      margin: 4px 0;
-    }
-  }
-}
-
-.payment-ok {
-  color: #34a853;
-  font-weight: 600;
-  font-size: 14px;
-  padding: 10px 15px;
-  background: #e6f4ea;
-  border-radius: 6px;
-  margin-bottom: 20px;
-  display: inline-block;
-}
-
-.success-actions {
-  display: flex;
-  gap: 15px;
-  justify-content: center;
-  margin-top: 40px;
-  flex-wrap: wrap;
-}
-
-.btn {
-  padding: 12px 30px;
-  border: none;
+  width: 100%;
+  max-width: 340px;
+  padding: 19px 32px;
+  background-color: #000;
+  color: #fff;
   border-radius: var(--radius-button);
-  font-size: 15px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-align: center;
+  text-transform: uppercase;
   text-decoration: none;
-  display: inline-block;
+  transition: opacity 0.2s ease;
 
   &:hover {
-    transform: translateY(-2px);
+    opacity: 0.82;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--dark-color);
+    outline-offset: 3px;
   }
 }
 
-.btn.btn-primary {
-  background: linear-gradient(135deg, #34a853 0%, #1e8e3e 100%);
-  color: white;
+/* Action secondaire, identique à celle du panier : encadrée, sans fond, et
+   44 px de haut — la taille d'une cible tactile confortable. */
+.order-success__secondary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 340px;
+  min-height: 44px;
+  padding: 10px 20px;
+  border: 1px solid var(--dark-color);
+  border-radius: var(--radius-button);
+  font-size: clamp(13px, 1.2vw, 16px);
+  text-align: center;
+  color: var(--dark-color);
+  text-decoration: none;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
 
   &:hover {
-    box-shadow: 0 4px 16px rgba(52, 168, 83, 0.3);
+    background-color: var(--dark-color);
+    color: #fff;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--dark-color);
+    outline-offset: 3px;
   }
 }
 
-.btn.btn-secondary {
-  background-color: #0066cc !important;
-  color: white !important;
-  border: 2px solid #0066cc !important;
-
-  &:hover {
-    background-color: #0052a3 !important;
-    border-color: #0052a3 !important;
-  }
-}
-
-@media (max-width: 768px) {
-  .success-container {
-    padding: 30px 20px;
-  }
-
-  .success-header h1 {
-    font-size: 24px;
-  }
-
-  .order-info {
-    grid-template-columns: 1fr;
-  }
-
-  .success-actions {
-    flex-direction: column;
-
-    .btn {
-      width: 100%;
-    }
+@media (prefers-reduced-motion: reduce) {
+  .order-success__step-link,
+  .order-success__cta,
+  .order-success__secondary {
+    transition: none;
   }
 }

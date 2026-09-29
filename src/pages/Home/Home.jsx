@@ -46,7 +46,10 @@ export default function Home() {
   const canShowLess = displayLimit > 20;
 
   return (
-    <div className={styles.home}>
+    // L'accueil n'est pas rendu dans le gabarit principal : il porte donc
+    // lui-même le fondu d'arrivée. Aucune clé n'est nécessaire — on ne peut
+    // atteindre cette page qu'en la montant.
+    <div className={`${styles.home} page-transition`}>
       <HeroVideo />
       <CatalogSection
         products={displayedProducts || []}
