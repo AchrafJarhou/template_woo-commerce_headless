@@ -9,6 +9,7 @@ import { useTranslation } from "react-i18next";
 import {
   getAttributeOptions,
   getDefaultSelection,
+  getDisplayPrices,
   getLowStockRemaining,
   getVariationAttributes,
   isOptionInStock,
@@ -80,6 +81,12 @@ export default function ProductModal({ product, onClose }) {
   const isInStock = isSelectionInStock(product, itemVariation);
   const lowStockRemaining = getLowStockRemaining(product, itemVariation);
 
+  const displayPrices = getDisplayPrices(product, itemVariation);
+  const currencyCode = product.prices?.currency_code;
+  const formattedPrice = formatModalPrice(displayPrices.price, currencyCode);
+  const isOnSale =
+    Number(displayPrices.regular_price) > Number(displayPrices.price);
+
   return (
     <div className="modal-backdrop" onClick={onClose}>
       <div className="modal-content" onClick={stopPropagation}>
@@ -107,10 +114,14 @@ export default function ProductModal({ product, onClose }) {
           <h2 className="modal-title">{product.name}</h2>
 
           <div className="modal-price">
-            {formatModalPrice(
-              product.prices?.price,
-              product.prices?.currency_code,
+            {isOnSale && (
+              <del className="modal-price__regular">
+                {formatModalPrice(displayPrices.regular_price, currencyCode)}
+              </del>
             )}
+            {displayPrices.isFrom
+              ? t("product.priceFrom", { price: formattedPrice })
+              : formattedPrice}
           </div>
 
           <div
