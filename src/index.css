@@ -26,11 +26,6 @@
      n'est écrite qu'ici, aucun bouton ne peut donc diverger, et revenir à des
      angles adoucis se ferait en changeant ce seul nombre. */
   --radius-button: 0;
-  /* Le sac du panier est une image rectangulaire pleine : arrondir sa boîte
-     arrondit la forme elle-même. En rapport et non en pixels, l'icône garde
-     exactement la même allure à ses deux tailles — barre du header et page
-     panier vide. */
-  --cart-icon-radius-ratio: 0.11;
 }
 
 * {
