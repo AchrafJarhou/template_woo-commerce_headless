@@ -317,10 +317,12 @@
     "addToCart": "Ajouter au panier",
     "chooseOption": "-- Choisir --",
     "inStock": "En stock",
+    "lowStock": "Plus que {{count}} en stock",
     "noSimilar": "Aucun produit similaire trouvé.",
     "outOfStock": "Rupture de stock",
     "photoAlt": "Photo de {{name}}",
     "price": "Prix",
+    "priceFrom": "À partir de {{price}}",
     "priceOnRequest": "Prix sur demande",
     "reference": "RÉF.",
     "similar": "Produits similaires"

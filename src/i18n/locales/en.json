@@ -317,10 +317,12 @@
     "addToCart": "Add to cart",
     "chooseOption": "-- Select --",
     "inStock": "In stock",
+    "lowStock": "Only {{count}} left in stock",
     "noSimilar": "No similar product found.",
     "outOfStock": "Out of stock",
     "photoAlt": "Photo of {{name}}",
     "price": "Price",
+    "priceFrom": "From {{price}}",
     "priceOnRequest": "Price on request",
     "reference": "REF.",
     "similar": "Similar products"
