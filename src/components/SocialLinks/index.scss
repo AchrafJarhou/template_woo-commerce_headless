@@ -10,10 +10,6 @@
    marge extérieure, ni filet de séparation. C'est l'écran qui l'accueille qui
    en décide — aujourd'hui le menu plein écran, demain le pied de page. */
 .social-links {
-  /* Taille des dessins, réglable ici seule : les deux marques sont normalisées
-     à la même hauteur d'encre, elles restent donc accordées quelle qu'elle soit. */
-  --social-icon-size: 24px;
-
   display: flex;
   align-items: center;
   justify-content: center;
@@ -50,10 +46,16 @@
     outline-offset: 2px;
   }
 
+  /* Taille des dessins : 24 px sauf si l'écran qui accueille la rangée en
+     décide autrement. La valeur par défaut est écrite dans le `var()` et non
+     sur `.social-links` — posée sur l'élément lui-même, elle l'emporterait sur
+     celle d'un parent, et aucun écran ne pourrait plus l'ajuster.
+     Les deux marques étant normalisées à la même hauteur d'encre, elles
+     restent accordées quelle que soit la valeur choisie. */
   svg {
     display: block;
-    width: var(--social-icon-size);
-    height: var(--social-icon-size);
+    width: var(--social-icon-size, 24px);
+    height: var(--social-icon-size, 24px);
   }
 }
 
