@@ -13,11 +13,13 @@ import {
   isOptionInStock,
   isSelectionInStock,
 } from "../../utils/variationStock";
+import { getProductName } from "../../utils/localizeProduct";
 
 export default function ProductCard({ product }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const dispatch = useDispatch();
   const [itemVariation, setItemVariation] = useState({});
+  const productName = getProductName(product, i18n.resolvedLanguage);
 
   const addProduct = async (productId, quantity, variation, name) => {
     const result = await dispatch(
@@ -47,14 +49,14 @@ export default function ProductCard({ product }) {
       {/* TEmporally Button: wishlist testing */}
       <WishlistButton product={product} />
       <Link to={"/product/" + product.id}>
-        <p dangerouslySetInnerHTML={{ __html: product.name || "-" }} />
+        <p dangerouslySetInnerHTML={{ __html: productName || "-" }} />
         <p>Marque: {product.brands?.[0]?.name}</p>
         <img
           src={
             product.images[0]?.src ||
             "https://placeholder.pics/svg/300/DEDEDE/555555/Placeholder"
           }
-          alt={product.name || "photo produit"}
+          alt={productName || "photo produit"}
         />
       </Link>
 
@@ -114,7 +116,7 @@ export default function ProductCard({ product }) {
       ))}
       {isSelectionInStock(product, itemVariation) ? (
         <button
-          onClick={() => addProduct(product.id, 1, itemVariation, product.name)}
+          onClick={() => addProduct(product.id, 1, itemVariation, productName)}
         >
           {t("product.addToCart")}
         </button>

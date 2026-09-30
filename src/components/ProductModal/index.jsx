@@ -16,12 +16,23 @@ import {
   isSelectionInStock,
 } from "../../utils/variationStock";
 import { translateAttributeName } from "../../utils/translateAttributeName";
+import {
+  getProductDescription,
+  getProductMaterial,
+  getProductName,
+} from "../../utils/localizeProduct";
 
 export default function ProductModal({ product, onClose }) {
   const dispatch = useDispatch();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [itemVariation, setItemVariation] = useState({});
   const [descriptionNeedsScroll, setDescriptionNeedsScroll] = useState(false);
+
+  const productName = getProductName(product, i18n.resolvedLanguage);
+  const productDescription = getProductDescription(
+    product,
+    i18n.resolvedLanguage,
+  );
 
   const formatModalPrice = (priceInCents, currencyCode) =>
     priceInCents
@@ -39,13 +50,11 @@ export default function ProductModal({ product, onClose }) {
   }, [product]);
 
   useEffect(() => {
-    if (product?.short_description) {
-      const tempDiv = document.createElement("div");
-      tempDiv.innerHTML = DOMPurify.sanitize(product.short_description);
-      const textContent = tempDiv.textContent || "";
-      setDescriptionNeedsScroll(textContent.length > 150);
-    }
-  }, [product]);
+    const tempDiv = document.createElement("div");
+    tempDiv.innerHTML = DOMPurify.sanitize(productDescription);
+    const textContent = tempDiv.textContent || "";
+    setDescriptionNeedsScroll(textContent.length > 150);
+  }, [productDescription]);
 
   // Recherche dynamique de l'attribut de type matière/composition (qu'il soit en variation ou informatif)
   const getProductMaterialAttribute = () => {
@@ -69,6 +78,13 @@ export default function ProductModal({ product, onClose }) {
         []
       ).join(", ")
     : null;
+  // En français, la matière est la valeur de l'attribut ; sa traduction est
+  // un champ ACF à part, qui la remplace quand il est rempli.
+  const materialText = getProductMaterial(
+    product,
+    i18n.resolvedLanguage,
+    materialValues,
+  );
 
   console.log("PRODUCT : ", product);
 
@@ -94,7 +110,7 @@ export default function ProductModal({ product, onClose }) {
       }),
     );
     if (addProductToCart.fulfilled.match(result)) {
-      dispatch(showToast(`${product.name} ajouté au panier`));
+      dispatch(showToast(`${productName} ajouté au panier`));
       onClose();
     } else {
       dispatch(showToast(result.payload || t("product.addError")));
@@ -126,7 +142,7 @@ export default function ProductModal({ product, onClose }) {
         <div className="modal-img-container">
           <img
             src={product.images[0]?.src || "https://placeholder.pics/svg/300"}
-            alt={product.name}
+            alt={productName}
             className="modal-img"
           />
         </div>
@@ -136,7 +152,7 @@ export default function ProductModal({ product, onClose }) {
             {t("product.reference")} {product.slug}
           </div>
 
-          <h2 className="modal-title">{product.name}</h2>
+          <h2 className="modal-title">{productName}</h2>
 
           <div className="modal-price">
             {isOnSale && (
@@ -152,17 +168,20 @@ export default function ProductModal({ product, onClose }) {
           <div
             className={`modal-description ${descriptionNeedsScroll ? "modal-description--scrollable" : ""}`}
             dangerouslySetInnerHTML={{
-              __html: DOMPurify.sanitize(product.short_description),
+              __html: DOMPurify.sanitize(productDescription),
             }}
           />
 
           {/* Bloc Matières dynamique et traduit via translateAttributeName */}
-          {materialValues && materialAttr && (
+          {materialText && (
             <div className="modal-materials">
               <span className="modal-materials-label">
-                {translateAttributeName(materialAttr.name, t)} :{" "}
+                {materialAttr
+                  ? translateAttributeName(materialAttr.name, t)
+                  : t("product.attributes.material")}{" "}
+                :{" "}
               </span>
-              <span className="modal-materials-value">{materialValues}</span>
+              <span className="modal-materials-value">{materialText}</span>
             </div>
           )}
 
