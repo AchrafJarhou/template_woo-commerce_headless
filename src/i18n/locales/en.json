@@ -358,6 +358,10 @@
     "label": "Search",
     "placeholder": "Search…"
   },
+  "social": {
+    "instagram": "RAVI on Instagram",
+    "tiktok": "RAVI on TikTok"
+  },
   "status": {
     "cancelled": "Cancelled",
     "completed": "Completed",
