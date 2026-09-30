@@ -84,6 +84,8 @@ export default function ProductModal({ product, onClose }) {
       }
     }
 
+    console.log("Produit", product);
+
     const result = await dispatch(
       addProductToCart({
         productId: product.id,
