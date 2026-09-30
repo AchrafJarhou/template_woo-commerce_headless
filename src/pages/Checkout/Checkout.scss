@@ -284,11 +284,31 @@ h3 {
   margin-top: 10px;
 }
 
+.input--error {
+  border-color: #fa755a !important;
+  background-color: rgba(250, 117, 90, 0.05);
+}
+
+.address-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 15px;
+}
+
+.required-notice {
+  font-size: 12px;
+  opacity: 0.7;
+  font-style: italic;
+}
+
 /* Mobile Responsive */
 @media (max-width: 900px) {
   .checkout-container {
     display: flex;
     flex-direction: column;
+    padding-left: 40px;
+    padding-right: 40px;
   }
 
   .checkout-left {

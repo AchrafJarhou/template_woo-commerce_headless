@@ -1,75 +1,79 @@
 import { useTranslation } from "react-i18next";
-export default function BillingAddress({ address, onChange }) {
+
+export default function BillingAddress({ address, onChange, errors = {} }) {
   const { t } = useTranslation();
 
   return (
     <>
-      <h3>{t("address.billing")}</h3>
+      <div className="address-section-header">
+        <h3>{t("address.billing")}</h3>
+        <span className="required-notice">* Champs obligatoires</span>
+      </div>
       <div className="form-group">
         <div className="form-row">
           <div className="input-field">
-            <label>{t("common.firstName")}</label>
+            <label>{t("common.firstName")} *</label>
             <input
               type="text"
               name="first_name"
               value={address.first_name || ""}
               onChange={onChange}
-              required
+              className={errors.billing_first_name ? "input--error" : ""}
             />
           </div>
           <div className="input-field">
-            <label>{t("common.lastName")}</label>
+            <label>{t("common.lastName")} *</label>
             <input
               type="text"
               name="last_name"
               value={address.last_name || ""}
               onChange={onChange}
-              required
+              className={errors.billing_last_name ? "input--error" : ""}
             />
           </div>
         </div>
         <div className="input-field">
-          <label>{t("address.street")}</label>
+          <label>{t("address.street")} *</label>
           <input
             type="text"
             name="address_1"
             value={address.address_1 || ""}
             placeholder={t("address.streetPlaceholder")}
             onChange={onChange}
-            required
+            className={errors.billing_address_1 ? "input--error" : ""}
           />
         </div>
         <div className="form-row">
           <div className="input-field">
-            <label>{t("address.city")}</label>
+            <label>{t("address.city")} *</label>
             <input
               type="text"
               name="city"
               value={address.city || ""}
               onChange={onChange}
-              required
+              className={errors.billing_city ? "input--error" : ""}
             />
           </div>
           <div className="input-field">
-            <label>{t("address.country")}</label>
+            <label>{t("address.country")} *</label>
             <input
               type="text"
               name="country"
               value={address.country || "France"}
               onChange={onChange}
-              required
+              className={errors.billing_country ? "input--error" : ""}
             />
           </div>
         </div>
         <div className="form-row">
           <div className="input-field">
-            <label>{t("address.postcode")}</label>
+            <label>{t("address.postcode")} *</label>
             <input
               type="text"
               name="postcode"
               value={address.postcode || ""}
               onChange={onChange}
-              required
+              className={errors.billing_postcode ? "input--error" : ""}
             />
           </div>
           <div className="input-field">

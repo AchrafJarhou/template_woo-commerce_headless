@@ -15,6 +15,7 @@ import {
   isOptionInStock,
   isSelectionInStock,
 } from "../../utils/variationStock";
+import { translateAttributeName } from "../../utils/translateAttributeName";
 
 export default function ProductModal({ product, onClose }) {
   const dispatch = useDispatch();
@@ -22,8 +23,6 @@ export default function ProductModal({ product, onClose }) {
   const [itemVariation, setItemVariation] = useState({});
   const [descriptionNeedsScroll, setDescriptionNeedsScroll] = useState(false);
 
-  // Le formatage des prix était réécrit ici, avec sa propre locale figée.
-  // Il passe désormais par la fonction partagée, qui suit la langue affichée.
   const formatModalPrice = (priceInCents, currencyCode) =>
     priceInCents
       ? formatPrice(priceInCents, {
@@ -48,8 +47,32 @@ export default function ProductModal({ product, onClose }) {
     }
   }, [product]);
 
+  // Recherche dynamique de l'attribut de type matière/composition (qu'il soit en variation ou informatif)
+  const getProductMaterialAttribute = () => {
+    if (!product.attributes) return null;
+    return product.attributes.find((attr) => {
+      const name = attr.name.toLowerCase();
+      return (
+        name.includes("matière") ||
+        name.includes("matiere") ||
+        name.includes("composition") ||
+        name.includes("material")
+      );
+    });
+  };
+
+  const materialAttr = getProductMaterialAttribute();
+  const materialValues = materialAttr
+    ? (
+        materialAttr.options ||
+        materialAttr.terms?.map((term) => term.name) ||
+        []
+      ).join(", ")
+    : null;
+
+  console.log("PRODUCT : ", product);
+
   const handleAddToCart = async () => {
-    // Valider que toutes les tailles/attributs sont sélectionnés
     if (variationAttributes.length > 0) {
       for (const attr of variationAttributes) {
         if (!itemVariation[attr.name]) {
@@ -131,12 +154,22 @@ export default function ProductModal({ product, onClose }) {
             }}
           />
 
+          {/* Bloc Matières dynamique et traduit via translateAttributeName */}
+          {materialValues && materialAttr && (
+            <div className="modal-materials">
+              <span className="modal-materials-label">
+                {translateAttributeName(materialAttr.name, t)} :{" "}
+              </span>
+              <span className="modal-materials-value">{materialValues}</span>
+            </div>
+          )}
+
           {variationAttributes.length > 0 && (
             <div className="modal-attributes">
               {variationAttributes.map((attr) => (
                 <div key={attr.name} className="modal-attribute-group">
                   <label htmlFor={attr.name} className="modal-attribute-label">
-                    {attr.name}
+                    {translateAttributeName(attr.name, t)}
                   </label>
                   <select
                     id={attr.name}
