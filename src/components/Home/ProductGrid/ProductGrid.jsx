@@ -59,9 +59,10 @@
 import { Link } from "react-router-dom";
 import styles from "./ProductGrid.module.scss";
 import { useTranslation } from "react-i18next";
+import { getProductName } from "../../../utils/localizeProduct";
 
 export default function ProductGrid({ products, filter, onProductClick }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const filteredProducts =
     filter === "tous"
       ? products
@@ -90,6 +91,7 @@ export default function ProductGrid({ products, filter, onProductClick }) {
         <div className={styles.grid}>
           {filteredProducts.map((product) => {
             const inStock = isProductInStock(product);
+            const productName = getProductName(product, i18n.resolvedLanguage);
 
             return (
               <div
@@ -107,7 +109,7 @@ export default function ProductGrid({ products, filter, onProductClick }) {
                       product.images[0]?.src ||
                       "https://placeholder.pics/svg/300/DEDEDE/555555/Placeholder"
                     }
-                    alt={product.name || "photo produit"}
+                    alt={productName || "photo produit"}
                     className={styles.image}
                   />
                   {!inStock && (
@@ -119,7 +121,7 @@ export default function ProductGrid({ products, filter, onProductClick }) {
                 <div
                   className={`${styles.title} ${!inStock ? styles.outOfStockTitle : ""}`}
                 >
-                  {product.name}
+                  {productName}
                 </div>
               </div>
             );
