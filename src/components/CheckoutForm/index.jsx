@@ -25,11 +25,8 @@ export default function CheckoutForm({ shippingMethod, setShippingMethod }) {
   const [paymentType, setPaymentType] = useState("card");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [errors, setErrors] = useState({}); // Gestion d'erreurs des champs
 
-  // Chaque champ affiche la saisie du client s'il en a fait une, sinon la
-  // valeur connue du compte. Rien n'est recopié dans un état : des données
-  // arrivées après l'affichage complètent les champs encore intacts sans
-  // jamais écraser ce qui a été tapé, et une déconnexion les retire.
   const prefill = buildCheckoutPrefill(user.customer, user.profile);
   const [shippingEdits, setShippingEdits] = useState({});
   const [billingEdits, setBillingEdits] = useState({});
@@ -45,8 +42,6 @@ export default function CheckoutForm({ shippingMethod, setShippingMethod }) {
     { id: "express", name: t("checkout.shippingExpress"), price: 12.9 },
   ];
 
-  // Rechargé à chaque arrivée sur la page, et non seulement s'il manque : la
-  // commande précédente a pu enregistrer une nouvelle adresse sur le compte.
   useEffect(() => {
     if (user.token) {
       dispatch(fetchCurrentCustomerThunk());
@@ -56,15 +51,65 @@ export default function CheckoutForm({ shippingMethod, setShippingMethod }) {
   const handleShippingChange = (e) => {
     const { name, value } = e.target;
     setShippingEdits((edits) => ({ ...edits, [name]: value }));
+    // Effacer l'erreur du champ lorsqu'il est modifié
+    if (errors[name]) {
+      setErrors((prev) => ({ ...prev, [name]: "" }));
+    }
   };
 
   const handleBillingChange = (e) => {
     const { name, value } = e.target;
     setBillingEdits((edits) => ({ ...edits, [name]: value }));
+    if (errors[`billing_${name}`]) {
+      setErrors((prev) => ({ ...prev, [`billing_${name}`]: "" }));
+    }
+  };
+
+  // Fonction de validation des adresses
+  const validateForm = () => {
+    const newErrors = {};
+
+    // Validation Livraison (champs obligatoires)
+    if (!shippingAddress.first_name?.trim()) newErrors.first_name = "Requis";
+    if (!shippingAddress.last_name?.trim()) newErrors.last_name = "Requis";
+    if (!shippingAddress.address_1?.trim()) newErrors.address_1 = "Requis";
+    if (!shippingAddress.city?.trim()) newErrors.city = "Requis";
+    if (!shippingAddress.postcode?.trim()) newErrors.postcode = "Requis";
+    if (!shippingAddress.country?.trim()) newErrors.country = "Requis";
+    if (!shippingAddress.email?.trim()) {
+      newErrors.email = "Requis";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(shippingAddress.email)) {
+      newErrors.email = "Email invalide";
+    }
+
+    // Validation Facturation (si différente de la livraison)
+    if (!sameAsBilling) {
+      if (!billingAddress.first_name?.trim())
+        newErrors.billing_first_name = "Requis";
+      if (!billingAddress.last_name?.trim())
+        newErrors.billing_last_name = "Requis";
+      if (!billingAddress.address_1?.trim())
+        newErrors.billing_address_1 = "Requis";
+      if (!billingAddress.city?.trim()) newErrors.billing_city = "Requis";
+      if (!billingAddress.postcode?.trim())
+        newErrors.billing_postcode = "Requis";
+      if (!billingAddress.country?.trim()) newErrors.billing_country = "Requis";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const processCheckout = async (e) => {
     e.preventDefault();
+
+    // Valider les champs avant de contacter Stripe ou le serveur
+    if (!validateForm()) {
+      setError(
+        "Veuillez remplir tous les champs obligatoires signalés en rouge.",
+      );
+      return;
+    }
 
     if (!stripe || !elements || loading) return;
     if (paymentType !== "card") {
@@ -107,9 +152,6 @@ export default function CheckoutForm({ shippingMethod, setShippingMethod }) {
           credentials: "include",
           headers: {
             "Content-Type": "application/json",
-            // Seul le jeton identifie le client côté WordPress : la commande
-            // rejoint son historique et ses adresses sont enregistrées pour
-            // pré-remplir la suivante. Sans lui, elle est passée en invité.
             ...(user.token && { Authorization: `Bearer ${user.token}` }),
           },
           body: JSON.stringify({
@@ -152,6 +194,7 @@ export default function CheckoutForm({ shippingMethod, setShippingMethod }) {
         <ShippingAddress
           address={shippingAddress}
           onChange={handleShippingChange}
+          errors={errors}
         />
 
         <div className="form-group" style={{ marginBottom: "30px" }}>
@@ -169,6 +212,7 @@ export default function CheckoutForm({ shippingMethod, setShippingMethod }) {
           <BillingAddress
             address={billingAddress}
             onChange={handleBillingChange}
+            errors={errors}
           />
         )}
 
