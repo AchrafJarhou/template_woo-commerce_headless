@@ -22,8 +22,6 @@ export default function ProductModal({ product, onClose }) {
   const [itemVariation, setItemVariation] = useState({});
   const [descriptionNeedsScroll, setDescriptionNeedsScroll] = useState(false);
 
-  // Le formatage des prix était réécrit ici, avec sa propre locale figée.
-  // Il passe désormais par la fonction partagée, qui suit la langue affichée.
   const formatModalPrice = (priceInCents, currencyCode) =>
     priceInCents
       ? formatPrice(priceInCents, {
@@ -48,8 +46,24 @@ export default function ProductModal({ product, onClose }) {
     }
   }, [product]);
 
+  // Recherche d'un attribut "Matières" ou "Matière" non utilisé pour les variations
+  const getProductMaterials = () => {
+    if (!product.attributes) return null;
+    const materialAttr = product.attributes.find(
+      (attr) =>
+        attr.name.toLowerCase().includes("matière") ||
+        attr.name.toLowerCase().includes("matiere") ||
+        attr.name.toLowerCase().includes("composition"),
+    );
+    if (!materialAttr) return null;
+    const options =
+      materialAttr.options || materialAttr.terms?.map((t) => t.name) || [];
+    return options.join(", ");
+  };
+
+  const productMaterials = getProductMaterials();
+
   const handleAddToCart = async () => {
-    // Valider que toutes les tailles/attributs sont sélectionnés
     if (variationAttributes.length > 0) {
       for (const attr of variationAttributes) {
         if (!itemVariation[attr.name]) {
@@ -130,6 +144,14 @@ export default function ProductModal({ product, onClose }) {
               __html: DOMPurify.sanitize(product.short_description),
             }}
           />
+
+          {/* Bloc Matières propre et élégant sous la description */}
+          {productMaterials && (
+            <div className="modal-materials">
+              <span className="modal-materials-label">Matières : </span>
+              <span className="modal-materials-value">{productMaterials}</span>
+            </div>
+          )}
 
           {variationAttributes.length > 0 && (
             <div className="modal-attributes">
