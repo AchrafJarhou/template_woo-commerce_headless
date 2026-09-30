@@ -15,6 +15,7 @@ import {
   isOptionInStock,
   isSelectionInStock,
 } from "../../utils/variationStock";
+import { translateAttributeName } from "../../utils/translateAttributeName";
 
 export default function ProductModal({ product, onClose }) {
   const dispatch = useDispatch();
@@ -46,22 +47,30 @@ export default function ProductModal({ product, onClose }) {
     }
   }, [product]);
 
-  // Recherche d'un attribut "Matières" ou "Matière" non utilisé pour les variations
-  const getProductMaterials = () => {
+  // Recherche dynamique de l'attribut de type matière/composition (qu'il soit en variation ou informatif)
+  const getProductMaterialAttribute = () => {
     if (!product.attributes) return null;
-    const materialAttr = product.attributes.find(
-      (attr) =>
-        attr.name.toLowerCase().includes("matière") ||
-        attr.name.toLowerCase().includes("matiere") ||
-        attr.name.toLowerCase().includes("composition"),
-    );
-    if (!materialAttr) return null;
-    const options =
-      materialAttr.options || materialAttr.terms?.map((t) => t.name) || [];
-    return options.join(", ");
+    return product.attributes.find((attr) => {
+      const name = attr.name.toLowerCase();
+      return (
+        name.includes("matière") ||
+        name.includes("matiere") ||
+        name.includes("composition") ||
+        name.includes("material")
+      );
+    });
   };
 
-  const productMaterials = getProductMaterials();
+  const materialAttr = getProductMaterialAttribute();
+  const materialValues = materialAttr
+    ? (
+        materialAttr.options ||
+        materialAttr.terms?.map((term) => term.name) ||
+        []
+      ).join(", ")
+    : null;
+
+  console.log("PRODUCT : ", product);
 
   const handleAddToCart = async () => {
     if (variationAttributes.length > 0) {
@@ -145,11 +154,13 @@ export default function ProductModal({ product, onClose }) {
             }}
           />
 
-          {/* Bloc Matières propre et élégant sous la description */}
-          {productMaterials && (
+          {/* Bloc Matières dynamique et traduit via translateAttributeName */}
+          {materialValues && materialAttr && (
             <div className="modal-materials">
-              <span className="modal-materials-label">Matières : </span>
-              <span className="modal-materials-value">{productMaterials}</span>
+              <span className="modal-materials-label">
+                {translateAttributeName(materialAttr.name, t)} :{" "}
+              </span>
+              <span className="modal-materials-value">{materialValues}</span>
             </div>
           )}
 
@@ -158,7 +169,7 @@ export default function ProductModal({ product, onClose }) {
               {variationAttributes.map((attr) => (
                 <div key={attr.name} className="modal-attribute-group">
                   <label htmlFor={attr.name} className="modal-attribute-label">
-                    {attr.name}
+                    {translateAttributeName(attr.name, t)}
                   </label>
                   <select
                     id={attr.name}

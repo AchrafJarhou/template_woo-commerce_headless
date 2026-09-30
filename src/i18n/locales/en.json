@@ -325,7 +325,15 @@
     "priceFrom": "From {{price}}",
     "priceOnRequest": "Price on request",
     "reference": "REF.",
-    "similar": "Similar products"
+    "similar": "Similar products",
+    "attributes": {
+      "size": "Size",
+      "color": "Color",
+      "fit": "Fit",
+      "material": "Material",
+      "weight": "Weight",
+      "madeIn": "Made in"
+    }
   },
   "review": {
     "anonymous": "Anonymous",
