@@ -18,6 +18,7 @@ import {
 import { translateAttributeName } from "../../utils/translateAttributeName";
 import {
   getProductDescription,
+  getProductMaterial,
   getProductName,
 } from "../../utils/localizeProduct";
 
@@ -77,6 +78,13 @@ export default function ProductModal({ product, onClose }) {
         []
       ).join(", ")
     : null;
+  // En français, la matière est la valeur de l'attribut ; sa traduction est
+  // un champ ACF à part, qui la remplace quand il est rempli.
+  const materialText = getProductMaterial(
+    product,
+    i18n.resolvedLanguage,
+    materialValues,
+  );
 
   console.log("PRODUCT : ", product);
 
@@ -165,12 +173,15 @@ export default function ProductModal({ product, onClose }) {
           />
 
           {/* Bloc Matières dynamique et traduit via translateAttributeName */}
-          {materialValues && materialAttr && (
+          {materialText && (
             <div className="modal-materials">
               <span className="modal-materials-label">
-                {translateAttributeName(materialAttr.name, t)} :{" "}
+                {materialAttr
+                  ? translateAttributeName(materialAttr.name, t)
+                  : t("product.attributes.material")}{" "}
+                :{" "}
               </span>
-              <span className="modal-materials-value">{materialValues}</span>
+              <span className="modal-materials-value">{materialText}</span>
             </div>
           )}
 
