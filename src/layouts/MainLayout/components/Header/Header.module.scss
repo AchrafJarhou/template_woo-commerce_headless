@@ -192,6 +192,17 @@
   gap: $spacing-lg;
 }
 
+/* Filet court, motif déjà employé sur la page panier et la confirmation de
+   commande : il sépare les pages du site des liens qui en sortent. */
+.navSocial::before {
+  content: "";
+  display: block;
+  width: 48px;
+  height: 1px;
+  margin: 0 auto $spacing-md;
+  background-color: rgba(0, 0, 0, 0.25);
+}
+
 .navLink {
   font-size: $font-size-lg;
   font-weight: $font-weight-bold;
