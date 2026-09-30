@@ -325,7 +325,15 @@
     "priceFrom": "À partir de {{price}}",
     "priceOnRequest": "Prix sur demande",
     "reference": "RÉF.",
-    "similar": "Produits similaires"
+    "similar": "Produits similaires",
+    "attributes": {
+      "size": "Taille",
+      "color": "Couleur",
+      "fit": "Coupe",
+      "material": "Matières",
+      "weight": "Grammage",
+      "madeIn": "Fabrication"
+    }
   },
   "review": {
     "anonymous": "Anonyme",

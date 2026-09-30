@@ -269,6 +269,26 @@
   opacity: 0.7;
 }
 
+/* Section Matières */
+.modal-materials {
+  margin: 0 0 20px 0;
+  letter-spacing: 0.5px;
+}
+
+.modal-materials-label {
+  text-transform: uppercase;
+  font-weight: 600;
+  opacity: 0.7;
+  font-size: 0.7rem;
+  letter-spacing: 2px;
+}
+
+.modal-materials-value {
+  opacity: 0.7;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+}
+
 /* Media Queries pour mobile */
 @media (max-width: 760px) {
   .modal-backdrop {

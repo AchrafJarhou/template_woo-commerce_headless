@@ -9,9 +9,10 @@ import {
 import "./index.css";
 import { decodeHtml } from "../../utils/decodeHtml";
 import { useTranslation } from "react-i18next";
+import { getProductName } from "../../utils/localizeProduct";
 
 export default function Autocomplete() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const search = useSelector((state) => state.filters.search);
@@ -57,20 +58,25 @@ export default function Autocomplete() {
           className="autocomplete-suggestions"
           onMouseDown={(e) => e.preventDefault()}
         >
-          {list.data.map((product) => (
-            <li key={product.id}>
-              <Link to={`/product/${product.id}`} onClick={handleSelect}>
-                <img
-                  src={
-                    product.images[0]?.src ||
-                    "https://placeholder.pics/svg/300/DEDEDE/555555/Placeholder"
-                  }
-                  alt={decodeHtml(product.name)}
-                />
-                <span>{decodeHtml(product.name)}</span>
-              </Link>
-            </li>
-          ))}
+          {list.data.map((product) => {
+            const productName = decodeHtml(
+              getProductName(product, i18n.resolvedLanguage),
+            );
+            return (
+              <li key={product.id}>
+                <Link to={`/product/${product.id}`} onClick={handleSelect}>
+                  <img
+                    src={
+                      product.images[0]?.src ||
+                      "https://placeholder.pics/svg/300/DEDEDE/555555/Placeholder"
+                    }
+                    alt={productName}
+                  />
+                  <span>{productName}</span>
+                </Link>
+              </li>
+            );
+          })}
         </ul>
       )}
     </div>
