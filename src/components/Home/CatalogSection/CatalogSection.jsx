@@ -8,6 +8,7 @@ import Footer from "../../../layouts/MainLayout/components/Footer/Footer.jsx";
 import ProductModal from "../../ProductModal";
 import Loader from "../../Loader";
 import { useTranslation } from "react-i18next";
+import { useSelector } from "react-redux";
 
 export default function CatalogSection({
   products,
@@ -21,6 +22,11 @@ export default function CatalogSection({
   const [filter, setFilter] = useState("tous");
   const [selectedProduct, setSelectedProduct] = useState(null);
 
+  // Récupération de heroVideo pour savoir s'il y a une vidéo ou non
+  const siteSettings = useSelector((state) => state.site.siteSettings);
+  const heroVideo = siteSettings?.heroVideo;
+  const hasHeroVideo = siteSettings ? Boolean(siteSettings.heroVideo) : true;
+
   const filteredProducts =
     filter === "tous"
       ? products
@@ -31,7 +37,10 @@ export default function CatalogSection({
   const showLoader = loading && products.length === 0;
 
   return (
-    <div className={styles.catalog} id={HOME_CATALOG_ANCHOR}>
+    <div
+      className={`${styles.catalog} ${!hasHeroVideo ? styles.noHero : ""}`}
+      id={HOME_CATALOG_ANCHOR}
+    >
       <Header />
       <main className={styles.main}>
         <FilterBar

@@ -1,0 +1,156 @@
+@import "../../styles/variables.scss";
+
+/* Contrôle segmenté : l'option active est remplie, les autres restent nues.
+   La distinction ne repose pas sur une nuance de couleur — sur le bleu du
+   site, aucune encre atténuée n'atteint le seuil de contraste ; seul le
+   remplissage distingue les deux états de façon lisible.
+
+   L'écran hôte règle la typographie sur sa propre classe, et deux variables :
+   --segmented-padding   (marges intérieures d'une option)
+   --segmented-tracking  (espacement des lettres)
+   Leurs valeurs par défaut sont écrites dans les var(), pour qu'un hôte
+   puisse toujours les remplacer. */
+
+/* Retrait entre le cadre et le remplissage. */
+$inset: 2px;
+
+/* Même courbe que les transitions de page et l'ouverture des fenêtres :
+   départ franc, arrivée douce. Le texte change de couleur sur la même durée
+   et la même courbe, pour blanchir au moment où le remplissage passe
+   dessous. */
+$slide: 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+
+.segmented-control {
+  position: relative;
+  display: inline-grid;
+  grid-auto-flow: column;
+  /* Colonnes égales, à la largeur du plus long libellé : c'est ce qui permet
+     de placer le remplissage par le calcul. */
+  grid-auto-columns: 1fr;
+  padding: $inset;
+  border: 1px solid var(--dark-color);
+  border-radius: var(--radius-button);
+}
+
+.segmented-control__indicator {
+  position: absolute;
+  top: $inset;
+  bottom: $inset;
+  left: $inset;
+  /* 100 % = largeur intérieure du cadre, retraits compris. */
+  width: calc((100% - #{2 * $inset}) / var(--segment-count));
+  border-radius: var(--radius-button);
+  background-color: var(--dark-color);
+  /* Une translation en pourcentage se rapporte à l'élément lui-même : rang
+     × 100 % le décale d'autant d'options. `transform` s'anime sans que la
+     page soit remise en page à chaque image. */
+  transform: translateX(calc(var(--segment-index) * 100%));
+  transition: transform $slide;
+}
+
+.segmented-control__option {
+  /* Passe devant le remplissage, et sert d'ancre à la zone tactile. */
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* La règle globale des boutons (src/index.scss) leur donne une largeur
+     ajustée au texte, un fond, des marges et une taille de texte en vw, et
+     un agrandissement au survol : tout est repris ici. */
+  width: auto;
+  margin: 0;
+  padding: var(--segmented-padding, 6px 12px);
+  border: none;
+  border-radius: var(--radius-button);
+  background: none;
+  color: var(--dark-color);
+  font: inherit;
+  /* Les navigateurs remettent la casse des boutons à zéro : elle suit ici
+     l'écran hôte. */
+  text-transform: inherit;
+  white-space: nowrap;
+  letter-spacing: var(--segmented-tracking, normal);
+  /* L'espacement s'ajoute aussi après la dernière lettre, ce qui décale le
+     mot vers la gauche dans sa case. Le même retrait à gauche le recentre. */
+  text-indent: var(--segmented-tracking, 0);
+  cursor: pointer;
+  transition:
+    color $slide,
+    background-color $transition-fast;
+
+  /* Porte la zone tactile à 44 px sans épaissir le contrôle : le
+     pseudo-élément déborde en hauteur, la mise en page n'en sait rien. */
+  &::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: max(100%, 44px);
+    transform: translateY(-50%);
+  }
+
+  &:hover {
+    transform: none;
+  }
+
+  &:hover:not([aria-pressed="true"]) {
+    background-color: color-mix(in srgb, var(--dark-color) 9%, transparent);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--dark-color);
+    outline-offset: 2px;
+  }
+
+  &[aria-pressed="true"] {
+    color: $white;
+    cursor: default;
+  }
+}
+
+/* Le libellé et ses variantes sont empilés dans la même case : elle prend la
+   largeur de la plus longue, et seul le libellé courant est visible. */
+.segmented-control__label {
+  display: grid;
+  justify-items: center;
+
+  /* La règle globale des span (src/index.scss) leur impose une police, une
+     taille en vw et la couleur de l'encre — le libellé actif disparaîtrait
+     sur le remplissage. Ils suivent ici le bouton. */
+  &,
+  > * {
+    color: inherit;
+    font: inherit;
+  }
+
+  > * {
+    grid-area: 1 / 1;
+  }
+}
+
+.segmented-control__reserve {
+  visibility: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .segmented-control__indicator,
+  .segmented-control__option {
+    transition: none;
+  }
+}
+
+/* Mode contraste élevé de Windows : le système efface les fonds, donc le
+   remplissage, et l'option active ne se distinguerait plus. On le repeint
+   aux couleurs de sélection choisies par l'utilisateur. */
+@media (forced-colors: active) {
+  .segmented-control__indicator {
+    forced-color-adjust: none;
+    background-color: Highlight;
+  }
+
+  .segmented-control__option[aria-pressed="true"] {
+    forced-color-adjust: none;
+    color: HighlightText;
+  }
+}

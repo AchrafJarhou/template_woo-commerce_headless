@@ -1,0 +1,66 @@
+@import "../../styles/variables.scss";
+
+/* Rangée de liens vers les comptes de la boutique.
+
+   Les règles globales (src/index.scss) donnent aux ul une marge en vw, et aux
+   li une taille en vw, une puce carrée et une marge basse : tout cela est
+   neutralisé ici, sans quoi la rangée se déformerait avec la largeur d'écran.
+
+   Le composant ne décide ni de sa place ni de ce qui l'entoure : il n'a ni
+   marge extérieure, ni filet de séparation. C'est l'écran qui l'accueille qui
+   en décide — aujourd'hui le menu plein écran, demain le pied de page. */
+.social-links {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-xs;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.social-links__item {
+  margin: 0;
+  font-size: initial;
+  list-style: none;
+}
+
+.social-links__link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* La cible reste confortable au doigt, même si le dessin est plus petit. */
+  min-width: 44px;
+  min-height: 44px;
+  color: $text-primary;
+  text-decoration: none;
+  transition: opacity $transition-fast;
+
+  /* Même réaction que les liens du menu : rien de nouveau à apprendre. */
+  &:hover {
+    opacity: 0.7;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $text-primary;
+    outline-offset: 2px;
+  }
+
+  /* Taille des dessins : 24 px sauf si l'écran qui accueille la rangée en
+     décide autrement. La valeur par défaut est écrite dans le `var()` et non
+     sur `.social-links` — posée sur l'élément lui-même, elle l'emporterait sur
+     celle d'un parent, et aucun écran ne pourrait plus l'ajuster.
+     Les deux marques étant normalisées à la même hauteur d'encre, elles
+     restent accordées quelle que soit la valeur choisie. */
+  svg {
+    display: block;
+    width: var(--social-icon-size, 24px);
+    height: var(--social-icon-size, 24px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .social-links__link {
+    transition: none;
+  }
+}

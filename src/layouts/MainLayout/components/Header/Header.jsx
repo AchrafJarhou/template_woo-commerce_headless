@@ -6,6 +6,7 @@ import menuBurgerIcon from "../../../../assets/icons/menu-burger.png";
 import cartIcon from "../../../../assets/icons/logo-panier.png";
 import { openAuthModal } from "../../../../slices/authModalSlice";
 import LanguageSwitcher from "../../../../components/LanguageSwitcher";
+import SocialLinks from "../../../../components/SocialLinks";
 import { useTranslation } from "react-i18next";
 
 export default function Header() {
@@ -57,9 +58,20 @@ export default function Header() {
         {/* Logo RAVI */}
         <Link to="/">
           {siteLogo ? (
-            <img src={siteLogo} alt={t("header.logoAlt")} className={styles.logoImg} />
+            <img
+              src={siteLogo}
+              alt={t("header.logoAlt")}
+              className={styles.logoImg}
+            />
           ) : (
-            <div className={styles.logo}>RAVI</div>
+            <div className={styles.logo}>
+              RAVI
+              {/* Masqué aux lecteurs d'écran : le lien garde « RAVI » pour
+                  nom, sans « marque déposée » à chaque passage. */}
+              <span className={styles.registered} aria-hidden="true">
+                ®
+              </span>
+            </div>
           )}
         </Link>
 
@@ -124,6 +136,14 @@ export default function Header() {
             <Link to="/contact" className={styles.navLink} onClick={closeMenu}>
               {t("header.nav.contact")}
             </Link>
+
+            {/* Les comptes de la marque ferment la colonne : ce sont des
+                destinations hors de la boutique, séparées des pages par un
+                filet. Le menu se referme au clic, pour retrouver le site tel
+                qu'on l'a quitté en revenant de l'onglet ouvert. */}
+            <div className={styles.navSocial}>
+              <SocialLinks onNavigate={closeMenu} />
+            </div>
           </div>
         </nav>
       )}
