@@ -35,10 +35,12 @@
 
 /* La boite principale */
 .modal-content {
+  /* Variable, car la galerie s'aligne dessus (voir plus bas). */
+  --modal-max-height: 95vh;
   position: relative;
   width: 100%;
   max-width: 960px;
-  max-height: 95vh;
+  max-height: var(--modal-max-height);
   overflow: hidden;
   background: #6784c8;
   border: 1px solid #000;
@@ -92,6 +94,78 @@
 .modal-img {
   max-width: 100%;
   max-height: 100%;
+  object-fit: contain;
+}
+
+/* Galerie — seulement quand l'article a plusieurs photos. Un article à photo
+   unique ne reçoit aucune de ces règles : sa mise en page ne change pas.
+
+   Les vignettes se placent sous la grande photo, et c'est elle qui leur cède
+   la place : le cadre garde sa taille. */
+.modal-img-container--gallery {
+  flex-direction: column;
+  gap: 16px;
+  /* La modale coupe ce qui dépasse sa hauteur maximale, et les vignettes, en
+     bas du cadre, seraient les premières coupées sur un écran bas. Le cadre
+     s'arrête donc à la hauteur visible (moins la bordure de 1 px de chaque
+     côté) : sur un tel écran, c'est la photo qui rétrécit. */
+  max-height: calc(var(--modal-max-height) - 2px);
+}
+
+.modal-img-container--gallery .modal-img {
+  flex: 1 1 0;
+  min-height: 0;
+  width: 100%;
+}
+
+.modal-gallery {
+  display: flex;
+  flex-shrink: 0;
+  gap: 8px;
+  max-width: 100%;
+  /* Trop de vignettes pour la largeur : la rangée défile au lieu de déborder.
+     Le retrait laisse au contour de focus la place de s'afficher. */
+  overflow-x: auto;
+  padding: 4px;
+}
+
+/* La taille est reprise dans ProductGallery.jsx (THUMB_SIZES) : les deux
+   valeurs doivent rester d'accord. */
+.modal-gallery__thumb {
+  flex: 0 0 auto;
+  width: 56px;
+  height: 56px;
+  padding: 4px;
+  /* Neutralise la règle globale des boutons (fond, arrondi, marges en vw,
+     agrandissement au survol). */
+  background: transparent;
+  border: 1px solid rgba(0, 0, 0, 0.25);
+  border-radius: 0;
+  opacity: 0.6;
+  transition:
+    opacity 0.2s,
+    border-color 0.2s;
+}
+
+.modal-gallery__thumb:hover {
+  transform: none;
+  opacity: 1;
+}
+
+.modal-gallery__thumb[aria-current="true"] {
+  border-color: #000;
+  opacity: 1;
+}
+
+.modal-gallery__thumb:focus-visible {
+  outline: 2px solid #000;
+  outline-offset: 2px;
+}
+
+.modal-gallery__thumb img {
+  display: block;
+  width: 100%;
+  height: 100%;
   object-fit: contain;
 }
 
@@ -303,6 +377,11 @@
     min-height: auto;
     aspect-ratio: 4 / 3;
     padding: 50px 20px 20px 20px;
+  }
+  /* En 4/3, les vignettes laisseraient trop peu de hauteur à la photo : le
+     cadre devient carré, et la photo garde à peu près sa taille d'avant. */
+  .modal-img-container--gallery {
+    aspect-ratio: 1 / 1;
   }
   .modal-txt-container {
     flex: 1 1 100%;
