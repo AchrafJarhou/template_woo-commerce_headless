@@ -203,11 +203,11 @@
   },
   "error404": {
     "body": "Sorry, the page you are looking for does not exist or has been removed.",
-    "browse": "Browse our catalogue",
+    "code": "Error 404",
     "continue": "Continue shopping",
+    "help": "Need help?",
     "home": "Back to home",
-    "suggestions": "Suggestions",
-    "title": "Oops! Page not found"
+    "title": "Page not found"
   },
   "errors": {
     "accountCreate": "Your account could not be created.",
