@@ -43,6 +43,8 @@
 }
 
 .logo {
+  /* Référence du ® suspendu (voir .registered). */
+  position: relative;
   text-align: center;
   font-family: var(--font-wordmark);
   font-size: clamp(17px, 4.6vw, 24px);
@@ -52,6 +54,30 @@
   letter-spacing: 0.16em;
   color: $text-primary;
   white-space: nowrap;
+}
+
+/* Marque déposée : petite, en exposant, suspendue hors du mot. RAVI garde
+   exactement la place et le centrage qu'il avait sans elle, et la barre ne
+   change pas de hauteur.
+   Les décalages sont exprimés dans la taille du signe (1em = 0,4 fois la
+   taille du logo, 8 px au moins). */
+.registered {
+  position: absolute;
+  left: 100%;
+  /* L'interlettrage du logo s'ajoute aussi après le I (0,16em du logo, soit
+     0,4em ici) : on le reprend, pour coller le signe à la lettre en ne
+     laissant qu'un léger jour. */
+  margin-left: -0.25em;
+  top: 0.3em;
+  /* La règle globale des span (src/index.scss) impose une autre police, une
+     taille en vw et une couleur : le signe suit ici le logo, graisse
+     comprise. En dessous de 8 px, ou en graisse normale, le lissage le
+     réduit à une tache grise sur téléphone. */
+  font-family: inherit;
+  font-size: max(0.4em, 8px);
+  color: inherit;
+  letter-spacing: 0;
+  line-height: 1;
 }
 
 .logoImg {
