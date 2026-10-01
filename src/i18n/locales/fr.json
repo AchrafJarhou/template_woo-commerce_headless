@@ -133,6 +133,7 @@
       "homme": "Homme",
       "tous": "Tous"
     },
+    "filterLabel": "Filtrer par catégorie",
     "nameAsc": "Nom : de A à Z",
     "newest": "Nouveautés",
     "noMatch": "Aucun produit ne correspond à votre recherche.",
