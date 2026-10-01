@@ -1,306 +1,180 @@
-.error-404-container {
-  min-height: 100vh;
+/* ─────────────────────────────────────────────────────────────────────────
+   Page introuvable.
+
+   Même langage que les autres écrans qui n'ont qu'une chose à dire — le
+   panier vide (Cart/index.scss) et la confirmation de commande
+   (Success/Success.scss) : le bleu du site sans carte posée dessus, un
+   intitulé en petites capitales espacées, un titre en police de titre, un
+   filet court, puis les deux boutons du site — le noir plein pour l'action
+   principale, l'encadré pour la seconde.
+
+   Rien n'est ajouté à la charte : ni dégradé, ni illustration animée, ni
+   couleur d'alerte. Le texte est à pleine encre : sur le bleu du site, il
+   plafonne à 4,86:1, et la moindre transparence le ferait passer sous le
+   seuil AA de 4,5:1. La hiérarchie se joue sur la taille et l'espacement.
+
+   Les règles globales (src/index.scss) dimensionnent h1, p et a en vw : tout
+   ce qui est utilisé ici reçoit une taille et des marges explicites, sans
+   quoi la page changerait de proportions avec la largeur de l'écran.
+   ───────────────────────────────────────────────────────────────────────── */
+
+.not-found {
+  /* `inherit` reprend la hauteur réservée au contenu par le gabarit
+     (MainLayout.css), comme le panier vide : la valeur reste définie à un
+     seul endroit. */
+  min-height: inherit;
   display: flex;
-  align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, var(--bg-color) 0%, rgba(37, 99, 235, 0.1) 100%);
-  padding: 3vw;
+  padding-inline: clamp(20px, 5vw, 64px);
 }
 
-.error-404-content {
+.not-found__inner {
+  /* Marges automatiques plutôt que `align-items: center` : le bloc est centré
+     verticalement, et s'il devient plus haut que l'écran il reste accessible
+     par le haut au lieu d'être rogné. */
+  margin-block: auto;
+  padding-block: clamp(40px, 8vh, 88px);
+  width: 100%;
+  /* En ch : la mesure suit la taille réelle du texte. */
+  max-width: 46ch;
   text-align: center;
-  max-width: 600px;
-  width: 100%;
-  animation: fadeInUp 0.6s ease-out;
 }
 
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* Intitulé en petites capitales espacées, comme le numéro de commande. */
+.not-found__code {
+  margin: 0;
+  font-size: clamp(11px, 1vw, 12px);
+  line-height: 1.4;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--dark-color);
 }
 
-.error-404-illustration {
-  position: relative;
-  width: 200px;
-  height: 200px;
-  margin: 0 auto 4vw;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.error-404-number {
-  font-size: 15vw;
+.not-found__title {
+  margin: clamp(12px, 1.8vh, 18px) 0 0;
   font-family: var(--font-heading);
-  font-weight: 700;
-  background: linear-gradient(135deg, var(--primary-color), #1e40af);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  animation: float 3s ease-in-out infinite;
-  letter-spacing: -0.05em;
-}
-
-.error-404-icon {
-  position: absolute;
-  width: 120px;
-  height: 120px;
-  color: var(--primary-color);
-  opacity: 0.8;
-  animation: rotate 20s linear infinite;
-}
-
-.error-404-icon svg {
-  width: 100%;
-  height: 100%;
-}
-
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-}
-
-@keyframes rotate {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.error-404-text h1 {
-  font-size: 6vw;
+  font-size: clamp(28px, 3.2vw, 44px);
+  line-height: 1.1;
   color: var(--dark-color);
-  margin-bottom: 2vw;
-  line-height: 1.2;
 }
 
-.error-404-text p {
-  font-size: 4vw;
+/* Filet court, repris du panier vide et de la confirmation de commande : il
+   sépare l'annonce de ce qui suit sans ajouter d'élément au HTML. */
+.not-found__title::after {
+  content: "";
+  display: block;
+  width: 48px;
+  height: 1px;
+  margin: clamp(16px, 2.5vh, 24px) auto 0;
+  background-color: rgb(15 23 42 / 0.25);
+}
+
+.not-found__message {
+  margin: clamp(16px, 2.5vh, 24px) 0 0;
+  font-size: clamp(16px, 1.6vw, 21px);
+  line-height: 1.5;
   color: var(--dark-color);
-  opacity: 0.7;
-  margin-bottom: 4vw;
-  line-height: 1.6;
 }
 
-.error-404-actions {
-  display: flex;
-  flex-direction: column;
-  gap: 2vw;
-  margin-bottom: 5vw;
+.not-found__actions {
+  display: grid;
+  justify-items: center;
+  gap: 12px;
+  margin-top: clamp(28px, 4vh, 40px);
 }
 
-.btn {
+/* Bouton plein du site, aligné sur .order-success__cta, .cart-state__cta et
+   .add-btn : même noir, même graisse, même interlettrage, mêmes angles vifs.
+   Une action principale se reconnaît au même geste visuel d'un écran à
+   l'autre. */
+.not-found__cta {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 3vw 6vw;
-  font-size: 4vw;
-  font-family: var(--font-body);
-  border: none;
+  width: 100%;
+  max-width: 340px;
+  padding: 19px 32px;
+  background-color: #000;
+  color: #fff;
   border-radius: var(--radius-button);
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-align: center;
+  text-transform: uppercase;
   text-decoration: none;
-  transition: all 0.3s ease;
-  cursor: pointer;
-  font-weight: 500;
+  transition: opacity 0.2s ease;
 }
 
-.btn-primary {
-  background-color: var(--primary-color);
-  color: white;
+.not-found__cta:hover {
+  opacity: 0.82;
 }
 
-.btn-primary:hover {
-  background-color: #1e40af;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 16px rgba(37, 99, 235, 0.3);
-}
-
-.btn-secondary {
-  background-color: transparent;
-  color: white;
-  border: 2px solid var(--primary-color);
-}
-
-.btn-secondary:hover {
-  background-color: var(--primary-color);
-  color: white;
-  border-color: var(--primary-color);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 16px rgba(37, 99, 235, 0.3);
-}
-
-.error-404-suggestions {
-  background-color: rgba(255, 255, 255, 0.5);
-  padding: 4vw;
-  border-radius: 2vw;
-  backdrop-filter: blur(10px);
-}
-
-.error-404-suggestions h3 {
-  font-size: 4vw;
-  color: var(--dark-color);
-  margin-bottom: 3vw;
-}
-
-.error-404-suggestions ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
+/* Action secondaire, alignée sur .order-success__secondary : encadrée, sans
+   fond, et 44 px de haut — la taille d'une cible tactile confortable. */
+.not-found__secondary {
   display: flex;
-  flex-direction: column;
-  gap: 1.5vw;
-}
-
-.error-404-suggestions li {
-  list-style: none;
-  margin: 0;
-}
-
-.error-404-suggestions a {
-  font-size: 4vw;
-  color: var(--primary-color);
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 340px;
+  min-height: 44px;
+  padding: 10px 20px;
+  border: 1px solid var(--dark-color);
+  border-radius: var(--radius-button);
+  font-size: clamp(13px, 1.2vw, 16px);
+  text-align: center;
+  color: var(--dark-color);
   text-decoration: none;
-  transition: all 0.3s ease;
-  display: inline-block;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
 }
 
-.error-404-suggestions a:hover {
-  color: #1e40af;
-  transform: translateX(5px);
+.not-found__secondary:hover {
+  background-color: var(--dark-color);
+  color: #fff;
 }
 
-@media screen and (aspect-ratio > 1/1) {
-  .error-404-container {
-    padding: 2vw;
-  }
-
-  .error-404-content {
-    max-width: 700px;
-  }
-
-  .error-404-illustration {
-    width: 250px;
-    height: 250px;
-    margin-bottom: 2vw;
-  }
-
-  .error-404-number {
-    font-size: 8vw;
-  }
-
-  .error-404-icon {
-    width: 150px;
-    height: 150px;
-  }
-
-  .error-404-text h1 {
-    font-size: 3vw;
-    margin-bottom: 1.5vw;
-  }
-
-  .error-404-text p {
-    font-size: 1.4vw;
-    margin-bottom: 2.5vw;
-  }
-
-  .error-404-actions {
-    flex-direction: row;
-    gap: 1.5vw;
-    margin-bottom: 3vw;
-    justify-content: center;
-  }
-
-  .btn {
-    padding: 1vw 2.5vw;
-    font-size: 1.1vw;
-    flex: 1;
-    max-width: 250px;
-  }
-
-  .error-404-suggestions {
-    padding: 2.5vw;
-  }
-
-  .error-404-suggestions h3 {
-    font-size: 1.8vw;
-    margin-bottom: 1.5vw;
-  }
-
-  .error-404-suggestions ul {
-    gap: 1vw;
-  }
-
-  .error-404-suggestions a {
-    font-size: 1.2vw;
-  }
+/* L'aide, en retrait : une ligne de texte et deux liens soulignés, comme les
+   liens de la confirmation de commande. Elle passe à la ligne d'elle-même
+   si l'écran est étroit. */
+.not-found__help {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: baseline;
+  gap: 4px 16px;
+  margin: clamp(24px, 3.5vh, 32px) 0 0;
+  font-size: clamp(13px, 1.2vw, 15px);
+  line-height: 1.6;
+  color: var(--dark-color);
 }
 
-@media screen and (aspect-ratio > 2.6/1) {
-  .error-404-container {
-    padding: 3lvh;
-  }
+.not-found__help a {
+  font-size: inherit;
+  color: var(--dark-color);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  transition: opacity 0.2s ease;
+}
 
-  .error-404-illustration {
-    width: 300px;
-    height: 300px;
-    margin-bottom: 3lvh;
-  }
+.not-found__help a:hover {
+  opacity: 0.7;
+}
 
-  .error-404-number {
-    font-size: 10lvh;
-  }
+.not-found__cta:focus-visible,
+.not-found__secondary:focus-visible,
+.not-found__help a:focus-visible {
+  outline: 2px solid var(--dark-color);
+  outline-offset: 3px;
+}
 
-  .error-404-icon {
-    width: 180px;
-    height: 180px;
-  }
-
-  .error-404-text h1 {
-    font-size: 4lvh;
-    margin-bottom: 2lvh;
-  }
-
-  .error-404-text p {
-    font-size: 2.5lvh;
-    margin-bottom: 3lvh;
-  }
-
-  .error-404-actions {
-    gap: 2lvh;
-    margin-bottom: 4lvh;
-  }
-
-  .btn {
-    padding: 1.5lvh 3lvh;
-    font-size: 2lvh;
-  }
-
-  .error-404-suggestions {
-    padding: 3lvh;
-  }
-
-  .error-404-suggestions h3 {
-    font-size: 3lvh;
-    margin-bottom: 2lvh;
-  }
-
-  .error-404-suggestions ul {
-    gap: 1.5lvh;   
-  }
-
-  .error-404-suggestions a {
-    font-size: 2lvh;
+@media (prefers-reduced-motion: reduce) {
+  .not-found__cta,
+  .not-found__secondary,
+  .not-found__help a {
+    transition: none;
   }
 }

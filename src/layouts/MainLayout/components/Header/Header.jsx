@@ -64,7 +64,14 @@ export default function Header() {
               className={styles.logoImg}
             />
           ) : (
-            <div className={styles.logo}>RAVI</div>
+            <div className={styles.logo}>
+              RAVI
+              {/* Masqué aux lecteurs d'écran : le lien garde « RAVI » pour
+                  nom, sans « marque déposée » à chaque passage. */}
+              <span className={styles.registered} aria-hidden="true">
+                ®
+              </span>
+            </div>
           )}
         </Link>
 

@@ -1,48 +1,46 @@
-import { Link } from 'react-router-dom';
-import './index.css';
+import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import Seo from "../../components/Seo";
 import { HOME_CATALOG_PATH } from "../../constants/navigation";
+import "./index.css";
 
+/**
+ * Page introuvable.
+ *
+ * Même composition que les autres écrans qui n'ont qu'une chose à dire — le
+ * panier vide et la confirmation de commande : un intitulé, un titre, un
+ * filet, une phrase, puis les deux boutons du site. Un seul chemin principal,
+ * revenir aux articles ; l'aide reste à portée, en retrait.
+ */
 export default function Error404() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+
   return (
-    <div className="error-404-container">
-      <div className="error-404-content">
-        <div className="error-404-illustration">
-          <div className="error-404-number">404</div>
-          <div className="error-404-icon">
-            <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="100" cy="100" r="90" fill="none" stroke="currentColor" strokeWidth="2" opacity="0.1" />
-              <path d="M 70 120 Q 100 150 130 120" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" />
-              <circle cx="80" cy="80" r="8" fill="currentColor" opacity="0.6" />
-              <circle cx="120" cy="80" r="8" fill="currentColor" opacity="0.6" />
-            </svg>
-          </div>
-        </div>
+    <section className="not-found">
+      {/* L'application répond 200 à toute adresse : sans cette consigne, un
+          moteur de recherche pourrait indexer la page comme un vrai contenu. */}
+      <Seo title={t("error404.title")} noIndex lang={i18n.resolvedLanguage} />
 
-        <div className="error-404-text">
-          <h1>{t("error404.title")}</h1>
-          <p>{t("error404.body")}</p>
-        </div>
+      <div className="not-found__inner">
+        <p className="not-found__code">{t("error404.code")}</p>
+        <h1 className="not-found__title">{t("error404.title")}</h1>
+        <p className="not-found__message">{t("error404.body")}</p>
 
-        <div className="error-404-actions">
-          <Link to="/" className="btn btn-primary">
-            {t("error404.home")}
-          </Link>
-          <Link to={HOME_CATALOG_PATH} className="btn btn-secondary">
+        <div className="not-found__actions">
+          <Link className="not-found__cta" to={HOME_CATALOG_PATH}>
             {t("error404.continue")}
           </Link>
+          <Link className="not-found__secondary" to="/">
+            {t("error404.home")}
+          </Link>
         </div>
 
-        <div className="error-404-suggestions">
-          <h3>{t("error404.suggestions")}</h3>
-          <ul>
-            <li><Link to="/">{t("error404.browse")}</Link></li>
-            <li><Link to="/contact">{t("nav.contactUs")}</Link></li>
-            <li><Link to="/faq">{t("nav.faq")}</Link></li>
-          </ul>
-        </div>
+        <p className="not-found__help">
+          {t("error404.help")}
+          <Link to="/contact">{t("nav.contactUs")}</Link>
+          <Link to="/faq">{t("nav.faq")}</Link>
+        </p>
       </div>
-    </div>
+    </section>
   );
 }
