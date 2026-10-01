@@ -82,16 +82,33 @@ function headless_register_user($request)
     return rest_ensure_response($token_response->get_data());
 }
 
-function headless_send_welcome_email($firstName, $email)
+//Fonction ancienne - 01/10
+// function headless_send_welcome_email($firstName, $email)
+// {
+//     $subject = 'Bienvenue !';
+//     $body = "Bonjour " . sanitize_text_field($firstName) . ",\n\n";
+//     $body .= "Merci de vous être inscrit sur notre boutique.\n\n";
+//     $body .= "Vous pouvez maintenant commencer à faire vos achats.\n\n";
+//     $body .= "Si vous avez des questions, n'hésitez pas à nous contacter.\n\n";
+//     $body .= "Cordialement,\nL'équipe";
+
+//     $headers = ['Content-Type: text/plain; charset=UTF-8'];
+
+//     wp_mail($email, $subject, $body, $headers);
+// }
+
+//Nouvelle version : 
+function headless_send_welcome_email($user_id, $password)
 {
-    $subject = 'Bienvenue !';
-    $body = "Bonjour " . sanitize_text_field($firstName) . ",\n\n";
-    $body .= "Merci de vous être inscrit sur notre boutique.\n\n";
-    $body .= "Vous pouvez maintenant commencer à faire vos achats.\n\n";
-    $body .= "Si vous avez des questions, n'hésitez pas à nous contacter.\n\n";
-    $body .= "Cordialement,\nL'équipe";
+    // On vérifie que WooCommerce est bien actif sur le serveur
+    if (function_exists('WC')) {
+        $mailer = WC()->mailer();
+        $emails = $mailer->get_emails();
 
-    $headers = ['Content-Type: text/plain; charset=UTF-8'];
-
-    wp_mail($email, $subject, $body, $headers);
+        // On déclenche l'e-mail "Nouveau compte" natif de WooCommerce
+        if (isset($emails['WC_Email_Customer_New_Account'])) {
+            // Le 3ème paramètre (false) indique que le mot de passe n'a pas été généré automatiquement
+            $emails['WC_Email_Customer_New_Account']->trigger($user_id, $password, false);
+        }
+    }
 }
