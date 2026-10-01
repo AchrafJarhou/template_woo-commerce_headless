@@ -21,8 +21,8 @@ const FADE_DURATION_RATIO = 1;
 export default function HeroVideo() {
   const heroRef = useRef(null);
   const siteSettings = useSelector((state) => state.site.siteSettings);
-  const heroVideo = siteSettings?.heroVideo || raviVideo;
-  const heroTitle = siteSettings?.heroTitle || "RAVI";
+  const heroVideo = siteSettings?.heroVideo;
+  const heroTitle = siteSettings?.heroTitle;
 
   useEffect(() => {
     let frame = null;

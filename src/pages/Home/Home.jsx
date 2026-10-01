@@ -14,6 +14,8 @@ export default function Home() {
   const filters = useSelector((state) => state.filters);
   const totalProducts = useSelector((state) => state.products.list.total);
   const loading = useSelector((state) => state.products.loading);
+  const siteSettings = useSelector((state) => state.site.siteSettings);
+  const heroVideo = siteSettings?.heroVideo;
 
   useEffect(() => {
     document.body.classList.add("home-page");
@@ -50,7 +52,7 @@ export default function Home() {
     // lui-même le fondu d'arrivée. Aucune clé n'est nécessaire — on ne peut
     // atteindre cette page qu'en la montant.
     <div className={`${styles.home} page-transition`}>
-      <HeroVideo />
+      {heroVideo && <HeroVideo />}
       <CatalogSection
         products={displayedProducts || []}
         hasMore={hasMore}

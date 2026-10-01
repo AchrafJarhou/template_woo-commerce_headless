@@ -17,6 +17,8 @@ export const fetchSiteThunk = createAsyncThunk(
       let siteData = await response.json();
       let logoUrl = null;
 
+      console.log("SITE DATA siteThunk", siteData);
+
       try {
         if (siteData.site_logo) {
           const mediaResponse = await fetch(
@@ -55,6 +57,8 @@ export const fetchSiteSettingsThunk = createAsyncThunk(
       const pageData = await response.json();
       const acfSettings = pageData.acf || {};
       thunkAPI.dispatch(setSiteSettings(acfSettings));
+
+      console.log("page data : ", pageData);
 
       return acfSettings;
     } catch (error) {
