@@ -333,6 +333,10 @@
       "material": "Material",
       "weight": "Weight",
       "madeIn": "Made in"
+    },
+    "gallery": {
+      "label": "Product photos",
+      "show": "Show photo {{index}} of {{count}}"
     }
   },
   "review": {

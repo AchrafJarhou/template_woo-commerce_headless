@@ -333,6 +333,10 @@
       "material": "Matières",
       "weight": "Grammage",
       "madeIn": "Fabrication"
+    },
+    "gallery": {
+      "label": "Photos de l'article",
+      "show": "Afficher la photo {{index}} sur {{count}}"
     }
   },
   "review": {

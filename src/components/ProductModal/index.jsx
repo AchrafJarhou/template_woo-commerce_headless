@@ -4,6 +4,7 @@ import DOMPurify from "dompurify";
 import { addProductToCart } from "../../thunkActionsCreator/cartThunks";
 import { showToast } from "../../slices/toastSlice";
 import "./index.css";
+import ProductGallery from "./ProductGallery";
 import { formatPrice } from "../../utils/formatPrice";
 import { useTranslation } from "react-i18next";
 import {
@@ -86,8 +87,6 @@ export default function ProductModal({ product, onClose }) {
     materialValues,
   );
 
-  console.log("PRODUCT : ", product);
-
   const handleAddToCart = async () => {
     if (variationAttributes.length > 0) {
       for (const attr of variationAttributes) {
@@ -99,8 +98,6 @@ export default function ProductModal({ product, onClose }) {
         }
       }
     }
-
-    console.log("Produit", product);
 
     const result = await dispatch(
       addProductToCart({
@@ -139,13 +136,12 @@ export default function ProductModal({ product, onClose }) {
           ✕
         </button>
 
-        <div className="modal-img-container">
-          <img
-            src={product.images[0]?.src || "https://placeholder.pics/svg/300"}
-            alt={productName}
-            className="modal-img"
-          />
-        </div>
+        {/* La clé remet la galerie sur la première photo à chaque article. */}
+        <ProductGallery
+          key={product.id}
+          images={product.images}
+          alt={productName}
+        />
 
         <div className="modal-txt-container">
           <div className="modal-category">
