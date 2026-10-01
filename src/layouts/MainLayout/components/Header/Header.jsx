@@ -58,7 +58,11 @@ export default function Header() {
         {/* Logo RAVI */}
         <Link to="/">
           {siteLogo ? (
-            <img src={siteLogo} alt={t("header.logoAlt")} className={styles.logoImg} />
+            <img
+              src={siteLogo}
+              alt={t("header.logoAlt")}
+              className={styles.logoImg}
+            />
           ) : (
             <div className={styles.logo}>RAVI</div>
           )}
