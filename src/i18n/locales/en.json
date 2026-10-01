@@ -133,6 +133,7 @@
       "homme": "Men",
       "tous": "All"
     },
+    "filterLabel": "Filter by category",
     "nameAsc": "Name: A to Z",
     "newest": "New arrivals",
     "noMatch": "No product matches your search.",
