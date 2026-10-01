@@ -68,7 +68,7 @@ function headless_register_user($request)
     update_user_meta($user_id, 'first_name', $firstName);
     update_user_meta($user_id, 'last_name', $lastName);
 
-    headless_send_welcome_email($firstName, $email);
+    headless_send_welcome_email($user_id, $password);
 
     $token_request = new WP_REST_Request('POST', '/jwt-auth/v1/token');
     $token_request->set_param('username', $username);
