@@ -56,7 +56,7 @@ async function initializeApp() {
   store.dispatch(initializeCartThunk());
   store.dispatch(fetchSiteThunk());
 
-  await store.dispatch(fetchSiteSettingsThunk()).catch(() => {
+  await store.dispatch(fetchSiteSettingsThunk()).unwrap().catch(() => {
     store.dispatch(setSiteSettings({}));
   });
 
