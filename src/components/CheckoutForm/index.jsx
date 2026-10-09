@@ -85,7 +85,7 @@
 //     if (user.token) {
 //       dispatch(fetchCurrentCustomerThunk());
 //     }
-//   }, [user.token, dispatch]);
+//   }, [user.isAuthenticated, dispatch]);
 
 //   const handleShippingChange = (e) => {
 //     const { name, value } = e.target;
@@ -438,10 +438,10 @@ export default function CheckoutForm({ shippingMethod, setShippingMethod }) {
   }, [isRelay]);
 
   useEffect(() => {
-    if (user.token) {
+    if (user.isAuthenticated) {
       dispatch(fetchCurrentCustomerThunk());
     }
-  }, [user.token, dispatch]);
+  }, [user.isAuthenticated, dispatch]);
 
   const handleShippingChange = (e) => {
     const { name, value } = e.target;
