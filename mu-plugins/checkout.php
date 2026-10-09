@@ -200,7 +200,7 @@ function headless_create_order_from_checkout($request)
     // fait les deux.
     wc_maybe_reduce_stock_levels($order_id);
 
-    // Sauvegarder les adresses dans le profil du customer si connecté
+    // Renseigner les adresses du profil (première commande uniquement)
     if ($user_id > 0) {
         headless_save_customer_addresses_from_order($order, $user_id);
     }
@@ -278,8 +278,18 @@ function headless_save_customer_addresses_from_order($order, $user_id)
     $shipping = $order->get_address('shipping');
     $billing = $order->get_address('billing');
 
-    // Mettre à jour l'adresse de livraison si elle existe dans la commande
-    if (!empty($shipping)) {
+    // Seule la première commande renseigne les adresses du profil : une
+    // adresse saisie ponctuellement au checkout ne remplace pas l'adresse par
+    // défaut. Le client la modifie lui-même depuis son profil.
+    $has_shipping = $customer->get_shipping_address_1() !== '';
+    $has_billing = $customer->get_billing_address_1() !== '';
+
+    if ($has_shipping && $has_billing) {
+        return;
+    }
+
+    // Enregistrer l'adresse de livraison si le profil n'en a pas encore
+    if (!$has_shipping && !empty($shipping)) {
         if (isset($shipping['first_name'])) $customer->set_shipping_first_name(sanitize_text_field($shipping['first_name']));
         if (isset($shipping['last_name'])) $customer->set_shipping_last_name(sanitize_text_field($shipping['last_name']));
         if (isset($shipping['company'])) $customer->set_shipping_company(sanitize_text_field($shipping['company']));
@@ -291,8 +301,8 @@ function headless_save_customer_addresses_from_order($order, $user_id)
         if (isset($shipping['phone'])) $customer->set_shipping_phone(sanitize_text_field($shipping['phone']));
     }
 
-    // Mettre à jour l'adresse de facturation si elle existe dans la commande
-    if (!empty($billing)) {
+    // Enregistrer l'adresse de facturation si le profil n'en a pas encore
+    if (!$has_billing && !empty($billing)) {
         if (isset($billing['first_name'])) $customer->set_billing_first_name(sanitize_text_field($billing['first_name']));
         if (isset($billing['last_name'])) $customer->set_billing_last_name(sanitize_text_field($billing['last_name']));
         if (isset($billing['company'])) $customer->set_billing_company(sanitize_text_field($billing['company']));
