@@ -20,8 +20,6 @@ export default function Header() {
   const siteLogo = siteSettings?.siteLogo;
   const dispatch = useDispatch();
 
-  console.log("🎨 Header - siteSettings:", siteSettings);
-  console.log("🎨 Header - siteLogo:", siteLogo);
   const isAuthentificated = useSelector((state) => state.user.isAuthenticated);
   const cartCount = cartItems.reduce(
     (total, item) => total + (Number(item.quantity) || 0),
